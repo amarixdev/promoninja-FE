@@ -8,7 +8,7 @@ const resolvers = merge(
   {},
   podcastResolvers,
   categoryResolvers,
-  podcastResolvers
+  productResolvers
 );
 
 export default resolvers

@@ -1,5 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
+import { prisma, PrismaClient } from "@prisma/client";
 import resolvers from "./graphql/resolvers.ts";
 import typeDefs from "./graphql/typeDefs";
 
@@ -7,19 +8,25 @@ import typeDefs from "./graphql/typeDefs";
 // definition and your set of resolvers.
 
 const main = async () => {
-  const server = new ApolloServer({
+  interface MyContext {
+    prisma?: PrismaClient;
+    test: String;
+  }
+
+  const server = new ApolloServer<MyContext>({
     resolvers,
     typeDefs,
   });
-
-  // Passing an ApolloServer instance to the `startStandaloneServer` function:
-  //  1. creates an Express app
-  //  2. installs your ApolloServer instance as middleware
-  //  3. prepares your app to handle incoming requests
-
+  const prisma = new PrismaClient();
   const PORT = 4000;
 
   const { url } = await startStandaloneServer(server, {
+    context: async () => {
+      return {
+        test: "test",
+        prisma,
+      };
+    },
     listen: { port: PORT },
   });
 

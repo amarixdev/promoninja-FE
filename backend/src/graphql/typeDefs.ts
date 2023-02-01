@@ -9,15 +9,15 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createProduct(input: AddProductInput): Product
+    createProduct(input: AddProductInput): String
   }
 
   type Mutation {
-    createPodcast(input: AddPodcastInput): Podcast
+    createPodcast(input: AddPodcastInput): String
   }
 
   type Mutation {
-    createCategory(input: AddCategoryInput): Category
+    createCategory(input: AddCategoryInput): String
   }
 
   type Product {
