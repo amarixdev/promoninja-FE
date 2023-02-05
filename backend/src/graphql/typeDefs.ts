@@ -3,18 +3,25 @@ import gql from "graphql-tag";
 const typeDefs = gql`
   type Query {
     test: String
-    shows: Shows
+    shows(input: Int): Shows
   }
 
   type Shows {
     items: [Items]
+    
   }
 
+ 
   type Items {
     id: ID
     name: String
     images: [Images]
     total_episodes: Int
+    external_urls: Spotify
+  }
+
+  type Spotify {
+    spotify: String
   }
 
   type Images {
