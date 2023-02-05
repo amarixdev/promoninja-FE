@@ -14,15 +14,17 @@ const Promos: CollectionConfig = {
       required: true,
     },
     {
-      name: "promoCode",
-      type: "text",
-      required: true,
+      name: "podcasts",
+      type: "relationship",
+      relationTo: 'podcasts',
+      hasMany: true
     },
     {
       name: "logo",
       type: "upload",
-      relationTo: "media",
+      relationTo: "sponsor-media",
       required: false,
+  
     },
   ],
 };

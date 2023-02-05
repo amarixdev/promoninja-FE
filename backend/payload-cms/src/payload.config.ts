@@ -3,8 +3,9 @@ import path from 'path';
 // import Examples from './collections/Examples';
 import Users from './collections/Users';
 import Podcasts from './collections/Podcasts';
-import Promos from './collections/Sponsors';
-import Media from './collections/Media';
+import Sponsors from './collections/Sponsors';
+import SponsorMedia from './collections/SponsorMedia';
+import PodcastMedia from './collections/PodcastMedia';
 
 export default buildConfig({
   serverURL: 'http://localhost:3000',
@@ -15,8 +16,9 @@ export default buildConfig({
   collections: [
     Users,
     Podcasts,
-    Promos,
-    Media
+    Sponsors,
+    SponsorMedia,
+    PodcastMedia
     // Examples,
   ],
   typescript: {

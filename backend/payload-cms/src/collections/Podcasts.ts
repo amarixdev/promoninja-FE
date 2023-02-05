@@ -4,7 +4,7 @@ import { CollectionConfig } from "payload/types";
 const Podcasts: CollectionConfig = {
   slug: "podcasts",
   admin: {
-    useAsTitle: "podcastTitle"
+    useAsTitle: "podcastTitle",
   },
   fields: [
     {
@@ -13,21 +13,53 @@ const Podcasts: CollectionConfig = {
       required: true,
     },
     {
-      name: "description",
-      type: "text",
-      required: false,
-    },
-    {
       name: "sponsors",
       type: "relationship",
       relationTo: "sponsor",
-      required: true,
+      required: false,
+      hasMany: true,
     },
     {
       name: "logo",
       type: "upload",
-      relationTo: "media",
-      required: true,
+      relationTo: "podcast-media",
+      required: false,
+    },
+    {
+      name: "offers",
+      type: "array",
+      unique: true,
+      
+      fields: [
+        {
+          name: "offer",
+          type: "group",
+          fields: [
+            {
+              type: "row",
+              fields: [
+                {
+                  name: "promotion",
+                  type: "relationship",
+                  relationTo: "sponsor",
+                  required: false,
+                },
+                {
+                  name: "description",
+                  type: "textarea",
+                  required: false,
+                },
+                {
+                  name: "url",
+                  type: "text",
+                  required: false,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      required: false,
     },
   ],
 };
