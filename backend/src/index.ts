@@ -23,6 +23,7 @@ const main = async () => {
   interface MyContext {
     prisma?: PrismaClient;
     test: String;
+    accessToken: String
   }
 
   const server = new ApolloServer<MyContext>({
