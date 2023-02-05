@@ -7,4 +7,7 @@ export const podcastResolvers = {
           console.log (prisma)
     },
   },
+  Query: {
+ 
+  }
 };

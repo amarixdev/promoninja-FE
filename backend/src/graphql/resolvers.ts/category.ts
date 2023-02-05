@@ -1,3 +1,4 @@
+import fetch from "node-fetch";
 import { GraphQLContext } from "../../../util/types";
 
 export const categoryResolvers = {
@@ -14,8 +15,23 @@ export const categoryResolvers = {
     },
   },
   Query: {
-    test(parent: any, args: any, context: any) {
-      return "Success";
+    async shows(parent: any, args: any, context: GraphQLContext) {
+      let offset = 0
+      const { accessToken } = context;
+      console.log(accessToken);
+      const result = await fetch(
+        `https://api.spotify.com/v1/search?q=shows&type=show&market=US&limit=50&offset=${offset}
+        `,
+        {
+          method: "GET",
+          headers: { Authorization: "Bearer " + accessToken },
+        }
+      );
+      const data = await result.json();
+      console.log(data.shows.items[0]);
+      const { shows } = data;
+      offset+=50
+      return shows;
     },
   },
 };

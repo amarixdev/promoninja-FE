@@ -3,9 +3,27 @@ import gql from "graphql-tag";
 const typeDefs = gql`
   type Query {
     test: String
-    podcasts: [Podcast]
-    products: [Product]
-    categories: [Category]
+    shows: Shows
+  }
+
+  type Shows {
+    items: [Items]
+  }
+
+  type Items {
+    id: ID
+    name: String
+    images: [Images]
+    total_episodes: Int
+  }
+
+  type Images {
+    url: String
+  }
+
+  type Category {
+    limit: Int
+    next: String
   }
 
   type Mutation {
