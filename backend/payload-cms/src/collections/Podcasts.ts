@@ -13,6 +13,17 @@ const Podcasts: CollectionConfig = {
       required: true,
     },
     {
+      name: "creator",
+      type: "text",
+      required: false,
+    },
+    {
+      name: "category",
+      type: "relationship",
+      relationTo: "podcastCategory",
+    },
+
+    {
       name: "sponsors",
       type: "relationship",
       relationTo: "sponsor",
@@ -29,7 +40,7 @@ const Podcasts: CollectionConfig = {
       name: "offers",
       type: "array",
       unique: true,
-      
+
       fields: [
         {
           name: "offer",
