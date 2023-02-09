@@ -74,8 +74,16 @@ const App = () => {
         isClosable: true,
       });
       console.log(response.data);
-    } catch (error) {
-      console.error(error);
+      setPodcast({ title: "", creator: "" });
+    } catch (error: any) {
+      const { message } = error.response.data;
+      toast({
+        title: "Error.",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 

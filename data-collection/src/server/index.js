@@ -25,7 +25,7 @@ app.post("/create-podcast", async (req, res) => {
 
     res.json({ createdPodcast });
   } catch (error) {
-    res.status(500).json({ error: error });
+    res.status(500).json({ message: "Podcast already exists" });
   }
 });
 
