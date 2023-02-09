@@ -14,14 +14,12 @@ app.post("/create-podcast", async (req, res) => {
   try {
     await prisma.$connect();
     const { podcast } = req.body;
-    const {
-      category: { id },
-    } = req.body;
     console.log(podcast);
     const createdPodcast = await prisma.podcasts.create({
       data: {
-        podcastTitle: podcast,
-        category: id,
+        podcastTitle: podcast.title,
+        category: podcast.category,
+        creator: podcast.creator,
       },
     });
 

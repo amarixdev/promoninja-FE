@@ -12,45 +12,46 @@ import {
 } from "@chakra-ui/react";
 
 const App = () => {
-  const [text, setText] = useState("");
-  const [titles, setTitles] = useState([{ podcastTitle: text, category: "" }]);
   const toast = useToast();
   const [category, setCategory] = useState({ name: "", id: "" });
-  const [podcast, setPodcast] = useState(text);
+  const [podcast, setPodcast] = useState({
+    title: "",
+    category: category.id,
+    creator: "",
+  });
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    if (category.id === "" || category.name === "") {
-      console.log("ERROR");
-      toast({
-        title: "Error.",
-        description: "Please Select A Category",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-    if (text === "") {
-      console.log("ERROR");
-      toast({
-        title: "Error.",
-        description: "Please Enter A Podcast",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    } else {
-      setTitles((prev) => [
-        ...prev,
-        { podcastTitle: text, category: category.id },
-      ]);
-
-      setPodcast(text);
-      console.log("Podcast", podcast);
-      console.log("Titles", titles)
-      setText("");
+    // setPodcast({ title: text, category: category.id, creator: "" });
+    try {
+      if (category.id === "" || category.name === "") {
+        console.log("ERROR");
+        toast({
+          title: "Error.",
+          description: "Please Select A Category",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+      if (podcast.title === "") {
+        console.log("ERROR");
+        toast({
+          title: "Error.",
+          description: "Please Enter A Podcast",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      } else {
+        console.log(podcast);
+        await handleSave();
+      }
+      // setText("");
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -58,12 +59,10 @@ const App = () => {
 
   const handleSave = async () => {
     try {
-
       const response = await axios.post(
         "http://localhost:3333/create-podcast",
         {
           podcast,
-          category
         }
       );
 
@@ -190,7 +189,8 @@ const App = () => {
           </Tab>
         </TabList>
       </Tabs>
-      <h1 className="text-white font-semibold text-5xl mt-28 mb-4">
+
+      <h1 className="text-white font-semibold text-5xl mb-4">
         {category.name}
       </h1>
       <form
@@ -201,11 +201,32 @@ const App = () => {
           <Text color={"white"}>Podcast Title</Text>
           <Input
             type="text"
-            value={text}
+            value={podcast.title}
             w={200}
             color={"white"}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) =>
+              setPodcast({
+                title: e.target.value,
+                category: category.id,
+                creator: podcast.creator,
+              })
+            }
           />
+          <Text color={"white"}>Creator</Text>
+          <Input
+            type="text"
+            value={podcast.creator}
+            w={200}
+            color={"white"}
+            onChange={(e) =>
+              setPodcast({
+                title: podcast.title,
+                category: category.id,
+                creator: e.target.value,
+              })
+            }
+          />
+
           <Text color={"white"}>Category ID</Text>
           <Input
             type="text"
@@ -225,24 +246,6 @@ const App = () => {
           </Button>
         </VStack>
       </form>
-      <Button onClick={handleSave} colorScheme="green" mt={8} w={"200px"} p={4}>
-        Create File
-      </Button>
-
-      <div className="border-2 border-purple-400 w-full h-[200px] overflow-scroll flex flex-wrap mt-8">
-        {titles.map((title, i) => {
-          if (i === 0) return;
-          else
-            return (
-              <div
-                className={`text-white text-md text-center font-semibold m-2 bg-blue-500 h-fit p-2 rounded-full shadow-lg shadow-black/50`}
-                key={i}
-              >
-                <h1>{title.podcastTitle}</h1>
-              </div>
-            );
-        })}
-      </div>
     </div>
   );
 };
