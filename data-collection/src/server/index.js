@@ -13,12 +13,12 @@ app.use(express.json());
 app.post("/create-podcast", async (req, res) => {
   try {
     await prisma.$connect();
-    const { podcast } = req.body;
+    const { podcast, category } = req.body;
     console.log(podcast);
     const createdPodcast = await prisma.podcasts.create({
       data: {
         podcastTitle: podcast.title,
-        category: podcast.category,
+        category: category.id,
         creator: podcast.creator,
       },
     });

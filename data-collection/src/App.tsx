@@ -16,7 +16,6 @@ const App = () => {
   const [category, setCategory] = useState({ name: "", id: "" });
   const [podcast, setPodcast] = useState({
     title: "",
-    category: category.id,
     creator: "",
   });
 
@@ -63,12 +62,13 @@ const App = () => {
         "http://localhost:3333/create-podcast",
         {
           podcast,
+          category,
         }
       );
 
       toast({
         title: "Success.",
-        description: "File written successfully.",
+        description: "Podcast added successfully.",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -207,7 +207,6 @@ const App = () => {
             onChange={(e) =>
               setPodcast({
                 title: e.target.value,
-                category: category.id,
                 creator: podcast.creator,
               })
             }
@@ -221,7 +220,6 @@ const App = () => {
             onChange={(e) =>
               setPodcast({
                 title: podcast.title,
-                category: category.id,
                 creator: e.target.value,
               })
             }
