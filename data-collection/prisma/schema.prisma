@@ -1,0 +1,15 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model podcasts {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  podcastTitle String  @unique
+  category     String?
+  creator      String?
+}
