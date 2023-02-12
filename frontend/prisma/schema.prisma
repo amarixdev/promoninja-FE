@@ -12,29 +12,23 @@ generator client {
 }
 
 model Podcast {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  creator     String
-  description String
-  imageUrl    String
-  promoCode   String
-  productsId  String[]  @db.ObjectId
-  products    Product[] @relation(fields: [productsId], references: [id])
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  creator   String?
+  imageUrl  String?
+  sponsorId String[]  @db.ObjectId
+  sponsors  Sponsor[] @relation(fields: [sponsorId], references: [id])
+  promotion String?
 }
 
-model Product {
+model Sponsor {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  categoryId String    @db.ObjectId
-  category   Category  @relation(fields: [categoryId], references: [id])
-  promoCode  String
-  discount   String
+  name       String    @unique
   podcastsId String[]  @db.ObjectId
   podcasts   Podcast[] @relation(fields: [podcastsId], references: [id])
 }
 
 model Category {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  products Product[]
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
 }
