@@ -1,15 +1,18 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-const APIContext = createContext();
+const Context = createContext();
 
-export function APIContextProvider({ children }) {
+export function ContextProvider({ children }) {
   const [offset, setOffset] = useState(0);
+  const [currentCategory, setCurrentCategory] = useState("");
 
   return (
-    <APIContext.Provider value={{ offset, setOffset }}>
+    <Context.Provider
+      value={{ offset, setOffset, currentCategory, setCurrentCategory }}
+    >
       {children}
-    </APIContext.Provider>
+    </Context.Provider>
   );
 }
 
-export default APIContext;
+export default Context;
