@@ -1,6 +1,9 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
@@ -12,29 +15,32 @@ generator client {
 }
 
 model Podcast {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  creator     String
-  description String
-  imageUrl    String
-  promoCode   String
-  productsId  String[]  @db.ObjectId
-  products    Product[] @relation(fields: [productsId], references: [id])
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  title     String    @unique
+  imageUrl  String?
+  sponsorId String[]  @db.ObjectId
+  category        Category?        @relation(fields: [categoryId], references: [id])
+  categoryId      String           @db.ObjectId
+  sponsors  Sponsor[] @relation(fields: [sponsorId], references: [id])
+  offer     Offer[]
 }
 
-model Product {
+model Sponsor {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  categoryId String    @db.ObjectId
-  category   Category  @relation(fields: [categoryId], references: [id])
-  promoCode  String
-  discount   String
+  name       String    @unique
+  imageUrl   String?   
   podcastsId String[]  @db.ObjectId
-  podcasts   Podcast[] @relation(fields: [podcastsId], references: [id])
+  podcast    Podcast[] @relation(fields: [podcastsId], references: [id])
+}
+
+type Offer {
+  sponsor     String
+  description String
 }
 
 model Category {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  products Product[]
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
+  Podcast Podcast[]
 }
