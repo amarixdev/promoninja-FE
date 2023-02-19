@@ -1,18 +1,20 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, useState, ReactNode } from "react";
+export type Category =
+  | "Spotify's Top Picks"
+  | "Comedy"
+  | "Educational"
+  | "Technology"
+  | "News & Politics"
+  | "Lifestyle"
+  | "";
 
 interface ContextType {
-  currentCategory: string;
-  setCurrentCategory: React.Dispatch<React.SetStateAction<string>>;
+  currentCategory: Category;
+  setCurrentCategory: React.Dispatch<React.SetStateAction<Category>>;
 }
 
 export const Context = createContext<ContextType>({
-  currentCategory: "",
+  currentCategory: "Comedy",
   setCurrentCategory: () => {},
 });
 
@@ -21,7 +23,8 @@ interface ContextProviderProps {
 }
 
 export function ContextProvider({ children }: ContextProviderProps) {
-  const [currentCategory, setCurrentCategory] = useState("");
+  const [currentCategory, setCurrentCategory] =
+    useState<ContextType["currentCategory"]>("Comedy");
 
   return (
     <Context.Provider value={{ currentCategory, setCurrentCategory }}>
