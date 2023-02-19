@@ -1,14 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  useContext,
-
-} from "react";
+import { useContext } from "react";
 import Context from "../context/context";
 import * as Hero from "../public/assets/comedy.png";
+import { Category } from "../context/context";
 
 type CategoryProps = {
-  category: string;
+  category: Category;
   podcasts: string[];
 };
 
