@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useContext, useEffect, useState } from "react";
+import {
+  useContext,
+
+} from "react";
 import Context from "../context/context";
-import category from "../pages/category";
 import * as Hero from "../public/assets/comedy.png";
 
 type CategoryProps = {
-  category: boolean | string;
+  category: string;
   podcasts: string[];
 };
 
