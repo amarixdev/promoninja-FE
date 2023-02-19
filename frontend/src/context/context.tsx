@@ -6,6 +6,8 @@ export type Category =
   | "Technology"
   | "News & Politics"
   | "Lifestyle"
+  | "Science"
+  | "Sports"
   | "";
 
 interface ContextType {
