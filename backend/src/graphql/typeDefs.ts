@@ -2,89 +2,36 @@ import gql from "graphql-tag";
 
 const typeDefs = gql`
   type Query {
-    test: String
-    shows(input: Int): Shows
-  }
-
-  type Shows {
-    items: [Items]
-    
-  }
-
- 
-  type Items {
-    id: ID
-    name: String
-    images: [Images]
-    total_episodes: Int
-    external_urls: Spotify
-  }
-
-  type Spotify {
-    spotify: String
-  }
-
-  type Images {
-    url: String
-  }
-
-  type Category {
-    limit: Int
-    next: String
+    podcast: [Podcast]
+    sponsor: [Sponsor]
   }
 
   type Mutation {
-    createProduct(input: AddProductInput): String
-  }
-
-  type Mutation {
-    createPodcast(input: AddPodcastInput): String
-  }
-
-  type Mutation {
-    createCategory(input: AddCategoryInput): String
-  }
-
-  type Product {
-    name: String
-    categoryId: String
-    promoCode: String
-    discount: String
-    podcasts: [Podcast]
+    createPodcast: Boolean
+    updatePodcast: Boolean
   }
 
   type Podcast {
-    title: String
-    creator: String
-    description: String
+    id: ID!
+    title: String!
     imageUrl: String
-    promoCode: String
-    products: Product
+    sponsors: [Sponsor]
+    category: [Category]
+    offer: [PodcastSponsor]
   }
 
   type Category {
-    name: String
-    products: [Product]
+    id: ID!
+    name: String!
   }
 
-  input AddCategoryInput {
-    name: String
-  }
-
-  input AddProductInput {
-    name: String
-    categoryId: String
-    promoCode: String
-    discount: String
-  }
-
-  input AddPodcastInput {
-    title: String
-    creator: String
-    description: String
+  type Sponsor {
+    id: ID!
+    name: String!
     imageUrl: String
-    promoCode: String
+    podcasts: [Sponsor]
   }
+
 `;
 
 export default typeDefs;
