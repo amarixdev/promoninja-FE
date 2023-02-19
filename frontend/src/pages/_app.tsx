@@ -4,17 +4,16 @@ import client from "../graphql/apollo-client";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { theme } from "../../styles/chakra/theme";
 import "../../styles/globals.css";
-import { APIContextProvider } from "../context/context";
-import Header from "../components/Header";
+import { ContextProvider } from "../context/context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <APIContextProvider>
+      <ContextProvider>
         <ChakraProvider theme={theme}>
           <Component {...pageProps} />
         </ChakraProvider>
-      </APIContextProvider>
+      </ContextProvider>
     </ApolloProvider>
   );
 }
