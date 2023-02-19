@@ -1,17 +1,12 @@
-import { useContext, useState } from "react";
+import { use, useContext, useState } from "react";
 import axios from "axios";
-import {
-  Button,
-  Input,
-  Text,
-  VStack,
-  useToast
-} from "@chakra-ui/react";
+import { Button, Input, Text, VStack, useToast } from "@chakra-ui/react";
 
 import CreateSponsor from "../components/CreateSponsor";
-import { Sponsor } from "../utils/types";
 import AppContext from "../context/context";
 import { Select } from "@chakra-ui/react";
+import { useQuery } from "@apollo/client";
+import { gql } from "graphql-tag";
 
 const App = () => {
   const toast = useToast();
@@ -20,47 +15,43 @@ const App = () => {
   const [displaySponsor, setDisplaySponsor] = useState(false);
   const [text, setText] = useState("");
   const { sponsor } = useContext(AppContext);
+  const [searchPreview, setSearchPreview] = useState([]);
 
-  const handleInputChange = (e: any) => {
-    setText(e.target.value);
-    if (text === "") {
-      console.log(true);
+  const { data } = useQuery(gql`
+    query {
+      getPodcasts {
+        title
+      }
+    }
+  `);
+
+  const handleInputChange = async (e: any) => {
+    try {
+      setText(e.target.value);
+      const podcasts = data.getPodcasts.map((obj: any) => obj.title);
+      const preview = podcasts.filter((title: string) =>
+        title.toLowerCase().includes(text.toLowerCase())
+      );
+
+      setSearchPreview(preview);
+      console.log(searchPreview);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const handleSubmit = async (e: any) => {
-    setPodcast(text);
+  const handleSubmit = async (preview: string) => {
+    setPodcast(preview);
+
     setDisplaySponsor(true);
-    e.preventDefault();
-    // setPodcast({ title: text, category: category.id, creator: "" });
     try {
-      // if (category === "") {
-      //   console.log("ERROR");
-      //   toast({
-      //     title: "Error.",
-      //     description: "Please Select A Category",
-      //     status: "error",
-      //     duration: 3000,
-      //     isClosable: true,
-      //   });
-      //   return;
-      // }
       if (podcast === "") {
         console.log("ERROR");
-        // toast({
-        //   title: "Error.",
-        //   description: "Please Enter A Podcast",
-        //   status: "error",
-        //   duration: 3000,
-        //   isClosable: true,
-        // });
+
         return;
       } else {
-        console.log(podcast);
-
-        await handleSave();
       }
-      // setText("");
+      setText("");
     } catch (error) {
       console.log(error);
     }
@@ -88,6 +79,7 @@ const App = () => {
       setPodcast("");
     } catch (error: any) {
       // const { message } = error.response.data;
+
       toast({
         title: "Error.",
         description: error.response.data.message.podcast,
@@ -102,12 +94,8 @@ const App = () => {
   return (
     <div className="bg-[#1e1e1e] h-screen w-full flex flex-col items-center justify-center">
       {/* Create Podcast and Sponsor page */}
-      <h1 className="text-white font-semibold text-5xl mb-4">
-        {podcast}
-      </h1>
-      <h1 className="font-bold">Hello</h1>
+      <h1 className="text-white font-semibold text-5xl mb-4">{podcast}</h1>
       <form
-        onSubmit={handleSubmit}
         className="w-[500px] flex flex-col justify-center items-center mb-4"
       >
         <VStack spacing={5}>
@@ -119,9 +107,18 @@ const App = () => {
             color={"white"}
             onChange={(e) => handleInputChange(e)}
           />
-          <Button type="submit" colorScheme={"green"} w={"150px"} p={4}>
-            Save Title
-          </Button>
+          <div className="w-[300px] bg-[#12121] flex flex-col items-center">
+            <ul className="text-center">
+              {text &&
+                searchPreview.map((preview) => (
+                  <li key={preview}>
+                    <Button onClick={() => handleSubmit(preview)}>
+                      {preview}
+                    </Button>
+                  </li>
+                ))}
+            </ul>
+          </div>
 
           {displaySponsor && podcast ? (
             <CreateSponsor podcast={podcast} />
