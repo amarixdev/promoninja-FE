@@ -1,39 +1,26 @@
 import type { AppProps } from "next/app";
-import React from "react";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { ContextProvider } from "../context/context";
 import "../styles/globals.css";
-
-const theme = extendTheme({
-  styles: {
-    global: () => ({
-      body: {
-        bg: "#1e1e1e",
-      },
-    }),
-  },
-});
+import {
+  ApolloClient,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+} from "@apollo/client";
+import client from "./graphql/apollo-client";
+import theme from "../styles/theme";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
+    <ApolloProvider client={client}>
       <ContextProvider>
-        <Component {...pageProps} />
+        <ChakraProvider theme={theme}>
+          <Component {...pageProps} />
+        </ChakraProvider>
       </ContextProvider>
-    </ChakraProvider>
+    </ApolloProvider>
   );
 }
-
-// function MyApp({ Component, pageProps }: AppProps) {
-//   return (
-//     <ApolloProvider client={client}>
-//       <ContextProvider>
-//         <ChakraProvider theme={theme}>
-//           <Component {...pageProps} />
-//         </ChakraProvider>
-//       </ContextProvider>
-//     </ApolloProvider>
-//   );
-// }
 
 export default MyApp;
