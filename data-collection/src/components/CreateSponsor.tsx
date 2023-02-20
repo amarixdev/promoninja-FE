@@ -1,3 +1,4 @@
+import { gql, useMutation } from "@apollo/client";
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -17,41 +18,52 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import axios from "axios";
-import { useContext, useRef, useState } from "react";
-import AppContext from "../context/context";
+import { useRef, useState } from "react";
+import { Operations } from "../graphql/operations";
 
 interface Props {
   podcast: string;
+  category: string;
+  displaySubmit: boolean;
+  createPodcast: ({}) => void;
 }
 
-const CreateSponsor = ({ podcast }: Props) => {
+const CreateSponsor = ({
+  podcast,
+  category,
+  createPodcast,
+  displaySubmit,
+}: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef(null);
-  const { sponsor, setSponsor } = useContext(AppContext);
-  const [text, setText] = useState({ name: "", url: "", description: "" });
+  // const { sponsor, setSponsor } = useContext(AppContext);
+  const [sponsor, setSponsor] = useState({
+    name: "",
+    url: "",
+    description: "",
+  });
   const toast = useToast();
 
-  const handleSubmit = async () => {
-    // setSponsor({
-    //   name: text.name,
-    //   url: text.url,
-    //   description: text.description,
-    //   image: "",
-    // });
+  const [createSponsor, { loading, error }] = useMutation(
+    Operations.Mutations.CreateSponsor
+  );
 
-    const sponsorReq = true;
+  const handleSubmit = async () => {
+    console.log("sponsor", sponsor);
+
+    createSponsor({
+      variables: {
+        input: {
+          podcast,
+          sponsor,
+          category,
+        },
+      },
+    });
+
+    setSponsor({ description: "", name: "", url: "" });
 
     try {
-      const response = await axios.post(
-        "http://localhost:3333/create-podcast",
-        {
-          podcast,
-          text,
-          sponsorReq,
-        }
-      );
-
       toast({
         title: "Success.",
         description: "Podcast added successfully.",
@@ -101,9 +113,9 @@ const CreateSponsor = ({ podcast }: Props) => {
                   ref={firstField}
                   id="username"
                   placeholder="Please enter sponsor name"
-                  value={text.name}
+                  value={sponsor.name}
                   onChange={(e) => {
-                    setText({ ...text, name: e.target.value });
+                    setSponsor({ ...sponsor, name: e.target.value });
                   }}
                 />
               </Box>
@@ -111,15 +123,15 @@ const CreateSponsor = ({ podcast }: Props) => {
               <Box>
                 <FormLabel htmlFor="url">Url</FormLabel>
                 <InputGroup>
-                  {/* <InputLeftAddon>http://</InputLeftAddon> */}
                   <Input
                     type="url"
                     id="url"
                     placeholder="Please enter domain"
-                    value={text.url}
-                    onChange={(e) => setText({ ...text, url: e.target.value })}
+                    value={sponsor.url}
+                    onChange={(e) =>
+                      setSponsor({ ...sponsor, url: e.target.value })
+                    }
                   />
-                  {/* <InputRightAddon>.com</InputRightAddon> */}
                 </InputGroup>
               </Box>
 
@@ -128,10 +140,10 @@ const CreateSponsor = ({ podcast }: Props) => {
 
                 <Textarea
                   id="desc"
-                  value={text.description}
+                  value={sponsor.description}
                   onChange={(e) =>
-                    setText({
-                      ...text,
+                    setSponsor({
+                      ...sponsor,
                       description: e.target.value,
                     })
                   }
