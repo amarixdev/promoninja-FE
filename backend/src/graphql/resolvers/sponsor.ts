@@ -1,9 +1,5 @@
 import { GraphQLBoolean } from "graphql";
-import {
-  GraphQLContext,
-  PodcastInput,
-  SponsorInput,
-} from "../../../util/types";
+import { GraphQLContext, PodcastInput, SponsorInput } from "../../util/types";
 
 export const productResolvers = {
   Mutation: {
@@ -56,6 +52,7 @@ export const productResolvers = {
         }
       } else {
         try {
+          console.log("updating...");
           const updatedSponsor = await prisma.podcast.update({
             where: {
               title: podcast,
@@ -83,5 +80,40 @@ export const productResolvers = {
       return true;
     },
   },
-  Query: {},
+  Query: {
+    getSponsors: async (
+      parent: any,
+      { input }: PodcastInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { podcast } = input;
+      
+      try {
+        console.log('connected')
+        const selectedPodcast = await prisma.podcast.findFirst({
+          where: {
+            title: podcast,
+          },
+        });
+
+        console.log(selectedPodcast);
+
+        /* Find all sponsors for given podcast */
+        const sponsors = await prisma.sponsor.findMany({
+          where: {
+            podcastsId: {
+              equals: selectedPodcast?.id,
+            },
+          },
+        });
+
+        console.log("SPONSORS", sponsors);
+
+        return sponsors;
+      } catch (error: any) {
+        console.log(error);
+      }
+    },
+  },
 };
