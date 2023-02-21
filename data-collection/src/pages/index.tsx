@@ -22,7 +22,7 @@ const App = () => {
     Operations.Mutations.CreatePodcast
   );
 
-  const { data } = useQuery(gql`
+  const { data, refetch } = useQuery(gql`
     query {
       getPodcasts {
         title
@@ -32,7 +32,7 @@ const App = () => {
 
   const handleInputChange = async (e: any) => {
     try {
-      console.log(data)
+      console.log(data);
       setText(e.target.value);
       const podcasts = data.getPodcasts.map((obj: any) => obj.title);
       const preview = podcasts.filter((title: string) =>
@@ -84,10 +84,11 @@ const App = () => {
     const sponsorReq = false;
 
     try {
-      createPodcast({
+      await createPodcast({
         variables: { input: { podcast, category } },
       });
 
+      await refetch();
       toast({
         title: "Success.",
         description: "Podcast added successfully.",
