@@ -1,5 +1,5 @@
 import { prisma } from "@prisma/client";
-import { GraphQLContext, PodcastInput } from "../../../util/types";
+import { GraphQLContext, PodcastInput } from "../../util/types";
 
 export const podcastResolvers = {
   Mutation: {
@@ -8,7 +8,6 @@ export const podcastResolvers = {
       { input }: PodcastInput,
       context: GraphQLContext
     ) => {
-      console.log("connected");
       const { prisma } = context;
 
       let { podcast, category } = input;
@@ -31,7 +30,7 @@ export const podcastResolvers = {
           },
         },
       });
-      
+
       return true;
     },
   },
@@ -43,7 +42,9 @@ export const podcastResolvers = {
           take: 10,
         });
         return podcasts;
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

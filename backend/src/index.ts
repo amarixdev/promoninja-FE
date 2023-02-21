@@ -1,7 +1,7 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { prisma, PrismaClient } from "@prisma/client";
-import resolvers from "./graphql/resolvers.ts";
+import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
 import Axios from "axios";
 import express from "express";
@@ -22,8 +22,7 @@ const main = async () => {
 
   interface MyContext {
     prisma?: PrismaClient;
-    test: String;
-    accessToken: String
+    test: string;
   }
 
   const server = new ApolloServer<MyContext>({
@@ -35,25 +34,8 @@ const main = async () => {
 
   const { url } = await startStandaloneServer(server, {
     context: async ({ req, res }) => {
-      const accessToken = await fetch(
-        "https://accounts.spotify.com/api/token",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization:
-              "Basic " +
-              Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64"),
-          },
-          body: "grant_type=client_credentials",
-        }
-      )
-        .then((result) => result.json())
-        .then((data) => {
-          return data.access_token;
-        });
+
       return {
-        accessToken,
         test: "test",
         prisma,
       };
