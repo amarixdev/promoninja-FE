@@ -1,5 +1,5 @@
-import { gql, useMutation } from "@apollo/client";
-import { AddIcon } from "@chakra-ui/icons";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { AddIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { Operations } from "../graphql/operations";
+import { Sponsor } from "../utils/types";
 
 interface Props {
   podcast: string;
@@ -28,12 +29,7 @@ interface Props {
   createPodcast: ({}) => void;
 }
 
-const CreateSponsor = ({
-  podcast,
-  category,
-  createPodcast,
-  displaySubmit,
-}: Props) => {
+const CreateSponsor = ({ podcast, category }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef(null);
   // const { sponsor, setSponsor } = useContext(AppContext);
@@ -43,15 +39,20 @@ const CreateSponsor = ({
     description: "",
   });
   const toast = useToast();
-
   const [createSponsor, { loading, error }] = useMutation(
     Operations.Mutations.CreateSponsor
   );
 
-  const handleSubmit = async () => {
-    console.log("sponsor", sponsor);
+  const { data, refetch } = useQuery(Operations.Queries.GetSponsors, {
+    variables: {
+      input: { podcast },
+    },
+  });
 
-    createSponsor({
+  const currentSponsors = data?.getSponsors;
+
+  const handleSubmit = async () => {
+    await createSponsor({
       variables: {
         input: {
           podcast,
@@ -61,6 +62,7 @@ const CreateSponsor = ({
       },
     });
 
+    await refetch();
     setSponsor({ description: "", name: "", url: "" });
 
     try {
@@ -83,6 +85,7 @@ const CreateSponsor = ({
     }
   };
 
+  // const currentSponsors = ["Athletic Greens", "Onnit", "NeuroGum"];
   return (
     <div className="mt-[100px]">
       <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
@@ -137,7 +140,6 @@ const CreateSponsor = ({
 
               <Box>
                 <FormLabel htmlFor="desc">Description</FormLabel>
-
                 <Textarea
                   id="desc"
                   value={sponsor.description}
@@ -148,6 +150,15 @@ const CreateSponsor = ({
                     })
                   }
                 />
+              </Box>
+              <Box>
+                <FormLabel>Current Sponsors</FormLabel>
+                {currentSponsors?.map((sponsor: Sponsor, index: number) => (
+                  <div key={index} className="w-full flex justify-between">
+                    <h1>{sponsor.name}</h1>
+                    <p className="text-sm">remove</p>
+                  </div>
+                ))}
               </Box>
             </Stack>
           </DrawerBody>
