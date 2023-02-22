@@ -26,3 +26,12 @@ export interface SponsorData {
   description: string;
   image?: string;
 }
+
+export interface DeleteInput {
+  input: DeleteData;
+}
+
+interface DeleteData {
+  sponsor: string;
+  podcast: string
+}
