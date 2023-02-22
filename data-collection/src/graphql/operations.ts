@@ -28,5 +28,10 @@ export const Operations = {
         createSponsor(input: $input)
       }
     `,
+    DeleteSponsor: gql`
+      mutation ($input: DeleteInput) {
+        deleteSponsor(input: $input)
+      }
+    `,
   },
 };
