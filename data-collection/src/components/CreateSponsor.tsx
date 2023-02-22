@@ -43,6 +43,17 @@ const CreateSponsor = ({ podcast, category }: Props) => {
     Operations.Mutations.CreateSponsor
   );
 
+  const [deleteSponsor, {}] = useMutation(Operations.Mutations.DeleteSponsor);
+
+  const handleDelete = async (sponsorToDelete: string) => {
+    await deleteSponsor({
+      variables: {
+        input: { sponsor: sponsorToDelete, podcast },
+      },
+    });
+    await refetch();
+  };
+
   const { data, refetch } = useQuery(Operations.Queries.GetSponsors, {
     variables: {
       input: { podcast },
@@ -50,6 +61,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
   });
 
   const currentSponsors = data?.getSponsors;
+  console.log(currentSponsors);
 
   const handleSubmit = async () => {
     await createSponsor({
@@ -156,7 +168,12 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                 {currentSponsors?.map((sponsor: Sponsor, index: number) => (
                   <div key={index} className="w-full flex justify-between">
                     <h1>{sponsor.name}</h1>
-                    <p className="text-sm">remove</p>
+                    <p
+                      className="text-sm hover:text-red-300 active:text-red-400 hover:cursor-pointer"
+                      onClick={() => handleDelete(sponsor.name)}
+                    >
+                      remove
+                    </p>
                   </div>
                 ))}
               </Box>
