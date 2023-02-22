@@ -64,9 +64,15 @@ export const productResolvers = {
                   description: sponsor.description,
                 },
               },
+              
               sponsors: {
-                create: {
-                  name: sponsor.name,
+                connectOrCreate: {
+                  where: {
+                    name: sponsor.name,
+                  },
+                  create: {
+                    name: sponsor.name,
+                  },
                 },
               },
             },
@@ -88,27 +94,22 @@ export const productResolvers = {
     ) => {
       const { prisma } = context;
       const { podcast } = input;
-      
+
       try {
-        console.log('connected')
         const selectedPodcast = await prisma.podcast.findFirst({
           where: {
             title: podcast,
           },
         });
 
-        console.log(selectedPodcast);
-
         /* Find all sponsors for given podcast */
         const sponsors = await prisma.sponsor.findMany({
           where: {
             podcastsId: {
-              equals: selectedPodcast?.id,
+              has: selectedPodcast?.id,
             },
           },
         });
-
-        console.log("SPONSORS", sponsors);
 
         return sponsors;
       } catch (error: any) {
