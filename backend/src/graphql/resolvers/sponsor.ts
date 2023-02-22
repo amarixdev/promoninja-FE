@@ -1,5 +1,10 @@
 import { GraphQLBoolean } from "graphql";
-import { GraphQLContext, PodcastInput, SponsorInput } from "../../util/types";
+import {
+  DeleteInput,
+  GraphQLContext,
+  PodcastInput,
+  SponsorInput,
+} from "../../util/types";
 
 export const productResolvers = {
   Mutation: {
@@ -11,8 +16,6 @@ export const productResolvers = {
       const { prisma } = context;
       let { podcast, sponsor, category } = input;
       category = category?.toLowerCase();
-
-      console.log(category);
 
       const CATEGORY = await prisma.category.findFirst({
         where: {
@@ -52,7 +55,7 @@ export const productResolvers = {
         }
       } else {
         try {
-          console.log("updating...");
+          console.log("updating... ");
           const updatedSponsor = await prisma.podcast.update({
             where: {
               title: podcast,
@@ -64,7 +67,7 @@ export const productResolvers = {
                   description: sponsor.description,
                 },
               },
-              
+
               sponsors: {
                 connectOrCreate: {
                   where: {
@@ -82,8 +85,63 @@ export const productResolvers = {
         }
       }
 
-      //   console.log(createdSponsor);
       return true;
+    },
+    deleteSponsor: async (
+      parent: any,
+      { input }: DeleteInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { sponsor: deletedSponsor, podcast } = input;
+
+      try {
+        const getPodcast = await prisma.podcast.findFirst({
+          where: {
+            title: podcast,
+          },
+        });
+
+        const getSponsor = await prisma.sponsor.findFirst({
+          where: {
+            name: deletedSponsor,
+          },
+        });
+
+        /* Remove the sponsor offer from podcast */
+        await prisma.podcast.update({
+          where: {
+            id: getPodcast?.id,
+          },
+          data: {
+            offer: {
+              deleteMany: {
+                where: {
+                  sponsor: deletedSponsor,
+                },
+              },
+            },
+          },
+        });
+
+        /* Disconnect sponsor-to-podcast relationship */
+        await prisma.sponsor.update({
+          where: {
+            id: getSponsor?.id,
+          },
+          data: {
+            podcast: {
+              disconnect: {
+                id: getPodcast?.id,
+              },
+            },
+          },
+        });
+
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   Query: {
