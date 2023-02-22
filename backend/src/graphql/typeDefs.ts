@@ -11,11 +11,17 @@ const typeDefs = gql`
     updatePodcast: Boolean
     createSponsor(input: PodcastInput!): Boolean
     updateSponsor: Boolean
+    deleteSponsor(input: DeleteInput): Boolean
+  }
+
+  input DeleteInput {
+    sponsor: String!
+    podcast: String!
   }
 
   input PodcastInput {
     sponsor: SponsorInput
-    podcast: String!
+    podcast: String
     category: String
   }
 
