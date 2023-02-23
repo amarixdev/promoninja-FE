@@ -14,6 +14,7 @@ import { Select } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@apollo/client";
 import { gql } from "graphql-tag";
 import { Operations } from "../graphql/operations";
+import Fuse from "fuse.js";
 
 const App = () => {
   const toast = useToast();
@@ -41,12 +42,21 @@ const App = () => {
         <Spinner />
       </div>
     );
-  
-  
-  const podcasts = data.getPodcasts.map((obj: any) => obj.title);
-  const preview = podcasts.filter((title: string) =>
-    title.toLowerCase().includes(text.toLowerCase())
-  );
+
+  const podcasts = data?.getPodcasts;
+
+  let fusePreview;
+  if (podcasts) {
+    const fuse = new Fuse(podcasts, {
+      keys: ["title"],
+      includeScore: true,
+    });
+
+    fusePreview = fuse.search(text).map((preview: any) => {
+      const { item } = preview;
+      return item.title;
+    });
+  }
 
   const handleInputChange = async (e: any) => {
     try {
@@ -94,8 +104,6 @@ const App = () => {
   };
 
   const handleSave = async () => {
-    const sponsorReq = false;
-
     try {
       await createPodcast({
         variables: { input: { podcast, category } },
@@ -150,7 +158,7 @@ const App = () => {
               <ul className="text-center">
                 {text &&
                   displayPreview &&
-                  preview.map((p: any) => (
+                  fusePreview?.map((p: any) => (
                     <li key={p}>
                       <Button
                         onClick={(e) => handleSubmit(e, p, true)}
