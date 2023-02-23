@@ -13,11 +13,13 @@ import {
   FormLabel,
   Input,
   InputGroup,
+  Spinner,
   Stack,
   Textarea,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import Fuse from "fuse.js";
 import { useRef, useState } from "react";
 import { Operations } from "../graphql/operations";
 import { Sponsor } from "../utils/types";
@@ -32,14 +34,14 @@ interface Props {
 const CreateSponsor = ({ podcast, category }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef(null);
-  // const { sponsor, setSponsor } = useContext(AppContext);
+  const [displayPreview, setDisplayPreview] = useState(false);
   const [sponsor, setSponsor] = useState({
     name: "",
     url: "",
     description: "",
   });
   const toast = useToast();
-  const [createSponsor, { loading, error }] = useMutation(
+  const [createSponsor, { error }] = useMutation(
     Operations.Mutations.CreateSponsor
   );
 
@@ -54,14 +56,48 @@ const CreateSponsor = ({ podcast, category }: Props) => {
     await refetch();
   };
 
-  const { data, refetch } = useQuery(Operations.Queries.GetSponsors, {
+  const { data, refetch } = useQuery(Operations.Queries.FetchSponsors, {
     variables: {
       input: { podcast },
     },
   });
 
-  const currentSponsors = data?.getSponsors;
-  console.log(currentSponsors);
+  const { data: sponsorList, loading } = useQuery(
+    Operations.Queries.GetSponsors
+  );
+
+  let fusePreview;
+
+  if (sponsorList) {
+    const fuse = new Fuse(sponsorList?.getSponsors, {
+      keys: ["name"],
+      includeScore: true,
+    });
+
+    fusePreview = fuse.search(sponsor?.name).map((preview: any) => {
+      const { item } = preview;
+      return item.name;
+    });
+  }
+
+  const sponsorPreview = sponsorList?.getSponsors.map((sponsor: any) => {
+    return sponsor.name;
+  });
+
+  // console.log(sponsorPreview);
+
+  const handleChange = (e: any) => {
+    setSponsor({ ...sponsor, name: e.target.value });
+    setDisplayPreview(true);
+  };
+
+  const currentSponsors = data?.fetchSponsors;
+
+  const handleSearch = (param: string, event: any) => {
+    event.preventDefault();
+    setSponsor({ ...sponsor, name: param });
+    setDisplayPreview(false);
+  };
 
   const handleSubmit = async () => {
     await createSponsor({
@@ -98,6 +134,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
   };
 
   // const currentSponsors = ["Athletic Greens", "Onnit", "NeuroGum"];
+  if (loading) return <Spinner />;
   return (
     <div className="mt-[100px]">
       <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
@@ -122,25 +159,45 @@ const CreateSponsor = ({ podcast, category }: Props) => {
 
           <DrawerBody>
             <Stack spacing="24px">
-              <Box>
-                <FormLabel htmlFor="username">Sponsor</FormLabel>
-                <Input
-                  ref={firstField}
-                  id="username"
-                  placeholder="Please enter sponsor name"
-                  value={sponsor.name}
-                  onChange={(e) => {
-                    setSponsor({ ...sponsor, name: e.target.value });
-                  }}
-                />
-              </Box>
+              <form onSubmit={(e) => handleSearch(sponsor.name, e)}>
+                <Box>
+                  <FormLabel>Sponsor</FormLabel>
+                  <Input
+                    ref={firstField}
+                    placeholder="Please enter sponsor name"
+                    value={sponsor.name}
+                    onChange={(e) => {
+                      handleChange(e);
+                    }}
+                  />
+                  {displayPreview && (
+                    <Box
+                      bg={"#2D3748"}
+                      h={"300px"}
+                      w={"275px"}
+                      pos="fixed"
+                      zIndex={"10"}
+                      rounded="3xl"
+                    >
+                      {fusePreview?.map((sponsor: any) => (
+                        <Button
+                          key={sponsor}
+                          margin={2}
+                          onClick={(e) => handleSearch(sponsor, e)}
+                        >
+                          {sponsor}
+                        </Button>
+                      ))}
+                    </Box>
+                  )}
+                </Box>
+              </form>
 
               <Box>
-                <FormLabel htmlFor="url">Url</FormLabel>
+                <FormLabel>Url</FormLabel>
                 <InputGroup>
                   <Input
                     type="url"
-                    id="url"
                     placeholder="Please enter domain"
                     value={sponsor.url}
                     onChange={(e) =>
