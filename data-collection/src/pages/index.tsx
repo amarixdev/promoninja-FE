@@ -1,6 +1,12 @@
 import { use, useContext, useState } from "react";
-import axios from "axios";
-import { Button, Input, Text, VStack, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Input,
+  Text,
+  VStack,
+  useToast,
+  Spinner,
+} from "@chakra-ui/react";
 
 import CreateSponsor from "../components/CreateSponsor";
 import AppContext from "../context/context";
@@ -15,14 +21,13 @@ const App = () => {
   const [podcast, setPodcast] = useState("");
   const [displaySponsor, setDisplaySponsor] = useState(false);
   const [displaySubmit, setDisplaySubmit] = useState(false);
+  const [displayPreview, setDisplayPreview] = useState(true);
   const [text, setText] = useState("");
   const { sponsor } = useContext(AppContext);
-  const [searchPreview, setSearchPreview] = useState([]);
-  const [createPodcast, { loading, error }] = useMutation(
+  const [createPodcast, { error }] = useMutation(
     Operations.Mutations.CreatePodcast
   );
-
-  const { data, refetch } = useQuery(gql`
+  const { data, loading, refetch } = useQuery(gql`
     query {
       getPodcasts {
         title
@@ -30,17 +35,25 @@ const App = () => {
     }
   `);
 
+  if (loading)
+    return (
+      <div className="w-full h-screen items-center justify-center flex">
+        <Spinner />
+      </div>
+    );
+  
+  
+  const podcasts = data.getPodcasts.map((obj: any) => obj.title);
+  const preview = podcasts.filter((title: string) =>
+    title.toLowerCase().includes(text.toLowerCase())
+  );
+
   const handleInputChange = async (e: any) => {
     try {
-      console.log(data);
       setText(e.target.value);
-      const podcasts = data.getPodcasts.map((obj: any) => obj.title);
-      const preview = podcasts.filter((title: string) =>
-        title.toLowerCase().includes(text.toLowerCase())
-      );
       setDisplaySubmit(false);
       setDisplaySponsor(false);
-      setSearchPreview(preview);
+      setDisplayPreview(true);
       setPodcast("");
     } catch (error) {
       console.log(error);
@@ -55,7 +68,7 @@ const App = () => {
     e.preventDefault();
     setText(preview);
     setPodcast(preview);
-    setSearchPreview([]);
+    setDisplayPreview(false);
     setDisplaySponsor(true);
 
     if (!existingPodcast) {
@@ -136,13 +149,14 @@ const App = () => {
             <div className="w-[300px] bg-[#12121] flex flex-col items-center mt-10">
               <ul className="text-center">
                 {text &&
-                  searchPreview.map((preview) => (
-                    <li key={preview}>
+                  displayPreview &&
+                  preview.map((p: any) => (
+                    <li key={p}>
                       <Button
-                        onClick={(e) => handleSubmit(e, preview, true)}
+                        onClick={(e) => handleSubmit(e, p, true)}
                         margin={1}
                       >
-                        {preview}
+                        {p}
                       </Button>
                     </li>
                   ))}
