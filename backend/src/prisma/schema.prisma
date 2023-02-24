@@ -15,20 +15,20 @@ generator client {
 }
 
 model Podcast {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  title     String    @unique
-  imageUrl  String?
-  sponsorId String[]  @db.ObjectId
-  category        Category?        @relation(fields: [categoryId], references: [id])
-  categoryId      String           @db.ObjectId
-  sponsors  Sponsor[] @relation(fields: [sponsorId], references: [id])
-  offer     Offer[]
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  title      String    @unique
+  imageUrl   String?
+  sponsorId  String[]  @db.ObjectId
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String    @db.ObjectId
+  sponsors   Sponsor[] @relation(fields: [sponsorId], references: [id])
+  offer      Offer[]
 }
 
 model Sponsor {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   name       String    @unique
-  imageUrl   String?   
+  imageUrl   String?
   podcastsId String[]  @db.ObjectId
   podcast    Podcast[] @relation(fields: [podcastsId], references: [id])
 }
@@ -39,8 +39,7 @@ type Offer {
 }
 
 model Category {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
   Podcast Podcast[]
 }
