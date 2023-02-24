@@ -34,8 +34,25 @@ const main = async () => {
 
   const { url } = await startStandaloneServer(server, {
     context: async ({ req, res }) => {
-
+      const accessToken = await fetch(
+        "https://accounts.spotify.com/api/token",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization:
+              "Basic " +
+              Buffer.from(CLIENT_ID + ":" + CLIENT_SECRET).toString("base64"),
+          },
+          body: "grant_type=client_credentials",
+        }
+      )
+        .then((result) => result.json())
+        .then((data) => {
+          return data.access_token;
+        });
       return {
+        accessToken,
         test: "test",
         prisma,
       };
