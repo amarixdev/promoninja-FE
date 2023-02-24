@@ -66,7 +66,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
     Operations.Queries.GetSponsors
   );
 
-  let fusePreview;
+  let fusePreview: string[] | undefined = undefined;
 
   if (sponsorList) {
     const fuse = new Fuse(sponsorList?.getSponsors, {
@@ -79,12 +79,6 @@ const CreateSponsor = ({ podcast, category }: Props) => {
       return item.name;
     });
   }
-
-  const sponsorPreview = sponsorList?.getSponsors.map((sponsor: any) => {
-    return sponsor.name;
-  });
-
-  // console.log(sponsorPreview);
 
   const handleChange = (e: any) => {
     setSponsor({ ...sponsor, name: e.target.value });
@@ -100,36 +94,63 @@ const CreateSponsor = ({ podcast, category }: Props) => {
   };
 
   const handleSubmit = async () => {
-    await createSponsor({
-      variables: {
-        input: {
-          podcast,
-          sponsor,
-          category,
-        },
-      },
-    });
-
-    await refetch();
-    setSponsor({ description: "", name: "", url: "" });
-
     try {
-      toast({
-        title: "Success.",
-        description: "Podcast added successfully.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+      if (fusePreview) {
+        for (const name of fusePreview) {
+          if (name === sponsor.name) {
+            toast({
+              title: "Error",
+              description: "Sponsor already exists",
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+            });
+            return;
+          }
+        }
+      }
+
+      if (!sponsor.url) {
+        toast({
+          title: "Error",
+          description: "Please add a url",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+      if (!sponsor.description) {
+        toast({
+          title: "Error",
+          description: "Please add a description",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      } else {
+        await createSponsor({
+          variables: {
+            input: {
+              podcast,
+              sponsor,
+              category,
+            },
+          },
+        });
+        await refetch();
+        toast({
+          title: "Success!",
+          description: "Sponsor added successfully.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setSponsor({ description: "", name: "", url: "" });
+      }
     } catch (error: any) {
-      const { message } = error.response.data.message.sponsor;
-      toast({
-        title: "Error.",
-        description: message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      console.log(error);
     }
   };
 
@@ -173,7 +194,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                   {displayPreview && (
                     <Box
                       bg={"#2D3748"}
-                      h={"300px"}
+                      h={"400px"}
                       w={"275px"}
                       pos="fixed"
                       zIndex={"10"}
