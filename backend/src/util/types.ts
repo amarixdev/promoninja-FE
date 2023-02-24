@@ -14,6 +14,7 @@ export interface PodcastData {
   sponsor: Sponsor;
   podcast: string;
   category: string;
+  image: string
 }
 
 export interface SponsorInput {
@@ -33,5 +34,14 @@ export interface DeleteInput {
 
 interface DeleteData {
   sponsor: string;
-  podcast: string
+  podcast: string;
+}
+
+export interface SpotifyAPI {
+  input: SpotifyAPIData;
+}
+
+interface SpotifyAPIData {
+  podcast: string;
+  id: number;
 }
