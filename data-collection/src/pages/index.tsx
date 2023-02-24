@@ -21,11 +21,14 @@ const App = () => {
   const toast = useToast();
   const [category, setCategory] = useState("");
   const [podcast, setPodcast] = useState("");
-  const [displaySponsor, setDisplaySponsor] = useState(false);
-  const [displaySubmit, setDisplaySubmit] = useState(false);
-  const [displayPreview, setDisplayPreview] = useState(true);
-  const [displayImage, setDisplayImage] = useState(true);
-  const [displayTitle, setDisplayTitle] = useState(false);
+  const [display, setDisplay] = useState({
+    sponsor: false,
+    submit: false,
+    preview: true,
+    image: true,
+    title: false,
+  });
+
   const [text, setText] = useState("");
   const [createPodcast, { error }] = useMutation(
     Operations.Mutations.CreatePodcast
@@ -59,12 +62,15 @@ const App = () => {
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      setDisplayImage(false);
       setText(e.target.value);
-      setDisplaySubmit(false);
-      setDisplaySponsor(false);
-      setDisplayPreview(true);
-      setDisplayTitle(false);
+      setDisplay((prev) => ({
+        ...prev,
+        image: false,
+        submit: false,
+        sponsor: false,
+        preview: true,
+        title: false,
+      }));
       setPodcast("");
     } catch (error) {
       console.log(error);
@@ -79,20 +85,26 @@ const App = () => {
     e.preventDefault();
     setText(preview);
     setPodcast(preview);
-    setDisplayPreview(false);
-    setDisplaySponsor(true);
-    setDisplayImage(true);
-    setDisplayTitle(true);
+    setDisplay((prev) => ({
+      ...prev,
+      preview: false,
+      sponsor: true,
+      image: true,
+      title: true,
+    }));
+    if (!text) {
+      return;
+    }
     if (!existingPodcast) {
-      setDisplaySubmit(true);
+      setDisplay((prev) => ({ ...prev, submit: true }));
     }
 
     if (!existingPodcast && text === podcast) {
-      setDisplaySubmit(false);
+      setDisplay((prev) => ({ ...prev, submit: false }));
     }
 
-    if (!existingPodcast && displaySubmit) {
-      setDisplaySubmit(true);
+    if (!existingPodcast && display.submit) {
+      setDisplay((prev) => ({ ...prev, submit: true }));
     }
 
     try {
@@ -108,8 +120,8 @@ const App = () => {
     }
   };
 
-  const imageURL = podcastImage?.fetchSpotifyPodcast[0].images[0].url;
-  const spotifyName = podcastImage?.fetchSpotifyPodcast[0].name;
+  const imageURL = podcastImage?.fetchSpotifyPodcast[0]?.images[0].url;
+  const spotifyName = podcastImage?.fetchSpotifyPodcast[0]?.name;
 
   const handleSave = async () => {
     try {
@@ -136,10 +148,9 @@ const App = () => {
         isClosable: true,
       });
     }
-    setDisplayImage(false);
+    setDisplay((prev) => ({ ...prev, image: false, title: false }));
     setCategory("");
     setText("");
-    setDisplayTitle(false);
   };
   /* TODO: Query for Spotify IDs and Images */
 
@@ -147,7 +158,7 @@ const App = () => {
     <div className="bg-[#1e1e1e] h-screen w-full flex flex-col items-center justify-center">
       <h1 className="text-white font-semibold text-3xl sm:text-4xl lg:text-5xl mb-4 fixed top-10">
         {/* {podcast} */}
-        {spotifyName && displayTitle && spotifyName}
+        {spotifyName && display.title && spotifyName}
       </h1>
       <form
         onSubmit={(e) => handleSubmit(e, text, false)}
@@ -169,7 +180,7 @@ const App = () => {
             <div className="w-[300px] bg-[#12121] flex flex-col items-center mt-10">
               <ul className="text-center">
                 {text &&
-                  displayPreview &&
+                  display.preview &&
                   fusePreview?.map((preview: string) => (
                     <li key={preview}>
                       <Button
@@ -183,19 +194,19 @@ const App = () => {
               </ul>
             </div>
           </div>
-          {displaySponsor && podcast ? (
+          {display.sponsor && podcast ? (
             <CreateSponsor
               podcast={spotifyName}
               createPodcast={createPodcast}
-              displaySubmit={displaySubmit}
+              displaySubmit={display.submit}
               category={category}
             />
           ) : null}
-          {imageURL && displayImage && (
+          {imageURL && display.image && (
             <Image src={imageURL} width={125} height={125} alt="/" />
           )}
 
-          {displaySubmit && (
+          {display.submit && (
             <Select
               placeholder="--Select Category--"
               textColor={"white"}
@@ -212,7 +223,7 @@ const App = () => {
               <option value="sports">Sports</option>
             </Select>
           )}
-          {displaySubmit && (
+          {display.submit && (
             <Button
               onClick={handleSave}
               colorScheme={"purple"}
