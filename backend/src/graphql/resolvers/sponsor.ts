@@ -145,7 +145,7 @@ export const productResolvers = {
     },
   },
   Query: {
-    getSponsors: async (
+    fetchSponsors: async (
       parent: any,
       { input }: PodcastInput,
       context: GraphQLContext
@@ -173,6 +173,11 @@ export const productResolvers = {
       } catch (error: any) {
         console.log(error);
       }
+    },
+    getSponsors: async (parent: any, args: any, context: GraphQLContext) => {
+      const { prisma } = context;
+      const sponsors = prisma.sponsor.findMany();
+      return sponsors;
     },
   },
 };
