@@ -15,23 +15,46 @@ export const podcastResolvers = {
 
       category = category?.toLowerCase();
 
-      const CATEGORY = await prisma.category.findFirst({
+      const getCategory = await prisma.category.findFirst({
         where: {
           name: category,
         },
       });
 
-      const createdPodcast = await prisma.podcast.create({
+      await prisma.podcast.create({
         data: {
           title: podcast,
           imageUrl: image,
           category: {
             connect: {
-              id: CATEGORY?.id,
+              id: getCategory?.id,
             },
           },
         },
       });
+
+      const getPodcast = await prisma.podcast.findFirst({
+        where: {
+          title: podcast,
+        },
+      });
+
+      console.log(podcast);
+
+      await prisma.category.update({
+        where: {
+          id: getCategory?.id,
+        },
+        data: {
+          podcast: {
+            connect: {
+              id: getPodcast?.id,
+            },
+          },
+        },
+      });
+
+      console.log("GETPODCAST", getPodcast?.id);
 
       return true;
     },
@@ -55,7 +78,6 @@ export const podcastResolvers = {
     ) => {
       const { accessToken, prisma } = context;
       const { podcast } = input;
-      console.log(podcast);
 
       try {
         const result = await fetch(
@@ -67,7 +89,6 @@ export const podcastResolvers = {
         );
 
         const data = await result.json();
-        console.log(data.shows.items.name);
         return data?.shows?.items;
       } catch (err) {
         console.log(err);
