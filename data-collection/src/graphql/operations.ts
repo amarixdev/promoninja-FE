@@ -9,10 +9,28 @@ export const Operations = {
         }
       }
     `,
-    GetSponsors: gql`
+    FetchSponsors: gql`
       query ($input: PodcastInput!) {
-        getSponsors(input: $input) {
+        fetchSponsors(input: $input) {
           name
+        }
+      }
+    `,
+    GetSponsors: gql`
+      query {
+        getSponsors {
+          name
+        }
+      }
+    `,
+    fetchSpotifyPodcast: gql`
+      query ($input: SpotifyAPI!) {
+        fetchSpotifyPodcast(input: $input) {
+          id
+          name
+          images {
+            url
+          }
         }
       }
     `,
