@@ -95,6 +95,7 @@ const App = () => {
     if (!text) {
       return;
     }
+
     if (!existingPodcast) {
       setDisplay((prev) => ({ ...prev, submit: true }));
     }
@@ -140,24 +141,26 @@ const App = () => {
         isClosable: true,
       });
     } catch (error: any) {
-      toast({
-        title: "Error.",
-        description: error.response.data.message.podcast,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      if (!category) {
+        toast({
+          title: "Error",
+          description: "Please Enter Category.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else console.log(error);
     }
     setDisplay((prev) => ({ ...prev, image: false, title: false }));
     setCategory("");
     setText("");
   };
-  /* TODO: Query for Spotify IDs and Images */
+
+  console.log(imageURL);
 
   return (
     <div className="bg-[#1e1e1e] h-screen w-full flex flex-col items-center justify-center">
       <h1 className="text-white font-semibold text-3xl sm:text-4xl lg:text-5xl mb-4 fixed top-10">
-        {/* {podcast} */}
         {spotifyName && display.title && spotifyName}
       </h1>
       <form
