@@ -1,4 +1,4 @@
-import { use, useContext, useState } from "react";
+import { FormEvent, use, useContext, useState } from "react";
 import {
   Button,
   Input,
@@ -11,10 +11,11 @@ import {
 import CreateSponsor from "../components/CreateSponsor";
 import AppContext from "../context/context";
 import { Select } from "@chakra-ui/react";
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { gql } from "graphql-tag";
 import { Operations } from "../graphql/operations";
 import Fuse from "fuse.js";
+import Image from "next/image";
 
 const App = () => {
   const toast = useToast();
@@ -23,18 +24,16 @@ const App = () => {
   const [displaySponsor, setDisplaySponsor] = useState(false);
   const [displaySubmit, setDisplaySubmit] = useState(false);
   const [displayPreview, setDisplayPreview] = useState(true);
+  const [displayImage, setDisplayImage] = useState(true);
+  const [displayTitle, setDisplayTitle] = useState(false);
   const [text, setText] = useState("");
-  const { sponsor } = useContext(AppContext);
   const [createPodcast, { error }] = useMutation(
     Operations.Mutations.CreatePodcast
   );
-  const { data, loading, refetch } = useQuery(gql`
-    query {
-      getPodcasts {
-        title
-      }
-    }
-  `);
+  const { data, loading, refetch } = useQuery(Operations.Queries.GetPodcasts);
+
+  const [getPodcastImage, { data: podcastImage, refetch: refetchImage }] =
+    useLazyQuery(Operations.Queries.fetchSpotifyPodcast);
 
   if (loading)
     return (
@@ -58,12 +57,14 @@ const App = () => {
     });
   }
 
-  const handleInputChange = async (e: any) => {
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
+      setDisplayImage(false);
       setText(e.target.value);
       setDisplaySubmit(false);
       setDisplaySponsor(false);
       setDisplayPreview(true);
+      setDisplayTitle(false);
       setPodcast("");
     } catch (error) {
       console.log(error);
@@ -71,7 +72,7 @@ const App = () => {
   };
 
   const handleSubmit = async (
-    e: any,
+    e: FormEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>,
     preview: string,
     existingPodcast: boolean
   ) => {
@@ -80,7 +81,8 @@ const App = () => {
     setPodcast(preview);
     setDisplayPreview(false);
     setDisplaySponsor(true);
-
+    setDisplayImage(true);
+    setDisplayTitle(true);
     if (!existingPodcast) {
       setDisplaySubmit(true);
     }
@@ -94,19 +96,27 @@ const App = () => {
     }
 
     try {
-      if (podcast === "") {
-        return;
-      } else {
-      }
+      await getPodcastImage({
+        variables: {
+          input: { podcast: preview },
+        },
+      });
+
+      await refetchImage();
     } catch (error) {
       console.log(error);
     }
   };
 
+  const imageURL = podcastImage?.fetchSpotifyPodcast[0].images[0].url;
+  const spotifyName = podcastImage?.fetchSpotifyPodcast[0].name;
+
   const handleSave = async () => {
     try {
       await createPodcast({
-        variables: { input: { podcast, category } },
+        variables: {
+          input: { podcast: spotifyName, category, image: imageURL },
+        },
       });
 
       await refetch();
@@ -126,16 +136,18 @@ const App = () => {
         isClosable: true,
       });
     }
+    setDisplayImage(false);
     setCategory("");
     setText("");
-    setPodcast("");
+    setDisplayTitle(false);
   };
+  /* TODO: Query for Spotify IDs and Images */
 
   return (
     <div className="bg-[#1e1e1e] h-screen w-full flex flex-col items-center justify-center">
-      {/* Create Podcast and Sponsor page */}
       <h1 className="text-white font-semibold text-3xl sm:text-4xl lg:text-5xl mb-4 fixed top-10">
-        {podcast}
+        {/* {podcast} */}
+        {spotifyName && displayTitle && spotifyName}
       </h1>
       <form
         onSubmit={(e) => handleSubmit(e, text, false)}
@@ -158,13 +170,13 @@ const App = () => {
               <ul className="text-center">
                 {text &&
                   displayPreview &&
-                  fusePreview?.map((p: any) => (
-                    <li key={p}>
+                  fusePreview?.map((preview: string) => (
+                    <li key={preview}>
                       <Button
-                        onClick={(e) => handleSubmit(e, p, true)}
+                        onClick={(e) => handleSubmit(e, preview, true)}
                         margin={1}
                       >
-                        {p}
+                        {preview}
                       </Button>
                     </li>
                   ))}
@@ -173,12 +185,15 @@ const App = () => {
           </div>
           {displaySponsor && podcast ? (
             <CreateSponsor
-              podcast={podcast}
+              podcast={spotifyName}
               createPodcast={createPodcast}
               displaySubmit={displaySubmit}
               category={category}
             />
           ) : null}
+          {imageURL && displayImage && (
+            <Image src={imageURL} width={125} height={125} alt="/" />
+          )}
 
           {displaySubmit && (
             <Select
