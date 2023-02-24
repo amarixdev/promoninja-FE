@@ -3,7 +3,27 @@ import gql from "graphql-tag";
 const typeDefs = gql`
   type Query {
     getPodcasts: [Podcast]
-    getSponsors(input: PodcastInput!): [Sponsor]
+    getSponsors: [Sponsor]
+    fetchSponsors(input: PodcastInput!): [Sponsor]
+    fetchSpotifyPodcast(input: SpotifyAPI!): [Items]
+  }
+
+  input SpotifyAPI {
+    podcast: String
+    id: ID
+    name: String
+  }
+
+  type Items {
+    id: ID
+    images: [Image]
+    name: String
+  }
+
+  type Image {
+    height: Int
+    url: String
+    width: Int
   }
 
   type Mutation {
@@ -23,6 +43,7 @@ const typeDefs = gql`
     sponsor: SponsorInput
     podcast: String
     category: String
+    image: String
   }
 
   input SponsorInput {
@@ -35,7 +56,7 @@ const typeDefs = gql`
   type Podcast {
     id: ID!
     title: String!
-    imageUrl: String
+    image: String
     categoryId: ID
     offer: [Offer]
     sponsorId: [ID]
@@ -52,7 +73,7 @@ const typeDefs = gql`
   type Sponsor {
     id: ID!
     name: String!
-    imageUrl: String
+    image: String
     podcastsId: [ID]
   }
 `;
