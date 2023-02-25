@@ -23,6 +23,7 @@ model Podcast {
   categoryId String[]   @db.ObjectId
   sponsors   Sponsor[]  @relation(fields: [sponsorId], references: [id])
   offer      Offer[]
+  publisher  String
 }
 
 model Sponsor {

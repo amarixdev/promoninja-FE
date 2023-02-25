@@ -11,7 +11,7 @@ export const podcastResolvers = {
     ) => {
       const { prisma } = context;
 
-      let { podcast, category, image } = input;
+      let { podcast, category, image, publisher } = input;
 
       category = category?.toLowerCase();
 
@@ -25,6 +25,7 @@ export const podcastResolvers = {
         data: {
           title: podcast,
           imageUrl: image,
+          publisher,
           category: {
             connect: {
               id: getCategory?.id,

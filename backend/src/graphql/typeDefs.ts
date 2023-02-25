@@ -6,18 +6,18 @@ const typeDefs = gql`
     getSponsors: [Sponsor]
     fetchSponsors(input: PodcastInput!): [Sponsor]
     fetchSpotifyPodcast(input: SpotifyAPI!): [Items]
+    fetchCategoryPodcasts(input: PodcastInput!): [Podcast]
   }
 
   input SpotifyAPI {
     podcast: String
-    id: ID
-    name: String
   }
 
   type Items {
     id: ID
     images: [Image]
     name: String
+    publisher: String
   }
 
   type Image {
@@ -44,6 +44,7 @@ const typeDefs = gql`
     podcast: String
     category: String
     image: String
+    publisher: String
   }
 
   input SponsorInput {
@@ -56,7 +57,7 @@ const typeDefs = gql`
   type Podcast {
     id: ID!
     title: String!
-    image: String
+    imageUrl: String
     categoryId: ID
     offer: [Offer]
     sponsorId: [ID]

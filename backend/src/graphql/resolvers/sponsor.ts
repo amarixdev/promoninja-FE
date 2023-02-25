@@ -14,7 +14,7 @@ export const productResolvers = {
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      let { podcast, sponsor, category } = input;
+      let { podcast, sponsor, category, publisher } = input;
       category = category?.toLowerCase();
 
       const CATEGORY = await prisma.category.findFirst({
@@ -31,7 +31,7 @@ export const productResolvers = {
 
       if (!existingPodcast) {
         try {
-          const createdSponsor = await prisma.sponsor.create({
+          await prisma.sponsor.create({
             data: {
               name: sponsor.name,
               podcast: {
@@ -41,6 +41,7 @@ export const productResolvers = {
                     sponsor: sponsor.name,
                     description: sponsor.description,
                   },
+                  publisher,
                   category: {
                     connect: {
                       id: CATEGORY?.id,
@@ -56,7 +57,7 @@ export const productResolvers = {
       } else {
         try {
           console.log("updating... ");
-          const updatedSponsor = await prisma.podcast.update({
+          await prisma.podcast.update({
             where: {
               title: podcast,
             },
@@ -159,15 +160,18 @@ export const productResolvers = {
             title: podcast,
           },
         });
+        let sponsors;
 
-        /* Find all sponsors for given podcast */
-        const sponsors = await prisma.sponsor.findMany({
-          where: {
-            podcastsId: {
-              has: selectedPodcast?.id,
+        if (selectedPodcast) {
+          /* Find all sponsors for given podcast */
+          sponsors = await prisma.sponsor.findMany({
+            where: {
+              podcastId: {
+                has: selectedPodcast?.id,
+              },
             },
-          },
-        });
+          });
+        }
 
         return sponsors;
       } catch (error: any) {

@@ -109,26 +109,34 @@ const App = () => {
     }
 
     try {
-      await getPodcastImage({
+      await getSpotify({
         variables: {
           input: { podcast: preview },
         },
       });
 
-      await refetchImage();
+      await refetchSpotify();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const imageURL = podcastImage?.fetchSpotifyPodcast[0]?.images[0].url;
+  const spotifyImage = podcastImage?.fetchSpotifyPodcast[0]?.images[0].url;
   const spotifyName = podcastImage?.fetchSpotifyPodcast[0]?.name;
+  const spotifyPublisher = podcastImage?.fetchSpotifyPodcast[0]?.publisher;
+
+  console.log(spotifyPublisher);
 
   const handleSave = async () => {
     try {
       await createPodcast({
         variables: {
-          input: { podcast: spotifyName, category, image: imageURL },
+          input: {
+            podcast: spotifyName,
+            category,
+            image: spotifyImage,
+            publisher: spotifyPublisher,
+          },
         },
       });
 

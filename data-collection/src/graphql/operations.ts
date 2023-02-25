@@ -23,17 +23,18 @@ export const Operations = {
         }
       }
     `,
-    fetchSpotifyPodcast: gql`
+    FetchSpotifyPodcast: gql`
       query ($input: SpotifyAPI!) {
         fetchSpotifyPodcast(input: $input) {
           id
           name
+          publisher
           images {
             url
           }
         }
       }
-    `,
+    `
   },
   Mutations: {
     CreatePodcast: gql`
