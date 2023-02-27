@@ -1,4 +1,3 @@
-import { prisma } from "@prisma/client";
 import { GraphQLContext, PodcastInput, SpotifyAPI } from "../../util/types";
 import fetch from "node-fetch";
 
@@ -40,8 +39,6 @@ export const podcastResolvers = {
         },
       });
 
-      console.log(podcast);
-
       await prisma.category.update({
         where: {
           id: getCategory?.id,
@@ -55,8 +52,6 @@ export const podcastResolvers = {
         },
       });
 
-      console.log("GETPODCAST", getPodcast?.id);
-
       return true;
     },
   },
@@ -64,9 +59,7 @@ export const podcastResolvers = {
     getPodcasts: async (parent: any, args: any, context: GraphQLContext) => {
       const { prisma } = context;
       try {
-        const podcasts = await prisma.podcast.findMany({
-          take: 6,
-        });
+        const podcasts = await prisma.podcast.findMany();
         return podcasts;
       } catch (error) {
         console.log(error);
@@ -93,6 +86,34 @@ export const podcastResolvers = {
         return data?.shows?.items;
       } catch (err) {
         console.log(err);
+      }
+    },
+    fetchCategoryPodcasts: async (
+      parent: any,
+      { input }: PodcastInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { category } = input;
+
+      try {
+        const getCategory = await prisma.category.findFirst({
+          where: {
+            name: category,
+          },
+        });
+
+        const category_podcasts = await prisma.podcast.findMany({
+          where: {
+            categoryId: {
+              equals: getCategory?.id,
+            },
+          },
+        });
+
+        return category_podcasts;
+      } catch (error) {
+        console.log(error);
       }
     },
   },
