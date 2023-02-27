@@ -1,3 +1,4 @@
+import { useQuery } from "@apollo/client";
 import {
   Card,
   CardBody,
@@ -11,22 +12,24 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import CategoryList from "../components/CategoryList";
+import { Operations } from "../graphql/operations";
 import * as Hero from "../public/assets/comedy.png";
 import * as Logo from "../public/assets/ninja4.png";
+import { GetStaticProps } from "next";
+import client from "../graphql/apollo-client";
+import category from "./category";
+import { CategoryPodcast, PodcastData } from "../utils/types";
 
-type Props = {};
+type Props = {
+  categoryPodcasts: any;
+};
 
-const podcasts = (props: Props) => {
+const podcasts = ({ categoryPodcasts }: Props) => {
   const [category, setCategory] = useState({ name: "", id: "" });
 
-  const Comedy = Array.from({ length: 5 }, () => "Comedy");
-  const TopPicks = Array.from({ length: 5 }, () => "TopPicks");
-  const Technology = Array.from({ length: 5 }, () => "Technology");
-  const Politics = Array.from({ length: 5 }, () => "Politics");
-  const Lifestyle = Array.from({ length: 5 }, () => "Lifestyle");
-  const Educational = Array.from({ length: 5 }, () => "Educational");
+  console.log(categoryPodcasts);
 
   return (
     <div className="w-full bg-[#121212]">
@@ -40,16 +43,49 @@ const podcasts = (props: Props) => {
           Podcasts
         </h1>
       </div>
-      <div className=" w-full h-screen mt-12 ">
-        <CategoryList category="Spotify's Top Picks" podcasts={TopPicks} />
-        <CategoryList category="Comedy" podcasts={Comedy} />
-        <CategoryList category="Educational" podcasts={Educational} />
-        <CategoryList category="Technology" podcasts={Technology} />
-        <CategoryList category="News & Politics" podcasts={Politics} />
-        <CategoryList category="Lifestyle" podcasts={Lifestyle} />
+      <div className=" w-full h-screen mt-12">
+        {categoryPodcasts.map((category: any) => (
+          <CategoryList key={Object.keys(category)[0]} category={category} />
+        ))}
       </div>
     </div>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const categories = [
+    "comedy",
+    "technology",
+    "news & politics",
+    "lifestyle",
+    "education",
+  ];
+
+  const categoryData = [];
+
+  for (const category of categories) {
+    const { data } = await client.query({
+      query: Operations.Queries.FetchCategoryPodcasts,
+      variables: {
+        input: {
+          category: category,
+        },
+      },
+    });
+    categoryData.push({ [category]: data });
+  }
+
+  const categoryPodcasts = categoryData.map((category: any) => {
+    const key = Object.keys(category)[0];
+    const value = category[key].fetchCategoryPodcasts;
+    return { [key]: value };
+  });
+
+  return {
+    props: {
+      categoryPodcasts,
+    },
+  };
 };
 
 export default podcasts;
