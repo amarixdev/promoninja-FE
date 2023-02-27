@@ -1,24 +1,64 @@
 import gql from "graphql-tag";
 
 export const Operations = {
-  Mutations: {
-    CREATE_CATEGORY: gql`
-      mutation {
-        createCategory
+  Queries: {
+    GetPodcasts: gql`
+      query {
+        getPodcasts {
+          title
+        }
       }
     `,
-    CREATE_PRODUCT: gql`
-      mutation {
-        createProduct
+    FetchSponsors: gql`
+      query ($input: PodcastInput!) {
+        fetchSponsors(input: $input) {
+          name
+        }
       }
     `,
-    CREATE_PODCAST: gql`
-      mutation {
-        cratePodcast
+    GetSponsors: gql`
+      query {
+        getSponsors {
+          name
+        }
+      }
+    `,
+    FetchSpotifyPodcast: gql`
+      query ($input: SpotifyAPI!) {
+        fetchSpotifyPodcast(input: $input) {
+          id
+          name
+          publisher
+          images {
+            url
+          }
+        }
+      }
+    `,
+    FetchCategoryPodcasts: gql`
+      query ($input: PodcastInput!) {
+        fetchCategoryPodcasts(input: $input) {
+          title
+          imageUrl
+        }
       }
     `,
   },
-  Queries: {
-    
+  Mutations: {
+    CreatePodcast: gql`
+      mutation ($input: PodcastInput!) {
+        createPodcast(input: $input)
+      }
+    `,
+    CreateSponsor: gql`
+      mutation ($input: PodcastInput!) {
+        createSponsor(input: $input)
+      }
+    `,
+    DeleteSponsor: gql`
+      mutation ($input: DeleteInput) {
+        deleteSponsor(input: $input)
+      }
+    `,
   },
 };
