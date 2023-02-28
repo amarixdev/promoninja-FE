@@ -1,15 +1,3 @@
-import { useQuery } from "@apollo/client";
-import {
-  Card,
-  CardBody,
-  HStack,
-  Input,
-  SimpleGrid,
-  Tab,
-  TabList,
-  Tabs,
-  Text,
-} from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { use, useState } from "react";
@@ -19,17 +7,13 @@ import * as Hero from "../public/assets/comedy.png";
 import * as Logo from "../public/assets/ninja4.png";
 import { GetStaticProps } from "next";
 import client from "../graphql/apollo-client";
-import category from "./category";
-import { CategoryPodcast, PodcastData } from "../utils/types";
+
 
 type Props = {
   categoryPodcasts: any;
 };
 
 const podcasts = ({ categoryPodcasts }: Props) => {
-  const [category, setCategory] = useState({ name: "", id: "" });
-
-  console.log(categoryPodcasts);
 
   return (
     <div className="w-full bg-[#121212]">
@@ -58,7 +42,9 @@ export const getStaticProps: GetStaticProps = async () => {
     "technology",
     "news & politics",
     "lifestyle",
-    "education",
+    "educational",
+    "sports",
+    "true crime",
   ];
 
   const categoryData = [];
