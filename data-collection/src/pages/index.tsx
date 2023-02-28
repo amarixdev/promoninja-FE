@@ -1,4 +1,4 @@
-import { FormEvent, use, useContext, useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   Button,
   Input,
@@ -9,45 +9,38 @@ import {
 } from "@chakra-ui/react";
 
 import CreateSponsor from "../components/CreateSponsor";
-import AppContext from "../context/context";
-import { Select } from "@chakra-ui/react";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { gql } from "graphql-tag";
 import { Operations } from "../graphql/operations";
 import Fuse from "fuse.js";
+import SelectCategory from "../components/SelectCategory";
 import Image from "next/image";
+import { capitalizeString } from "../util/functions";
 
 const App = () => {
-  const toast = useToast();
-  const [category, setCategory] = useState("");
-  const [podcast, setPodcast] = useState("");
   const [display, setDisplay] = useState({
     sponsor: false,
     submit: false,
     preview: true,
     image: true,
     title: false,
+    category: false,
   });
-
+  const toast = useToast();
+  const [category, setCategory] = useState("");
+  const [podcast, setPodcast] = useState("");
   const [text, setText] = useState("");
-  const [createPodcast, { error }] = useMutation(
-    Operations.Mutations.CreatePodcast
+  const [createPodcast] = useMutation(Operations.Mutations.CreatePodcast);
+  const { data, refetch } = useQuery(Operations.Queries.GetPodcasts);
+  const [fetchCategory, { data: categoryData }] = useLazyQuery(
+    Operations.Queries.FetchCategory
   );
-  const { data, loading, refetch } = useQuery(Operations.Queries.GetPodcasts);
 
-  const [getPodcastImage, { data: podcastImage, refetch: refetchImage }] =
-    useLazyQuery(Operations.Queries.fetchSpotifyPodcast);
-
-  if (loading)
-    return (
-      <div className="w-full h-screen items-center justify-center flex">
-        <Spinner />
-      </div>
-    );
+  const [getSpotify, { data: spotifyData, refetch: refetchSpotify }] =
+    useLazyQuery(Operations.Queries.FetchSpotifyPodcast);
 
   const podcasts = data?.getPodcasts;
 
-  let fusePreview;
+  let fusePreview: any;
   if (podcasts) {
     const fuse = new Fuse(podcasts, {
       keys: ["title"],
@@ -70,6 +63,7 @@ const App = () => {
         sponsor: false,
         preview: true,
         title: false,
+        category: false,
       }));
       setPodcast("");
     } catch (error) {
@@ -91,49 +85,61 @@ const App = () => {
       sponsor: true,
       image: true,
       title: true,
+      category: false,
     }));
+
     if (!text) {
       return;
     }
-
-    if (!existingPodcast) {
-      setDisplay((prev) => ({ ...prev, submit: true }));
-    }
-
-    if (!existingPodcast && text === podcast) {
-      setDisplay((prev) => ({ ...prev, submit: false }));
-    }
-
-    if (!existingPodcast && display.submit) {
-      setDisplay((prev) => ({ ...prev, submit: true }));
-    }
-
     try {
-      await getSpotify({
-        variables: {
-          input: { podcast: preview },
-        },
-      });
+      await Promise.all([
+        fetchCategory({
+          variables: {
+            input: { podcast: fusePreview[0] },
+          },
+        }),
+        getSpotify({
+          variables: {
+            input: { podcast: preview },
+          },
+        }),
+      ]).then((result) => {
+        const fetchedName = result[1].data.fetchSpotifyPodcast[0].name;
+        const podcastList = podcasts.map((podcast: any) => {
+          return podcast.title;
+        });
+        if (!existingPodcast) {
+          setDisplay((prev) => ({ ...prev, submit: true }));
+        }
+        if (!existingPodcast && text === podcast) {
+          setDisplay((prev) => ({ ...prev, submit: false }));
+        }
+        if (!existingPodcast && display.submit) {
+          setDisplay((prev) => ({ ...prev, submit: true }));
+        }
 
+        if (podcastList.includes(fetchedName)) {
+          setDisplay((prev) => ({ ...prev, submit: false }));
+          setDisplay((prev) => ({ ...prev, category: true }));
+        }
+      });
       await refetchSpotify();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const spotifyImage = podcastImage?.fetchSpotifyPodcast[0]?.images[0].url;
-  const spotifyName = podcastImage?.fetchSpotifyPodcast[0]?.name;
-  const spotifyPublisher = podcastImage?.fetchSpotifyPodcast[0]?.publisher;
-
-  console.log(spotifyPublisher);
+  const spotifyImage = spotifyData?.fetchSpotifyPodcast[0]?.images[0].url;
+  const spotifyName = spotifyData?.fetchSpotifyPodcast[0]?.name;
+  const spotifyPublisher = spotifyData?.fetchSpotifyPodcast[0]?.publisher;
 
   const handleSave = async () => {
     try {
       await createPodcast({
         variables: {
           input: {
-            podcast: spotifyName,
             category,
+            podcast: spotifyName,
             image: spotifyImage,
             publisher: spotifyPublisher,
           },
@@ -163,8 +169,6 @@ const App = () => {
     setCategory("");
     setText("");
   };
-
-  console.log(imageURL);
 
   return (
     <div className="bg-[#1e1e1e] h-screen w-full flex flex-col items-center justify-center">
@@ -213,26 +217,24 @@ const App = () => {
               category={category}
             />
           ) : null}
-          {imageURL && display.image && (
-            <Image src={imageURL} width={125} height={125} alt="/" />
+          {spotifyImage && display.image && (
+            <>
+              <Image
+                src={spotifyImage}
+                width={125}
+                height={125}
+                alt="/"
+                priority
+              />
+              <h1 className="font-bold text-lg">
+                {display.category &&
+                  capitalizeString(categoryData?.fetchCategory)}
+              </h1>
+            </>
           )}
 
           {display.submit && (
-            <Select
-              placeholder="--Select Category--"
-              textColor={"white"}
-              textAlign={"center"}
-              onChange={(e) => setCategory(e.target.value)}
-              value={category}
-            >
-              <option value="comedy">Comedy</option>
-              <option value="technology">Technology</option>
-              <option value="news & politics">News & Politics</option>
-              <option value="education">Education</option>
-              <option value="lifestyle">Lifestyle</option>
-              <option value="science">Science</option>
-              <option value="sports">Sports</option>
-            </Select>
+            <SelectCategory category={category} setCategory={setCategory} />
           )}
           {display.submit && (
             <Button
