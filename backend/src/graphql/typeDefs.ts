@@ -4,6 +4,7 @@ const typeDefs = gql`
   type Query {
     getPodcasts: [Podcast]
     getSponsors: [Sponsor]
+    fetchCategory(input: PodcastInput!): String
     fetchSponsors(input: PodcastInput!): [Sponsor]
     fetchSpotifyPodcast(input: SpotifyAPI!): [Items]
     fetchCategoryPodcasts(input: PodcastInput!): [Podcast]
