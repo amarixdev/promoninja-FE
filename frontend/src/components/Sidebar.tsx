@@ -4,16 +4,18 @@ import { useState } from "react";
 import { useEffect } from "react";
 import * as LogoText from "../public/assets/logo-text.png";
 import * as Ninja4 from "../public/assets/ninja4.png";
-import useScreenWidth from "../utils/hooks";
+import {useMediaQuery } from "../utils/hooks";
 
 type Props = {};
 
 const Sidebar = (props: Props) => {
-  const screenWidth = useScreenWidth();
+
+  const isBreakpoint = useMediaQuery(639);
+
   return (
     <div
       className={
-        screenWidth >= 640
+        !isBreakpoint
           ? "w-[255px] bg-black relative z-10 overflow-clip"
           : "hidden"
       }

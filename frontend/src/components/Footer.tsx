@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import useScreenWidth from "../utils/hooks";
+import { useMediaQuery } from "../utils/hooks";
 
 type Props = {};
 
 const Footer = (props: Props) => {
-  const screenWidth = useScreenWidth();
-  
+  const isBreakPoint = useMediaQuery(639);
   return (
     <div
       className={
-        screenWidth <= 640
+        isBreakPoint
           ? "w-full bg-[#312f2f] min-h-[75px] fixed bottom-[0] mb-0 pb-[75px]"
           : "hidden"
       }

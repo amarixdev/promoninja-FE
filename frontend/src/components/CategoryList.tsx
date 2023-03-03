@@ -5,7 +5,7 @@ import Context from "../context/context";
 import * as Hero from "../public/assets/comedy.png";
 import { PodcastData } from "../utils/types";
 import { capitalizeString, truncateString } from "../utils/functions";
-import useScreenWidth from "../utils/hooks";
+import { useMediaQuery } from "../utils/hooks";
 
 interface CategoryProps {
   category: any;
@@ -15,15 +15,14 @@ const CategoryList = ({ category }: CategoryProps) => {
   const { setCurrentCategory } = useContext(Context);
   const categoryName = Object.keys(category)[0];
   const podcastData = category[categoryName];
-  const screenWidth = useScreenWidth();
+  const isBreakPoint = useMediaQuery(639);
 
   return (
     <>
-   
       <div className="flex justify-between items-center my-4">
         <h1
           className={`text-lg sm:text-xl md:text-2xl p-5 font-bold text-white ${
-            screenWidth >= 640 ? "ml-6" : "ml-2"
+            !isBreakPoint ? "ml-6" : "ml-2"
           }`}
         >
           {capitalizeString(categoryName)}
@@ -37,15 +36,15 @@ const CategoryList = ({ category }: CategoryProps) => {
         </Link>
       </div>
       <div
-        className={`flex overflow-x-scroll scrollbar-hide ${
-          screenWidth >= 640 ? "ml-6" : "ml-2"
+        className={`flex overflow-x-scroll scrollbar-hide scroll-smooth ${
+          !isBreakPoint ? "ml-6" : "ml-2"
         }`}
       >
         {podcastData?.map((podcast: PodcastData) => (
           <div
             key={podcast.title}
             className={
-              screenWidth >= 640
+              !isBreakPoint
                 ? `from-[#0d0d0d] bg-gradient-radial to-[#202020] hover:bg-[#292727]  hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[240px] h-[255px] sm:h-[283px] md:h-[312px] lg:h-[340px] rounded-lg mx-3`
                 : "hover:cursor-pointer flex flex-col items-center min-w-[120px] h-[255px] ml-2 scroll-smooth rounded-lg"
             }
@@ -60,7 +59,7 @@ const CategoryList = ({ category }: CategoryProps) => {
             />
 
             <h1 className="text-sm sm:text-md lg:text-lg text-center px-2 pt-6 font-semibold text-white whitespace-nowrap">
-              {screenWidth >= 640
+              {!isBreakPoint
                 ? truncateString(podcast.title, 20)
                 : truncateString(podcast.title, 15)}
             </h1>
