@@ -40,6 +40,7 @@ export const Operations = {
         fetchCategoryPodcasts(input: $input) {
           title
           imageUrl
+          publisher
         }
       }
     `,
