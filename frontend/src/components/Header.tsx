@@ -9,8 +9,13 @@ type Props = {};
 const Header = (props: Props) => {
   return (
     <div className="w-full flex items-center justify-start text-white p-4 fixed z-10">
-      <Image src={Ninja4} alt="" className=" h-fit" width={140} />
-      <Image alt="/" src={LogoText} width={220} className="p-8 sm:p-6" />
+      <Image src={Ninja4} alt="" className=" h-fit" width={130} />
+      <Image
+        alt="/"
+        src={LogoText}
+        width={220}
+        className="p-6 sm:p-4 relative right-7"
+      />
     </div>
   );
 };
