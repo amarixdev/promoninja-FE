@@ -10,4 +10,5 @@ export interface CategoryPodcast {
 export interface PodcastData {
   title: string;
   imageUrl: string;
+  publisher:string
 }

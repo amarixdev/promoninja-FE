@@ -14,7 +14,8 @@ export interface PodcastData {
   sponsor: Sponsor;
   podcast: string;
   category: string;
-  image: string
+  image: string;
+  publisher: string;
 }
 
 export interface SponsorInput {

@@ -62,6 +62,7 @@ const typeDefs = gql`
     categoryId: ID
     offer: [Offer]
     sponsorId: [ID]
+    publisher:String
   }
 
   type Category {
