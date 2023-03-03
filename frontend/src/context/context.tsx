@@ -1,18 +1,9 @@
 import { createContext, useState, ReactNode } from "react";
-export type Category =
-  | "Spotify's Top Picks"
-  | "Comedy"
-  | "Educational"
-  | "Technology"
-  | "News & Politics"
-  | "Lifestyle"
-  | "Science"
-  | "Sports"
-  | "";
+
 
 interface ContextType {
-  currentCategory: Category;
-  setCurrentCategory: React.Dispatch<React.SetStateAction<Category>>;
+  currentCategory: string;
+  setCurrentCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export const Context = createContext<ContextType>({
