@@ -1,56 +1,64 @@
 import Image from "next/image";
 import React, { useContext } from "react";
-import Context from "../../context/context";
+import Footer from "../../components/Footer";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
 import * as Hero from "../../public/assets/comedy.png";
+import * as Backdrop from "../../public/assets/backdrop.jpeg";
 import { capitalizeString, truncateString } from "../../utils/functions";
 import { useMediaQuery } from "../../utils/hooks";
 import { PodcastData } from "../../utils/types";
+import Sidebar from "../../components/Sidebar";
 
 interface Props {
   categoryPodcasts: PodcastData[];
+  category: string;
 }
 
-const category = ({ categoryPodcasts }: Props) => {
-  const { currentCategory } = useContext(Context);
+const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   const isBreakPoint = useMediaQuery(639);
 
   return (
-    <div className="w-full  h-screen">
-      <Image
-        src={Hero}
-        alt="comedy"
-        className="fixed z-0 w-full lg:top-[-100px] xl:top-[-150px]"
-      />
-      <h1 className="text-5xl font-bold text-white absolute z-2 top-[8rem]">
-        {capitalizeString(currentCategory)}
-      </h1>
-      <div className="bg-[#121212] w-full h-screen relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-10 p-5 ">
-        {categoryPodcasts?.map((podcast) => (
-          <div key={`${podcast.title}`}>
-            <Image
-              src={podcast.imageUrl}
-              alt=""
-              width={190}
-              height={190}
-              className="rounded-xl mt-4 shadow-lg shadow-black "
-            />
+    <div className="flex">
+      <Sidebar />
+      <div className="h-screen w-full">
+        <Image
+          src={Backdrop}
+          alt="comedy"
+          className="fixed z-0 w-full lg:top-[-100px] xl:top-[-150px]"
+        />
+        <div className="w-full h-screen bg-black/30 from-black fixed"></div>
 
-            <h1 className="text-sm sm:text-md lg:text-lg text-center pt-6 font-semibold text-white whitespace-nowrap">
-              {!isBreakPoint
-                ? truncateString(podcast.title, 20)
-                : truncateString(podcast.title, 15)}
-            </h1>
-            <p className="text-xs sm:text-sm lg:text-md text-center font-medium text-[#909090] mt-5 ">
+        <h1 className="font-bold text-5xl md:text-6xl lg:text-8xl text-white absolute z-2 top-[8rem] sm:top-[12rem]">
+          {capitalizeString(categoryName)}
+        </h1>
+
+        <div className="bg-[#121212] relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-10 p-5 ">
+          {categoryPodcasts?.map((podcast) => (
+            <div key={`${podcast.title}`}>
+              <Image
+                src={podcast.imageUrl}
+                alt=""
+                width={190}
+                height={190}
+                className="rounded-xl"
+              />
+
+              <h1 className="text-xs sm:text-md lg:text-lg text-center pt-6 font-semibold text-white whitespace-wrap">
+                {!isBreakPoint
+                  ? truncateString(podcast.title, 100)
+                  : truncateString(podcast.title, 25)}
+              </h1>
+              {/* <p className="text-xs sm:text-sm lg:text-md text-center font-medium text-[#909090] mt-5 ">
               {!isBreakPoint
                 ? podcast.publisher
-                : truncateString(podcast.publisher, 42)}
-            </p>
-          </div>
-        ))}
+                : truncateString(podcast.publisher, 25)}
+            </p> */}
+            </div>
+          ))}
+        </div>
+        <Footer />
       </div>
-      <div className="w-full bg-green-200 fixed z-100 h-[200px]">Test</div>
     </div>
   );
 };
@@ -81,6 +89,7 @@ export async function getStaticProps({ params }: any) {
   return {
     props: {
       categoryPodcasts,
+      category,
     },
   };
 }
