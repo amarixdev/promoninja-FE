@@ -10,9 +10,9 @@ export const podcastResolvers = {
     ) => {
       const { prisma } = context;
 
-      let { podcast, category, image, publisher } = input;
-
+      let { podcast, category, image, publisher, description } = input;
       category = category?.toLowerCase();
+      console.log("DESCRIPTION", description);
 
       const getCategory = await prisma.category.findFirst({
         where: {
@@ -25,6 +25,7 @@ export const podcastResolvers = {
           title: podcast,
           imageUrl: image,
           publisher,
+          description,
           category: {
             connect: {
               id: getCategory?.id,
@@ -59,8 +60,9 @@ export const podcastResolvers = {
     getPodcasts: async (parent: any, args: any, context: GraphQLContext) => {
       const { prisma } = context;
       try {
-        const podcasts = await prisma.podcast.findMany();
-        return podcasts;
+        const all_podcasts = await prisma.podcast.findMany();
+
+        return all_podcasts;
       } catch (error) {
         console.log(error);
       }
@@ -72,7 +74,6 @@ export const podcastResolvers = {
     ) => {
       const { accessToken, prisma } = context;
       const { podcast } = input;
-
       try {
         const result = await fetch(
           `https://api.spotify.com/v1/search?q=${podcast}&type=show&market=US&limit=1`,

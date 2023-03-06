@@ -14,7 +14,7 @@ import { Operations } from "../graphql/operations";
 import Fuse from "fuse.js";
 import SelectCategory from "../components/SelectCategory";
 import Image from "next/image";
-import { capitalizeString } from "../util/functions";
+import { capitalizeString } from "../utils/functions";
 
 const App = () => {
   const [display, setDisplay] = useState({
@@ -35,7 +35,7 @@ const App = () => {
     Operations.Queries.FetchCategory
   );
 
-  const [getSpotify, { data: spotifyData, refetch: refetchSpotify }] =
+  const [fetchSpotify, { data: spotifyData, refetch: refetchSpotify }] =
     useLazyQuery(Operations.Queries.FetchSpotifyPodcast);
 
   const podcasts = data?.getPodcasts;
@@ -98,7 +98,7 @@ const App = () => {
             input: { podcast: fusePreview[0] },
           },
         }),
-        getSpotify({
+        fetchSpotify({
           variables: {
             input: { podcast: preview },
           },
@@ -132,6 +132,7 @@ const App = () => {
   const spotifyImage = spotifyData?.fetchSpotifyPodcast[0]?.images[0].url;
   const spotifyName = spotifyData?.fetchSpotifyPodcast[0]?.name;
   const spotifyPublisher = spotifyData?.fetchSpotifyPodcast[0]?.publisher;
+  const spotifyDescription = spotifyData?.fetchSpotifyPodcast[0]?.description;
 
   const handleSave = async () => {
     try {
@@ -142,6 +143,7 @@ const App = () => {
             podcast: spotifyName,
             image: spotifyImage,
             publisher: spotifyPublisher,
+            description: spotifyDescription,
           },
         },
       });

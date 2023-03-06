@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 const typeDefs = gql`
   type Query {
     getPodcasts: [Podcast]
+    getPodcast: Podcast
     getSponsors: [Sponsor]
     fetchCategory(input: PodcastInput!): String
     fetchSponsors(input: PodcastInput!): [Sponsor]
@@ -19,6 +20,7 @@ const typeDefs = gql`
     images: [Image]
     name: String
     publisher: String
+    description: String
   }
 
   type Image {
@@ -46,6 +48,7 @@ const typeDefs = gql`
     category: String
     image: String
     publisher: String
+    description: String
   }
 
   input SponsorInput {
@@ -62,7 +65,8 @@ const typeDefs = gql`
     categoryId: ID
     offer: [Offer]
     sponsorId: [ID]
-    publisher:String
+    publisher: String
+    description: String
   }
 
   type Category {

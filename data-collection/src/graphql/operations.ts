@@ -29,6 +29,7 @@ export const Operations = {
           id
           name
           publisher
+          description
           images {
             url
           }
