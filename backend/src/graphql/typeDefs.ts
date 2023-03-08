@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 const typeDefs = gql`
   type Query {
     getPodcasts: [Podcast]
-    getPodcast: Podcast
+    getPodcast(input: PodcastInput!): Podcast
     getSponsors: [Sponsor]
     fetchCategory(input: PodcastInput!): String
     fetchSponsors(input: PodcastInput!): [Sponsor]

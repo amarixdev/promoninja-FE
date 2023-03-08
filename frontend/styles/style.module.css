@@ -1,3 +1,4 @@
+/* Button */
 .btn {
   text-decoration: none;
   border: 1px solid rgb(239, 157, 26);
@@ -33,4 +34,31 @@
 
 .btn:hover:before {
   left: 100%;
+}
+
+/* Play-Button */
+.play {
+  clip-path: polygon(
+    0 0,
+    50% 25%,
+    50% 75%,
+    50% 75%,
+    50% 25%,
+    100% 50%,
+    100% 50%,
+    0% 100%
+  );
+}
+
+.play.clicked {
+  clip-path: polygon(
+    0 0,
+    40% 0,
+    40% 100%,
+    60% 100%,
+    60% 0,
+    100% 0,
+    100% 100%,
+    0 100%
+  );
 }

@@ -9,6 +9,16 @@ export const Operations = {
         }
       }
     `,
+    GetPodcast: gql`
+      query ($input: PodcastInput!) {
+        getPodcast(input: $input) {
+          title
+          imageUrl
+          publisher
+          description
+        }
+      }
+    `,
     FetchSponsors: gql`
       query ($input: PodcastInput!) {
         fetchSponsors(input: $input) {
