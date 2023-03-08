@@ -8,12 +8,12 @@ import Footer from "../../components/Footer";
 import { CategoryPodcast } from "../../utils/types";
 import { useMediaQuery } from "../../utils/hooks";
 
-type Props = {
+interface Props {
   categoryPreviews: CategoryPodcast[];
-};
+}
 
 const podcasts = ({ categoryPreviews }: Props) => {
-  const isBreakPoint = useMediaQuery(639);
+  const isBreakPoint = useMediaQuery(1023);
   return (
     <>
       <div className="flex">

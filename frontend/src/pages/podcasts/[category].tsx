@@ -3,12 +3,17 @@ import React, { useContext } from "react";
 import Footer from "../../components/Footer";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
-import * as Hero from "../../public/assets/comedy.png";
 import * as Backdrop from "../../public/assets/backdrop.jpeg";
-import { capitalizeString, truncateString } from "../../utils/functions";
+import {
+  capitalizeString,
+  convertToSlug,
+  truncateString,
+} from "../../utils/functions";
 import { useMediaQuery } from "../../utils/hooks";
 import { PodcastData } from "../../utils/types";
 import Sidebar from "../../components/Sidebar";
+import Link from "next/link";
+import { GetStaticProps } from "next";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -16,7 +21,8 @@ interface Props {
 }
 
 const category = ({ categoryPodcasts, category: categoryName }: Props) => {
-  const isBreakPoint = useMediaQuery(639);
+  const isBreakPoint = useMediaQuery(1023);
+  console.log(categoryName);
 
   return (
     <div className="flex">
@@ -36,18 +42,22 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
         <div className="bg-[#121212] relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-10 p-5 ">
           {categoryPodcasts?.map((podcast) => (
             <div key={`${podcast.title}`}>
-              <Image
-                src={podcast.imageUrl}
-                alt=""
-                width={190}
-                height={190}
-                className="rounded-xl"
-              />
+              <Link href={`/podcasts/${categoryName}/${podcast.title}`}>
+                <Image
+                  src={podcast.imageUrl}
+                  alt=""
+                  width={190}
+                  height={190}
+                  className="rounded-xl"
+                />
+              </Link>
 
               <h1 className="text-xs sm:text-md lg:text-lg text-center pt-6 font-semibold text-white whitespace-wrap">
                 {!isBreakPoint
-                  ? truncateString(podcast.title, 100)
-                  : truncateString(podcast.title, 25)}
+                  ? truncateString(podcast.title, 40)
+                  : truncateString(podcast.title, 25)}{" "}
+                {/* Fix responsiveness */}{" "}
+                {/* Fix ghost podcasts, collection-tool */}
               </h1>
               {/* <p className="text-xs sm:text-sm lg:text-md text-center font-medium text-[#909090] mt-5 ">
               {!isBreakPoint

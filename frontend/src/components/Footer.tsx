@@ -4,7 +4,7 @@ import { useMediaQuery } from "../utils/hooks";
 type Props = {};
 
 const Footer = (props: Props) => {
-  const isBreakPoint = useMediaQuery(639);
+  const isBreakPoint = useMediaQuery(1023);
   return (
     <div
       className={
