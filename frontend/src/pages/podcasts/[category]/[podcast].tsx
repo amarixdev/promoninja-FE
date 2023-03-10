@@ -6,15 +6,21 @@ import PlayButton from "../../../components/PlayButton";
 import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
-import { PodcastData } from "../../../utils/types";
+import { useMediaQuery } from "../../../utils/hooks";
+import { PodcastData, SponsorData } from "../../../utils/types";
 
 interface Props {
   podcastData: PodcastData;
+  sponsorData: SponsorData[];
   loading: boolean;
 }
 
-const podcast = ({ podcastData, loading }: Props) => {
+const podcast = ({ podcastData, sponsorData }: Props) => {
   const imageSrc = podcastData?.imageUrl;
+  const isBreakPoint = useMediaQuery(1023);
+
+  console.log(sponsorData);
+
   if (!imageSrc)
     return (
       <div className="flex w-full h-screen items-center justify-center">
@@ -23,25 +29,24 @@ const podcast = ({ podcastData, loading }: Props) => {
     );
 
   return (
-    <div className="flex flex-col h-screen items-center relative">
+    <div className="flex flex-col items-center relative ">
       <Image
         src={imageSrc}
         alt="/"
-        width={200}
-        height={200}
+        width={230}
+        height={230}
         priority
-        className="z-10 rounded-3xl relative mt-10"
+        className="z-10 rounded-3xl relative mt-10 xs:w-[160px] base:w-[130px] sm:w-[230px]"
       />
-      <div className="w-9/12 flex flex-col justify-center">
-        <h1 className="font-bold text-2xl text-center mt-10 px-6">
+      <div className="w-11/12 flex flex-col justify-center">
+        <h1 className="text-lg font-bold text-center mt-10 px-4 base:text-xl xs:text-2xl sm:text-3xl">
           {podcastData?.title}
         </h1>
-        <p className="w-full font-semibold text-center mt-6">
+        <p className="w-full text-md xs:text-lg font-semibold text-center mt-6">
           {podcastData?.publisher}
         </p>
       </div>
-
-      <PlayButton /* sponsors prop */ />
+      <PlayButton sponsorData={sponsorData} />
 
       <Footer />
     </div>
@@ -60,7 +65,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { podcast } = params;
-  const { data, loading } = await client.query({
+  let { data: podcastData, loading } = await client.query({
     query: Operations.Queries.GetPodcast,
     variables: {
       input: {
@@ -68,10 +73,22 @@ export const getStaticProps = async ({ params }: any) => {
       },
     },
   });
-  const podcastData = data.getPodcast;
+  let { data: sponsorData } = await client.query({
+    query: Operations.Queries.FetchSponsors,
+    variables: {
+      input: {
+        podcast,
+      },
+    },
+  });
+
+  podcastData = podcastData.getPodcast;
+  sponsorData = sponsorData.fetchSponsors;
+  console.log(sponsorData);
   return {
     props: {
       podcastData,
+      sponsorData,
       loading,
     },
   };
