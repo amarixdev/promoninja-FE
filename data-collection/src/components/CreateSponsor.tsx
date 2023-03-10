@@ -1,5 +1,5 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { AddIcon, CloseIcon } from "@chakra-ui/icons";
+import { useMutation, useQuery } from "@apollo/client";
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -39,6 +39,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
     name: "",
     url: "",
     description: "",
+    image: "",
   });
   const toast = useToast();
   const [createSponsor, { error }] = useMutation(
@@ -83,6 +84,9 @@ const CreateSponsor = ({ podcast, category }: Props) => {
   const handleChange = (e: any) => {
     setSponsor({ ...sponsor, name: e.target.value });
     setDisplayPreview(true);
+    if (e.target.value === "") {
+      setDisplayPreview(false);
+    }
   };
 
   const currentSponsors = data?.fetchSponsors;
@@ -119,16 +123,6 @@ const CreateSponsor = ({ podcast, category }: Props) => {
           isClosable: true,
         });
         return;
-      }
-      if (!sponsor.description) {
-        toast({
-          title: "Error",
-          description: "Please add a description",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-        return;
       } else {
         await createSponsor({
           variables: {
@@ -147,7 +141,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
           duration: 3000,
           isClosable: true,
         });
-        setSponsor({ description: "", name: "", url: "" });
+        setSponsor({ description: "", name: "", url: "", image: "" });
       }
     } catch (error: any) {
       console.log(error);
@@ -194,7 +188,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                   {displayPreview && (
                     <Box
                       bg={"#2D3748"}
-                      h={"400px"}
+                      h={"500px"}
                       w={"275px"}
                       pos="fixed"
                       zIndex={"10"}
@@ -227,7 +221,6 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                   />
                 </InputGroup>
               </Box>
-
               <Box>
                 <FormLabel htmlFor="desc">Description</FormLabel>
                 <Textarea
@@ -241,6 +234,16 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                   }
                 />
               </Box>
+              <InputGroup>
+                <Input
+                  type="url"
+                  placeholder="Please enter image URL"
+                  value={sponsor.image}
+                  onChange={(e) =>
+                    setSponsor({ ...sponsor, image: e.target.value })
+                  }
+                />
+              </InputGroup>
               <Box>
                 <FormLabel>Current Sponsors</FormLabel>
                 {currentSponsors?.map((sponsor: Sponsor, index: number) => (

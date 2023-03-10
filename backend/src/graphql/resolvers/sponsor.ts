@@ -34,6 +34,7 @@ export const productResolvers = {
           await prisma.sponsor.create({
             data: {
               name: sponsor.name,
+              imageUrl: sponsor.image,
               podcast: {
                 create: {
                   title: podcast,
@@ -51,6 +52,12 @@ export const productResolvers = {
               },
             },
           });
+          const createdSponsor = await prisma.sponsor.findFirst({
+            where: {
+              name: sponsor.name,
+            },
+          });
+
         } catch (error) {
           console.log(error);
         }
@@ -76,6 +83,7 @@ export const productResolvers = {
                   },
                   create: {
                     name: sponsor.name,
+                    imageUrl: sponsor.image,
                   },
                 },
               },
@@ -172,7 +180,6 @@ export const productResolvers = {
             },
           });
         }
-
         return sponsors;
       } catch (error: any) {
         console.log(error);

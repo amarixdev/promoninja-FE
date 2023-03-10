@@ -13,6 +13,7 @@ export const Operations = {
       query ($input: PodcastInput!) {
         fetchSponsors(input: $input) {
           name
+          imageUrl
         }
       }
     `,

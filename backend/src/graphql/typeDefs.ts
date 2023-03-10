@@ -80,7 +80,7 @@ const typeDefs = gql`
   type Sponsor {
     id: ID!
     name: String!
-    image: String
+    imageUrl: String
     podcastsId: [ID]
   }
 `;
