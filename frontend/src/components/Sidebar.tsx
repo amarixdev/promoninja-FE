@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import * as LogoText from "../public/assets/logo-text.png";
-import * as Ninja4 from "../public/assets/ninja4.png";
+import * as Ninja4 from "../public/assets/logo.png";
 import { useMediaQuery } from "../utils/hooks";
 
 type Props = {};
