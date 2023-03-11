@@ -3,4 +3,5 @@ export interface Sponsor {
   url: string;
   description: string;
   image: string;
+  baseUrl: string;
 }

@@ -14,6 +14,7 @@ export const Operations = {
         fetchSponsors(input: $input) {
           name
           imageUrl
+          url
         }
       }
     `,
@@ -21,6 +22,7 @@ export const Operations = {
       query {
         getSponsors {
           name
+          url
         }
       }
     `,

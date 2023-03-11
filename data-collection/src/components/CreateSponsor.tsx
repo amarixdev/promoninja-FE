@@ -13,6 +13,7 @@ import {
   FormLabel,
   Input,
   InputGroup,
+  InputLeftAddon,
   Spinner,
   Stack,
   Textarea,
@@ -34,13 +35,21 @@ interface Props {
 const CreateSponsor = ({ podcast, category }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef(null);
-  const [displayPreview, setDisplayPreview] = useState(false);
+  const [existingSponsor, setExistingSponsor] = useState(false);
+  const [display, setDisplay] = useState({
+    preview: false,
+    image: true,
+    baseUrl: false,
+    fullPath: false,
+  });
   const [sponsor, setSponsor] = useState({
     name: "",
     url: "",
+    baseUrl: "",
     description: "",
     image: "",
   });
+
   const toast = useToast();
   const [createSponsor, { error }] = useMutation(
     Operations.Mutations.CreateSponsor
@@ -57,7 +66,11 @@ const CreateSponsor = ({ podcast, category }: Props) => {
     await refetch();
   };
 
-  const { data, refetch } = useQuery(Operations.Queries.FetchSponsors, {
+  const {
+    data,
+    refetch,
+    loading: sponsorLoading,
+  } = useQuery(Operations.Queries.FetchSponsors, {
     variables: {
       input: { podcast },
     },
@@ -83,38 +96,95 @@ const CreateSponsor = ({ podcast, category }: Props) => {
 
   const handleChange = (e: any) => {
     setSponsor({ ...sponsor, name: e.target.value });
-    setDisplayPreview(true);
+    setDisplay((prev) => ({
+      ...prev,
+      preview: true,
+      baseUrl: false,
+      image: true,
+    }));
     if (e.target.value === "") {
-      setDisplayPreview(false);
+      setDisplay((prev) => ({ ...prev, preview: false, image: true }));
     }
   };
 
   const currentSponsors = data?.fetchSponsors;
 
-  const handleSearch = (param: string, event: any) => {
+  const handleSearch = (param: string, event: any, isExisting: boolean) => {
     event.preventDefault();
     setSponsor({ ...sponsor, name: param });
-    setDisplayPreview(false);
+    setDisplay((prev) => ({ ...prev, preview: false }));
+    if (isExisting) {
+      setDisplay((prev) => ({ ...prev, image: false, baseUrl: true }));
+      setExistingSponsor(true);
+    }
+    if (!isExisting) {
+      setDisplay((prev) => ({
+        ...prev,
+        image: true,
+        baseUrl: false,
+        fullPath: false,
+      }));
+      setExistingSponsor(false);
+      setSponsor((prev) => ({ ...prev, url: "" }));
+    }
   };
 
+  const handleURLBlur = (e: any) => {
+    if (!existingSponsor) {
+      setSponsor((prev) => ({
+        ...prev,
+        baseUrl: e.target.value.split("/")[0],
+        url: e.target.value,
+      }));
+    } else {
+      setDisplay((prev) => ({ ...prev, fullPath: true, baseUrl: false }));
+      setSponsor((prev) => ({
+        ...prev,
+        url: baseUrl + "/" + e.target.value,
+      }));
+    }
+  };
+  const handleURLFocus = (e: any) => {
+    if (!existingSponsor) return;
+    else {
+      setDisplay((prev) => ({ ...prev, fullPath: false, baseUrl: true }));
+      setSponsor((prev) => ({
+        ...prev,
+        url: "",
+      }));
+    }
+  };
   const handleSubmit = async () => {
     try {
-      if (fusePreview) {
-        for (const name of fusePreview) {
-          if (name === sponsor.name) {
-            toast({
-              title: "Error",
-              description: "Sponsor already exists",
-              status: "error",
-              duration: 3000,
-              isClosable: true,
-            });
-            return;
-          }
-        }
-      }
+      // if (fusePreview) {
+      //   for (const name of fusePreview) {
+      //     if (name === sponsor.name) {
+      //       toast({
+      //         title: "Error",
+      //         description: "Sponsor already exists",
+      //         status: "error",
+      //         duration: 3000,
+      //         isClosable: true,
+      //       });
+      //       return;
+      //     }
+      //   }
+      // }
 
-      if (!sponsor.url) {
+      const url = "test" + (baseUrl + "/" + sponsor.url);
+      setSponsor((prev) => ({ ...prev, url: url }));
+
+      if (existingSponsor && !sponsor.url) {
+        toast({
+          title: "Error",
+          description: "Please add a url",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+      if (!existingSponsor && !sponsor.baseUrl) {
         toast({
           title: "Error",
           description: "Please add a url",
@@ -141,15 +211,27 @@ const CreateSponsor = ({ podcast, category }: Props) => {
           duration: 3000,
           isClosable: true,
         });
-        setSponsor({ description: "", name: "", url: "", image: "" });
+        setSponsor({
+          description: "",
+          name: "",
+          url: "",
+          image: "",
+          baseUrl: "",
+        });
       }
     } catch (error: any) {
       console.log(error);
     }
   };
-
-  // const currentSponsors = ["Athletic Greens", "Onnit", "NeuroGum"];
   if (loading) return <Spinner />;
+  if (sponsorLoading) return <Spinner />;
+
+  const selectedSponsor = sponsorList?.getSponsors.filter((current: any) => {
+    return current.name === sponsor.name;
+  });
+
+  const baseUrl = selectedSponsor[0]?.url;
+
   return (
     <div className="mt-[100px]">
       <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
@@ -174,7 +256,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
 
           <DrawerBody>
             <Stack spacing="24px">
-              <form onSubmit={(e) => handleSearch(sponsor.name, e)}>
+              <form onSubmit={(e) => handleSearch(sponsor.name, e, false)}>
                 <Box>
                   <FormLabel>Sponsor</FormLabel>
                   <Input
@@ -185,7 +267,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                       handleChange(e);
                     }}
                   />
-                  {displayPreview && (
+                  {display.preview && (
                     <Box
                       bg={"#2D3748"}
                       h={"500px"}
@@ -198,7 +280,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                         <Button
                           key={sponsor}
                           margin={2}
-                          onClick={(e) => handleSearch(sponsor, e)}
+                          onClick={(e) => handleSearch(sponsor, e, true)}
                         >
                           {sponsor}
                         </Button>
@@ -211,13 +293,34 @@ const CreateSponsor = ({ podcast, category }: Props) => {
               <Box>
                 <FormLabel>Url</FormLabel>
                 <InputGroup>
+                  {display.baseUrl ? (
+                    <InputLeftAddon>{baseUrl}</InputLeftAddon>
+                  ) : null}
                   <Input
                     type="url"
-                    placeholder="Please enter domain"
-                    value={sponsor.url}
-                    onChange={(e) =>
-                      setSponsor({ ...sponsor, url: e.target.value })
+                    placeholder={display.baseUrl ? "Path?" : "Please enter Url"}
+                    value={
+                      display.fullPath
+                        ? sponsor.url
+                        : display.baseUrl
+                        ? sponsor.url
+                        : sponsor.baseUrl
                     }
+                    onChange={
+                      display.baseUrl
+                        ? (e) =>
+                            setSponsor({
+                              ...sponsor,
+                              url: e.target.value,
+                            })
+                        : (e) =>
+                            setSponsor((prev) => ({
+                              ...prev,
+                              baseUrl: e.target.value,
+                            }))
+                    }
+                    onBlur={(e) => handleURLBlur(e)}
+                    onFocus={handleURLFocus}
                   />
                 </InputGroup>
               </Box>
@@ -234,16 +337,18 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                   }
                 />
               </Box>
-              <InputGroup>
-                <Input
-                  type="url"
-                  placeholder="Please enter image URL"
-                  value={sponsor.image}
-                  onChange={(e) =>
-                    setSponsor({ ...sponsor, image: e.target.value })
-                  }
-                />
-              </InputGroup>
+              {display.image && (
+                <InputGroup>
+                  <Input
+                    type="url"
+                    placeholder="Please enter image URL"
+                    value={sponsor.image}
+                    onChange={(e) =>
+                      setSponsor({ ...sponsor, image: e.target.value })
+                    }
+                  />
+                </InputGroup>
+              )}
               <Box>
                 <FormLabel>Current Sponsors</FormLabel>
                 {currentSponsors?.map((sponsor: Sponsor, index: number) => (

@@ -35,12 +35,14 @@ export const productResolvers = {
             data: {
               name: sponsor.name,
               imageUrl: sponsor.image,
+              url: sponsor.baseUrl,
               podcast: {
                 create: {
                   title: podcast,
                   offer: {
                     sponsor: sponsor.name,
                     description: sponsor.description,
+                    url: sponsor.url,
                   },
                   publisher,
                   category: {
@@ -57,7 +59,6 @@ export const productResolvers = {
               name: sponsor.name,
             },
           });
-
         } catch (error) {
           console.log(error);
         }
@@ -73,6 +74,7 @@ export const productResolvers = {
                 push: {
                   sponsor: sponsor.name,
                   description: sponsor.description,
+                  url: sponsor.url,
                 },
               },
 
@@ -84,6 +86,7 @@ export const productResolvers = {
                   create: {
                     name: sponsor.name,
                     imageUrl: sponsor.image,
+                    url: sponsor.baseUrl,
                   },
                 },
               },

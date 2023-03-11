@@ -56,6 +56,7 @@ const typeDefs = gql`
     url: String
     description: String
     image: String
+    baseUrl: String
   }
 
   type Podcast {
@@ -76,12 +77,14 @@ const typeDefs = gql`
   type Offer {
     sponsor: String!
     description: String!
+    url: String!
   }
   type Sponsor {
     id: ID!
     name: String!
     imageUrl: String
     podcastsId: [ID]
+    url: String!
   }
 `;
 

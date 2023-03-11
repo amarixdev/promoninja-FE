@@ -31,6 +31,7 @@ model Sponsor {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   name      String    @unique
   imageUrl  String?
+  url       String
   podcastId String[]  @db.ObjectId
   podcast   Podcast[] @relation(fields: [podcastId], references: [id])
 }
@@ -38,6 +39,7 @@ model Sponsor {
 type Offer {
   sponsor     String
   description String
+  url         String
 }
 
 model Category {

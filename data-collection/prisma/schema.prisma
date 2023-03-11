@@ -36,6 +36,7 @@ model Sponsor {
 type Offer {
   sponsor     String
   description String
+  url         String
 }
 
 model Category {
