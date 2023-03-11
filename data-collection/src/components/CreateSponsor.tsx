@@ -108,7 +108,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
   };
 
   const currentSponsors = data?.fetchSponsors;
-
+  const [duplicate, setDuplicate] = useState(false);
   const handleSearch = (param: string, event: any, isExisting: boolean) => {
     event.preventDefault();
     setSponsor({ ...sponsor, name: param });
@@ -118,14 +118,40 @@ const CreateSponsor = ({ podcast, category }: Props) => {
       setExistingSponsor(true);
     }
     if (!isExisting) {
+      if (fusePreview) {
+        if (param === fusePreview[0]) {
+          setDisplay((prev) => ({ ...prev, image: false, baseUrl: true }));
+          setExistingSponsor(true);
+        }
+      } else {
+        setDisplay((prev) => ({
+          ...prev,
+          image: true,
+          baseUrl: false,
+          fullPath: false,
+        }));
+        setExistingSponsor(false);
+        setSponsor((prev) => ({ ...prev, url: "" }));
+      }
+    }
+  };
+
+  const handleBlur = () => {
+    if (sponsor.name === "") return;
+    if (existingSponsor) {
+      setDisplay((prev) => ({
+        ...prev,
+        image: false,
+        baseUrl: false,
+        fullPath: true,
+      }));
+    } else {
       setDisplay((prev) => ({
         ...prev,
         image: true,
         baseUrl: false,
         fullPath: false,
       }));
-      setExistingSponsor(false);
-      setSponsor((prev) => ({ ...prev, url: "" }));
     }
   };
 
@@ -136,18 +162,30 @@ const CreateSponsor = ({ podcast, category }: Props) => {
         baseUrl: e.target.value.split("/")[0],
         url: e.target.value,
       }));
-    } else {
       setDisplay((prev) => ({ ...prev, fullPath: true, baseUrl: false }));
+    } else {
+      console.log(sponsor);
+      setDisplay((prev) => ({
+        ...prev,
+        fullPath: true,
+        baseUrl: false,
+      }));
       setSponsor((prev) => ({
         ...prev,
         url: baseUrl + "/" + e.target.value,
       }));
     }
   };
+
   const handleURLFocus = (e: any) => {
     if (!existingSponsor) return;
     else {
-      setDisplay((prev) => ({ ...prev, fullPath: false, baseUrl: true }));
+      setDisplay((prev) => ({
+        ...prev,
+        fullPath: false,
+        baseUrl: true,
+        image: false,
+      }));
       setSponsor((prev) => ({
         ...prev,
         url: "",
@@ -156,23 +194,25 @@ const CreateSponsor = ({ podcast, category }: Props) => {
   };
   const handleSubmit = async () => {
     try {
-      // if (fusePreview) {
-      //   for (const name of fusePreview) {
-      //     if (name === sponsor.name) {
-      //       toast({
-      //         title: "Error",
-      //         description: "Sponsor already exists",
-      //         status: "error",
-      //         duration: 3000,
-      //         isClosable: true,
-      //       });
-      //       return;
-      //     }
-      //   }
-      // }
-
       const url = "test" + (baseUrl + "/" + sponsor.url);
       setSponsor((prev) => ({ ...prev, url: url }));
+
+      let duplicate;
+
+      currentSponsors.forEach((current: any) => {
+        if (current.name.includes(sponsor.name)) {
+          toast({
+            title: "Error",
+            description: "Sponsor already exists",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          duplicate = true;
+        }
+      });
+
+      if (duplicate) return;
 
       if (existingSponsor && !sponsor.url) {
         toast({
@@ -266,6 +306,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                     onChange={(e) => {
                       handleChange(e);
                     }}
+                    onBlur={handleBlur}
                   />
                   {display.preview && (
                     <Box
@@ -325,7 +366,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                 </InputGroup>
               </Box>
               <Box>
-                <FormLabel htmlFor="desc">Description</FormLabel>
+                <FormLabel>Description</FormLabel>
                 <Textarea
                   id="desc"
                   value={sponsor.description}
@@ -335,18 +376,23 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                       description: e.target.value,
                     })
                   }
+                  onBlur={handleBlur}
                 />
               </Box>
               {display.image && (
                 <InputGroup>
-                  <Input
-                    type="url"
-                    placeholder="Please enter image URL"
-                    value={sponsor.image}
-                    onChange={(e) =>
-                      setSponsor({ ...sponsor, image: e.target.value })
-                    }
-                  />
+                  <Box>
+                    <FormLabel>Image Url</FormLabel>
+                    <Input
+                      type="url"
+                      placeholder="Please enter image URL"
+                      value={sponsor.image}
+                      onChange={(e) =>
+                        setSponsor({ ...sponsor, image: e.target.value })
+                      }
+                      onBlur={handleBlur}
+                    />
+                  </Box>
                 </InputGroup>
               )}
               <Box>

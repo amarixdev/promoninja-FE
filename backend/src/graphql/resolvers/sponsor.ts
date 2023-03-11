@@ -133,6 +133,11 @@ export const productResolvers = {
                 },
               },
             },
+            sponsors: {
+              disconnect: {
+                id: getSponsor?.id,
+              },
+            },
           },
         });
 
