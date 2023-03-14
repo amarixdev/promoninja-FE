@@ -1,7 +1,8 @@
 /* Button */
 .btn {
   text-decoration: none;
-  border: 1px solid rgb(239, 157, 26);
+  /* border: 1px solid rgb(243, 174, 64); */
+  background-color: white;
   position: relative;
   overflow: hidden;
   width: 200px;

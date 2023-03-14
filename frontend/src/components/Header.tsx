@@ -1,15 +1,15 @@
 import { HStack, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
-import * as LogoText from "../public/assets/logo-text.png";
-import * as Ninja4 from "../public/assets/logo.png";
+import LogoText from "../public/assets/logo-text.png";
+import Logo from "../public/assets/logo.png";
 
 type Props = {};
 
 const Header = (props: Props) => {
   return (
     <div className="w-full flex items-center justify-start text-white p-4 fixed z-10">
-      <Image src={Ninja4} alt="" className=" h-fit" width={130} />
+      <Image src={Logo} alt="" className=" h-fit" width={130} />
       <Image
         alt="/"
         src={LogoText}
