@@ -1,5 +1,5 @@
 // import ColorExtractor from "../../../components/ColorExtractor";
-import { Divider, Img, Spinner } from "@chakra-ui/react";
+import { Button, Divider, Img, Input, Spinner } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -8,10 +8,10 @@ import PlayButton from "../../../components/PlayButton";
 import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
+import { ImSad } from "react-icons/im";
 import {
   callToAction,
   convertToFullURL,
-  rgbToHex,
   truncateString,
 } from "../../../utils/functions";
 import { useMediaQuery } from "../../../utils/hooks";
@@ -28,6 +28,7 @@ const podcast = ({ podcastData, sponsorData }: Props) => {
   const isBreakPoint = useMediaQuery(1023);
   const [isActive, setIsActive] = useState(false);
   const [sponsorIndex, setSponsorIndex] = useState(0);
+  let existingSponsor: boolean = true;
 
   const handleScrub = (forward: boolean) => {
     const limit = sponsorData?.length - 1;
@@ -48,6 +49,12 @@ const podcast = ({ podcastData, sponsorData }: Props) => {
     }
   };
 
+  if (!sponsorData) {
+    existingSponsor = false;
+  }
+
+  console.log(podcastData);
+
   if (!imageSrc)
     return (
       <div className="flex w-full h-screen items-center justify-center ">
@@ -59,7 +66,7 @@ const podcast = ({ podcastData, sponsorData }: Props) => {
     offer.sponsor.includes(sponsorData[sponsorIndex].name)
   );
 
-  const backgroundColor = podcastData.backgroundColor;
+  const backgroundColor = podcastData?.backgroundColor;
   const gradientStyle = {
     backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, #101010)`,
   };
@@ -67,21 +74,18 @@ const podcast = ({ podcastData, sponsorData }: Props) => {
   return (
     <div className={`${isBreakPoint ? "flex flex-col" : "flex"}`}>
       <Sidebar />
-      <div className="flex flex-col items-center relative h-screen bg-[#101010] w-full">
-        {isActive && (
-          <h1 className="font-bold base:text-lg xs:text-2xl text-3xl mt-6">
-            {sponsorData[sponsorIndex]?.name}
-          </h1>
-        )}
-        <div
-          className={` items-center w-full flex justify-center`}
-          style={!isActive ? gradientStyle : undefined}
-        >
-          {isActive ? (
-            <Link
-              href={convertToFullURL(currentPodcast[0].url)}
-              target="_blank"
-            >
+      {
+        <div className="flex flex-col items-center relative h-screen bg-[#101010] w-full">
+          {isActive && existingSponsor && (
+            <h1 className="font-bold base:text-lg xs:text-2xl text-3xl mt-6">
+              {sponsorData[sponsorIndex]?.name}
+            </h1>
+          )}
+          <div
+            className={` items-center w-full flex justify-center`}
+            style={!isActive ? gradientStyle : undefined}
+          >
+            {isActive ? (
               <Image
                 src={!isActive ? imageSrc : sponsorData[sponsorIndex]?.imageUrl}
                 alt="/"
@@ -90,55 +94,65 @@ const podcast = ({ podcastData, sponsorData }: Props) => {
                 priority
                 className="z-10 rounded-3xl relative mt-10 xs:w-[160px] base:w-[130px] sm:w-[190px] shadow-xl shadow-black"
               />
-            </Link>
+            ) : (
+              <Image
+                src={!isActive ? imageSrc : sponsorData[sponsorIndex]?.imageUrl}
+                alt="/"
+                width={230}
+                height={230}
+                priority
+                className={`z-10 rounded-3xl relative mt-10 xs:w-[160px] base:w-[130px] sm:w-[190px]`}
+              />
+            )}
+          </div>
+          {!isActive ? (
+            <div className="w-10/12 flex flex-col justify-center">
+              <h1 className="text-lg font-bold text-center mt-10 px-4 base:text-xl xs:text-2xl sm:text-3xl">
+                {!isActive
+                  ? podcastData?.title
+                  : sponsorData[sponsorIndex]?.name}
+              </h1>
+              <p className="w-full text-md xs:text-lg font-semibold text-center mt-6">
+                {isActive || truncateString(podcastData?.publisher, 30)}
+              </p>
+            </div>
           ) : (
-            <Image
-              src={!isActive ? imageSrc : sponsorData[sponsorIndex]?.imageUrl}
-              alt="/"
-              width={230}
-              height={230}
-              priority
-              className={`z-10 rounded-3xl relative mt-10 xs:w-[160px] base:w-[130px] sm:w-[190px]`}
+            <div className="w-10/12 text-center flex flex-col items-center justify-center mt-10">
+              <h1 className="font-bold base:text-md xs:text-lg sm:text-xl text-center mb-6">
+                {callToAction(podcastData?.title)}
+              </h1>
+              <h1 className="font-semibold base:text-xs xs:text-sm border border-1 border-green-500 p-4">
+                {currentPodcast[0].description}
+              </h1>
+            </div>
+          )}
+          {isActive && (
+            <div className="font-semibold my-8 flex">
+              <Link
+                href={convertToFullURL(currentPodcast[0].url)}
+                target="_blank"
+              >
+                <Button className="font-bold mx-2">Shop Now </Button>
+              </Link>
+            </div>
+          )}
+          {existingSponsor || (
+            <div className="w-full h-screen flex items-center justify-center">
+              <h1 className="mx-3">No sponsors available</h1>
+              <ImSad />
+            </div>
+          )}
+          {existingSponsor && (
+            <PlayButton
+              sponsorData={sponsorData}
+              isActive={isActive}
+              setIsActive={setIsActive}
+              handleScrub={handleScrub}
+              sponsorIndex={sponsorIndex}
             />
           )}
         </div>
-        {isActive && (
-          <Link href={convertToFullURL(currentPodcast[0].url)} target="_blank">
-            <div className="font-semibold my-4 flex">
-              <p className="font-bold mx-2">Visit </p>
-              <p className="hover:underline hover:underline-offset-2">
-                {currentPodcast[0].url}
-              </p>
-            </div>
-          </Link>
-        )}
-        {!isActive ? (
-          <div className="w-10/12 flex flex-col justify-center">
-            <h1 className="text-lg font-bold text-center mt-10 px-4 base:text-xl xs:text-2xl sm:text-3xl">
-              {!isActive ? podcastData?.title : sponsorData[sponsorIndex]?.name}
-            </h1>
-            <p className="w-full text-md xs:text-lg font-semibold text-center mt-6">
-              {isActive || truncateString(podcastData?.publisher, 30)}
-            </p>
-          </div>
-        ) : (
-          <div className="w-10/12 text-center flex flex-col items-center justify-center mt-10">
-            <h1 className="font-semibold border border-1 border-green-500 p-4">
-              {truncateString(currentPodcast[0].description, 80)}
-            </h1>
-            <h1 className="font-bold base:text-md xs:text-lg sm:text-xl text-center my-10">
-              {callToAction(podcastData?.title)}
-            </h1>
-          </div>
-        )}
-        <PlayButton
-          sponsorData={sponsorData}
-          isActive={isActive}
-          setIsActive={setIsActive}
-          handleScrub={handleScrub}
-          sponsorIndex={sponsorIndex}
-        />
-      </div>
+      }
       {isBreakPoint && (
         <div className="w-full text-[#101010] base:text-[10px] xs:text-[5px] relative">
           margin
@@ -161,31 +175,49 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { podcast } = params;
-  let { data: podcastData, loading } = await client.query({
-    query: Operations.Queries.GetPodcast,
-    variables: {
-      input: {
-        podcast,
+  try {
+    let { data: podcastData, loading } = await client.query({
+      query: Operations.Queries.GetPodcast,
+      variables: {
+        input: {
+          podcast,
+        },
       },
-    },
-  });
-  let { data: sponsorData } = await client.query({
-    query: Operations.Queries.FetchSponsors,
-    variables: {
-      input: {
-        podcast,
-      },
-    },
-  });
+    });
 
-  podcastData = podcastData.getPodcast;
-  sponsorData = sponsorData.fetchSponsors;
-  console.log(podcastData);
-  return {
-    props: {
-      podcastData,
-      sponsorData,
-      loading,
-    },
-  };
+    let { data: sponsorData } = await client.query({
+      query: Operations.Queries.FetchSponsors,
+      variables: {
+        input: {
+          podcast,
+        },
+      },
+    });
+
+    if (!sponsorData?.fetchSponsors) {
+      console.log("NO DATA");
+    }
+
+    if (sponsorData?.fetchSponsors.length === 0) {
+      podcastData = podcastData.getPodcast;
+      return {
+        props: {
+          podcastData,
+        },
+      };
+    }
+
+    podcastData = podcastData.getPodcast;
+    sponsorData = sponsorData.fetchSponsors;
+
+    return {
+      props: {
+        podcastData,
+        sponsorData,
+        loading,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+  }
 };
