@@ -16,6 +16,12 @@ export const Operations = {
           imageUrl
           publisher
           description
+          backgroundColor
+          offer {
+            sponsor
+            description
+            url
+          }
         }
       }
     `,
