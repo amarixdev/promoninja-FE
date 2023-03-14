@@ -14,7 +14,7 @@ export const productResolvers = {
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      let { podcast, sponsor, category, publisher } = input;
+      let { podcast, sponsor, category, publisher, backgroundColor } = input;
       category = category?.toLowerCase();
 
       const CATEGORY = await prisma.category.findFirst({
@@ -45,6 +45,7 @@ export const productResolvers = {
                     url: sponsor.url,
                   },
                   publisher,
+                  backgroundColor,
                   category: {
                     connect: {
                       id: CATEGORY?.id,

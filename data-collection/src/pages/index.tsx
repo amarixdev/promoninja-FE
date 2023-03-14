@@ -6,6 +6,7 @@ import {
   VStack,
   useToast,
   Spinner,
+  HStack,
 } from "@chakra-ui/react";
 
 import CreateSponsor from "../components/CreateSponsor";
@@ -15,8 +16,12 @@ import Fuse from "fuse.js";
 import SelectCategory from "../components/SelectCategory";
 import Image from "next/image";
 import { capitalizeString } from "../utils/functions";
+import Link from "next/link";
+import Extractor from "../components/Extractor";
+import { GetStaticProps } from "next";
 
-const App = () => {
+const App = ({ image }: any) => {
+  const [extractedColor, setExtractedColor] = useState("");
   const [display, setDisplay] = useState({
     sponsor: false,
     submit: false,
@@ -30,7 +35,10 @@ const App = () => {
   const [podcast, setPodcast] = useState("");
   const [text, setText] = useState("");
   const [createPodcast] = useMutation(Operations.Mutations.CreatePodcast);
-  const { data, refetch } = useQuery(Operations.Queries.GetPodcasts);
+  const [updatePodcast] = useMutation(Operations.Mutations.UpdatePodcast);
+  const { data, refetch: refetchPodcasts } = useQuery(
+    Operations.Queries.GetPodcasts
+  );
   const [fetchCategory, { data: categoryData }] = useLazyQuery(
     Operations.Queries.FetchCategory
   );
@@ -124,6 +132,7 @@ const App = () => {
         }
       });
       await refetchSpotify();
+      await refetchPodcasts();
     } catch (error) {
       console.log(error);
     }
@@ -144,11 +153,13 @@ const App = () => {
             image: spotifyImage,
             publisher: spotifyPublisher,
             description: spotifyDescription,
+            backgroundColor: extractedColor,
           },
         },
       });
 
-      await refetch();
+      await refetchPodcasts();
+      await refetchSpotify();
       toast({
         title: "Success.",
         description: "Podcast added successfully.",
@@ -172,11 +183,41 @@ const App = () => {
     setText("");
   };
 
+  const handleUpdate = async () => {
+    await updatePodcast({
+      variables: {
+        input: {
+          backgroundColor: extractedColor,
+          podcast,
+        },
+      },
+    });
+    setDisplay((prev) => ({
+      ...prev,
+      image: false,
+      title: false,
+      submit: false,
+    }));
+    setCategory("");
+    setText("");
+    setPodcast("");
+    refetchPodcasts();
+    refetchSpotify();
+    toast({
+      title: "Success.",
+      description: "Color Updated.",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
   return (
-    <div className="bg-[#1e1e1e] h-screen w-full flex flex-col items-center justify-center">
-      <h1 className="text-white font-semibold text-3xl sm:text-4xl lg:text-5xl mb-4 fixed top-10">
+    <div className="bg-[#1e1e1e] relative top-[200px] h-screen w-full flex flex-col items-center justify-center overflow-y-visible">
+      <h1 className="text-white font-semibold text-3xl sm:text-4xl lg:text-5xl mb-4 ">
         {spotifyName && display.title && spotifyName}
       </h1>
+
       <form
         onSubmit={(e) => handleSubmit(e, text, false)}
         className="w-[500px] flex flex-col justify-center items-center mb-4 h-[500px]"
@@ -211,6 +252,7 @@ const App = () => {
               </ul>
             </div>
           </div>
+
           {display.sponsor && podcast ? (
             <CreateSponsor
               podcast={spotifyName}
@@ -219,6 +261,10 @@ const App = () => {
               category={category}
             />
           ) : null}
+
+          {display.sponsor && (
+            <Button onClick={handleUpdate}>Update Color</Button>
+          )}
           {spotifyImage && display.image && (
             <>
               <Image
@@ -251,6 +297,13 @@ const App = () => {
           )}
         </VStack>
       </form>
+      {display.sponsor && podcast && (
+        <Extractor
+          image={spotifyImage}
+          extractedColor={extractedColor}
+          setExtractedColor={setExtractedColor}
+        />
+      )}
     </div>
   );
 };

@@ -61,5 +61,10 @@ export const Operations = {
         deleteSponsor(input: $input)
       }
     `,
+    UpdatePodcast: gql`
+      mutation ($input: PodcastInput!) {
+        updatePodcast(input: $input)
+      }
+    `,
   },
 };

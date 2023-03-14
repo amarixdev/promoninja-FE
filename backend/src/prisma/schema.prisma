@@ -15,16 +15,17 @@ generator client {
 }
 
 model Podcast {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  title       String     @unique
-  imageUrl    String?
-  sponsorId   String[]   @db.ObjectId
-  category    Category[] @relation(fields: [categoryId], references: [id])
-  categoryId  String[]   @db.ObjectId
-  sponsors    Sponsor[]  @relation(fields: [sponsorId], references: [id])
-  offer       Offer[]
-  publisher   String
-  description String?
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  title           String     @unique
+  imageUrl        String?
+  sponsorId       String[]   @db.ObjectId
+  category        Category[] @relation(fields: [categoryId], references: [id])
+  categoryId      String[]   @db.ObjectId
+  sponsors        Sponsor[]  @relation(fields: [sponsorId], references: [id])
+  offer           Offer[]
+  publisher       String
+  description     String?
+  backgroundColor String?
 }
 
 model Sponsor {

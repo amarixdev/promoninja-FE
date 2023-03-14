@@ -10,7 +10,14 @@ export const podcastResolvers = {
     ) => {
       const { prisma } = context;
 
-      let { podcast, category, image, publisher, description } = input;
+      let {
+        podcast,
+        category,
+        image,
+        publisher,
+        description,
+        backgroundColor,
+      } = input;
       category = category?.toLowerCase();
 
       const getCategory = await prisma.category.findFirst({
@@ -18,12 +25,14 @@ export const podcastResolvers = {
           name: category,
         },
       });
+      console.log(backgroundColor);
 
       await prisma.podcast.create({
         data: {
           title: podcast,
           imageUrl: image,
           publisher,
+          backgroundColor,
           description,
           category: {
             connect: {
@@ -52,6 +61,24 @@ export const podcastResolvers = {
         },
       });
 
+      return true;
+    },
+    updatePodcast: async (
+      parent: any,
+      { input }: PodcastInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { backgroundColor, podcast } = input;
+      console.log("updating...");
+      await prisma.podcast.update({
+        where: {
+          title: podcast,
+        },
+        data: {
+          backgroundColor,
+        },
+      });
       return true;
     },
   },
