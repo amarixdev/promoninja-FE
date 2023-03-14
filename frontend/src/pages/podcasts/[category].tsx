@@ -25,7 +25,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   console.log(categoryName);
 
   return (
-    <div className="flex">
+    <div className="flex ">
       <Sidebar />
       <div className="h-screen w-full">
         <Image
@@ -35,11 +35,15 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
         />
         <div className="w-full h-screen bg-black/30 from-black fixed"></div>
 
-        <h1 className="font-bold text-5xl md:text-6xl lg:text-8xl text-white absolute z-2 top-[8rem] sm:top-[12rem]">
+        <h1 className="font-bold text-5xl md:text-6xl lg:text-8xl text-white px-4 absolute z-2 top-[8rem] sm:top-[12rem]">
           {capitalizeString(categoryName)}
         </h1>
 
-        <div className="bg-[#121212] relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-10 p-5 ">
+        <div
+          className={`bg-[#121212] ${
+            isBreakPoint && "h-fit"
+          } relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-10 p-5`}
+        >
           {categoryPodcasts?.map((podcast) => (
             <div key={`${podcast.title}`}>
               <Link href={`/podcasts/${categoryName}/${podcast.title}`}>
@@ -52,20 +56,16 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
                 />
               </Link>
 
-              <h1 className="text-xs sm:text-md lg:text-lg text-center pt-6 font-semibold text-white whitespace-wrap">
+              <h1 className="text-[10px] sm:text-md lg:text-lg text-center pt-6 font-semibold text-white whitespace-wrap">
                 {!isBreakPoint
                   ? truncateString(podcast.title, 40)
-                  : truncateString(podcast.title, 25)}{" "}
-                {/* Fix responsiveness */}{" "}
-                {/* Fix ghost podcasts, collection-tool */}
+                  : truncateString(podcast.title, 20)}
               </h1>
-              {/* <p className="text-xs sm:text-sm lg:text-md text-center font-medium text-[#909090] mt-5 ">
-              {!isBreakPoint
-                ? podcast.publisher
-                : truncateString(podcast.publisher, 25)}
-            </p> */}
             </div>
           ))}
+          <div className="w-full text-[#121212] text-[50px] relative">
+            margin
+          </div>
         </div>
         <Footer />
       </div>

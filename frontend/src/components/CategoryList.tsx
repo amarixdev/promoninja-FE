@@ -62,7 +62,7 @@ const CategoryList = ({ category }: CategoryProps) => {
             <p className="text-xs sm:text-sm lg:text-md text-center px-2 font-medium text-[#909090] mt-5">
               {!isBreakPoint
                 ? podcast.publisher
-                : truncateString(podcast.publisher, 42)}
+                : truncateString(podcast.publisher, 30)}
             </p>
           </div>
         ))}

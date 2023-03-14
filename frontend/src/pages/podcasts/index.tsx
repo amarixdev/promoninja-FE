@@ -37,6 +37,7 @@ const podcasts = ({ categoryPreviews }: Props) => {
                 category={category}
               />
             ))}
+            <div className="w-full mt-6 text-[#121212] relative">margin</div>
           </div>
         </div>
       </div>

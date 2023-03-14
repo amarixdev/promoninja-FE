@@ -15,7 +15,7 @@ const Sidebar = (props: Props) => {
     <div
       className={
         !isBreakpoint
-          ? "w-[245px] bg-black relative z-10 overflow-clip"
+          ? "w-[260px] bg-black relative z-10 overflow-clip"
           : "hidden"
       }
     >

@@ -9,7 +9,7 @@ const Footer = (props: Props) => {
     <div
       className={
         isBreakPoint
-          ? "w-full bg-[#312f2f] fixed bottom-[0] mb-0 pb-[60px]"
+          ? "w-[100%] bg-[#312f2f] fixed bottom-[0] base:pb-[50px] xs:pb-[60px] sm:pb-[65px]"
           : "hidden"
       }
     >
