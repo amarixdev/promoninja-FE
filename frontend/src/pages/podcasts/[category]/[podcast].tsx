@@ -16,14 +16,16 @@ import {
 } from "../../../utils/functions";
 import { useMediaQuery } from "../../../utils/hooks";
 import { PodcastData, SponsorData } from "../../../utils/types";
+import PreviousPage from "../../../components/PreviousPage";
 
 interface Props {
   podcastData: PodcastData;
   sponsorData: SponsorData[];
   loading: boolean;
+  category: string;
 }
 
-const podcast = ({ podcastData, sponsorData }: Props) => {
+const podcast = ({ podcastData, sponsorData, category }: Props) => {
   const imageSrc = podcastData?.imageUrl;
   const isBreakPoint = useMediaQuery(1023);
   const [isActive, setIsActive] = useState(false);
@@ -76,6 +78,7 @@ const podcast = ({ podcastData, sponsorData }: Props) => {
       <Sidebar />
       {
         <div className="flex flex-col items-center relative h-screen bg-[#101010] w-full">
+          <PreviousPage category={category} />
           {isActive && existingSponsor && (
             <h1 className="font-bold base:text-lg xs:text-2xl text-3xl mt-6">
               {sponsorData[sponsorIndex]?.name}
@@ -121,9 +124,11 @@ const podcast = ({ podcastData, sponsorData }: Props) => {
               <h1 className="font-bold base:text-md xs:text-lg sm:text-xl text-center mb-6">
                 {callToAction(podcastData?.title)}
               </h1>
-              <h1 className="font-semibold base:text-xs xs:text-sm border border-1 border-green-500 p-4">
-                {currentPodcast[0].description}
-              </h1>
+              <div className="w-full border-t-[1px] border-b-[1px]">
+                <h1 className="font-semibold base:text-xs xs:text-sm outline-teal-300 p-4">
+                  {currentPodcast[0].description}
+                </h1>
+              </div>
             </div>
           )}
           {isActive && (
@@ -154,7 +159,7 @@ const podcast = ({ podcastData, sponsorData }: Props) => {
         </div>
       }
       {isBreakPoint && (
-        <div className="w-full text-[#101010] base:text-[10px] xs:text-[5px] relative">
+        <div className="w-full text-[#101010] base:text-[20px] xs:text-[10px] relative">
           margin
         </div>
       )}
@@ -174,7 +179,7 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }: any) => {
-  const { podcast } = params;
+  const { podcast, category } = params;
   try {
     let { data: podcastData, loading } = await client.query({
       query: Operations.Queries.GetPodcast,
@@ -203,6 +208,7 @@ export const getStaticProps = async ({ params }: any) => {
       return {
         props: {
           podcastData,
+          category,
         },
       };
     }
@@ -215,6 +221,7 @@ export const getStaticProps = async ({ params }: any) => {
         podcastData,
         sponsorData,
         loading,
+        category,
       },
     };
   } catch (error) {
