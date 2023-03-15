@@ -3,8 +3,7 @@ import React, { useContext, useState } from "react";
 import Footer from "../../components/Footer";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
-import Backdrop from "../../public/assets/backdrop.jpeg";
-import Comedy from "../../public/assets/comedy.avif";
+import Comedy from "../../public/assets/comedy2.avif";
 import Technology from "../../public/assets/technology.avif";
 import News from "../../public/assets/news.avif";
 import Lifestyle from "../../public/assets/lifestyle.avif";
@@ -12,6 +11,7 @@ import Sports from "../../public/assets/sports.avif";
 import Crime from "../../public/assets/crime.avif";
 import Education from "../../public/assets/education.avif";
 import BackdropMain from "../../public/assets/backdropMain.jpeg";
+import styles from "../../../styles/style.module.css"
 
 import {
   capitalizeString,
@@ -73,15 +73,15 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
             className="fixed z-0 w-full lg:top-[-100px] xl:top-[-150px]"
             priority
           />
-          <div className="w-full h-screen bg-black/30 from-black fixed"></div>
+          <div className="w-full h-screen bg-gradient-to-tr bg-black/10 from-black/40 fixed"></div>
 
-          <h1 className="font-bold text-5xl md:text-6xl lg:text-8xl text-white px-4 absolute z-2 top-[8rem] sm:top-[12rem]">
+          <h1 className="font-bold sm:font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-8xl text-white px-4 absolute z-2 top-[8rem] sm:top-[12rem]">
             {capitalizeString(categoryName)}
           </h1>
 
           {
             <div
-              className={`bg-[#121212] ${
+              className={`bg-[#121212] ${styles.shadow}  ${
                 isBreakPoint && "h-fit"
               } relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-10 p-5`}
             >
