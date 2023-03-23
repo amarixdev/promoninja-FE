@@ -6,6 +6,23 @@ export const Operations = {
       query {
         getPodcasts {
           title
+          imageUrl
+        }
+      }
+    `,
+    GetPodcast: gql`
+      query ($input: PodcastInput!) {
+        getPodcast(input: $input) {
+          title
+          imageUrl
+          publisher
+          description
+          backgroundColor
+          offer {
+            sponsor
+            description
+            url
+          }
         }
       }
     `,

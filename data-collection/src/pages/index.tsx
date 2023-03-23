@@ -1,12 +1,10 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useReducer } from "react";
 import {
   Button,
   Input,
-  Text,
   VStack,
   useToast,
-  Spinner,
-  HStack,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import CreateSponsor from "../components/CreateSponsor";
@@ -27,22 +25,30 @@ const App = ({ image }: any) => {
     image: true,
     title: false,
     category: false,
+    updateColor: true,
   });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [category, setCategory] = useState("");
   const [podcast, setPodcast] = useState("");
   const [text, setText] = useState("");
   const [createPodcast] = useMutation(Operations.Mutations.CreatePodcast);
   const [updatePodcast] = useMutation(Operations.Mutations.UpdatePodcast);
+  const [deletePodcast] = useMutation(Operations.Mutations.DeletePodcast);
+
+  const [currentCategory, setCurrentCategory] = useState("");
+  const [currentBgColor, setCurrentBgColor] = useState("");
   const { data, refetch: refetchPodcasts } = useQuery(
     Operations.Queries.GetPodcasts
   );
-  const [fetchCategory, { data: categoryData }] = useLazyQuery(
-    Operations.Queries.FetchCategory
-  );
+  const [fetchCategory] = useLazyQuery(Operations.Queries.FetchCategory);
 
   const [fetchSpotify, { data: spotifyData, refetch: refetchSpotify }] =
     useLazyQuery(Operations.Queries.FetchSpotifyPodcast);
+
+  const [getPodcast, { refetch: refetchCurrentPodcast }] = useLazyQuery(
+    Operations.Queries.GetPodcast
+  );
 
   const podcasts = data?.getPodcasts;
 
@@ -71,6 +77,7 @@ const App = ({ image }: any) => {
         title: false,
         category: false,
       }));
+      setExtractedColor("");
       setPodcast("");
     } catch (error) {
       console.log(error);
@@ -85,6 +92,7 @@ const App = ({ image }: any) => {
     e.preventDefault();
     setText(preview);
     setPodcast(preview);
+    setExtractedColor("");
     setDisplay((prev) => ({
       ...prev,
       preview: false,
@@ -98,24 +106,47 @@ const App = ({ image }: any) => {
       return;
     }
     try {
-      await Promise.all([
-        fetchCategory({
+      if (existingPodcast) {
+        const getCategory = await fetchCategory({
           variables: {
-            input: { podcast: fusePreview[0] },
+            input: { podcast: preview },
           },
-        }),
+        });
+
+        setCurrentCategory(
+          getCategory.data.fetchCategory
+        ); /* BUG: Fix submit by enter */
+      }
+
+      await Promise.all([
         fetchSpotify({
           variables: {
             input: { podcast: preview },
           },
         }),
+        getPodcast({
+          variables: {
+            input: { podcast: preview },
+          },
+        }),
       ]).then((result) => {
-        const fetchedName = result[1].data.fetchSpotifyPodcast[0].name;
+        const fetchBgColor = result[1].data.getPodcast?.backgroundColor;
+        console.log(result[0]);
+
+        if (!fetchBgColor) {
+          setCurrentBgColor("rgb(16,16,16)");
+        } else {
+          setCurrentBgColor(result[1].data.getPodcast.backgroundColor);
+        }
+
+        const fetchedName = result[0].data.fetchSpotifyPodcast[0].name;
+
         const podcastList = podcasts.map((podcast: any) => {
           return podcast.title;
         });
         if (!existingPodcast) {
           setDisplay((prev) => ({ ...prev, submit: true }));
+          setCurrentCategory("");
         }
         if (!existingPodcast && text === podcast) {
           setDisplay((prev) => ({ ...prev, submit: false }));
@@ -125,8 +156,12 @@ const App = ({ image }: any) => {
         }
 
         if (podcastList.includes(fetchedName)) {
-          setDisplay((prev) => ({ ...prev, submit: false }));
-          setDisplay((prev) => ({ ...prev, category: true }));
+          setDisplay((prev) => ({
+            ...prev,
+            submit: false,
+            category: true,
+          }));
+
         }
       });
       await refetchSpotify();
@@ -142,6 +177,7 @@ const App = ({ image }: any) => {
   const spotifyDescription = spotifyData?.fetchSpotifyPodcast[0]?.description;
 
   const handleSave = async () => {
+    /* Add to database */
     try {
       await createPodcast({
         variables: {
@@ -156,8 +192,10 @@ const App = ({ image }: any) => {
         },
       });
 
+      await refetchCurrentPodcast();
       await refetchPodcasts();
       await refetchSpotify();
+
       toast({
         title: "Success.",
         description: "Podcast added successfully.",
@@ -176,7 +214,12 @@ const App = ({ image }: any) => {
         });
       } else console.log(error);
     }
-    setDisplay((prev) => ({ ...prev, image: false, title: false }));
+    setDisplay((prev) => ({
+      ...prev,
+      image: false,
+      title: false,
+      submit: false,
+    }));
     setCategory("");
     setText("");
   };
@@ -195,6 +238,7 @@ const App = ({ image }: any) => {
       image: false,
       title: false,
       submit: false,
+      sponsor: false,
     }));
     setCategory("");
     setText("");
