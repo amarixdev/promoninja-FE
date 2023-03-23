@@ -63,12 +63,12 @@ const CreateSponsor = ({ podcast, category }: Props) => {
         input: { sponsor: sponsorToDelete, podcast },
       },
     });
-    await refetch();
+    await refetchSponsors();
   };
 
   const {
     data,
-    refetch,
+    refetch: refetchSponsors,
     loading: sponsorLoading,
   } = useQuery(Operations.Queries.FetchSponsors, {
     variables: {
@@ -76,9 +76,11 @@ const CreateSponsor = ({ podcast, category }: Props) => {
     },
   });
 
-  const { data: sponsorList, loading } = useQuery(
-    Operations.Queries.GetSponsors
-  );
+  const {
+    data: sponsorList,
+    loading,
+    refetch: refetchGetSponsors,
+  } = useQuery(Operations.Queries.GetSponsors);
 
   let fusePreview: string[] | undefined = undefined;
 
@@ -108,16 +110,19 @@ const CreateSponsor = ({ podcast, category }: Props) => {
   };
 
   const currentSponsors = data?.fetchSponsors;
-  const [duplicate, setDuplicate] = useState(false);
-  const handleSearch = (param: string, event: any, isExisting: boolean) => {
+  const handleSearch = (
+    param: string,
+    event: any,
+    isExistingSponsor: boolean
+  ) => {
     event.preventDefault();
     setSponsor({ ...sponsor, name: param });
     setDisplay((prev) => ({ ...prev, preview: false }));
-    if (isExisting) {
+    if (isExistingSponsor) {
       setDisplay((prev) => ({ ...prev, image: false, baseUrl: true }));
       setExistingSponsor(true);
     }
-    if (!isExisting) {
+    if (!isExistingSponsor) {
       if (fusePreview) {
         if (param === fusePreview[0]) {
           setDisplay((prev) => ({ ...prev, image: false, baseUrl: true }));
@@ -164,7 +169,6 @@ const CreateSponsor = ({ podcast, category }: Props) => {
       }));
       setDisplay((prev) => ({ ...prev, fullPath: true, baseUrl: false }));
     } else {
-      console.log(sponsor);
       setDisplay((prev) => ({
         ...prev,
         fullPath: true,
@@ -198,19 +202,20 @@ const CreateSponsor = ({ podcast, category }: Props) => {
       setSponsor((prev) => ({ ...prev, url: url }));
 
       let duplicate;
-
-      currentSponsors.forEach((current: any) => {
-        if (current.name.includes(sponsor.name)) {
-          toast({
-            title: "Error",
-            description: "Sponsor already exists",
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
-          duplicate = true;
-        }
-      });
+      if (existingSponsor) {
+        currentSponsors?.forEach((current: any) => {
+          if (current.name.includes(sponsor.name)) {
+            toast({
+              title: "Error",
+              description: "Sponsor already exists",
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+            });
+            duplicate = true;
+          }
+        });
+      }
 
       if (duplicate) return;
 
@@ -243,7 +248,9 @@ const CreateSponsor = ({ podcast, category }: Props) => {
             },
           },
         });
-        await refetch();
+        await refetchSponsors();
+        await refetchGetSponsors();
+
         toast({
           title: "Success!",
           description: "Sponsor added successfully.",
@@ -258,6 +265,15 @@ const CreateSponsor = ({ podcast, category }: Props) => {
           image: "",
           baseUrl: "",
         });
+
+        setDisplay({
+          preview: false,
+          image: true,
+          baseUrl: false,
+          fullPath: false,
+        });
+
+        setExistingSponsor(false);
       }
     } catch (error: any) {
       console.log(error);
@@ -269,11 +285,10 @@ const CreateSponsor = ({ podcast, category }: Props) => {
   const selectedSponsor = sponsorList?.getSponsors.filter((current: any) => {
     return current.name === sponsor.name;
   });
-
   const baseUrl = selectedSponsor[0]?.url;
 
   return (
-    <div className="mt-[100px]">
+    <div className="">
       <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
         Create Sponsor
       </Button>
@@ -310,7 +325,8 @@ const CreateSponsor = ({ podcast, category }: Props) => {
                   />
                   {display.preview && (
                     <Box
-                      bg={"#2D3748"}
+                      // bg={"#2D3748"}
+                      bg={"white"}
                       h={"500px"}
                       w={"275px"}
                       pos="fixed"
