@@ -5,3 +5,12 @@ export interface Sponsor {
   image: string;
   baseUrl: string;
 }
+
+export interface Podcasts {
+  podcasts: PodcastData[];
+}
+
+export interface PodcastData {
+  title: string;
+  imageUrl: string;
+}
