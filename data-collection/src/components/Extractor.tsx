@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import React from "react";
-import styles from "../styles/extractor.module.css";
-
 const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
   const canvasRef = useRef() as any;
   const [canvasLoaded, setCanvasLoaded] = useState(false);
@@ -16,10 +14,10 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
         init() {
           APP.canvas = canvasRef.current;
           APP.ctx = APP.canvas.getContext("2d");
-          APP.canvas.width = 600;
-          APP.canvas.style.width = "100%";
-          APP.canvas.height = 600;
-          APP.canvas.style.height = "100%";
+          // APP.canvas.width = 200;
+          // APP.canvas.style.width = 200;
+          // APP.canvas.height = 200;
+          // APP.canvas.style.height = 200;
           APP.img = document.createElement("img");
           APP.img.crossOrigin = "Anonymous";
           APP.img.src = image;
@@ -32,7 +30,16 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
           //once the image is loaded, add it to the canvas
 
           APP.img.onload = (ev: any) => {
-            APP.ctx.drawImage(APP.img, 0, 0);
+            const scale = 0.35;
+            const newWidth = APP.img.width * scale;
+            const newHeight = APP.img.height * scale;
+            APP.canvas.width = newWidth;
+            APP.canvas.style.width = newWidth + "px";
+            APP.canvas.height = newHeight;
+            APP.canvas.style.height = newHeight + "px";
+            APP.ctx.drawImage(APP.img, 0, 0, newWidth, newHeight);
+            APP.canvas.style.borderRadius = "20px";
+
             //call the context.getImageData method to get the array of [r,g,b,a] values
             let imgDataObj = APP.ctx.getImageData(
               0,
@@ -46,15 +53,18 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
               // console.log(APP.data.length, 900 * 600 * 4); //  has 2,160,000 elements
               APP.canvas.addEventListener("mousemove", APP.getPixel);
               APP.canvas.addEventListener("click", APP.addBox);
-
             }
           };
         },
 
         getPixel(ev: any) {
+          const scale = 0.35;
+          const newWidth = APP.img.width * scale;
+          const newHeight = APP.img.height * scale;
+          APP.canvas.width = newWidth;
           //as the mouse moves around the image
           // let canvas = ev.target;
-          let cols = APP.canvas.width;
+          let cols = newWidth;
           // let rows = canvas.height;
           let { offsetX, offsetY } = ev;
           //call the method to get the r,g,b,a values for current pixel
@@ -65,21 +75,27 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
           if (pixelColorElem !== null) {
             pixelColorElem.style.backgroundColor = clr;
           }
+
           //save the string to use elsewhere
           APP.pixel = clr;
           //now get the average of the surrounding pixel colors
           APP.getAverage(ev);
         },
         getAverage(ev: any) {
+          const scale = 0.35;
+          const newWidth = APP.img.width * scale;
+          const newHeight = APP.img.height * scale;
+          APP.canvas.width = newWidth;
+          APP.canvas.height = newHeight;
           //create a 41px by 41px average colour square
           //replace everything in the canvas with the original image
           // let canvas = ev.target;
-          let cols = APP.canvas.width;
-          let rows = APP.canvas.height;
+          let cols = newWidth;
+          let rows = newHeight;
           //remove the current contents of the canvas to draw the image and box again
           APP.ctx.clearRect(0, 0, cols, rows);
           //add the image from memory
-          APP.ctx.drawImage(APP.img, 0, 0);
+          APP.ctx.drawImage(APP.img, 0, 0, newWidth, newHeight);
           let { offsetX, offsetY } = ev;
           const inset = 20;
           //inset by 20px as our workable range
@@ -100,7 +116,7 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
               blues += c.blue;
             }
           }
-          let nums = 41 * 41; //total number of pixels in the box
+          let nums = 21 * 21; //total number of pixels in the box
           let red = Math.round(reds / nums);
           let green = Math.round(greens / nums);
           let blue = Math.round(blues / nums);
@@ -108,13 +124,13 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
           let clr = `rgb(${red}, ${green}, ${blue})`;
           //now draw an overlaying square of that colour
           //make the square twice as big as the sample area
-          APP.ctx.fillStyle = clr;
+          APP.ctx.fillStyle = APP.pixel;
           APP.ctx.strokeStyle = "#FFFFFF";
           APP.ctx.strokeWidth = 2;
           //save the average colour for later
           APP.average = clr;
-          APP.ctx.strokeRect(offsetX - inset, offsetY - inset, 41, 41);
-          APP.ctx.fillRect(offsetX - inset, offsetY - inset, 41, 41);
+          APP.ctx.strokeRect(offsetX - inset, offsetY - inset, 21, 21);
+          APP.ctx.fillRect(offsetX - inset, offsetY - inset, 21, 21);
         },
         getPixelColor(cols: any, x: number, y: number) {
           //see grid.html as reference for this algorithm
@@ -146,7 +162,7 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
 
           const averageColor = average.style.backgroundColor;
 
-          setExtractedColor(averageColor.replace(/\s/g, "")); //Formatting
+          setExtractedColor(APP.pixel.replace(/\s/g, "")); //Formatting
         },
       };
       APP.init();
@@ -154,16 +170,10 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
     }
   }, [canvasLoaded, image]);
 
-  console.log(extractedColor);
-
   return (
-    <main className={`${styles.main} relative`}>
+    <main className={`relative`}>
       <p>
-        <span
-          className={styles.box}
-          id="pixelColor"
-          data-label="Current Pixel"
-        ></span>
+        <span id="pixelColor" data-label="Current Pixel"></span>
         <canvas
           width="900"
           ref={(e) => {
@@ -173,10 +183,10 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
         ></canvas>
       </p>
 
-      <div
+      {/* <div
         style={{ background: `${extractedColor}` }}
         className={` w-[50px] outline outline-black outline-2 h-[50px] bottom-[800px] absolute left-[500px]`}
-      ></div>
+      ></div> */}
     </main>
   );
 };
