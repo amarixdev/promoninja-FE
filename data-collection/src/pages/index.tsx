@@ -17,6 +17,7 @@ import { capitalizeString } from "../utils/functions";
 import DeleteModal from "../components/DeleteModal";
 
 const App = ({ image }: any) => {
+  const [isExistingPodcast, setIsExistingPodcast] = useState(false);
   const [extractedColor, setExtractedColor] = useState("");
   const [display, setDisplay] = useState({
     sponsor: false,
@@ -38,6 +39,8 @@ const App = ({ image }: any) => {
 
   const [currentCategory, setCurrentCategory] = useState("");
   const [currentBgColor, setCurrentBgColor] = useState("");
+  const [currentTitle, setCurrentTitle] = useState("");
+  const [currentImage, setCurrentImage] = useState("");
   const { data, refetch: refetchPodcasts } = useQuery(
     Operations.Queries.GetPodcasts
   );
@@ -46,9 +49,8 @@ const App = ({ image }: any) => {
   const [fetchSpotify, { data: spotifyData, refetch: refetchSpotify }] =
     useLazyQuery(Operations.Queries.FetchSpotifyPodcast);
 
-  const [getPodcast, { refetch: refetchCurrentPodcast }] = useLazyQuery(
-    Operations.Queries.GetPodcast
-  );
+  const [getPodcast, { data: podcastData, refetch: refetchCurrentPodcast }] =
+    useLazyQuery(Operations.Queries.GetPodcast);
 
   const podcasts = data?.getPodcasts;
 
@@ -67,6 +69,7 @@ const App = ({ image }: any) => {
 
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
+      setIsExistingPodcast(false);
       setText(e.target.value);
       setDisplay((prev) => ({
         ...prev,
@@ -84,11 +87,16 @@ const App = ({ image }: any) => {
     }
   };
 
+  /* Bug: Have to click preview to register as existing */
+
   const handleSubmit = async (
     e: FormEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>,
     preview: string,
     existingPodcast: boolean
   ) => {
+    const podcastTitleList = podcasts.map((podcast: any) => {
+      return podcast.title;
+    });
     e.preventDefault();
     setText(preview);
     setPodcast(preview);
@@ -105,6 +113,10 @@ const App = ({ image }: any) => {
     if (!text) {
       return;
     }
+    if (existingPodcast) {
+      setIsExistingPodcast(true);
+    }
+
     try {
       if (existingPodcast) {
         const getCategory = await fetchCategory({
@@ -112,42 +124,36 @@ const App = ({ image }: any) => {
             input: { podcast: preview },
           },
         });
-
-        setCurrentCategory(
-          getCategory.data.fetchCategory
-        ); /* BUG: Fix submit by enter */
+        setCurrentCategory(getCategory.data.fetchCategory);
       }
 
       await Promise.all([
+        /* Fetching new podcast */
         fetchSpotify({
           variables: {
             input: { podcast: preview },
           },
         }),
+        /* Fetching existing podcast */
         getPodcast({
           variables: {
             input: { podcast: preview },
           },
         }),
       ]).then((result) => {
-        const fetchBgColor = result[1].data.getPodcast?.backgroundColor;
-        console.log(result[0]);
-
-        if (!fetchBgColor) {
+        let fetchBgColor;
+        if (!result[1].data) {
           setCurrentBgColor("rgb(16,16,16)");
-        } else {
-          setCurrentBgColor(result[1].data.getPodcast.backgroundColor);
-        }
-
-        const fetchedName = result[0].data.fetchSpotifyPodcast[0].name;
-
-        const podcastList = podcasts.map((podcast: any) => {
-          return podcast.title;
-        });
-        if (!existingPodcast) {
           setDisplay((prev) => ({ ...prev, submit: true }));
           setCurrentCategory("");
+        } else {
+          fetchBgColor = result[1].data.getPodcast?.backgroundColor;
+          setCurrentBgColor(fetchBgColor);
+          setCurrentTitle(result[1].data.getPodcast?.title);
+          setCurrentImage(result[1].data.getPodcast?.imageUrl);
         }
+        const fetchedSpotifyName = result[0].data.fetchSpotifyPodcast[0].name;
+
         if (!existingPodcast && text === podcast) {
           setDisplay((prev) => ({ ...prev, submit: false }));
         }
@@ -155,13 +161,31 @@ const App = ({ image }: any) => {
           setDisplay((prev) => ({ ...prev, submit: true }));
         }
 
-        if (podcastList.includes(fetchedName)) {
+        /* Register string match as existing podcast */
+        if (podcastTitleList.includes(fetchedSpotifyName)) {
+          const result = getPodcast({
+            variables: {
+              input: { podcast: fetchedSpotifyName },
+            },
+          });
+          result.then((fetchData) => {
+            const currentPodcastData = fetchData?.data.getPodcast;
+            setCurrentBgColor(currentPodcastData.backgroundColor);
+          });
+
+          fetchCategory({
+            variables: {
+              input: { podcast: fetchedSpotifyName },
+            },
+          }).then((fetchData) => {
+            setCurrentCategory(fetchData?.data.fetchCategory);
+          });
+
           setDisplay((prev) => ({
             ...prev,
             submit: false,
             category: true,
           }));
-
         }
       });
       await refetchSpotify();
@@ -192,7 +216,6 @@ const App = ({ image }: any) => {
         },
       });
 
-      await refetchCurrentPodcast();
       await refetchPodcasts();
       await refetchSpotify();
 
@@ -311,10 +334,12 @@ const App = ({ image }: any) => {
 
       {/* Title */}
       <h1 className="text-white absolute font-extrabold top-[-180px] text-3xl sm:text-4xl lg:text-5xl mb-4 ">
-        {spotifyName && display.title && spotifyName}
+        {isExistingPodcast && display.title
+          ? currentTitle
+          : spotifyName && display.title && spotifyName}
       </h1>
       {/* Category */}
-      <h2 className="text-white absolute font-semibold top-[-100px] text-lg sm:text-2xl lg:text-xl mb-4 ">
+      <h2 className="text-white absolute font-semibold top-[-115px] text-lg sm:text-2xl lg:text-xl mb-4 ">
         {spotifyName && display.title && capitalizeString(currentCategory)}
       </h2>
 
@@ -322,7 +347,7 @@ const App = ({ image }: any) => {
       {display.image && podcast && (
         <div onClick={() => setCurrentBgColor(extractedColor)}>
           <Extractor
-            image={spotifyImage}
+            image={isExistingPodcast ? currentImage : spotifyImage}
             extractedColor={extractedColor}
             setExtractedColor={setExtractedColor}
           />
