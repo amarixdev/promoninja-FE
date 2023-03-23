@@ -14,11 +14,9 @@ import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { Operations } from "../graphql/operations";
 import Fuse from "fuse.js";
 import SelectCategory from "../components/SelectCategory";
-import Image from "next/image";
-import { capitalizeString } from "../utils/functions";
-import Link from "next/link";
 import Extractor from "../components/Extractor";
-import { GetStaticProps } from "next";
+import { capitalizeString } from "../utils/functions";
+import DeleteModal from "../components/DeleteModal";
 
 const App = ({ image }: any) => {
   const [extractedColor, setExtractedColor] = useState("");
@@ -212,26 +210,93 @@ const App = ({ image }: any) => {
     });
   };
 
+  const handleDelete = async () => {
+    onClose();
+    try {
+      await deletePodcast({
+        variables: {
+          input: { podcast },
+        },
+      });
+      setDisplay((prev) => ({
+        ...prev,
+        image: false,
+        title: false,
+        submit: false,
+        sponsor: false,
+      }));
+      setCategory("");
+      setText("");
+      setPodcast("");
+      refetchPodcasts();
+      refetchSpotify();
+      toast({
+        title: "Success.",
+        description: "Deleted.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const gradientStyle = {
+    backgroundImage: `linear-gradient(to bottom, ${
+      currentBgColor ? currentBgColor : extractedColor
+    }, #101010)`,
+  };
+
   return (
-    <div className="bg-[#1e1e1e] relative top-[200px] h-screen w-full flex flex-col items-center justify-center overflow-y-visible">
-      <h1 className="text-white font-semibold text-3xl sm:text-4xl lg:text-5xl mb-4 ">
+    <div className="bg-[#101010] relative top-[200px] h-screen w-full flex flex-col items-center justify-center overflow-y-visible">
+      <DeleteModal
+        isOpen={isOpen}
+        onClose={onClose}
+        handleDelete={handleDelete}
+      />
+      {/* Theme Preview */}
+      {spotifyName && display.title && (
+        <div className="bg-[#101010] fixed w-full h-[320px] top-[170px] z-1">
+          <div
+            className="w-full h-[260px] fixed z-10"
+            style={gradientStyle}
+          ></div>
+        </div>
+      )}
+
+      {/* Title */}
+      <h1 className="text-white absolute font-extrabold top-[-180px] text-3xl sm:text-4xl lg:text-5xl mb-4 ">
         {spotifyName && display.title && spotifyName}
       </h1>
+      {/* Category */}
+      <h2 className="text-white absolute font-semibold top-[-100px] text-lg sm:text-2xl lg:text-xl mb-4 ">
+        {spotifyName && display.title && capitalizeString(currentCategory)}
+      </h2>
+
+      {/* Image Color Extraction */}
+      {display.image && podcast && (
+        <div onClick={() => setCurrentBgColor(extractedColor)}>
+          <Extractor
+            image={spotifyImage}
+            extractedColor={extractedColor}
+            setExtractedColor={setExtractedColor}
+          />
+        </div>
+      )}
 
       <form
         onSubmit={(e) => handleSubmit(e, text, false)}
         className="w-[500px] flex flex-col justify-center items-center mb-4 h-[500px]"
       >
         <VStack spacing={5} className="h-full">
-          <div className=" w-full flex-col items-center justify-center text-center">
-            <Text color={"white"} mt={10}>
-              Podcast Title
-            </Text>
+          <div className="flex-col h-[80px] items-center justify-center text-center">
             <Input
               type="text"
               value={text}
               w={200}
               color={"white"}
+              placeholder={"Search Podcast Title"}
               onChange={(e) => handleInputChange(e)}
               mt={10}
             />
@@ -262,25 +327,14 @@ const App = ({ image }: any) => {
             />
           ) : null}
 
-          {display.sponsor && (
+          {display.sponsor && !display.submit && display.updateColor && (
             <Button onClick={handleUpdate}>Update Color</Button>
           )}
-          {spotifyImage && display.image && (
-            <>
-              <Image
-                src={spotifyImage}
-                width={125}
-                height={125}
-                alt="/"
-                priority
-              />
-              <h1 className="font-bold text-lg">
-                {display.category &&
-                  capitalizeString(categoryData?.fetchCategory)}
-              </h1>
-            </>
+          {display.sponsor && !display.submit && display.updateColor && (
+            <Button colorScheme={"red"} onClick={onOpen}>
+              Delete Podcast
+            </Button>
           )}
-
           {display.submit && (
             <SelectCategory category={category} setCategory={setCategory} />
           )}
@@ -297,13 +351,6 @@ const App = ({ image }: any) => {
           )}
         </VStack>
       </form>
-      {display.sponsor && podcast && (
-        <Extractor
-          image={spotifyImage}
-          extractedColor={extractedColor}
-          setExtractedColor={setExtractedColor}
-        />
-      )}
     </div>
   );
 };

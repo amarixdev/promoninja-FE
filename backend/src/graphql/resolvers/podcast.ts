@@ -1,5 +1,6 @@
 import { GraphQLContext, PodcastInput, SpotifyAPI } from "../../util/types";
 import fetch from "node-fetch";
+import { prisma } from "@prisma/client";
 
 export const podcastResolvers = {
   Mutation: {
@@ -25,8 +26,7 @@ export const podcastResolvers = {
           name: category,
         },
       });
-      console.log(backgroundColor);
-
+    
       await prisma.podcast.create({
         data: {
           title: podcast,
@@ -80,6 +80,27 @@ export const podcastResolvers = {
         },
       });
       return true;
+    },
+    deletePodcast: async (
+      parent: any,
+      { input }: PodcastInput,
+      context: GraphQLContext
+    ) => {
+      try {
+        const { prisma } = context;
+        const { podcast } = input;
+
+        console.log(podcast)
+
+        await prisma.podcast.delete({
+          where: {
+            title: podcast,
+          },
+        });
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   Query: {

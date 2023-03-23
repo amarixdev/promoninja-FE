@@ -11,6 +11,15 @@ const typeDefs = gql`
     fetchCategoryPodcasts(input: PodcastInput!): [Podcast]
   }
 
+  type Mutation {
+    createPodcast(input: PodcastInput!): Boolean
+    updatePodcast(input: PodcastInput!): Boolean
+    createSponsor(input: PodcastInput!): Boolean
+    updateSponsor: Boolean
+    deleteSponsor(input: DeleteInput): Boolean
+    deletePodcast(input: PodcastInput!): Boolean
+  }
+
   input SpotifyAPI {
     podcast: String
   }
@@ -27,14 +36,6 @@ const typeDefs = gql`
     height: Int
     url: String
     width: Int
-  }
-
-  type Mutation {
-    createPodcast(input: PodcastInput!): Boolean
-    updatePodcast(input: PodcastInput!): Boolean
-    createSponsor(input: PodcastInput!): Boolean
-    updateSponsor: Boolean
-    deleteSponsor(input: DeleteInput): Boolean
   }
 
   input DeleteInput {
