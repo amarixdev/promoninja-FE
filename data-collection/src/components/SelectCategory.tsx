@@ -1,20 +1,32 @@
 import { Select } from "@chakra-ui/react";
 import React, { Dispatch, SetStateAction } from "react";
+import {
+  initState,
+  ReducerAction,
+  REDUCER_ACTION_TYPE,
+} from "../utils/reducer";
 
 interface Props {
-  category: string;
-  setCategory: Dispatch<SetStateAction<string>>;
+  // category: string;
+  // setCategory: Dispatch<SetStateAction<string>>;
+  dispatch: Dispatch<ReducerAction>;
+  state: typeof initState;
 }
 
-const SelectCategory = ({ category, setCategory }: Props) => {
+const SelectCategory = ({ state, dispatch }: Props) => {
   return (
     <div>
       <Select
         placeholder="--Select Category--"
         textColor={"white"}
         textAlign={"center"}
-        onChange={(e) => setCategory(e.target.value)}
-        value={category}
+        onChange={(e) =>
+          dispatch({
+            type: REDUCER_ACTION_TYPE.SET_CATEGORY,
+            payload: e.target.value,
+          })
+        }
+        value={state.category}
       >
         <option value="comedy">Comedy</option>
         <option value="technology">Technology</option>

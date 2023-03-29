@@ -1,4 +1,4 @@
-import { FormEvent, useState, useReducer } from "react";
+import { FormEvent, useState, useReducer, ChangeEvent } from "react";
 import {
   Button,
   Input,
@@ -15,108 +15,73 @@ import SelectCategory from "../components/SelectCategory";
 import Extractor from "../components/Extractor";
 import { capitalizeString } from "../utils/functions";
 import DeleteModal from "../components/DeleteModal";
+import { REDUCER_ACTION_TYPE, initState, reducer } from "../utils/reducer";
 
-const App = ({ image }: any) => {
-  const [isExistingPodcast, setIsExistingPodcast] = useState(false);
-  const [extractedColor, setExtractedColor] = useState("");
-  const [display, setDisplay] = useState({
-    sponsor: false,
-    submit: false,
-    preview: true,
-    image: true,
-    title: false,
-    category: false,
-    updateColor: true,
-  });
+const App = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const [category, setCategory] = useState("");
-  const [podcast, setPodcast] = useState("");
-  const [text, setText] = useState("");
+  const [state, dispatch] = useReducer(reducer, initState);
+  console.log(state);
+
   const [createPodcast] = useMutation(Operations.Mutations.CreatePodcast);
   const [updatePodcast] = useMutation(Operations.Mutations.UpdatePodcast);
   const [deletePodcast] = useMutation(Operations.Mutations.DeletePodcast);
 
-  const [currentCategory, setCurrentCategory] = useState("");
-  const [currentBgColor, setCurrentBgColor] = useState("");
-  const [currentTitle, setCurrentTitle] = useState("");
-  const [currentImage, setCurrentImage] = useState("");
   const { data, refetch: refetchPodcasts } = useQuery(
     Operations.Queries.GetPodcasts
   );
   const [fetchCategory] = useLazyQuery(Operations.Queries.FetchCategory);
-
   const [fetchSpotify, { data: spotifyData, refetch: refetchSpotify }] =
     useLazyQuery(Operations.Queries.FetchSpotifyPodcast);
 
-  const [getPodcast, { data: podcastData, refetch: refetchCurrentPodcast }] =
-    useLazyQuery(Operations.Queries.GetPodcast);
+  const [getPodcast, { refetch: refetchCurrentPodcast }] = useLazyQuery(
+    Operations.Queries.GetPodcast
+  );
 
   const podcasts = data?.getPodcasts;
 
   let fusePreview: any;
+
   if (podcasts) {
     const fuse = new Fuse(podcasts, {
       keys: ["title"],
       includeScore: true,
     });
 
-    fusePreview = fuse.search(text).map((preview: any) => {
+    fusePreview = fuse.search(state.text).map((preview: any) => {
       const { item } = preview;
       return item.title;
     });
   }
 
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      setIsExistingPodcast(false);
-      setText(e.target.value);
-      setDisplay((prev) => ({
-        ...prev,
-        image: false,
-        submit: false,
-        sponsor: false,
-        preview: true,
-        title: false,
-        category: false,
-      }));
-      setExtractedColor("");
-      setPodcast("");
-    } catch (error) {
-      console.log(error);
-    }
+  const handlePodcastInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.INPUT_CHANGE,
+      payload: e.target.value,
+    });
   };
 
-  /* Bug: Have to click preview to register as existing */
-
-  const handleSubmit = async (
+  const handleSelectPodcast = async (
     e: FormEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>,
     preview: string,
     existingPodcast: boolean
   ) => {
+    e.preventDefault();
     const podcastTitleList = podcasts.map((podcast: any) => {
       return podcast.title;
     });
-    e.preventDefault();
-    setText(preview);
-    setPodcast(preview);
-    setExtractedColor("");
-    setDisplay((prev) => ({
-      ...prev,
-      preview: false,
-      sponsor: true,
-      image: true,
-      title: true,
-      category: false,
-    }));
 
-    if (!text) {
+    if (!state.text) {
       return;
     }
-    if (existingPodcast) {
-      setIsExistingPodcast(true);
-    }
+    dispatch({ type: REDUCER_ACTION_TYPE.SELECT_PODCAST, payload: preview });
 
+    if (existingPodcast) {
+      dispatch({
+        type: REDUCER_ACTION_TYPE.TOGGLE_EXISTING_PODCAST,
+        payload: true,
+      });
+    }
     try {
       if (existingPodcast) {
         const getCategory = await fetchCategory({
@@ -124,7 +89,11 @@ const App = ({ image }: any) => {
             input: { podcast: preview },
           },
         });
-        setCurrentCategory(getCategory.data.fetchCategory);
+
+        dispatch({
+          type: REDUCER_ACTION_TYPE.UPDATE_CURRENT_PODCAST,
+          payload: { category: getCategory.data.fetchCategory },
+        });
       }
 
       await Promise.all([
@@ -141,24 +110,40 @@ const App = ({ image }: any) => {
           },
         }),
       ]).then((result) => {
-        let fetchBgColor;
         if (!result[1].data) {
-          setCurrentBgColor("rgb(16,16,16)");
-          setDisplay((prev) => ({ ...prev, submit: true }));
-          setCurrentCategory("");
+          dispatch({
+            type: REDUCER_ACTION_TYPE.UPDATE_DISPLAY,
+            payload: { submit: true },
+          });
+
+          dispatch({
+            type: REDUCER_ACTION_TYPE.UPDATE_CURRENT_PODCAST,
+            payload: { bgColor: "rgb(16,16,16)", category: "" },
+          });
         } else {
-          fetchBgColor = result[1].data.getPodcast?.backgroundColor;
-          setCurrentBgColor(fetchBgColor);
-          setCurrentTitle(result[1].data.getPodcast?.title);
-          setCurrentImage(result[1].data.getPodcast?.imageUrl);
+          dispatch({
+            type: REDUCER_ACTION_TYPE.UPDATE_CURRENT_PODCAST,
+            payload: {
+              bgColor: result[1].data.getPodcast?.backgroundColor,
+              title: result[1].data.getPodcast?.title,
+              image: result[1].data.getPodcast?.imageUrl,
+            },
+          });
         }
         const fetchedSpotifyName = result[0].data.fetchSpotifyPodcast[0].name;
 
-        if (!existingPodcast && text === podcast) {
-          setDisplay((prev) => ({ ...prev, submit: false }));
+        if (!existingPodcast && state.text === state.podcast) {
+          dispatch({
+            type: REDUCER_ACTION_TYPE.UPDATE_DISPLAY,
+            payload: { submit: false },
+          });
         }
-        if (!existingPodcast && display.submit) {
-          setDisplay((prev) => ({ ...prev, submit: true }));
+
+        if (!existingPodcast && state.display.submit) {
+          dispatch({
+            type: REDUCER_ACTION_TYPE.UPDATE_DISPLAY,
+            payload: { submit: true },
+          });
         }
 
         /* Register string match as existing podcast */
@@ -170,7 +155,13 @@ const App = ({ image }: any) => {
           });
           result.then((fetchData) => {
             const currentPodcastData = fetchData?.data.getPodcast;
-            setCurrentBgColor(currentPodcastData.backgroundColor);
+
+            dispatch({
+              type: REDUCER_ACTION_TYPE.UPDATE_CURRENT_PODCAST,
+              payload: {
+                bgColor: currentPodcastData.backgroundColor,
+              },
+            });
           });
 
           fetchCategory({
@@ -178,14 +169,17 @@ const App = ({ image }: any) => {
               input: { podcast: fetchedSpotifyName },
             },
           }).then((fetchData) => {
-            setCurrentCategory(fetchData?.data.fetchCategory);
+            dispatch({
+              type: REDUCER_ACTION_TYPE.UPDATE_CURRENT_PODCAST,
+              payload: {
+                category: fetchData?.data.fetchCategory,
+              },
+            });
           });
-
-          setDisplay((prev) => ({
-            ...prev,
-            submit: false,
-            category: true,
-          }));
+          dispatch({
+            type: REDUCER_ACTION_TYPE.UPDATE_DISPLAY,
+            payload: { submit: false, category: true },
+          });
         }
       });
       await refetchSpotify();
@@ -206,15 +200,27 @@ const App = ({ image }: any) => {
       await createPodcast({
         variables: {
           input: {
-            category,
+            category: state.category,
             podcast: spotifyName,
             image: spotifyImage,
             publisher: spotifyPublisher,
             description: spotifyDescription,
-            backgroundColor: extractedColor,
+            backgroundColor: state.extractedColor,
           },
         },
       });
+      dispatch({
+        type: REDUCER_ACTION_TYPE.UPDATE_DISPLAY,
+        payload: {
+          image: false,
+          title: false,
+          submit: false,
+          updateColor: false,
+          sponsor: false,
+        },
+      });
+
+      dispatch({ type: REDUCER_ACTION_TYPE.RESET_FIELDS });
 
       await refetchPodcasts();
       await refetchSpotify();
@@ -227,7 +233,7 @@ const App = ({ image }: any) => {
         isClosable: true,
       });
     } catch (error: any) {
-      if (!category) {
+      if (!state.category) {
         toast({
           title: "Error",
           description: "Please Enter Category.",
@@ -237,37 +243,20 @@ const App = ({ image }: any) => {
         });
       } else console.log(error);
     }
-    setDisplay((prev) => ({
-      ...prev,
-      image: false,
-      title: false,
-      submit: false,
-    }));
-    setCategory("");
-    setText("");
   };
 
-  const handleUpdate = async () => {
+  const handleUpdateColor = async () => {
     await updatePodcast({
       variables: {
         input: {
-          backgroundColor: extractedColor,
-          podcast,
+          backgroundColor: state.extractedColor,
+          podcast: state.podcast,
         },
       },
     });
-    setDisplay((prev) => ({
-      ...prev,
-      image: false,
-      title: false,
-      submit: false,
-      sponsor: false,
-    }));
-    setCategory("");
-    setText("");
-    setPodcast("");
-    refetchPodcasts();
-    refetchSpotify();
+    await refetchPodcasts();
+    await refetchCurrentPodcast();
+
     toast({
       title: "Success.",
       description: "Color Updated.",
@@ -277,24 +266,25 @@ const App = ({ image }: any) => {
     });
   };
 
-  const handleDelete = async () => {
+  const handleDeletePodcast = async () => {
     onClose();
     try {
       await deletePodcast({
         variables: {
-          input: { podcast },
+          input: { podcast: state.podcast },
         },
       });
-      setDisplay((prev) => ({
-        ...prev,
-        image: false,
-        title: false,
-        submit: false,
-        sponsor: false,
-      }));
-      setCategory("");
-      setText("");
-      setPodcast("");
+      dispatch({
+        type: REDUCER_ACTION_TYPE.UPDATE_DISPLAY,
+        payload: {
+          image: false,
+          title: false,
+          submit: false,
+          sponsor: false,
+        },
+      });
+
+      dispatch({ type: REDUCER_ACTION_TYPE.RESET_FIELDS });
       refetchPodcasts();
       refetchSpotify();
       toast({
@@ -311,7 +301,9 @@ const App = ({ image }: any) => {
 
   const gradientStyle = {
     backgroundImage: `linear-gradient(to bottom, ${
-      currentBgColor ? currentBgColor : extractedColor
+      state.currentPodcast.bgColor
+        ? state.currentPodcast.bgColor
+        : state.extractedColor
     }, #101010)`,
   };
 
@@ -320,10 +312,10 @@ const App = ({ image }: any) => {
       <DeleteModal
         isOpen={isOpen}
         onClose={onClose}
-        handleDelete={handleDelete}
+        handleDeletePodcast={handleDeletePodcast}
       />
       {/* Theme Preview */}
-      {spotifyName && display.title && (
+      {spotifyName && state.display.title && (
         <div className="bg-[#101010] fixed w-full h-[320px] top-[170px] z-1">
           <div
             className="w-full h-[260px] fixed z-10"
@@ -334,49 +326,61 @@ const App = ({ image }: any) => {
 
       {/* Title */}
       <h1 className="text-white absolute font-extrabold top-[-180px] text-3xl sm:text-4xl lg:text-5xl mb-4 ">
-        {isExistingPodcast && display.title
-          ? currentTitle
-          : spotifyName && display.title && spotifyName}
+        {state.isExistingPodcast && state.display.title
+          ? state.currentPodcast.title
+          : spotifyName && state.display.title && spotifyName}
       </h1>
       {/* Category */}
       <h2 className="text-white absolute font-semibold top-[-115px] text-lg sm:text-2xl lg:text-xl mb-4 ">
-        {spotifyName && display.title && capitalizeString(currentCategory)}
+        {spotifyName &&
+          state.display.title &&
+          capitalizeString(state.currentPodcast.category)}
       </h2>
 
       {/* Image Color Extraction */}
-      {display.image && podcast && (
-        <div onClick={() => setCurrentBgColor(extractedColor)}>
+      {state.podcast && (
+        <div
+          onClick={() =>
+            dispatch({
+              type: REDUCER_ACTION_TYPE.UPDATE_CURRENT_PODCAST,
+              payload: { bgColor: state.extractedColor },
+            })
+          }
+        >
           <Extractor
-            image={isExistingPodcast ? currentImage : spotifyImage}
-            extractedColor={extractedColor}
-            setExtractedColor={setExtractedColor}
+            image={
+              state.isExistingPodcast
+                ? state.currentPodcast.image
+                : spotifyImage
+            }
+            dispatch={dispatch}
           />
         </div>
       )}
 
       <form
-        onSubmit={(e) => handleSubmit(e, text, false)}
+        onSubmit={(e) => handleSelectPodcast(e, state.text, false)}
         className="w-[500px] flex flex-col justify-center items-center mb-4 h-[500px]"
       >
         <VStack spacing={5} className="h-full">
           <div className="flex-col h-[80px] items-center justify-center text-center">
             <Input
               type="text"
-              value={text}
+              value={state.text}
               w={200}
               color={"white"}
               placeholder={"Search Podcast Title"}
-              onChange={(e) => handleInputChange(e)}
+              onChange={(e) => handlePodcastInputChange(e)}
               mt={10}
             />
             <div className="w-[300px] bg-[#12121] flex flex-col items-center mt-10">
               <ul className="text-center">
-                {text &&
-                  display.preview &&
+                {state.text &&
+                  state.display.preview &&
                   fusePreview?.map((preview: string) => (
                     <li key={preview}>
                       <Button
-                        onClick={(e) => handleSubmit(e, preview, true)}
+                        onClick={(e) => handleSelectPodcast(e, preview, true)}
                         margin={1}
                       >
                         {preview}
@@ -387,27 +391,32 @@ const App = ({ image }: any) => {
             </div>
           </div>
 
-          {display.sponsor && podcast ? (
+          {state.display.sponsor && state.podcast ? (
             <CreateSponsor
               podcast={spotifyName}
               createPodcast={createPodcast}
-              displaySubmit={display.submit}
-              category={category}
+              displaySubmit={state.display.submit}
+              state={state}
+              dispatch={dispatch}
             />
           ) : null}
 
-          {display.sponsor && !display.submit && display.updateColor && (
-            <Button onClick={handleUpdate}>Update Color</Button>
+          {state.display.sponsor &&
+            !state.display.submit &&
+            state.display.updateColor && (
+              <Button onClick={handleUpdateColor}>Update Color</Button>
+            )}
+          {state.display.sponsor &&
+            !state.display.submit &&
+            state.display.updateColor && (
+              <Button colorScheme={"red"} onClick={onOpen}>
+                Delete Podcast
+              </Button>
+            )}
+          {state.display.submit && (
+            <SelectCategory state={state} dispatch={dispatch} />
           )}
-          {display.sponsor && !display.submit && display.updateColor && (
-            <Button colorScheme={"red"} onClick={onOpen}>
-              Delete Podcast
-            </Button>
-          )}
-          {display.submit && (
-            <SelectCategory category={category} setCategory={setCategory} />
-          )}
-          {display.submit && (
+          {state.display.submit && (
             <Button
               onClick={handleSave}
               colorScheme={"purple"}

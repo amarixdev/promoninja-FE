@@ -21,18 +21,20 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Fuse from "fuse.js";
-import { useRef, useState } from "react";
+import { Dispatch, useRef, useState } from "react";
 import { Operations } from "../graphql/operations";
 import { Sponsor } from "../utils/types";
+import { ReducerAction, initState } from "../utils/reducer";
 
 interface Props {
   podcast: string;
-  category: string;
   displaySubmit: boolean;
   createPodcast: ({}) => void;
+  dispatch: Dispatch<ReducerAction>;
+  state: typeof initState;
 }
 
-const CreateSponsor = ({ podcast, category }: Props) => {
+const CreateSponsor = ({ podcast, state }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef(null);
   const [existingSponsor, setExistingSponsor] = useState(false);
@@ -244,7 +246,7 @@ const CreateSponsor = ({ podcast, category }: Props) => {
             input: {
               podcast,
               sponsor,
-              category,
+              category: state.category,
             },
           },
         });

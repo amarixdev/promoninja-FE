@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import React from "react";
-const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
+import { REDUCER_ACTION_TYPE } from "../utils/reducer";
+const Extractor = ({ image, dispatch, setExtractedColor }: any) => {
   const canvasRef = useRef() as any;
   const [canvasLoaded, setCanvasLoaded] = useState(false);
 
@@ -162,13 +163,16 @@ const Extractor = ({ image, extractedColor, setExtractedColor }: any) => {
 
           const averageColor = average.style.backgroundColor;
 
-          setExtractedColor(APP.pixel.replace(/\s/g, "")); //Formatting
+          dispatch({
+            type: REDUCER_ACTION_TYPE.SET_EXTRACTED_COLOR,
+            payload: APP.pixel.replace(/\s/g, ""),
+          });
         },
       };
       APP.init();
     } else {
     }
-  }, [canvasLoaded, image]);
+  }, [canvasLoaded, image, dispatch]);
 
   return (
     <main className={`relative`}>

@@ -12,10 +12,10 @@ import {
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  handleDelete: () => Promise<void>;
+  handleDeletePodcast: () => Promise<void>;
 }
 
-const DefaultModal = ({ isOpen, onClose, handleDelete }: Props) => {
+const DefaultModal = ({ isOpen, onClose, handleDeletePodcast }: Props) => {
   return (
     <>
       {/* <Button onClick={onOpen}>Open Modal</Button> */}
@@ -28,7 +28,7 @@ const DefaultModal = ({ isOpen, onClose, handleDelete }: Props) => {
           <ModalBody></ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={handleDelete}>
+            <Button colorScheme="red" mr={3} onClick={handleDeletePodcast}>
               Yes, Delete
             </Button>
             <Button colorScheme={"blue"} variant="ghost" onClick={onClose}>
