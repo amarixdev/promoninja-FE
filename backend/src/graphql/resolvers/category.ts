@@ -16,7 +16,6 @@ export const categoryResolvers = {
         },
       });
 
-      // console.log(getPodcast)
 
       const category = await prisma.category.findFirst({
         where: {
@@ -28,9 +27,6 @@ export const categoryResolvers = {
           name: true,
         },
       });
-
-      console.log(category?.name);
-
       return category?.name;
     },
   },
