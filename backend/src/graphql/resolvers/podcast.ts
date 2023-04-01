@@ -26,7 +26,7 @@ export const podcastResolvers = {
           name: category,
         },
       });
-    
+
       await prisma.podcast.create({
         data: {
           title: podcast,
@@ -90,8 +90,6 @@ export const podcastResolvers = {
         const { prisma } = context;
         const { podcast } = input;
 
-        console.log(podcast)
-
         await prisma.podcast.delete({
           where: {
             title: podcast,
@@ -121,12 +119,18 @@ export const podcastResolvers = {
     ) => {
       const { prisma } = context;
       const { podcast: podcastTitle } = input;
+
       try {
         const podcast = await prisma.podcast.findFirst({
           where: {
             title: podcastTitle,
           },
         });
+
+        if (!podcast) {
+          return false;
+        }
+
         return podcast;
       } catch (error) {
         console.log(error);
