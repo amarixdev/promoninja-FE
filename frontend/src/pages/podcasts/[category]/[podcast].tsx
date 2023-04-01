@@ -1,22 +1,19 @@
 // import ColorExtractor from "../../../components/ColorExtractor";
-import { Button, Divider, Img, Input, Spinner } from "@chakra-ui/react";
+import { Spinner, useDisclosure } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import Footer from "../../../components/Footer";
-import PlayButton from "../../../components/PlayButton";
 import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
 import { ImSad } from "react-icons/im";
-import {
-  callToAction,
-  convertToFullURL,
-  truncateString,
-} from "../../../utils/functions";
+import { FaEllipsisV } from "react-icons/fa";
 import { useMediaQuery } from "../../../utils/hooks";
 import { PodcastData, SponsorData } from "../../../utils/types";
-import PreviousPage from "../../../components/PreviousPage";
+import DescriptionDrawer from "../../../components/DescriptionDrawer";
+import { convertToFullURL, truncateString } from "../../../utils/functions";
+import { BsPlayCircle } from "react-icons/bs";
 
 interface Props {
   podcastData: PodcastData;
@@ -26,36 +23,23 @@ interface Props {
 }
 
 const podcast = ({ podcastData, sponsorData, category }: Props) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const imageSrc = podcastData?.imageUrl;
   const isBreakPoint = useMediaQuery(1023);
-  const [isActive, setIsActive] = useState(false);
-  const [sponsorIndex, setSponsorIndex] = useState(0);
+  const [sponsorDrawer, setSponsorDrawer] = useState(true);
+  const [truncated, setTruncated] = useState(true);
+  const [drawerData, setDrawerData] = useState({
+    image: "",
+    name: "",
+    description: "",
+    url: "",
+    publisher: "",
+  });
   let existingSponsor: boolean = true;
-
-  const handleScrub = (forward: boolean) => {
-    const limit = sponsorData?.length - 1;
-
-    /* Scrub Forward */
-    if (forward && sponsorIndex !== limit) {
-      setSponsorIndex((prev) => prev + 1);
-
-      /* Scrub Backward */
-    }
-    if (forward && sponsorIndex === limit) {
-      setSponsorIndex(0);
-    }
-    if (!forward && sponsorIndex === 0) {
-      setSponsorIndex(sponsorData.length - 1);
-    } else if (!forward && sponsorIndex !== 0) {
-      setSponsorIndex((prev) => prev - 1);
-    }
-  };
 
   if (!sponsorData) {
     existingSponsor = false;
   }
-
-  console.log(podcastData);
 
   if (!imageSrc)
     return (
@@ -64,105 +48,188 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
       </div>
     );
 
-  const currentPodcast = podcastData.offer.filter((offer) =>
-    offer.sponsor.includes(sponsorData[sponsorIndex].name)
-  );
-
   const backgroundColor = podcastData?.backgroundColor;
   const gradientStyle = {
-    backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, #101010)`,
+    backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, #000000)`,
+  };
+
+  const handleDrawer = (sponsor: string, isSponsorDrawer: boolean) => {
+    setSponsorDrawer(isSponsorDrawer);
+
+    let sponsorImage = "";
+    let sponsorDescription = "";
+    let sponsorURL = "";
+    let sponsorName = "";
+
+    if (isSponsorDrawer) {
+      sponsorImage = sponsorData.filter((data) => data.name === sponsor)[0]
+        .imageUrl;
+      const filteredSponsor = podcastData.offer.filter(
+        (offer) => offer.sponsor === sponsor
+      )[0];
+      sponsorDescription = filteredSponsor.description;
+      sponsorURL = filteredSponsor.url;
+      sponsorName = filteredSponsor.sponsor;
+    }
+
+    const podcastImage = podcastData.imageUrl;
+    const podcastTitle = podcastData.title;
+    const podcastDescription = podcastData.description;
+    const publisher = podcastData.publisher;
+
+    setDrawerData({
+      image: isSponsorDrawer ? sponsorImage : podcastImage,
+      name: isSponsorDrawer ? sponsorName : podcastTitle,
+      description: isSponsorDrawer ? sponsorDescription : podcastDescription,
+      url: sponsorURL,
+      publisher,
+    });
+    onOpen();
   };
 
   return (
     <div className={`${isBreakPoint ? "flex flex-col" : "flex"}`}>
       <Sidebar />
-      {
-        <div className="flex flex-col items-center relative h-screen bg-[#101010] w-full">
-          <PreviousPage category={category} />
-          {isActive && existingSponsor && (
-            <h1 className="font-bold base:text-lg xs:text-2xl text-3xl mt-6">
-              {sponsorData[sponsorIndex]?.name}
-            </h1>
-          )}
-          <div
-            className={` items-center w-full flex justify-center`}
-            style={!isActive ? gradientStyle : undefined}
-          >
-            {isActive ? (
-              <Image
-                src={!isActive ? imageSrc : sponsorData[sponsorIndex]?.imageUrl}
-                alt="/"
-                width={230}
-                height={230}
-                priority
-                className="z-10 rounded-3xl relative mt-10 xs:w-[160px] base:w-[130px] sm:w-[190px] shadow-xl shadow-black"
-              />
-            ) : (
-              <Image
-                src={!isActive ? imageSrc : sponsorData[sponsorIndex]?.imageUrl}
-                alt="/"
-                width={230}
-                height={230}
-                priority
-                className={`z-10 rounded-3xl relative mt-10 xs:w-[160px] base:w-[130px] sm:w-[190px]`}
-              />
-            )}
-          </div>
-          {!isActive ? (
-            <div className="w-10/12 flex flex-col justify-center">
-              <h1 className="text-lg font-bold text-center mt-10 px-4 base:text-xl xs:text-2xl sm:text-3xl">
-                {!isActive
-                  ? podcastData?.title
-                  : sponsorData[sponsorIndex]?.name}
-              </h1>
-              <p className="w-full text-md xs:text-lg font-semibold text-center mt-6">
-                {isActive || truncateString(podcastData?.publisher, 30)}
-              </p>
-            </div>
-          ) : (
-            <div className="w-10/12 text-center flex flex-col items-center justify-center mt-10">
-              <h1 className="font-bold base:text-md xs:text-lg sm:text-xl text-center mb-6">
-                {callToAction(podcastData?.title)}
-              </h1>
-              <div className="w-full border-t-[1px] border-b-[1px]">
-                <h1 className="font-semibold base:text-xs xs:text-sm outline-teal-300 p-4">
-                  {currentPodcast[0].description}
-                </h1>
+      <div className="flex-col w-full">
+        {
+          <div className="flex flex-col items-center relative h-[50vh] gradient bg-[#000000] w-full">
+            <div
+              className={`items-center w-full h-full flex justify-center`}
+              style={gradientStyle}
+            >
+              <div className="flex flex-col justify-center items-center w-full relative top-[60px]">
+                <Image
+                  src={imageSrc}
+                  alt="/"
+                  width={250}
+                  height={250}
+                  priority
+                  className={`z-10 top-4 mt-10 relative base:w-[150px] xs:w-[180px] sm:w-[250px] shadow-2xl shadow-black`}
+                />
+                <div className="w-full my-10">
+                  <h1 className=" base:text-3xl xs:text-4xl sm:text-5xl font-bold ml-6 px-2">
+                    {podcastData?.title}
+                  </h1>
+                  <h2 className="base:text-md font-medium xs:text-lg ml-6 my-4 text-[#aaaaaa] p-2">
+                    {podcastData?.publisher}{" "}
+                  </h2>
+                  {isBreakPoint || (
+                    <div className="flex w-full justify-start items-center p-4">
+                      <BsPlayCircle color="#1DB954" />
+                      <p className="text-xs font-semibold px-2">
+                        Listen on Spotify
+                      </p>
+                    </div>
+                  )}
+                  {isBreakPoint && (
+                    <div className="flex items-center justify-end px-5 relative">
+                      <FaEllipsisV onClick={() => handleDrawer("", false)} />
+                    </div>
+                  )}
+                  {isBreakPoint || (
+                    <div className="w-full h-[80px] overflow-y-scroll">
+                      <p className="p-2 ml-6 text-[#aaaaaa] mb-4">
+                        {truncated
+                          ? truncateString(podcastData?.description, 280)
+                          : podcastData?.description}
+                        <span className="mx-4 font-bold text-xs">
+                          {
+                            <button
+                              onClick={() => setTruncated((prev) => !prev)}
+                              className="hover:text-white active:scale-95"
+                            >
+                              {podcastData.description.length > 280 && truncated
+                                ? "Read More"
+                                : podcastData.description.length > 280 &&
+                                  !truncated
+                                ? "Collapse"
+                                : ""}
+                            </button>
+                          }
+                        </span>
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          )}
-          {isActive && (
-            <div className="font-semibold my-8 flex">
-              <Link
-                href={convertToFullURL(currentPodcast[0].url)}
-                target="_blank"
+          </div>
+        }
+
+        <div
+          className={`w-full base:mt-14 lg:mt-20 h-full text-[#aaaaaa] flex flex-col`}
+        >
+          <div className="flex justify-center items-center">
+            <div className="w-[95%] border-b-[1px] py-8 mt-2 mb-6"></div>
+          </div>
+          <DescriptionDrawer
+            isOpen={isOpen}
+            onClose={onClose}
+            drawer={drawerData}
+            sponsorDrawer={sponsorDrawer}
+          />
+          <div className="flex flex-wrap mx-4 justify-between">
+            {podcastData.offer.map((offer, index) => (
+              <div
+                key={offer.sponsor}
+                className="w-full h-[50px] flex justify-between items-center"
               >
-                <Button className="font-bold mx-2">Shop Now </Button>
-              </Link>
-            </div>
-          )}
-          {existingSponsor || (
-            <div className="w-full h-screen flex items-center justify-center">
-              <h1 className="mx-3">No sponsors available</h1>
-              <ImSad />
-            </div>
-          )}
-          {existingSponsor && (
-            <PlayButton
-              sponsorData={sponsorData}
-              isActive={isActive}
-              setIsActive={setIsActive}
-              handleScrub={handleScrub}
-              sponsorIndex={sponsorIndex}
-            />
-          )}
+                <div className="flex items-center">
+                  <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
+                    {index + 1}
+                  </p>
+                  {isBreakPoint || (
+                    <Image
+                      src={
+                        sponsorData.filter(
+                          (sponsor) => sponsor.name === offer.sponsor
+                        )[0].imageUrl
+                      }
+                      width={40}
+                      height={40}
+                      priority
+                      alt={offer.sponsor}
+                      className="mx-2"
+                    />
+                  )}
+
+                  <div className="w-full items-start px-2">
+                    <h1 className="text-white font-semibold base:text-sm">
+                      {offer.sponsor}
+                    </h1>
+                    <h3 className="base:text-xs">{offer.url}</h3>
+                  </div>
+                </div>
+                {isBreakPoint || (
+                  <div className="flex w-[50vw] absolute justify-start right-[100px] px-8 items-center">
+                    <p className="text-sm self-start font-semibold">
+                      {offer.description}
+                    </p>
+                  </div>
+                )}
+                {isBreakPoint || (
+                  <div className="relative right-10 text-xs">
+                    <Link href={convertToFullURL(offer.url)} target="_blank">
+                      Visit Site
+                    </Link>
+                  </div>
+                )}
+                {isBreakPoint && (
+                  <FaEllipsisV
+                    className="mr-4 hover:cursor-pointer"
+                    onClick={() => handleDrawer(offer.sponsor, true)}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      }
-      {isBreakPoint && (
-        <div className="w-full text-[#101010] base:text-[20px] xs:text-[10px] relative">
-          margin
-        </div>
-      )}
+        {isBreakPoint && (
+          <div className="w-full text-[#000000] base:text-[50px] xs:text-[60px] relative">
+            margin
+          </div>
+        )}
+      </div>
       <Footer />
     </div>
   );
