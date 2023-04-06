@@ -16,15 +16,22 @@ import Extractor from "../components/Extractor";
 import { capitalizeString } from "../utils/functions";
 import DeleteModal from "../components/DeleteModal";
 import { REDUCER_ACTION_TYPE, initState, reducer } from "../utils/reducer";
+import { AiOutlineEllipsis } from "react-icons/ai";
+import EditModal from "../components/EditModal";
+import { Tooltip } from "@chakra-ui/react";
 
 const App = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenDetails,
+    onOpen: onOpenDetails,
+    onClose: onCloseDetails,
+  } = useDisclosure();
+
   const toast = useToast();
   const [state, dispatch] = useReducer(reducer, initState);
-  console.log(state);
-
   const [createPodcast] = useMutation(Operations.Mutations.CreatePodcast);
-  const [updatePodcast] = useMutation(Operations.Mutations.UpdatePodcast);
+  const [updateColor] = useMutation(Operations.Mutations.UpdateColor);
   const [deletePodcast] = useMutation(Operations.Mutations.DeletePodcast);
 
   const { data, refetch: refetchPodcasts } = useQuery(
@@ -246,7 +253,7 @@ const App = () => {
   };
 
   const handleUpdateColor = async () => {
-    await updatePodcast({
+    await updateColor({
       variables: {
         input: {
           backgroundColor: state.extractedColor,
@@ -299,6 +306,13 @@ const App = () => {
     }
   };
 
+  const handleDetails = async () => {
+    onOpenDetails();
+    try {
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const gradientStyle = {
     backgroundImage: `linear-gradient(to bottom, ${
       state.currentPodcast.bgColor
@@ -314,6 +328,13 @@ const App = () => {
         onClose={onClose}
         handleDeletePodcast={handleDeletePodcast}
       />
+      <EditModal
+        isOpen={isOpenDetails}
+        onClose={onCloseDetails}
+        podcastTitle={state.currentPodcast.title}
+        refetch={refetchPodcasts}
+      />
+
       {/* Theme Preview */}
       {spotifyName && state.display.title && (
         <div className="bg-[#101010] fixed w-full h-[320px] top-[170px] z-1">
@@ -372,7 +393,20 @@ const App = () => {
               placeholder={"Search Podcast Title"}
               onChange={(e) => handlePodcastInputChange(e)}
               mt={10}
+              zIndex={10}
+              pos="relative"
             />
+            {state.display.submit ||
+              (state.isExistingPodcast && (
+                <Tooltip label="Edit Offer" placement={"end"}>
+                  <div className="relative w-[40px] left-[260px] flex justify-end bottom-8 text-white z-1 hover:cursor-pointer">
+                    <AiOutlineEllipsis
+                      size="40px"
+                      onClick={() => handleDetails()}
+                    />
+                  </div>
+                </Tooltip>
+              ))}
             <div className="w-[300px] bg-[#12121] flex flex-col items-center mt-10">
               <ul className="text-center">
                 {state.text &&
@@ -394,10 +428,8 @@ const App = () => {
           {state.display.sponsor && state.podcast ? (
             <CreateSponsor
               podcast={spotifyName}
-              createPodcast={createPodcast}
-              displaySubmit={state.display.submit}
               state={state}
-              dispatch={dispatch}
+              refetchPodcast={refetchCurrentPodcast}
             />
           ) : null}
 

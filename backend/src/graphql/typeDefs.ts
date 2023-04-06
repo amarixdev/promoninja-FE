@@ -13,7 +13,8 @@ const typeDefs = gql`
 
   type Mutation {
     createPodcast(input: PodcastInput!): Boolean
-    updatePodcast(input: PodcastInput!): Boolean
+    updateColor(input: PodcastInput!): Boolean
+    updateOffers(input: PodcastInput!): Boolean
     createSponsor(input: PodcastInput!): Boolean
     updateSponsor: Boolean
     deleteSponsor(input: DeleteInput): Boolean
@@ -51,6 +52,13 @@ const typeDefs = gql`
     publisher: String
     description: String
     backgroundColor: String
+    offer: [OfferInput]
+  }
+
+  input OfferInput {
+    sponsor: String!
+    description: String!
+    url: String!
   }
 
   input SponsorInput {

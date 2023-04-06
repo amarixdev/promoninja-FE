@@ -1,6 +1,6 @@
 import { GraphQLContext, PodcastInput, SpotifyAPI } from "../../util/types";
 import fetch from "node-fetch";
-import { prisma } from "@prisma/client";
+
 
 export const podcastResolvers = {
   Mutation: {
@@ -63,7 +63,7 @@ export const podcastResolvers = {
 
       return true;
     },
-    updatePodcast: async (
+    updateColor: async (
       parent: any,
       { input }: PodcastInput,
       context: GraphQLContext
@@ -81,6 +81,29 @@ export const podcastResolvers = {
       });
       return true;
     },
+
+    updateOffers: async (
+      parent: any,
+      { input }: PodcastInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { podcast, offer } = input;
+
+      await prisma.podcast.update({
+        where: {
+          title: podcast,
+        },
+        data: {
+          offer: {
+            set: offer
+          },
+        },
+      });
+
+      return true;
+    },
+
     deletePodcast: async (
       parent: any,
       { input }: PodcastInput,

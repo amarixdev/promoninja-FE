@@ -11,11 +11,20 @@ import {
 
 interface Props {
   isOpen: boolean;
+  sponsor?: string | undefined;
   onClose: () => void;
-  handleDeletePodcast: () => Promise<void>;
+  handleDeletePodcast?: () => Promise<void>;
+  handleDeleteSponsor?: (sponsor: string | undefined) => Promise<void>;
 }
 
-const DefaultModal = ({ isOpen, onClose, handleDeletePodcast }: Props) => {
+const DeleteModal = ({
+  isOpen,
+  onClose,
+  handleDeletePodcast,
+  handleDeleteSponsor,
+  sponsor,
+}: Props) => {
+
   return (
     <>
       {/* <Button onClick={onOpen}>Open Modal</Button> */}
@@ -28,8 +37,18 @@ const DefaultModal = ({ isOpen, onClose, handleDeletePodcast }: Props) => {
           <ModalBody></ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={handleDeletePodcast}>
-              Yes, Delete
+            <Button
+              colorScheme="red"
+              mr={3}
+              onClick={
+                handleDeletePodcast
+                  ? handleDeletePodcast
+                  : () => handleDeleteSponsor?.(sponsor)
+              }
+            >
+              {handleDeletePodcast
+                ? " Yes, Delete Podcast"
+                : `Yes, Delete Sponsor`}
             </Button>
             <Button colorScheme={"blue"} variant="ghost" onClick={onClose}>
               Close
@@ -41,4 +60,4 @@ const DefaultModal = ({ isOpen, onClose, handleDeletePodcast }: Props) => {
   );
 };
 
-export default DefaultModal;
+export default DeleteModal;

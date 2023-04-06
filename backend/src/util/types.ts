@@ -18,6 +18,13 @@ export interface PodcastData {
   publisher: string;
   description: string;
   backgroundColor: string;
+  offer: OfferData[];
+}
+
+interface OfferData {
+  url: string;
+  description: string;
+  sponsor: string;
 }
 
 export interface SponsorInput {
