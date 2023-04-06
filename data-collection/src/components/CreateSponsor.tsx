@@ -1,4 +1,9 @@
-import { useMutation, useQuery } from "@apollo/client";
+import {
+  ApolloQueryResult,
+  OperationVariables,
+  useMutation,
+  useQuery,
+} from "@apollo/client";
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -28,13 +33,13 @@ import { ReducerAction, initState } from "../utils/reducer";
 
 interface Props {
   podcast: string;
-  displaySubmit: boolean;
-  createPodcast: ({}) => void;
-  dispatch: Dispatch<ReducerAction>;
   state: typeof initState;
+  refetchPodcast: (
+    variables?: Partial<OperationVariables> | undefined
+  ) => Promise<ApolloQueryResult<any>>;
 }
 
-const CreateSponsor = ({ podcast, state }: Props) => {
+const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef(null);
   const [existingSponsor, setExistingSponsor] = useState(false);
@@ -252,6 +257,7 @@ const CreateSponsor = ({ podcast, state }: Props) => {
         });
         await refetchSponsors();
         await refetchGetSponsors();
+        await refetchPodcast();
 
         toast({
           title: "Success!",
@@ -284,10 +290,10 @@ const CreateSponsor = ({ podcast, state }: Props) => {
   if (loading) return <Spinner />;
   if (sponsorLoading) return <Spinner />;
 
-  const selectedSponsor = sponsorList?.getSponsors.filter((current: any) => {
+  const drawerData = sponsorList?.getSponsors.filter((current: any) => {
     return current.name === sponsor.name;
   });
-  const baseUrl = selectedSponsor[0]?.url;
+  const baseUrl = drawerData[0]?.url;
 
   return (
     <div className="">
