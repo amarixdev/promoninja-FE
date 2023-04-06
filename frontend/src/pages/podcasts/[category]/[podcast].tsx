@@ -1,5 +1,5 @@
 // import ColorExtractor from "../../../components/ColorExtractor";
-import { Spinner, useDisclosure } from "@chakra-ui/react";
+import { Button, Spinner, useDisclosure } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -7,7 +7,6 @@ import Footer from "../../../components/Footer";
 import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
-import { ImSad } from "react-icons/im";
 import { FaEllipsisV } from "react-icons/fa";
 import { useMediaQuery } from "../../../utils/hooks";
 import { PodcastData, SponsorData } from "../../../utils/types";
@@ -157,7 +156,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         }
 
         <div
-          className={`w-full base:mt-14 lg:mt-20 h-full text-[#aaaaaa] flex flex-col`}
+          className={`w-full base:mt-14 lg:mt-20 text-[#aaaaaa] flex flex-col`}
         >
           <div className="flex justify-center items-center">
             <div className="w-[95%] border-b-[1px] py-8 mt-2 mb-6"></div>
@@ -172,7 +171,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
             {podcastData.offer.map((offer, index) => (
               <div
                 key={offer.sponsor}
-                className="w-full h-[50px] flex justify-between items-center"
+                className="w-full h-[50px] flex justify-between items-center hover:bg-[#101010]"
               >
                 <div className="flex items-center">
                   <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
@@ -194,23 +193,27 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                   )}
 
                   <div className="w-full items-start px-2">
-                    <h1 className="text-white font-semibold base:text-sm">
+                    <h1 className="text-white font-semibold base:text-sm ">
                       {offer.sponsor}
                     </h1>
                     <h3 className="base:text-xs">{offer.url}</h3>
                   </div>
                 </div>
                 {isBreakPoint || (
-                  <div className="flex w-[50vw] absolute justify-start right-[100px] px-8 items-center">
-                    <p className="text-sm self-start font-semibold">
+                  <div className="flex w-[50vw] absolute justify-start right-[100px] px-[140px] items-center">
+                    <p className="text-sm self-start font-medium">
                       {offer.description}
                     </p>
                   </div>
                 )}
                 {isBreakPoint || (
                   <div className="relative right-10 text-xs">
-                    <Link href={convertToFullURL(offer.url)} target="_blank">
-                      Visit Site
+                    <Link
+                      href={convertToFullURL(offer.url)}
+                      target="_blank"
+                      className=""
+                    >
+                      <Button>Visit Site</Button>
                     </Link>
                   </div>
                 )}
