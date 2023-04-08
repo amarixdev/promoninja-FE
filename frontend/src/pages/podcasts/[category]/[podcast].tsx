@@ -2,7 +2,7 @@
 import { Button, Spinner, useDisclosure } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../../../components/Footer";
 import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
@@ -13,6 +13,8 @@ import { PodcastData, SponsorData } from "../../../utils/types";
 import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import { convertToFullURL, truncateString } from "../../../utils/functions";
 import { BsPlayCircle } from "react-icons/bs";
+import PreviousPage from "../../../components/PreviousPage";
+import { NavContext } from "../../../context/navContext";
 
 interface Props {
   podcastData: PodcastData;
@@ -23,6 +25,8 @@ interface Props {
 
 const podcast = ({ podcastData, sponsorData, category }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { setPreviousPage, previousPage, categoryType, setCategoryType } =
+    NavContext();
   const imageSrc = podcastData?.imageUrl;
   const isBreakPoint = useMediaQuery(1023);
   const [sponsorDrawer, setSponsorDrawer] = useState(true);
@@ -35,6 +39,15 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     publisher: "",
   });
   let existingSponsor: boolean = true;
+  useEffect(() => {
+    setCategoryType(category);
+
+    if (categoryType !== null) {
+      setPreviousPage("category");
+    } else {
+      setPreviousPage("podcasts");
+    }
+  }, [category]);
 
   if (!sponsorData) {
     existingSponsor = false;
@@ -46,6 +59,8 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         <Spinner />
       </div>
     );
+
+  console.log(2, categoryType);
 
   const backgroundColor = podcastData?.backgroundColor;
   const gradientStyle = {
@@ -90,6 +105,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     <div className={`${isBreakPoint ? "flex flex-col" : "flex"}`}>
       <Sidebar />
       <div className="flex-col w-full">
+        <PreviousPage />
         {
           <div className="flex flex-col items-center relative h-[50vh] gradient bg-[#000000] w-full">
             <div
@@ -250,6 +266,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { podcast, category } = params;
+  console.log(podcast);
   try {
     let { data: podcastData, loading } = await client.query({
       query: Operations.Queries.GetPodcast,

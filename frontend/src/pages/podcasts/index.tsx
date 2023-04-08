@@ -7,6 +7,7 @@ import Sidebar from "../../components/Sidebar";
 import Footer from "../../components/Footer";
 import { CategoryPodcast } from "../../utils/types";
 import { useMediaQuery } from "../../utils/hooks";
+import PreviousPage from "../../components/PreviousPage";
 
 interface Props {
   categoryPreviews: CategoryPodcast[];
