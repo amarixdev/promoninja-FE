@@ -100,7 +100,7 @@ export const productResolvers = {
 
       return true;
     },
-    deleteSponsor: async (
+    deletePodcastSponsor: async (
       parent: any,
       { input }: DeleteInput,
       context: GraphQLContext
@@ -160,6 +160,63 @@ export const productResolvers = {
       } catch (error) {
         console.log(error);
       }
+    },
+    deleteSponsor: async (
+      parent: any,
+      { input }: DeleteInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { sponsor } = input;
+
+      const getSponsor = await prisma.sponsor.findFirst({
+        where: {
+          name: sponsor,
+        },
+      });
+
+      /* Delete individual offers from sponsor */
+      await prisma.podcast.updateMany({
+        where: {
+          sponsorId: {
+            has: getSponsor?.id,
+          },
+        },
+        data: {
+          offer: {
+            deleteMany: {
+              where: {
+                sponsor: {
+                  equals: sponsor,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      /* Disconnect Sponsors from multiple podcasts */
+      await prisma.podcast.updateMany({
+        where: {
+          sponsors: {
+            some: {
+              id: getSponsor?.id,
+            },
+          },
+        },
+        data: {
+          sponsorId: {
+            set: [],
+          },
+        },
+      });
+
+      /* Delete sponsor */
+      await prisma.sponsor.delete({
+        where: {
+          name: sponsor,
+        },
+      });
     },
   },
   Query: {

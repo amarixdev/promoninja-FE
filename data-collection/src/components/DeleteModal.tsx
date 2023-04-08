@@ -8,23 +8,29 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
+import { Sponsor } from "../pages/sponsors";
 
 interface Props {
   isOpen: boolean;
-  sponsor?: string | undefined;
+  podcastSponsor?: string | undefined;
+  sponsor?: Sponsor | undefined;
   onClose: () => void;
   handleDeletePodcast?: () => Promise<void>;
-  handleDeleteSponsor?: (sponsor: string | undefined) => Promise<void>;
+  handleDeletePodcastSponsor?: (
+    podcastSponsor: string | undefined
+  ) => Promise<void>;
+  handleDeleteSponsor?: (podcastSponsor: Sponsor | undefined) => Promise<void>;
 }
 
 const DeleteModal = ({
   isOpen,
   onClose,
   handleDeletePodcast,
+  handleDeletePodcastSponsor,
   handleDeleteSponsor,
+  podcastSponsor,
   sponsor,
 }: Props) => {
-
   return (
     <>
       {/* <Button onClick={onOpen}>Open Modal</Button> */}
@@ -43,6 +49,8 @@ const DeleteModal = ({
               onClick={
                 handleDeletePodcast
                   ? handleDeletePodcast
+                  : handleDeletePodcastSponsor
+                  ? () => handleDeletePodcastSponsor?.(podcastSponsor)
                   : () => handleDeleteSponsor?.(sponsor)
               }
             >

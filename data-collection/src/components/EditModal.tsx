@@ -61,7 +61,9 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
   } = useQuery<Data>(Operations.Queries.GetPodcast, {
     variables: { input: { podcast: podcastTitle } },
   });
-  const [deleteSponsor] = useMutation(Operations.Mutations.DeleteSponsor);
+  const [deletePodcastSponsor] = useMutation(
+    Operations.Mutations.DeletePodcastSponsor
+  );
   const [updateOffers] = useMutation(Operations.Mutations.UpdateOffers);
   const [sponsorToDelete, setSponsorToDelete] = useState<string | undefined>(
     ""
@@ -164,9 +166,9 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
     onOpenSponsor();
   };
 
-  const handleDeleteSponsor = async (sponsor: string | undefined) => {
+  const handleDeletePodcastSponsor = async (sponsor: string | undefined) => {
     try {
-      await deleteSponsor({
+      await deletePodcastSponsor({
         variables: {
           input: {
             sponsor: sponsorToDelete,
@@ -197,8 +199,8 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
         <DeleteModal
           isOpen={isOpenSponsor}
           onClose={onCloseSponsor}
-          handleDeleteSponsor={handleDeleteSponsor}
-          sponsor={sponsorToDelete}
+          handleDeletePodcastSponsor={handleDeletePodcastSponsor}
+          podcastSponsor={sponsorToDelete}
         />
         <ModalOverlay />
         <ModalContent bgColor={"#aaaaaa"}>

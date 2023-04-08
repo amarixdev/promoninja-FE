@@ -40,6 +40,7 @@ export const Operations = {
         getSponsors {
           name
           url
+          imageUrl
         }
       }
     `,
@@ -71,6 +72,11 @@ export const Operations = {
     CreateSponsor: gql`
       mutation ($input: PodcastInput!) {
         createSponsor(input: $input)
+      }
+    `,
+    DeletePodcastSponsor: gql`
+      mutation ($input: DeleteInput) {
+        deletePodcastSponsor(input: $input)
       }
     `,
     DeleteSponsor: gql`

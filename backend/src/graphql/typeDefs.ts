@@ -17,6 +17,7 @@ const typeDefs = gql`
     updateOffers(input: PodcastInput!): Boolean
     createSponsor(input: PodcastInput!): Boolean
     updateSponsor: Boolean
+    deletePodcastSponsor(input: DeleteInput): Boolean
     deleteSponsor(input: DeleteInput): Boolean
     deletePodcast(input: PodcastInput!): Boolean
   }
@@ -40,8 +41,8 @@ const typeDefs = gql`
   }
 
   input DeleteInput {
-    sponsor: String!
-    podcast: String!
+    sponsor: String
+    podcast: String
   }
 
   input PodcastInput {

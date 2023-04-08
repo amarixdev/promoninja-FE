@@ -62,10 +62,12 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
     Operations.Mutations.CreateSponsor
   );
 
-  const [deleteSponsor, {}] = useMutation(Operations.Mutations.DeleteSponsor);
+  const [deletePodcastSponsor, {}] = useMutation(
+    Operations.Mutations.DeletePodcastSponsor
+  );
 
   const handleDelete = async (sponsorToDelete: string) => {
-    await deleteSponsor({
+    await deletePodcastSponsor({
       variables: {
         input: { sponsor: sponsorToDelete, podcast },
       },
