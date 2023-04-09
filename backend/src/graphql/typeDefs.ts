@@ -68,6 +68,7 @@ const typeDefs = gql`
     description: String
     image: String
     baseUrl: String
+    category: String
   }
 
   type Podcast {

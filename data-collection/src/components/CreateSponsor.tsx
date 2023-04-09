@@ -30,6 +30,7 @@ import { Dispatch, useRef, useState } from "react";
 import { Operations } from "../graphql/operations";
 import { Sponsor } from "../utils/types";
 import { ReducerAction, initState } from "../utils/reducer";
+import SelectSponsorCategory from "./SelectSponsorCategory";
 
 interface Props {
   podcast: string;
@@ -55,7 +56,9 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
     baseUrl: "",
     description: "",
     image: "",
+    category: "",
   });
+
 
   const toast = useToast();
   const [createSponsor, { error }] = useMutation(
@@ -274,6 +277,7 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
           url: "",
           image: "",
           baseUrl: "",
+          category: "",
         });
 
         setDisplay({
@@ -391,6 +395,10 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
                   />
                 </InputGroup>
               </Box>
+              <SelectSponsorCategory
+                category={sponsor.category}
+                setSponsor={setSponsor}
+              />
               <Box>
                 <FormLabel>Description</FormLabel>
                 <Textarea

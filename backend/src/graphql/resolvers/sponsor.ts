@@ -17,6 +17,7 @@ export const productResolvers = {
       let { podcast, sponsor, category, publisher, backgroundColor } = input;
       category = category?.toLowerCase();
 
+
       const CATEGORY = await prisma.category.findFirst({
         where: {
           name: category,
@@ -29,6 +30,12 @@ export const productResolvers = {
         },
       });
 
+      const getSponsorCategory = await prisma.sponsorCategory.findFirst({
+        where: {
+          name: sponsor.category,
+        },
+      });
+
       if (!existingPodcast) {
         try {
           await prisma.sponsor.create({
@@ -36,6 +43,11 @@ export const productResolvers = {
               name: sponsor.name,
               imageUrl: sponsor.image,
               url: sponsor.baseUrl,
+              category: {
+                connect: {
+                  id: getSponsorCategory?.id,
+                },
+              },
               podcast: {
                 create: {
                   title: podcast,
@@ -53,11 +65,6 @@ export const productResolvers = {
                   },
                 },
               },
-            },
-          });
-          const createdSponsor = await prisma.sponsor.findFirst({
-            where: {
-              name: sponsor.name,
             },
           });
         } catch (error) {
@@ -176,6 +183,7 @@ export const productResolvers = {
       });
 
       /* Delete individual offers from sponsor */
+
       await prisma.podcast.updateMany({
         where: {
           sponsorId: {
@@ -196,6 +204,7 @@ export const productResolvers = {
       });
 
       /* Disconnect Sponsors from multiple podcasts */
+
       await prisma.podcast.updateMany({
         where: {
           sponsors: {
@@ -218,6 +227,19 @@ export const productResolvers = {
         },
       });
     },
+    // updateSponsor: async (
+    //   parent: any,
+    //   { input }: PodcastInput,
+    //   context: GraphQLContext
+    // ) => {
+    //   const { prisma } = context;
+    //   const { sponsor } = input;
+    //   await prisma.sponsorCategory.create({
+    //     data: {
+    //       name: "",
+    //     },
+    //   });
+    // },
   },
   Query: {
     fetchSponsors: async (

@@ -4,6 +4,7 @@ export interface Sponsor {
   description: string;
   image: string;
   baseUrl: string;
+  category: string
 }
 
 export interface Podcasts {

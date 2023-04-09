@@ -28,24 +28,33 @@ model Podcast {
   backgroundColor String?
 }
 
-model Sponsor {
+model Category {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name      String    @unique
-  imageUrl  String?
-  url       String
-  podcastId String[]  @db.ObjectId
+  name      String
   podcast   Podcast[] @relation(fields: [podcastId], references: [id])
+  podcastId String[]  @db.ObjectId
+}
+
+model Sponsor {
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  name              String            @unique
+  imageUrl          String?
+  url               String
+  podcastId         String[]          @db.ObjectId
+  podcast           Podcast[]         @relation(fields: [podcastId], references: [id])
+  category          SponsorCategory[] @relation(fields: [sponsorCategoryId], references: [id])
+  sponsorCategoryId String[]         @db.ObjectId
+}
+
+model SponsorCategory {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  sponsor   Sponsor[] @relation(fields: [sponsorId], references: [id])
+  sponsorId String[]  @db.ObjectId
 }
 
 type Offer {
   sponsor     String
   description String
   url         String
-}
-
-model Category {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  podcast   Podcast[] @relation(fields: [podcastId], references: [id])
-  podcastId String[]  @db.ObjectId
 }
