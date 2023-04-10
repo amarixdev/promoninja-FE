@@ -43,7 +43,7 @@ model Sponsor {
   podcastId         String[]          @db.ObjectId
   podcast           Podcast[]         @relation(fields: [podcastId], references: [id])
   category          SponsorCategory[] @relation(fields: [sponsorCategoryId], references: [id])
-  sponsorCategoryId String[]         @db.ObjectId
+  sponsorCategoryId String[]          @db.ObjectId
 }
 
 model SponsorCategory {
@@ -51,6 +51,7 @@ model SponsorCategory {
   name      String
   sponsor   Sponsor[] @relation(fields: [sponsorId], references: [id])
   sponsorId String[]  @db.ObjectId
+  imageUrl  String?
 }
 
 type Offer {
