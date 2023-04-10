@@ -37,6 +37,24 @@ export const Operations = {
       query {
         getSponsors {
           name
+          imageUrl
+          url
+        }
+      }
+    `,
+    GetSponsorCategories: gql`
+      query {
+        getSponsorCategories {
+          imageUrl
+          name
+        }
+      }
+    `,
+    GetSponsorCategory: gql`
+      query ($input: String!) {
+        getSponsorCategory(input: $input) {
+          name
+          imageUrl
         }
       }
     `,
@@ -73,9 +91,9 @@ export const Operations = {
         createSponsor(input: $input)
       }
     `,
-    DeleteSponsor: gql`
+    DeletePodcastSponsor: gql`
       mutation ($input: DeleteInput) {
-        deleteSponsor(input: $input)
+        deletePodcastSponsor(input: $input)
       }
     `,
   },

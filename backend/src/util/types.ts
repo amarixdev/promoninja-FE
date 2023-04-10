@@ -55,3 +55,12 @@ interface SpotifyAPIData {
   podcast: string;
   id: number;
 }
+
+export interface SponsorCategory {
+  name: string;
+  imageUrl: string;
+}
+
+export interface SponsorCategoryInput {
+  input: string
+}
