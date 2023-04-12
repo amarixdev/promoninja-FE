@@ -30,6 +30,29 @@ export const sponsorCategory = {
       });
       return category;
     },
+    getCategorySponsors: async (
+      parent: any,
+      { input }: SponsorCategoryInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+
+      const getCategoryId = await prisma.sponsorCategory.findFirst({
+        where: {
+          name: input,
+        },
+      });
+
+      const sponsors = await prisma.sponsor.findMany({
+        where: {
+          sponsorCategoryId: {
+            equals: getCategoryId?.id,
+          },
+        },
+      });
+
+      return sponsors;
+    },
   },
   Mutation: {},
 };

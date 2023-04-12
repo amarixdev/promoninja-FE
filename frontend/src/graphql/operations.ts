@@ -58,6 +58,33 @@ export const Operations = {
         }
       }
     `,
+    GetSponsorPodcasts: gql`
+      query ($input: SponsorInput!) {
+        getSponsorPodcasts(input: $input) {
+          title
+          imageUrl
+          publisher
+          description
+          backgroundColor
+          offer {
+            sponsor
+            description
+            url
+          }
+        }
+      }
+    `,
+
+    GetCategorySponsors: gql`
+      query ($input: String!) {
+        getCategorySponsors(input: $input) {
+          name
+          imageUrl
+          url
+          summary
+        }
+      }
+    `,
     FetchSpotifyPodcast: gql`
       query ($input: SpotifyAPI!) {
         fetchSpotifyPodcast(input: $input) {

@@ -17,6 +17,8 @@ type Props = {
   onClose: () => void;
   drawer: DrawerData;
   sponsorDrawer: boolean;
+  hideLink?: boolean;
+  podcastButton?: boolean;
 };
 
 interface DrawerData {
@@ -25,6 +27,7 @@ interface DrawerData {
   image: string;
   description: string;
   publisher: string;
+  color?: string;
 }
 
 const DescriptionDrawer = ({
@@ -32,9 +35,15 @@ const DescriptionDrawer = ({
   onClose,
   drawer,
   sponsorDrawer,
+  hideLink,
+  podcastButton,
 }: Props) => {
-  console.log(drawer);
   const isBreakPoint = useMediaQuery(1023);
+  const backgroundColor = drawer?.color;
+  const gradientStyle = {
+    backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, #000000)`,
+  };
+
   return (
     <>
       <Drawer
@@ -84,13 +93,28 @@ const DescriptionDrawer = ({
                   {drawer.description}
                 </h1>
                 <Link
-                  href={convertToFullURL(drawer.url)}
+                  href={convertToFullURL(!hideLink ? drawer.url : "")}
                   target="_blank"
                   className="w-full flex justify-center items-center"
                 >
-                  {sponsorDrawer && (
-                    <button className=" base:w-[125px] rounded-full border-[1px] text-sm font-semibold text-[#aaaaaa] border-[#aaaaaa] p-2">
-                      Visit Site
+                  {sponsorDrawer && !hideLink && (
+                    <div className="flex flex-col">
+                      <button className=" base:w-[125px] rounded-full border-[1px] active:scale-95 text-sm font-semibold text-[#aaaaaa] border-[#aaaaaa] p-2">
+                        Shop Now
+                      </button>
+                      {podcastButton && (
+                        <button
+                          className={` mt-4 base:w-[125px] rounded-full border-[1px] text-sm active:scale-95 font-bold text-white p-2`}
+                          style={{ background: drawer.color }}
+                        >
+                          Podcast
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  {hideLink && (
+                    <button className=" base:w-[125px] rounded-full border-[1px] active:scale-95 text-sm font-semibold text-[#aaaaaa] border-[#aaaaaa] p-2">
+                      Visit Page
                     </button>
                   )}
                 </Link>
@@ -99,7 +123,7 @@ const DescriptionDrawer = ({
           </DrawerBody>
           <div
             className={
-              "w-full flex items-center justify-center bottom-20 relative font-semibold text-xl"
+              "w-full flex items-center justify-center bottom-20 relative font-semibold text-xl hover:cursor-pointer"
             }
             onClick={onClose}
           >

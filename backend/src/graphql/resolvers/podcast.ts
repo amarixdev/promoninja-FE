@@ -1,6 +1,11 @@
-import { GraphQLContext, PodcastInput, SpotifyAPI } from "../../util/types";
+import {
+  GraphQLContext,
+  PodcastInput,
+  SponsorData,
+  SponsorInput,
+  SpotifyAPI,
+} from "../../util/types";
 import fetch from "node-fetch";
-
 
 export const podcastResolvers = {
   Mutation: {
@@ -96,7 +101,7 @@ export const podcastResolvers = {
         },
         data: {
           offer: {
-            set: offer
+            set: offer,
           },
         },
       });
@@ -209,6 +214,30 @@ export const podcastResolvers = {
       } catch (error) {
         console.log(error);
       }
+    },
+    getSponsorPodcasts: async (
+      parent: any,
+      { input }: SponsorInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { name } = input;
+
+      const getSponsor = await prisma.sponsor.findFirst({
+        where: {
+          name: name,
+        },
+      });
+      
+      const podcasts = await prisma.podcast.findMany({
+        where: {
+          sponsorId: {
+            has: getSponsor?.id,
+          },
+        },
+      });
+
+      return podcasts;
     },
   },
 };
