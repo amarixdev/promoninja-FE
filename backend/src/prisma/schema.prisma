@@ -44,6 +44,7 @@ model Sponsor {
   podcast           Podcast[]         @relation(fields: [podcastId], references: [id])
   category          SponsorCategory[] @relation(fields: [sponsorCategoryId], references: [id])
   sponsorCategoryId String[]          @db.ObjectId
+  summary       String?
 }
 
 model SponsorCategory {

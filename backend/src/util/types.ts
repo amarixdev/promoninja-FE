@@ -33,8 +33,8 @@ export interface SponsorInput {
 
 export interface SponsorData {
   name: string;
-  url: string;
-  description: string;
+  url?: string;
+  description?: string;
   image?: string;
 }
 
@@ -62,5 +62,5 @@ export interface SponsorCategory {
 }
 
 export interface SponsorCategoryInput {
-  input: string
+  input: string;
 }
