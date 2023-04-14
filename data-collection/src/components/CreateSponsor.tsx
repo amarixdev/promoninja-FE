@@ -55,7 +55,7 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
     name: "",
     url: "",
     baseUrl: "",
-    description: "",
+    promoCode: "",
     image: "",
     category: "",
     summary: "",
@@ -287,7 +287,7 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
           isClosable: true,
         });
         setSponsor({
-          description: "",
+          promoCode: "",
           name: "",
           url: "",
           image: "",
@@ -434,14 +434,14 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
                 setSponsor={setSponsor}
               />
               <Box>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Promo Code</FormLabel>
                 <Textarea
                   id="desc"
-                  value={sponsor.description}
+                  value={sponsor.promoCode}
                   onChange={(e) =>
                     setSponsor({
                       ...sponsor,
-                      description: e.target.value,
+                      promoCode: e.target.value,
                     })
                   }
                   onBlur={handleBlur}

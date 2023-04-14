@@ -15,16 +15,24 @@ export interface PodcastData {
   publisher: string;
   description: string;
   offer: OfferData[];
-  backgroundColor: string
+  backgroundColor: string;
 }
 
 export interface SponsorData {
   name: string;
   imageUrl: string;
+  url: string;
+  summary: string;
+  offer: string;
 }
 
 export interface OfferData {
-  description: string;
+  promoCode: string;
   sponsor: string;
   url: string;
+}
+
+export interface SponsorCategory {
+  name: string;
+  imageUrl: string;
 }

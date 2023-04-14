@@ -19,9 +19,16 @@ export const Operations = {
           backgroundColor
           offer {
             sponsor
-            description
+            promoCode
             url
           }
+        }
+      }
+    `,
+    GetPodcastCategory: gql`
+      query ($input: PodcastInput!) {
+        getPodcastCategory(input: $input) {
+          name
         }
       }
     `,
@@ -30,6 +37,7 @@ export const Operations = {
         fetchSponsors(input: $input) {
           name
           imageUrl
+          offer
         }
       }
     `,
@@ -68,7 +76,7 @@ export const Operations = {
           backgroundColor
           offer {
             sponsor
-            description
+            promoCode
             url
           }
         }
@@ -82,6 +90,7 @@ export const Operations = {
           imageUrl
           url
           summary
+          offer
         }
       }
     `,

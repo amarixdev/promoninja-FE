@@ -20,7 +20,7 @@ export const Operations = {
           backgroundColor
           offer {
             sponsor
-            description
+            promoCode
             url
           }
         }

@@ -47,7 +47,7 @@ interface Data {
 }
 
 interface Offer {
-  description: string;
+  promoCode: string;
   sponsor: string;
   url: string;
 }
@@ -69,6 +69,7 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
     ""
   );
   const [offerStates, setOfferStates] = useState<any>({});
+
   const [editing, setEditing] = useState("");
   const {
     onOpen: onOpenSponsor,
@@ -91,7 +92,7 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
       const initOfferStates = podcastOffers.map((offer: Offer) => ({
         sponsor: offer.sponsor,
         url: offer.url,
-        description: offer.description,
+        promoCode: offer.promoCode,
       }));
       setOfferStates(initOfferStates);
     }
@@ -118,8 +119,8 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
       newStates[index].sponsor = event.target.value;
     }
 
-    if (type === "description") {
-      newStates[index].description = event.target.value;
+    if (type === "promoCode") {
+      newStates[index].promoCode = event.target.value;
     }
 
     setOfferStates(newStates);
@@ -266,21 +267,21 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
                     />
                   </div>
                   <div className="flex items-center pt-2 w-[250px]">
-                    {editing !== offer.description ? (
+                    {editing !== offer.promoCode ? (
                       <p className="text-sm font-light">
-                        {offerStates[index]?.description}
+                        {offerStates[index]?.promoCode}
                       </p>
                     ) : (
                       <Textarea
-                        value={offerStates[index].description}
-                        onChange={(e) => handleChange(e, index, "description")}
+                        value={offerStates[index].promoCode}
+                        onChange={(e) => handleChange(e, index, "promoCode")}
                         className="text-sm font-light"
                         onBlur={() => setEditing("")}
                       />
                     )}
                     <AiFillEdit
                       className="ml-4 hover:cursor-pointer w-10"
-                      onClick={() => handleEditing(offer.description)}
+                      onClick={() => handleEditing(offer.promoCode)}
                     />
                   </div>
                 </div>

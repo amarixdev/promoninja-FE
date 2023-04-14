@@ -4,7 +4,9 @@ const typeDefs = gql`
   type Query {
     getPodcasts: [Podcast]
     getPodcast(input: PodcastInput!): Podcast
+    getPodcastCategory(input: PodcastInput!): Category
     getSponsors: [Sponsor]
+    getSponsor(input: SponsorInput!): Sponsor
     getSponsorCategories: [SponsorCategory]
     getSponsorCategory(input: String!): SponsorCategory
     getSponsorPodcasts(input: SponsorInput!): [Podcast]
@@ -62,7 +64,7 @@ const typeDefs = gql`
 
   input OfferInput {
     sponsor: String!
-    description: String!
+    promoCode: String!
     url: String!
   }
 
@@ -94,7 +96,7 @@ const typeDefs = gql`
   }
   type Offer {
     sponsor: String!
-    description: String!
+    promoCode: String!
     url: String!
   }
   type Sponsor {
@@ -104,6 +106,7 @@ const typeDefs = gql`
     podcastsId: [ID]
     url: String!
     summary: String
+    offer: String
   }
 
   type SponsorCategory {

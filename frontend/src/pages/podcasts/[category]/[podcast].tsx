@@ -9,7 +9,7 @@ import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
 import { FaEllipsisV } from "react-icons/fa";
 import { useMediaQuery } from "../../../utils/hooks";
-import { PodcastData, SponsorData } from "../../../utils/types";
+import { OfferData, PodcastData, SponsorData } from "../../../utils/types";
 import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import { convertToFullURL, truncateString } from "../../../utils/functions";
 import { BsPlayCircle } from "react-icons/bs";
@@ -27,6 +27,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { setPreviousPage, previousPage, categoryType, setCategoryType } =
     NavContext();
+
   const imageSrc = podcastData?.imageUrl;
   const isBreakPoint = useMediaQuery(1023);
   const [sponsorDrawer, setSponsorDrawer] = useState(true);
@@ -60,8 +61,6 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
       </div>
     );
 
-  console.log(2, categoryType);
-
   const backgroundColor = podcastData?.backgroundColor;
   const gradientStyle = {
     backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, #000000)`,
@@ -71,17 +70,21 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     setSponsorDrawer(isSponsorDrawer);
 
     let sponsorImage = "";
-    let sponsorDescription = "";
+    let sponsorOffer = "";
     let sponsorURL = "";
     let sponsorName = "";
 
     if (isSponsorDrawer) {
-      sponsorImage = sponsorData.filter((data) => data.name === sponsor)[0]
-        .imageUrl;
+      const selectedSponsor = sponsorData.filter(
+        (data) => data.name === sponsor
+      )[0];
+      sponsorImage = selectedSponsor.imageUrl;
+      sponsorOffer = selectedSponsor.offer;
+
       const filteredSponsor = podcastData.offer.filter(
         (offer) => offer.sponsor === sponsor
       )[0];
-      sponsorDescription = filteredSponsor.description;
+      sponsorOffer = sponsorOffer;
       sponsorURL = filteredSponsor.url;
       sponsorName = filteredSponsor.sponsor;
     }
@@ -94,7 +97,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     setDrawerData({
       image: isSponsorDrawer ? sponsorImage : podcastImage,
       name: isSponsorDrawer ? sponsorName : podcastTitle,
-      description: isSponsorDrawer ? sponsorDescription : podcastDescription,
+      description: isSponsorDrawer ? sponsorOffer : podcastDescription,
       url: sponsorURL,
       publisher,
     });
@@ -182,9 +185,10 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
             onClose={onClose}
             drawer={drawerData}
             sponsorDrawer={sponsorDrawer}
+            podcastPage={true}
           />
           <div className="flex flex-wrap mx-4 justify-between">
-            {podcastData.offer.map((offer, index) => (
+            {podcastData.offer.map((offer: OfferData, index) => (
               <div
                 key={offer.sponsor}
                 className="w-full h-[50px] flex justify-between items-center hover:bg-[#101010]"
@@ -218,7 +222,11 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                 {isBreakPoint || (
                   <div className="flex w-[50vw] absolute justify-start right-[100px] px-[140px] items-center">
                     <p className="text-sm self-start font-medium">
-                      {offer.description}
+                      {
+                        sponsorData.filter(
+                          (sponsor) => sponsor.name === offer.sponsor
+                        )[0].offer
+                      }
                     </p>
                   </div>
                 )}
@@ -266,7 +274,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { podcast, category } = params;
-  console.log(podcast);
+
   try {
     let { data: podcastData, loading } = await client.query({
       query: Operations.Queries.GetPodcast,

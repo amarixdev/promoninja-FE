@@ -23,7 +23,7 @@ export interface PodcastData {
 
 interface OfferData {
   url: string;
-  description: string;
+  promoCode: string;
   sponsor: string;
 }
 

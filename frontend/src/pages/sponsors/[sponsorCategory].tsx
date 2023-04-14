@@ -43,7 +43,10 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
     onClose: onCloseDrawer,
   } = useDisclosure();
   const [hideLink, setHideLink] = useState(true);
+  const [hideOffer, setHideOffer] = useState(true);
   const [selectedSponsor, setSelectedSponsor] = useState("");
+  const [selectedPodcast, setSelectedPodcast] = useState("");
+
   const [drawerData, setDrawerData] = useState({
     image: "",
     name: "",
@@ -63,6 +66,7 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
     input: SponsorData | PodcastData,
     sponsorName: string
   ) => {
+    /* Sponsor */
     if (isSponsorData(input)) {
       setHideLink(true);
       setDrawerData((prev) => ({
@@ -75,16 +79,24 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
       onOpenDrawer();
     } else {
       setHideLink(false);
-      const offer = input.offer.filter(
+      const podcastOffer = input.offer.filter(
         (offer) => offer.sponsor === sponsorName
       );
+
+      const promotion = sponsorsData?.filter(
+        (sponsor) => sponsor.name === sponsorName
+      )[0].offer;
+
+      /* Podcast */
+      setSelectedPodcast(input.title);
       setDrawerData((prev) => ({
         ...prev,
         image: input.imageUrl,
         name: input.title,
-        description: offer[0].description,
-        url: offer[0].url,
+        description: promotion,
+        url: podcastOffer[0].url,
         color: input.backgroundColor,
+        publisher: input.publisher,
       }));
       onOpenDrawer();
     }
@@ -116,6 +128,7 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
         sponsorDrawer={true}
         hideLink={hideLink}
         podcastButton={true}
+        currentPodcast={selectedPodcast}
       />
       <div className="h-screen w-full">
         <Image
@@ -135,13 +148,16 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
 
         {
           <div
-            className={`bg-[#151515] h-[200vh]  ${
+            className={`bg-[#151515] h-[260vh]  ${
               isBreakPoint && "h-full"
             } relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] items-center flex flex-col p-5`}
           >
             {sponsorsData?.map((sponsor: SponsorData) => (
               <div key={`${sponsor.name}`} className="w-full my-4">
-                <div className="min-w-[75%] my-3 base:max-h-[80px] max-h-[120px] flex rounded-l-[9999px] rounded-r-[4000px] transition ease-in-out duration-150 hover:bg-[#222222]">
+                <div
+                  className="min-w-[75%] my-3 base:max-h-[80px] max-h-[120px] flex rounded-l-[9999px] rounded-r-[4000px] transition ease-in-out duration-150 hover:bg-[#222222]"
+                  onClick={() => setHideOffer((prev) => !prev)}
+                >
                   <Image
                     src={sponsor?.imageUrl}
                     alt=""
@@ -159,10 +175,6 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
                         onClick={() => handleDrawer(sponsor, sponsor.name)}
                       />
                     </div>
-
-                    {/* <p className="text-center base:text-xs p-4">
-                      {truncateString(sponsor.summary, 50)}
-                    </p> */}
                   </div>
                 </div>
                 <Button onClick={() => handleCollapse(sponsor.name)}>
@@ -184,32 +196,37 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
                     rounded="md"
                     shadow="md"
                   >
-                    <div className="flex w-full">
-                      {sponsorPodcasts?.map((pod) => (
-                        <div key={pod.title} className="px-4">
-                          <Image
-                            src={pod?.imageUrl}
-                            width={100}
-                            height={100}
-                            alt={pod.title}
-                            className="rounded-3xl"
-                          />
-                          <h1 className="text-sm font-semibold">
-                            {truncateString(pod.title, 15)}
-                          </h1>
-                          <h3 className="text-xs text-[#6f6f6f]">
-                            {truncateString(pod.publisher, 20)}
-                          </h3>
-                          <Button
-                            width={"20"}
-                            h={"5"}
-                            fontSize={"x-small"}
-                            onClick={() => handleDrawer(pod, sponsor.name)}
-                          >
-                            View Offer
-                          </Button>
-                        </div>
-                      ))}
+                    <div className="flex flex-col w-full">
+                      <div className="w-full font-light p-2 mb-4">
+                        {sponsor.offer}
+                      </div>
+                      <div className="w-full flex">
+                        {sponsorPodcasts?.map((pod) => (
+                          <div key={pod.title} className="px-4">
+                            <Image
+                              src={pod?.imageUrl}
+                              width={100}
+                              height={100}
+                              alt={pod.title}
+                              className="rounded-3xl"
+                            />
+                            <h1 className="text-sm font-semibold">
+                              {truncateString(pod.title, 15)}
+                            </h1>
+                            <h3 className="text-xs text-[#6f6f6f]">
+                              {truncateString(pod.publisher, 20)}
+                            </h3>
+                            <Button
+                              width={"20"}
+                              h={"5"}
+                              fontSize={"x-small"}
+                              onClick={() => handleDrawer(pod, sponsor.name)}
+                            >
+                              Support
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </Box>
                 </Collapse>
@@ -252,7 +269,6 @@ export const getStaticProps = async ({ params }: any) => {
 
   categoryData = categoryData?.getSponsorCategory;
   sponsorsData = sponsorsData?.getCategorySponsors;
-
   return {
     props: {
       categoryData,
