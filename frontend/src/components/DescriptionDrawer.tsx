@@ -10,7 +10,6 @@ import Link from "next/link";
 import React from "react";
 import { convertToFullURL, truncateString } from "../utils/functions";
 import { BsPlayCircle } from "react-icons/bs";
-import { useMediaQuery } from "../utils/hooks";
 
 type Props = {
   isOpen: boolean;
@@ -19,14 +18,16 @@ type Props = {
   sponsorDrawer: boolean;
   hideLink?: boolean;
   podcastButton?: boolean;
+  currentPodcast?: string;
+  podcastPage?: boolean;
 };
 
 interface DrawerData {
-  name: string;
+  title: string;
+  subtitle: string;
   url: string;
   image: string;
   description: string;
-  publisher: string;
   color?: string;
 }
 
@@ -36,14 +37,8 @@ const DescriptionDrawer = ({
   drawer,
   sponsorDrawer,
   hideLink,
-  podcastButton,
+  podcastPage,
 }: Props) => {
-  const isBreakPoint = useMediaQuery(1023);
-  const backgroundColor = drawer?.color;
-  const gradientStyle = {
-    backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, #000000)`,
-  };
-
   return (
     <>
       <Drawer
@@ -69,14 +64,15 @@ const DescriptionDrawer = ({
                   priority
                   className="h-[80px]"
                 />
+
                 <div className="base:px-3 xs:px-4">
                   <h1 className="base:text-lg xs:text-xl font-bold hover:underline">
                     <Link href={convertToFullURL(drawer.url)} target="_blank">
-                      {drawer.name}
+                      {drawer.title}
                     </Link>
                   </h1>
                   <h3 className="base:text-xs xs:text-sm font-bold text-[#aaaaaa]">
-                    {sponsorDrawer ? drawer.url : drawer.publisher}
+                    {drawer.subtitle}
                   </h3>
                 </div>
               </div>
@@ -89,35 +85,43 @@ const DescriptionDrawer = ({
                     </p>
                   </div>
                 )}
-                <h1 className="p-6 text-white h-[40vh] overflow-scroll">
-                  {drawer.description}
-                </h1>
-                <Link
-                  href={convertToFullURL(!hideLink ? drawer.url : "")}
-                  target="_blank"
-                  className="w-full flex justify-center items-center"
-                >
-                  {sponsorDrawer && !hideLink && (
-                    <div className="flex flex-col">
-                      <button className=" base:w-[125px] rounded-full border-[1px] active:scale-95 text-sm font-semibold text-[#aaaaaa] border-[#aaaaaa] p-2">
-                        Shop Now
-                      </button>
-                      {podcastButton && (
-                        <button
-                          className={` mt-4 base:w-[125px] rounded-full border-[1px] text-sm active:scale-95 font-bold text-white p-2`}
-                          style={{ background: drawer.color }}
-                        >
-                          Podcast
+                <div className="p-6 text-white h-[40vh] flex flex-col items-center">
+                  <h1>{drawer.description}</h1>
+                  {hideLink || !sponsorDrawer || (
+                    <>
+                      <h1
+                        style={{ color: "white" }}
+                        className="text-3xl font-extrabold mt-4"
+                      >
+                        Visit{" "}
+                      </h1>
+                      <Link
+                        href={convertToFullURL(drawer.url)}
+                        target="_blank"
+                        className={`text-lg active:scale-95 underline underline-offset-2 mt-5 p-4 rounded-md bg-[#242424] ${
+                          podcastPage ? "border-2" : "border-[3px]"
+                        } `}
+                        style={{ borderColor: drawer.color }}
+                      >
+                        <p className="font-bold" style={{}}>
+                          {drawer.url}
+                        </p>
+                      </Link>
+                    </>
+                  )}
+                </div>
+
+                <div className="flex flex-col">
+                  {hideLink && (
+                    <div className="w-full flex justify-center items-center">
+                      <Link href={`/${drawer.title}`}>
+                        <button className="base:w-[125px] rounded-full border-[1px] active:scale-95 text-sm font-semibold text-[#aaaaaa] border-[#aaaaaa] p-2">
+                          Visit Page
                         </button>
-                      )}
+                      </Link>
                     </div>
                   )}
-                  {hideLink && (
-                    <button className=" base:w-[125px] rounded-full border-[1px] active:scale-95 text-sm font-semibold text-[#aaaaaa] border-[#aaaaaa] p-2">
-                      Visit Page
-                    </button>
-                  )}
-                </Link>
+                </div>
               </div>
             </div>
           </DrawerBody>

@@ -49,10 +49,10 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
 
   const [drawerData, setDrawerData] = useState({
     image: "",
-    name: "",
+    title: "",
     description: "",
     url: "",
-    publisher: "",
+    subtitle: "",
     color: "",
   });
 
@@ -66,13 +66,14 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
     input: SponsorData | PodcastData,
     sponsorName: string
   ) => {
+
     /* Sponsor */
     if (isSponsorData(input)) {
       setHideLink(true);
       setDrawerData((prev) => ({
         ...prev,
         image: input.imageUrl,
-        name: input.name,
+        title: input.name,
         description: input.summary,
         url: input.url,
       }));
@@ -92,11 +93,11 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
       setDrawerData((prev) => ({
         ...prev,
         image: input.imageUrl,
-        name: input.title,
+        title: input.title,
         description: promotion,
         url: podcastOffer[0].url,
         color: input.backgroundColor,
-        publisher: input.publisher,
+        subtitle: input.publisher,
       }));
       onOpenDrawer();
     }

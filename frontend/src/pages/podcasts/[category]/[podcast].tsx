@@ -34,10 +34,10 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   const [truncated, setTruncated] = useState(true);
   const [drawerData, setDrawerData] = useState({
     image: "",
-    name: "",
+    title: "",
+    subtitle: "",
     description: "",
     url: "",
-    publisher: "",
   });
   let existingSponsor: boolean = true;
   useEffect(() => {
@@ -69,38 +69,45 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   const handleDrawer = (sponsor: string, isSponsorDrawer: boolean) => {
     setSponsorDrawer(isSponsorDrawer);
 
-    let sponsorImage = "";
-    let sponsorOffer = "";
-    let sponsorURL = "";
-    let sponsorName = "";
+    let sponsorPromotionUrl = "";
 
     if (isSponsorDrawer) {
-      const selectedSponsor = sponsorData.filter(
+      const filteredSponsor = sponsorData.filter(
         (data) => data.name === sponsor
       )[0];
-      sponsorImage = selectedSponsor.imageUrl;
-      sponsorOffer = selectedSponsor.offer;
 
-      const filteredSponsor = podcastData.offer.filter(
+      const filteredPodcast = podcastData.offer.filter(
         (offer) => offer.sponsor === sponsor
       )[0];
-      sponsorOffer = sponsorOffer;
-      sponsorURL = filteredSponsor.url;
-      sponsorName = filteredSponsor.sponsor;
+
+      const sponsorImage = filteredSponsor.imageUrl;
+      const sponsorOffer = filteredSponsor.offer;
+      const sponsorBaseUrl = filteredSponsor.url;
+      const sponsorName = filteredPodcast.sponsor;
+      sponsorPromotionUrl = filteredPodcast.url;
+
+      setDrawerData({
+        image: sponsorImage,
+        title: sponsorName,
+        subtitle: sponsorBaseUrl,
+        description: sponsorOffer,
+        url: sponsorPromotionUrl,
+      });
+    } else {
+      const podcastImage = podcastData.imageUrl;
+      const podcastTitle = podcastData.title;
+      const podcastDescription = podcastData.description;
+      const publisher = podcastData.publisher;
+
+      setDrawerData({
+        image: podcastImage,
+        title: podcastTitle,
+        subtitle: publisher,
+        description: podcastDescription,
+        url: sponsorPromotionUrl,
+      });
     }
 
-    const podcastImage = podcastData.imageUrl;
-    const podcastTitle = podcastData.title;
-    const podcastDescription = podcastData.description;
-    const publisher = podcastData.publisher;
-
-    setDrawerData({
-      image: isSponsorDrawer ? sponsorImage : podcastImage,
-      name: isSponsorDrawer ? sponsorName : podcastTitle,
-      description: isSponsorDrawer ? sponsorOffer : podcastDescription,
-      url: sponsorURL,
-      publisher,
-    });
     onOpen();
   };
 
