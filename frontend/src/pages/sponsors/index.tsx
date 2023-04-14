@@ -9,6 +9,7 @@ import { Operations } from "../../graphql/operations";
 import { useMediaQuery } from "../../utils/hooks";
 import { SponsorCategory, SponsorData } from "../../utils/types";
 import FeaturedGIF from "../../public/assets/optimizedGIF.gif";
+
 import Link from "next/link";
 
 interface Props {
@@ -17,8 +18,22 @@ interface Props {
   loading: boolean;
 }
 
-const Sponsors = ({ loading, categoryData }: Props) => {
+type GroupedSponsors = { [key: string]: string[] };
+
+const Sponsors = ({ loading, categoryData, sponsorsData }: Props) => {
   const isBreakPoint = useMediaQuery(1023);
+
+  const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
+  const groupedSponsors: GroupedSponsors = {};
+
+  sortedSponsors.forEach((str, i) => {
+    const firstLetter = str.charAt(0).toUpperCase();
+    if (!groupedSponsors[firstLetter]) {
+      groupedSponsors[firstLetter] = [];
+    } else {
+    }
+    groupedSponsors[firstLetter].push(str);
+  });
 
   if (loading) return <Spinner />;
   return (
@@ -57,22 +72,20 @@ const Sponsors = ({ loading, categoryData }: Props) => {
               </div>
             </div>
             <div className="h-[60vh] mt-10 w-full items-center">
-              <div className="w-full flex overflow-x-scroll scrollbar-hide">
+              <div className="w-full flex items-center justify-start">
+                <h1 className="text-4xl font-bold p-4 text-[#909090]">
+                  Browse Categories
+                </h1>
+              </div>
+              <div className="w-full mt-6 flex overflow-x-scroll scrollbar-hide">
                 {categoryData.map((category: SponsorCategory) => (
                   <Link
                     key={category.name}
                     href={`/sponsors/${category.name}`}
                     className="min-w-[67%] mx-4 rounded-3xl shadow-lg flex flex-col items-center"
                   >
-                    <Image
-                      src={category.imageUrl}
-                      height={400}
-                      width={400}
-                      alt="/"
-                      className="rounded-t-3xl w-full"
-                    />
-                    <div className="w-[100%] h-20 flex items-center justify-center bg-black/20 rounded-b-3xl">
-                      <p className="text-sm font-semibold text-[#bdbdbd]">
+                    <div className="w-[100%] h-20 flex items-center justify-center bg-black/20 hover:bg-[#1b1b1b] rounded-xl">
+                      <p className="text-xl font-extrabold text-[#bdbdbd]">
                         {" "}
                         {category.name}
                       </p>
@@ -80,7 +93,44 @@ const Sponsors = ({ loading, categoryData }: Props) => {
                   </Link>
                 ))}
               </div>
-              <div className="w-full flex justify-center"></div>
+              <div className="w-full flex items-center justify-start mt-10">
+                <h1 className="text-4xl font-bold p-4 text-[#909090]">A-Z</h1>
+              </div>
+              <div className="w-full h-screen flex flex-col items-center">
+                {Object.keys(groupedSponsors).map((letter) => (
+                  <div className="w-full p-4" key={letter}>
+                    <p className="text-white text-3xl font-bold">{letter}</p>
+                    <div className="w-full flex flex-wrap p-4 gap-y-16 gap-x-2 items-center justify-start">
+                      {groupedSponsors[letter].map((sponsor) =>
+                        sponsorsData
+                          .filter((data) => data.name === sponsor)
+                          .map((sponsor) => (
+                            <div className="flex flex-col">
+                              <div
+                                key={sponsor.name}
+                                className="flex flex-col w-[150px]"
+                              >
+                                <Image
+                                  src={sponsor.imageUrl}
+                                  alt={sponsor.name}
+                                  width={120}
+                                  height={120}
+                                  className="rounded-lg"
+                                />
+                              </div>
+                              <div className="mt-2">
+                                <h1 className="font-semibold text-start text-sm absolute max-w-[150px]">
+                                  {sponsor.name}
+                                </h1>
+                              </div>
+                            </div>
+                          ))
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
             </div>
           </div>
         </div>
