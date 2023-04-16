@@ -1,7 +1,7 @@
 import { Button, Spinner } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import Footer from "../../components/Footer";
 import Sidebar from "../../components/Sidebar";
 import client from "../../graphql/apollo-client";
@@ -9,8 +9,11 @@ import { Operations } from "../../graphql/operations";
 import { useMediaQuery } from "../../utils/hooks";
 import { SponsorCategory, SponsorData } from "../../utils/types";
 import FeaturedGIF from "../../public/assets/optimizedGIF.gif";
+import { AiFillCaretLeft } from "react-icons/ai";
+import { AiFillCaretRight } from "react-icons/ai";
 
 import Link from "next/link";
+import Carousel from "../../components/Carousel";
 
 interface Props {
   sponsorsData: SponsorData[];
@@ -22,7 +25,7 @@ type GroupedSponsors = { [key: string]: string[] };
 
 const Sponsors = ({ loading, categoryData, sponsorsData }: Props) => {
   const isBreakPoint = useMediaQuery(1023);
-
+  const [currDeg, setCurrDeg] = useState(0);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
   const groupedSponsors: GroupedSponsors = {};
 
@@ -34,6 +37,14 @@ const Sponsors = ({ loading, categoryData, sponsorsData }: Props) => {
     }
     groupedSponsors[firstLetter].push(str);
   });
+
+  const handleRotate = (direction: any) => {
+    if (direction === "next") {
+      setCurrDeg(currDeg + 45);
+    } else if (direction === "prev") {
+      setCurrDeg(currDeg - 45);
+    }
+  };
 
   if (loading) return <Spinner />;
   return (
@@ -50,57 +61,85 @@ const Sponsors = ({ loading, categoryData, sponsorsData }: Props) => {
           </div>
           <div className="w-full mt-20 flex flex-col items-start justify-center">
             <h1 className="font-extrabold px-4 base:text-4xl">Featured</h1>
-            <h2 className="font-md text-2xl text-[#909090] p-4">
-              Athletic Greens
-            </h2>
 
-            <Image
-              src={FeaturedGIF}
-              width={700}
-              height={700}
-              alt="/"
-              priority
-              className=""
-            />
-            <Button className="ml-4">More Info</Button>
+            <div className="w-full flex flex-col items-center justify-center">
+              <h2 className="font-md text-2xl text-start text-[#909090] p-4">
+                Athletic Greens
+              </h2>
+              <Image
+                src={FeaturedGIF}
+                width={700}
+                height={700}
+                alt="/"
+                priority
+                className=""
+              />
+
+              <Button className="ml-4 mt-4">More Info</Button>
+            </div>
+
             <div className="w-full flex justify-center items-center h-[200px]">
               <div className="max-w-[60%] max-h-[100px] py-2">
                 <p className="font-regular base:text-md xs:text-lg text-[#909090] tracking-widest">
-                  Support your favorite podcasts when you shop with PromoNinja
+                  Support your favorite creators when you shop with PromoNinja
                   approved sponsors.
                 </p>
               </div>
             </div>
             <div className="h-[60vh] mt-10 w-full items-center">
               <div className="w-full flex items-center justify-start">
-                <h1 className="text-4xl font-bold p-4 text-[#909090]">
-                  Browse Categories
+                <h1 className="text-4xl font-extrabold p-4 text-white">
+                  Shop Categories
                 </h1>
               </div>
-              <div className="w-full mt-6 flex overflow-x-scroll scrollbar-hide">
-                {categoryData.map((category: SponsorCategory) => (
-                  <Link
-                    key={category.name}
-                    href={`/sponsors/${category.name}`}
-                    className="min-w-[67%] mx-4 rounded-3xl shadow-lg flex flex-col items-center"
-                  >
-                    <div className="w-[100%] h-20 flex items-center justify-center bg-black/20 hover:bg-[#1b1b1b] rounded-xl">
-                      <p className="text-xl font-extrabold text-[#bdbdbd]">
-                        {" "}
-                        {category.name}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
+              <div className="flex flex-col items-center px-10">
+                <Carousel
+                  handleRotate={handleRotate}
+                  currDeg={currDeg}
+                  categoryData={categoryData}
+                />
+                <div className="flex gap-10 relative bottom-10">
+                  <Button w={100} onClick={() => handleRotate("prev")}>
+                    <AiFillCaretLeft />
+                  </Button>
+                  <Button w={100} onClick={() => handleRotate("next")}>
+                    <AiFillCaretRight />
+                  </Button>
+                </div>
               </div>
-              <div className="w-full flex items-center justify-start mt-10">
-                <h1 className="text-4xl font-bold p-4 text-[#909090]">A-Z</h1>
+
+              <div className="w-full flex justify-center items-center h-[200px] py-5">
+                <div className="max-w-[60%] max-h-[100px] py-2">
+                  <p className="font-regular base:text-md xs:text-lg text-[#909090] tracking-widest">
+                    Did you know some podcast sponsorships are for charitable
+                    causes? For example, {""}
+                    <span>
+                      <Link
+                        href={`/podcasts/lifestyle/${"Crime Junkie"}`}
+                        target="_blank"
+                        className="hover:text-yellow-200 font-semibold mr-1"
+                      >
+                        Crime Junkie
+                      </Link>
+                    </span>
+                    has partnered with organizations such as the National Center
+                    for Missing and Exploited Children?
+                  </p>
+                </div>
+              </div>
+
+              <div className="w-full flex items-center base:mt-[180px] sm:mt-[100px] justify-start">
+                <h1 className="text-4xl font-extrabold p-4 text-white">
+                  Sponsors A-Z
+                </h1>
               </div>
               <div className="w-full h-screen flex flex-col items-center">
                 {Object.keys(groupedSponsors).map((letter) => (
-                  <div className="w-full p-4" key={letter}>
-                    <p className="text-white text-3xl font-bold">{letter}</p>
-                    <div className="w-full flex flex-wrap p-4 gap-y-16 gap-x-2 items-center justify-start">
+                  <div className="w-full p-4 my-4" key={letter}>
+                    <p className="text-[#909090] text-3xl font-bold">
+                      {letter}
+                    </p>
+                    <div className="w-full flex flex-wrap p-1 gap-y-16 gap-x-2 items-center base:justify-center lg:justify-start">
                       {groupedSponsors[letter].map((sponsor) =>
                         sponsorsData
                           .filter((data) => data.name === sponsor)
@@ -108,20 +147,20 @@ const Sponsors = ({ loading, categoryData, sponsorsData }: Props) => {
                             <div className="flex flex-col">
                               <div
                                 key={sponsor.name}
-                                className="flex flex-col w-[150px]"
+                                className="flex flex-col w-[100px] mx-5"
                               >
                                 <Image
                                   src={sponsor.imageUrl}
                                   alt={sponsor.name}
-                                  width={120}
-                                  height={120}
+                                  width={100}
+                                  height={100}
                                   className="rounded-lg"
                                 />
-                              </div>
-                              <div className="mt-2">
-                                <h1 className="font-semibold text-start text-sm absolute max-w-[150px]">
-                                  {sponsor.name}
-                                </h1>
+                                <div>
+                                  <h1 className="font-semibold absolute text-sm mt-2 text-center max-w-[100px]">
+                                    {sponsor.name}
+                                  </h1>
+                                </div>
                               </div>
                             </div>
                           ))
@@ -130,7 +169,6 @@ const Sponsors = ({ loading, categoryData, sponsorsData }: Props) => {
                   </div>
                 ))}
               </div>
-
             </div>
           </div>
         </div>
