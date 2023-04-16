@@ -18,6 +18,7 @@ export interface PodcastData {
   publisher: string;
   description: string;
   backgroundColor: string;
+  externalUrl: string;
   offer: OfferData[];
 }
 

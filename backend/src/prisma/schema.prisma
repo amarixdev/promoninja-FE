@@ -26,6 +26,7 @@ model Podcast {
   publisher       String
   description     String?
   backgroundColor String?
+  externalUrl     String?
 }
 
 model Category {

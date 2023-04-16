@@ -54,6 +54,9 @@ export const Operations = {
           images {
             url
           }
+          external_urls {
+            spotify
+          }
         }
       }
     `,

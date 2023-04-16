@@ -20,6 +20,7 @@ type Props = {
   podcastButton?: boolean;
   currentPodcast?: string;
   podcastPage?: boolean;
+  externalUrl?: string;
 };
 
 interface DrawerData {
@@ -38,6 +39,7 @@ const DescriptionDrawer = ({
   sponsorDrawer,
   hideLink,
   podcastPage,
+  externalUrl,
 }: Props) => {
   return (
     <>
@@ -78,12 +80,16 @@ const DescriptionDrawer = ({
               </div>
               <div>
                 {sponsorDrawer || (
-                  <div className="flex w-full justify-start items-center p-4">
+                  <Link
+                    href={externalUrl || "/"}
+                    target="_blank"
+                    className="flex w-full justify-start items-center p-4"
+                  >
                     <BsPlayCircle color="#1DB954" />
-                    <p className="text-xs font-semibold px-2">
+                    <p className="text-xs font-semibold px-2 hover:cursor-pointer">
                       Listen on Spotify
                     </p>
-                  </div>
+                  </Link>
                 )}
                 <div className="p-6 text-white h-[40vh] flex flex-col items-center">
                   <h1>{drawer.description}</h1>

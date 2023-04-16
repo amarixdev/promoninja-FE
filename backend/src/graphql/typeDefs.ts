@@ -38,12 +38,17 @@ const typeDefs = gql`
     name: String
     publisher: String
     description: String
+    external_urls: External_urls
   }
 
   type Image {
     height: Int
     url: String
     width: Int
+  }
+
+  type External_urls {
+    spotify: String
   }
 
   input DeleteInput {
@@ -59,6 +64,7 @@ const typeDefs = gql`
     publisher: String
     description: String
     backgroundColor: String
+    externalUrl: String
     offer: [OfferInput]
   }
 
@@ -76,6 +82,7 @@ const typeDefs = gql`
     baseUrl: String
     category: String
     summary: String
+    promoCode: String
   }
 
   type Podcast {
@@ -88,6 +95,7 @@ const typeDefs = gql`
     publisher: String
     description: String
     backgroundColor: String
+    externalUrl: String
   }
 
   type Category {

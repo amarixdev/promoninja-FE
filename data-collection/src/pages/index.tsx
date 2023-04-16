@@ -196,6 +196,9 @@ const App = () => {
     }
   };
 
+  const spotifyExternalUrl =
+    spotifyData?.fetchSpotifyPodcast[0].external_urls.spotify;
+
   const spotifyImage = spotifyData?.fetchSpotifyPodcast[0]?.images[0].url;
   const spotifyName = spotifyData?.fetchSpotifyPodcast[0]?.name;
   const spotifyPublisher = spotifyData?.fetchSpotifyPodcast[0]?.publisher;
@@ -213,6 +216,7 @@ const App = () => {
             publisher: spotifyPublisher,
             description: spotifyDescription,
             backgroundColor: state.extractedColor,
+            externalUrl: spotifyExternalUrl,
           },
         },
       });
@@ -251,6 +255,7 @@ const App = () => {
       } else console.log(error);
     }
   };
+
 
   const handleUpdateColor = async () => {
     await updateColor({

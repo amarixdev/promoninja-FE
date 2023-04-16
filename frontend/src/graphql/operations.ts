@@ -17,6 +17,7 @@ export const Operations = {
           publisher
           description
           backgroundColor
+          externalUrl
           offer {
             sponsor
             promoCode
@@ -38,6 +39,7 @@ export const Operations = {
           name
           imageUrl
           offer
+          url
         }
       }
     `,

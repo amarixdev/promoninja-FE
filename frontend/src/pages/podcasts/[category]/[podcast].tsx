@@ -39,6 +39,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     description: "",
     url: "",
   });
+
   let existingSponsor: boolean = true;
   useEffect(() => {
     setCategoryType(category);
@@ -132,18 +133,24 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                   className={`z-10 top-4 mt-10 relative base:w-[150px] xs:w-[180px] sm:w-[250px] shadow-2xl shadow-black`}
                 />
                 <div className="w-full my-10">
-                  <h1 className=" base:text-3xl xs:text-4xl sm:text-5xl font-bold ml-6 px-2">
+                  <h1 className=" base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold ml-6 px-2">
                     {podcastData?.title}
                   </h1>
                   <h2 className="base:text-md font-medium xs:text-lg ml-6 my-4 text-[#aaaaaa] p-2">
                     {podcastData?.publisher}{" "}
                   </h2>
                   {isBreakPoint || (
-                    <div className="flex w-full justify-start items-center p-4">
-                      <BsPlayCircle color="#1DB954" />
-                      <p className="text-xs font-semibold px-2">
-                        Listen on Spotify
-                      </p>
+                    <div className="w-full">
+                      <Link
+                        href={podcastData?.externalUrl}
+                        target="_blank"
+                        className="flex w-fit justify-start items-center p-4"
+                      >
+                        <BsPlayCircle color="#1DB954" />
+                        <p className="text-xs font-semibold px-2">
+                          Listen on Spotify
+                        </p>
+                      </Link>
                     </div>
                   )}
                   {isBreakPoint && (
@@ -193,6 +200,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
             drawer={drawerData}
             sponsorDrawer={sponsorDrawer}
             podcastPage={true}
+            externalUrl={podcastData?.externalUrl}
           />
           <div className="flex flex-wrap mx-4 justify-between">
             {podcastData.offer.map((offer: OfferData, index) => (
