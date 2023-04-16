@@ -432,7 +432,11 @@ const App = () => {
 
           {state.display.sponsor && state.podcast ? (
             <CreateSponsor
-              podcast={spotifyName}
+              podcast={
+                state.isExistingPodcast && state.display.title
+                  ? state.currentPodcast.title
+                  : spotifyName && state.display.title && spotifyName
+              }
               state={state}
               refetchPodcast={refetchCurrentPodcast}
             />

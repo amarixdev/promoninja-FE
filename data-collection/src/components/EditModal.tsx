@@ -69,7 +69,6 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
     ""
   );
   const [offerStates, setOfferStates] = useState<any>({});
-
   const [editing, setEditing] = useState("");
   const {
     onOpen: onOpenSponsor,
@@ -192,8 +191,6 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
     }
   };
 
-  console.log(offerStates);
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -273,7 +270,7 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
                       </p>
                     ) : (
                       <Textarea
-                        value={offerStates[index].promoCode}
+                        value={offerStates[index]?.promoCode}
                         onChange={(e) => handleChange(e, index, "promoCode")}
                         className="text-sm font-light"
                         onBlur={() => setEditing("")}
