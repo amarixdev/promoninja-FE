@@ -3,15 +3,21 @@ import Image from "next/image";
 import React from "react";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
-import { PodcastData, Podcasts } from "../utils/types";
 
-const podcasts = ({ podcasts }: Podcasts) => {
-  console.log(podcasts);
+type Props = {
+  podcastsData: Podcast[];
+};
 
-  console.log(podcasts[0].imageUrl);
+interface Podcast {
+  title: string;
+  imageUrl: string;
+}
+
+const Podcasts = ({ podcastsData }: Props) => {
+
   return (
     <div className="grid grid-cols-8 mt-10 space-y-4 px-6">
-      {podcasts.map((pod) => (
+      {podcastsData.map((pod) => (
         <div key={pod.title}>
           <Image
             src={pod?.imageUrl}
@@ -27,15 +33,15 @@ const podcasts = ({ podcasts }: Podcasts) => {
   );
 };
 
-export default podcasts;
+export default Podcasts;
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await client.query({
     query: Operations.Queries.GetPodcasts,
   });
 
-  const podcasts = data?.getPodcasts;
+  const podcastsData = data?.getPodcasts;
   return {
-    props: { podcasts },
+    props: { podcastsData },
   };
 };
