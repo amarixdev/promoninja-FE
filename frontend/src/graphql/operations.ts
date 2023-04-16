@@ -52,6 +52,15 @@ export const Operations = {
         }
       }
     `,
+    GetSponsor: gql`
+      query ($input: SponsorInput!) {
+        getSponsor(input: $input) {
+          name
+          imageUrl
+          url
+        }
+      }
+    `,
     GetSponsorCategories: gql`
       query {
         getSponsorCategories {
@@ -61,7 +70,7 @@ export const Operations = {
       }
     `,
     GetSponsorCategory: gql`
-      query ($input: String!) {
+      query ($input: SponsorCategoryInput!) {
         getSponsorCategory(input: $input) {
           name
           imageUrl
@@ -86,7 +95,7 @@ export const Operations = {
     `,
 
     GetCategorySponsors: gql`
-      query ($input: String!) {
+      query ($input: SponsorCategoryInput!) {
         getCategorySponsors(input: $input) {
           name
           imageUrl

@@ -66,7 +66,6 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
     input: SponsorData | PodcastData,
     sponsorName: string
   ) => {
-
     /* Sponsor */
     if (isSponsorData(input)) {
       setHideLink(true);
@@ -257,14 +256,14 @@ export const getStaticProps = async ({ params }: any) => {
   let { data: categoryData, loading } = await client.query({
     query: Operations.Queries.GetSponsorCategory,
     variables: {
-      input: category,
+      input: { category },
     },
   });
 
   let { data: sponsorsData } = await client.query({
     query: Operations.Queries.GetCategorySponsors,
     variables: {
-      input: category,
+      input: { category },
     },
   });
 

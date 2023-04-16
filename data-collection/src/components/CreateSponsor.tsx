@@ -1,6 +1,7 @@
 import {
   ApolloQueryResult,
   OperationVariables,
+  useLazyQuery,
   useMutation,
   useQuery,
 } from "@apollo/client";
@@ -26,7 +27,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Fuse from "fuse.js";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Operations } from "../graphql/operations";
 import { Sponsor } from "../utils/types";
 import { initState } from "../utils/reducer";
@@ -40,34 +41,29 @@ interface Props {
   ) => Promise<ApolloQueryResult<any>>;
 }
 
-const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
+const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef(null);
-  const [existingSponsor, setExistingSponsor] = useState(false);
   const [display, setDisplay] = useState({
     preview: false,
-    image: true,
-    baseUrl: false,
-    fullPath: false,
-    summary: true,
   });
   const [sponsor, setSponsor] = useState({
     name: "",
     url: "",
     baseUrl: "",
     promoCode: "",
+    offer: "",
     image: "",
     category: "",
     summary: "",
   });
+  const [currentCategory, setCurrentCategory] = useState("");
 
   const toast = useToast();
   const [createSponsor] = useMutation(Operations.Mutations.CreateSponsor);
-
   const [deletePodcastSponsor, {}] = useMutation(
     Operations.Mutations.DeletePodcastSponsor
   );
-
   const handleDelete = async (sponsorToDelete: string) => {
     await deletePodcastSponsor({
       variables: {
@@ -86,6 +82,25 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
       input: { podcast },
     },
   });
+
+  const { data: sponsorData } = useQuery(Operations.Queries.GetSponsor, {
+    variables: {
+      input: {
+        name: sponsor.name,
+      },
+    },
+  });
+
+  const [getSponsorCategory] = useLazyQuery(
+    Operations.Queries.GetSponsorCategory
+  );
+
+  const isExistingSponsor = sponsorData?.getSponsor !== null;
+  const [existingSponsor, setExistingSponsor] = useState(false);
+
+  useEffect(() => {
+    setExistingSponsor(isExistingSponsor);
+  }, [sponsorData, isExistingSponsor]);
 
   const {
     data: sponsorList,
@@ -112,75 +127,48 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
     setDisplay((prev) => ({
       ...prev,
       preview: true,
-      baseUrl: false,
-      image: true,
-      summary: true,
     }));
     if (e.target.value === "") {
-      setDisplay((prev) => ({ ...prev, preview: false, image: true }));
+      setDisplay((prev) => ({ ...prev, preview: false }));
     }
   };
 
   const currentSponsors = data?.fetchSponsors;
-  const handleSearch = (
-    param: string,
-    event: any,
-    isExistingSponsor: boolean
-  ) => {
+  const handleSearch = async (param: string, event: any, exists: boolean) => {
     event.preventDefault();
+
+    if (exists) {
+      const { data: sponsorCategory } = await getSponsorCategory({
+        variables: {
+          input: {
+            sponsor: param,
+          },
+        },
+      });
+      setCurrentCategory(sponsorCategory?.getSponsorCategory?.name);
+    }
+
     setSponsor({ ...sponsor, name: param });
-    setDisplay((prev) => ({ ...prev, preview: false, summary: false }));
+    setDisplay((prev) => ({ ...prev, preview: false }));
     if (isExistingSponsor) {
-      setDisplay((prev) => ({
-        ...prev,
-        image: false,
-        baseUrl: true,
-      }));
       setExistingSponsor(true);
+      setSponsor((prev) => ({ ...prev, category: currentCategory }));
     }
     if (!isExistingSponsor) {
       setDisplay((prev) => ({ ...prev, summary: true }));
       if (fusePreview) {
         if (param === fusePreview[0]) {
-          setDisplay((prev) => ({
-            ...prev,
-            image: false,
-            baseUrl: true,
-          }));
           setExistingSponsor(true);
         }
       } else {
-        setDisplay((prev) => ({
-          ...prev,
-          image: true,
-          baseUrl: false,
-          fullPath: false,
-        }));
         setExistingSponsor(false);
         setSponsor((prev) => ({ ...prev, url: "" }));
       }
     }
   };
 
-  console.log(display.summary);
-
   const handleBlur = () => {
     if (sponsor.name === "") return;
-    if (existingSponsor) {
-      setDisplay((prev) => ({
-        ...prev,
-        image: false,
-        baseUrl: false,
-        fullPath: true,
-      }));
-    } else {
-      setDisplay((prev) => ({
-        ...prev,
-        image: true,
-        baseUrl: false,
-        fullPath: false,
-      }));
-    }
   };
 
   const handleURLBlur = (e: any) => {
@@ -190,17 +178,7 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
         baseUrl: e.target.value.split("/")[0],
         url: e.target.value,
       }));
-      setDisplay((prev) => ({
-        ...prev,
-        fullPath: true,
-        baseUrl: false,
-      }));
     } else {
-      setDisplay((prev) => ({
-        ...prev,
-        fullPath: true,
-        baseUrl: false,
-      }));
       setSponsor((prev) => ({
         ...prev,
         url: baseUrl + "/" + e.target.value,
@@ -211,12 +189,6 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
   const handleURLFocus = (e: any) => {
     if (!existingSponsor) return;
     else {
-      setDisplay((prev) => ({
-        ...prev,
-        fullPath: false,
-        baseUrl: true,
-        image: false,
-      }));
       setSponsor((prev) => ({
         ...prev,
         url: "",
@@ -271,7 +243,6 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
             input: {
               podcast,
               sponsor,
-              category: state.category,
             },
           },
         });
@@ -294,14 +265,11 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
           baseUrl: "",
           category: "",
           summary: "",
+          offer: "",
         });
 
         setDisplay({
           preview: false,
-          image: true,
-          baseUrl: false,
-          fullPath: false,
-          summary: true,
         });
 
         setExistingSponsor(false);
@@ -377,51 +345,27 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
                   )}
                 </Box>
               </form>
-              {display.summary && (
-                <Box>
-                  <FormLabel>Summary</FormLabel>
-                  <InputGroup>
-                    <Textarea
-                      placeholder={"Please enter Summary"}
-                      value={sponsor.summary}
-                      onChange={(e) =>
-                        setSponsor((prev) => ({
-                          ...prev,
-                          summary: e.target.value,
-                        }))
-                      }
-                    />
-                  </InputGroup>
-                </Box>
-              )}
-
               <Box>
                 <FormLabel>Url</FormLabel>
                 <InputGroup>
-                  {display.baseUrl ? (
+                  {existingSponsor ? (
                     <InputLeftAddon>{baseUrl}</InputLeftAddon>
                   ) : null}
                   <Input
                     type="url"
-                    placeholder={display.baseUrl ? "Path?" : "Please enter Url"}
-                    value={
-                      display.fullPath
-                        ? sponsor.url
-                        : display.baseUrl
-                        ? sponsor.url
-                        : sponsor.baseUrl
-                    }
+                    placeholder={existingSponsor ? "Path?" : "Please enter Url"}
+                    value={existingSponsor ? sponsor.baseUrl : sponsor.url}
                     onChange={
-                      display.baseUrl
+                      existingSponsor
                         ? (e) =>
                             setSponsor({
                               ...sponsor,
-                              url: e.target.value,
+                              baseUrl: e.target.value,
                             })
                         : (e) =>
                             setSponsor((prev) => ({
                               ...prev,
-                              baseUrl: e.target.value,
+                              url: e.target.value,
                             }))
                     }
                     onBlur={(e) => handleURLBlur(e)}
@@ -430,7 +374,9 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
                 </InputGroup>
               </Box>
               <SelectSponsorCategory
-                category={sponsor.category}
+                isExisting={existingSponsor}
+                newCategory={sponsor.category}
+                currentCategory={currentCategory}
                 setSponsor={setSponsor}
               />
               <Box>
@@ -447,10 +393,57 @@ const CreateSponsor = ({ podcast, state, refetchPodcast }: Props) => {
                   onBlur={handleBlur}
                 />
               </Box>
-              {display.image && (
+              {existingSponsor || (
+                <Box>
+                  <FormLabel>
+                    Summary
+                    <span className="text-green-500 font-bold">
+                      ( New Sponsor)
+                    </span>
+                  </FormLabel>
+                  <InputGroup>
+                    <Textarea
+                      placeholder={"Please enter Summary"}
+                      value={sponsor.summary}
+                      onChange={(e) =>
+                        setSponsor((prev) => ({
+                          ...prev,
+                          summary: e.target.value,
+                        }))
+                      }
+                    />
+                  </InputGroup>
+                </Box>
+              )}
+              {existingSponsor || (
+                <Box>
+                  <FormLabel>
+                    Offer{" "}
+                    <span className="text-green-500 font-bold">
+                      ( New Sponsor)
+                    </span>{" "}
+                  </FormLabel>
+                  <Textarea
+                    value={sponsor.offer}
+                    onChange={(e) =>
+                      setSponsor({
+                        ...sponsor,
+                        offer: e.target.value,
+                      })
+                    }
+                    onBlur={handleBlur}
+                  />
+                </Box>
+              )}
+              {!existingSponsor && (
                 <InputGroup>
                   <Box>
-                    <FormLabel>Image Url</FormLabel>
+                    <FormLabel>
+                      Image Url{" "}
+                      <span className="text-green-500 font-bold">
+                        ( New Sponsor)
+                      </span>
+                    </FormLabel>
                     <Input
                       type="url"
                       placeholder="Please enter image URL"

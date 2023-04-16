@@ -2,8 +2,10 @@ import { Select } from "@chakra-ui/react";
 import { useState } from "react";
 
 interface Props {
-  category: string;
+  newCategory?: string;
   setSponsor: (prev: any) => void;
+  isExisting: boolean;
+  currentCategory?: string;
 }
 
 /* TODO: 
@@ -11,7 +13,12 @@ interface Props {
 2. Add back accidentally deleted sponsors
 3. Work on sponsor page */
 
-const SelectSponsorCategory = ({ category, setSponsor }: Props) => {
+const SelectSponsorCategory = ({
+  newCategory,
+  currentCategory,
+  setSponsor,
+  isExisting,
+}: Props) => {
   return (
     <div>
       <Select
@@ -21,12 +28,11 @@ const SelectSponsorCategory = ({ category, setSponsor }: Props) => {
         onChange={(e) => {
           setSponsor((prev: any) => ({ ...prev, category: e.target.value }));
         }}
-        value={category}
+        value={isExisting ? currentCategory : newCategory}
       >
         <option value="Health & Wellness">Health & Wellness</option>
         <option value="Digital Services">Digital Services</option>
-        <option value="Food & Beverage">Food & Beverage</option>
-        <option value="Personal Care">Personal Care</option>
+        <option value="Food">Food</option>
         <option value="Accessories">Accessories</option>
         <option value="Home Decor">Home Decor</option>
         <option value="Outdoors">Outdoors</option>

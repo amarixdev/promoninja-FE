@@ -26,6 +26,25 @@ export const Operations = {
         }
       }
     `,
+    GetSponsor: gql`
+      query ($input: SponsorInput!) {
+        getSponsor(input: $input) {
+          name
+          imageUrl
+          url
+        }
+      }
+    `,
+
+    GetSponsorCategory: gql`
+      query ($input: SponsorCategoryInput!) {
+        getSponsorCategory(input: $input) {
+          name
+          imageUrl
+        }
+      }
+    `,
+
     FetchSponsors: gql`
       query ($input: PodcastInput!) {
         fetchSponsors(input: $input) {

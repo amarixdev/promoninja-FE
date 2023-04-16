@@ -8,9 +8,9 @@ const typeDefs = gql`
     getSponsors: [Sponsor]
     getSponsor(input: SponsorInput!): Sponsor
     getSponsorCategories: [SponsorCategory]
-    getSponsorCategory(input: String!): SponsorCategory
+    getSponsorCategory(input: SponsorCategoryInput!): SponsorCategory
     getSponsorPodcasts(input: SponsorInput!): [Podcast]
-    getCategorySponsors(input: String!): [Sponsor]
+    getCategorySponsors(input: SponsorCategoryInput!): [Sponsor]
     fetchCategory(input: PodcastInput!): String
     fetchSponsors(input: PodcastInput!): [Sponsor]
     fetchSpotifyPodcast(input: SpotifyAPI!): [Items]
@@ -83,6 +83,7 @@ const typeDefs = gql`
     category: String
     summary: String
     promoCode: String
+    offer: String
   }
 
   type Podcast {
@@ -115,6 +116,11 @@ const typeDefs = gql`
     url: String!
     summary: String
     offer: String
+  }
+
+  input SponsorCategoryInput {
+    sponsor: String
+    category: String
   }
 
   type SponsorCategory {

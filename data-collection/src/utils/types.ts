@@ -5,6 +5,7 @@ export interface Sponsor {
   image: string;
   baseUrl: string;
   category: string;
+  offer: string;
 }
 
 export interface Podcasts {

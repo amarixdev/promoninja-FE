@@ -62,6 +62,11 @@ export interface SponsorCategory {
   imageUrl: string;
 }
 
+export interface SponsorCategory {
+  input: SponsorCategoryInput;
+}
+
 export interface SponsorCategoryInput {
-  input: string;
+  category: string;
+  sponsor: string;
 }

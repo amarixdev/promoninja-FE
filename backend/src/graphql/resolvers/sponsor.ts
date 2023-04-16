@@ -17,15 +17,9 @@ export const productResolvers = {
       let { podcast, sponsor, category, publisher, backgroundColor } = input;
       category = category?.toLowerCase();
 
-      const CATEGORY = await prisma.category.findFirst({
+      const getCategory = await prisma.category.findFirst({
         where: {
           name: category,
-        },
-      });
-
-      const existingPodcast = await prisma.podcast.findFirst({
-        where: {
-          title: podcast,
         },
       });
 
@@ -35,13 +29,21 @@ export const productResolvers = {
         },
       });
 
+      const existingPodcast = await prisma.podcast.findFirst({
+        where: {
+          title: podcast,
+        },
+      });
+
       if (!existingPodcast) {
+        console.log(1, sponsor);
         try {
           await prisma.sponsor.create({
             data: {
               name: sponsor.name,
               imageUrl: sponsor.image,
               url: sponsor.baseUrl,
+              offer: sponsor.offer,
               category: {
                 connect: {
                   id: getSponsorCategory?.id,
@@ -59,7 +61,7 @@ export const productResolvers = {
                   backgroundColor,
                   category: {
                     connect: {
-                      id: CATEGORY?.id,
+                      id: getCategory?.id,
                     },
                   },
                 },
@@ -94,6 +96,19 @@ export const productResolvers = {
                     name: sponsor.name,
                     imageUrl: sponsor.image,
                     url: sponsor.baseUrl,
+                    offer: sponsor.offer,
+                  },
+                },
+                update: {
+                  where: {
+                    name: sponsor.name,
+                  },
+                  data: {
+                    category: {
+                      connect: {
+                        id: getSponsorCategory?.id,
+                      },
+                    },
                   },
                 },
               },
@@ -181,7 +196,6 @@ export const productResolvers = {
         },
       });
 
-
       /* Delete individual offers from sponsor */
 
       await prisma.podcast.updateMany({
@@ -265,6 +279,23 @@ export const productResolvers = {
       const { prisma } = context;
       const sponsors = prisma.sponsor.findMany();
       return sponsors;
+    },
+
+    getSponsor: async (
+      parent: any,
+      { input }: SponsorInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { name } = input;
+
+      const sponsor = await prisma.sponsor.findFirst({
+        where: {
+          name: name,
+        },
+      });
+
+      return sponsor;
     },
   },
 };
