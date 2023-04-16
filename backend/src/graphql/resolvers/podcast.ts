@@ -23,6 +23,7 @@ export const podcastResolvers = {
         publisher,
         description,
         backgroundColor,
+        externalUrl,
       } = input;
       category = category?.toLowerCase();
 
@@ -39,6 +40,7 @@ export const podcastResolvers = {
           publisher,
           backgroundColor,
           description,
+          externalUrl,
           category: {
             connect: {
               id: getCategory?.id,
@@ -74,7 +76,7 @@ export const podcastResolvers = {
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      const { backgroundColor, podcast } = input;
+      const { backgroundColor, podcast, externalUrl } = input;
       console.log("updating...");
       await prisma.podcast.update({
         where: {
@@ -228,7 +230,7 @@ export const podcastResolvers = {
           name: name,
         },
       });
-      
+
       const podcasts = await prisma.podcast.findMany({
         where: {
           sponsorId: {
