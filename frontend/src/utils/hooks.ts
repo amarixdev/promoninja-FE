@@ -10,20 +10,22 @@ export const useMediaQuery = (width: number) => {
     }
   }, []);
 
-  useLayoutEffect(() => {
-    const media = window.matchMedia(`(max-width: ${width}px)`);
-    media.addEventListener("change", updateTarget);
+  if (typeof window !== "undefined") {
+    useLayoutEffect(() => {
+      const media = window.matchMedia(`(max-width: ${width}px)`);
+      media.addEventListener("change", updateTarget);
 
-    // Check on mount (callback is not called until a change occurs)
+      // Check on mount (callback is not called until a change occurs)
 
-    if (media.matches) {
-      setTargetReached(true);
-    } else {
-      setTargetReached(false);
-    }
+      if (media.matches) {
+        setTargetReached(true);
+      } else {
+        setTargetReached(false);
+      }
 
-    return () => media.removeEventListener("change", updateTarget);
-  }, []);
+      return () => media.removeEventListener("change", updateTarget);
+    }, []);
+  }
 
   return targetReached;
 };
