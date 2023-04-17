@@ -148,6 +148,25 @@ export const productResolvers = {
         },
       });
 
+      const getSponsorCategory = await prisma.sponsorCategory.findFirst({
+        where: {
+          name: category,
+        },
+      });
+
+      await prisma.sponsorCategory.update({
+        where: {
+          id: getSponsorCategory?.id,
+        },
+        data: {
+          sponsor: {
+            disconnect: {
+              id: getSponsor?.id,
+            },
+          },
+        },
+      });
+
       /* Delete individual offers from sponsor */
 
       await prisma.podcast.updateMany({

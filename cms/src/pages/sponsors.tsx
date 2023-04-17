@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { Button, Spinner, useDisclosure, useToast } from "@chakra-ui/react";
 import { GetServerSideProps, GetStaticProps } from "next";
 import Image from "next/image";
@@ -31,6 +31,10 @@ const Sponsors = () => {
     imageUrl: "",
   });
 
+  const [getSponsorCategory, { data: sponsorCategoryData }] = useLazyQuery(
+    Operations.Queries.GetSponsorCategory
+  );
+
   const sponsorsData = data?.getSponsors;
 
   const handleDeleteSponsor = async (sponsor: Sponsor | undefined) => {
@@ -39,6 +43,7 @@ const Sponsors = () => {
       variables: {
         input: {
           sponsor: sponsor?.name,
+          category: sponsorCategoryData?.getSponsorCategory?.name,
         },
       },
     });
@@ -53,7 +58,11 @@ const Sponsors = () => {
     });
   };
 
-  const openDeleteModal = (sponsor: Sponsor) => {
+  const openDeleteModal = async (sponsor: Sponsor) => {
+    await getSponsorCategory({
+      variables: { input: { sponsor: sponsor.name } },
+    });
+
     setSponsorToDelete(sponsor);
     onOpen();
   };

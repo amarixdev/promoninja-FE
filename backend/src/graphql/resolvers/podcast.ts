@@ -120,6 +120,46 @@ export const podcastResolvers = {
         const { prisma } = context;
         const { podcast } = input;
 
+        const getPodcast = await prisma.podcast.findFirst({
+          where: {
+            title: podcast,
+          },
+        });
+
+        const getCategory = await prisma.category.findFirst({
+          where: {
+            podcastId: {
+              has: getPodcast?.id,
+            },
+          },
+        });
+
+        /* Disconnect sponsor from it's category  */
+        await prisma.category.update({
+          where: {
+            id: getCategory?.id,
+          },
+          data: {
+            podcast: {
+              disconnect: {
+                id: getPodcast?.id,
+              },
+            },
+          },
+        });
+
+        /* Disconnect podcast from all sponsors  */
+        await prisma.podcast.update({
+          where: {
+            title: podcast,
+          },
+          data: {
+            sponsors: {
+              set: [],
+            },
+          },
+        });
+
         await prisma.podcast.delete({
           where: {
             title: podcast,
