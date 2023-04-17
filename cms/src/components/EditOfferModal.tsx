@@ -25,6 +25,7 @@ import { Operations } from "../graphql/operations";
 import { AiFillCloseCircle, AiFillEdit } from "react-icons/ai";
 import DeleteModal from "./DeleteModal";
 import { off } from "process";
+import { OfferData } from "../utils/types";
 
 type Props = {
   isOpen: boolean;
@@ -42,14 +43,8 @@ interface Data {
     imageUrl: string;
     publisher: string;
     description: string;
-    offer: Offer[];
+    offer: OfferData[];
   };
-}
-
-interface Offer {
-  promoCode: string;
-  sponsor: string;
-  url: string;
 }
 
 const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
@@ -88,7 +83,7 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
   useEffect(() => {
     if (!loading && data) {
       const podcastOffers = data?.getPodcast.offer;
-      const initOfferStates = podcastOffers.map((offer: Offer) => ({
+      const initOfferStates = podcastOffers.map((offer: OfferData) => ({
         sponsor: offer.sponsor,
         url: offer.url,
         promoCode: offer.promoCode,
@@ -207,7 +202,7 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
           <ModalBody>
             <div className="h-[250px] overflow-y-scroll">
               <h1 className="font-extrabold text-3xl ">Edit Offers</h1>
-              {data?.getPodcast.offer.map((offer: Offer, index: number) => (
+              {data?.getPodcast.offer.map((offer: OfferData, index: number) => (
                 <div
                   className="w-full p-2 flex flex-col font-medium border-b-[1px] border-black"
                   key={offer.sponsor}
@@ -250,7 +245,7 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
                       </p>
                     ) : (
                       <Input
-                        value={offerStates[index].url}
+                        value={offerStates[index]?.url}
                         type="text"
                         h="30px"
                         w={"fit"}
