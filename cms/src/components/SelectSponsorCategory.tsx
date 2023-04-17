@@ -27,10 +27,13 @@ const SelectSponsorCategory = ({
         textColor={"black"}
         textAlign={"center"}
         onChange={(e) => {
-          setSponsor((prev: any) => ({
-            ...prev,
-            category: e.target.value,
-          }));
+          {
+            isExisting ||
+              setSponsor((prev: any) => ({
+                ...prev,
+                category: e.target.value,
+              }));
+          }
         }}
         value={isExisting ? currentCategory : newCategory}
       >
