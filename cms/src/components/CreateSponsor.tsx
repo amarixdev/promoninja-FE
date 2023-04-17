@@ -32,16 +32,37 @@ import { Operations } from "../graphql/operations";
 import { Sponsor } from "../utils/types";
 import { initState } from "../utils/reducer";
 import SelectSponsorCategory from "./SelectSponsorCategory";
+import { url } from "inspector";
 
 interface Props {
   podcast: string;
-  state: typeof initState;
+  backgroundColor: string;
+  category: string;
+  spotifyPodcast: {
+    spotifyImage: string;
+    spotifyName: string;
+    spotifyPublisher: string;
+    spotifyDescription: string;
+    spotifyExternalUrl: string;
+  };
   refetchPodcast: (
     variables?: Partial<OperationVariables> | undefined
   ) => Promise<ApolloQueryResult<any>>;
 }
 
-const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
+const CreateSponsor = ({
+  podcast,
+  refetchPodcast,
+  spotifyPodcast,
+  backgroundColor,
+  category,
+}: Props) => {
+  const {
+    data: sponsorList,
+    loading,
+    refetch: refetchGetSponsors,
+  } = useQuery(Operations.Queries.GetSponsors);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const firstField = useRef(null);
   const [display, setDisplay] = useState({
@@ -57,6 +78,10 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
     category: "",
     summary: "",
   });
+  const [urlPath, setUrlPath] = useState("");
+  let baseUrl: any;
+  let drawerData: any;
+
   const [currentCategory, setCurrentCategory] = useState("");
 
   const toast = useToast();
@@ -102,12 +127,6 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
     setExistingSponsor(isExistingSponsor);
   }, [sponsorData, isExistingSponsor]);
 
-  const {
-    data: sponsorList,
-    loading,
-    refetch: refetchGetSponsors,
-  } = useQuery(Operations.Queries.GetSponsors);
-
   let fusePreview: string[] | undefined = undefined;
 
   if (sponsorList) {
@@ -123,7 +142,14 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
   }
 
   const handleSponsorChange = (e: any) => {
-    setSponsor({ ...sponsor, name: e.target.value });
+    setSponsor((prev) => ({
+      ...prev,
+      name: e.target.value,
+      baseUrl: "",
+      url: "",
+      category: "",
+    }));
+    setUrlPath("");
     setDisplay((prev) => ({
       ...prev,
       preview: true,
@@ -134,8 +160,15 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
   };
 
   const currentSponsors = data?.fetchSponsors;
+
   const handleSearch = async (param: string, event: any, exists: boolean) => {
     event.preventDefault();
+
+    if (sponsorList) {
+      drawerData = sponsorList?.getSponsors.filter((current: any) => {
+        return current.name === param;
+      });
+    }
 
     if (exists) {
       const { data: sponsorCategory } = await getSponsorCategory({
@@ -146,15 +179,21 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
         },
       });
       setCurrentCategory(sponsorCategory?.getSponsorCategory?.name);
-    }
-
-    setSponsor({ ...sponsor, name: param });
-    setDisplay((prev) => ({ ...prev, preview: false }));
-    if (isExistingSponsor) {
       setExistingSponsor(true);
-      setSponsor((prev) => ({ ...prev, category: currentCategory }));
+      setSponsor((prev) => ({
+        ...prev,
+        baseUrl: drawerData[0]?.url,
+        url: drawerData[0]?.url,
+        category: sponsorCategory?.getSponsorCategory?.name,
+      }));
     }
-    if (!isExistingSponsor) {
+    setSponsor((prev) => ({
+      ...prev,
+      name: param,
+    }));
+    setDisplay((prev) => ({ ...prev, preview: false }));
+
+    if (!existingSponsor) {
       setDisplay((prev) => ({ ...prev, summary: true }));
       if (fusePreview) {
         if (param === fusePreview[0]) {
@@ -162,8 +201,19 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
         }
       } else {
         setExistingSponsor(false);
-        setSponsor((prev) => ({ ...prev, url: "" }));
+        setSponsor((prev) => ({ ...prev, url: "", baseUrl: "" }));
       }
+    }
+  };
+
+  const handleUrlInput = (e: any) => {
+    if (existingSponsor) {
+      setUrlPath(e.target.value);
+    } else {
+      setSponsor((prev) => ({
+        ...prev,
+        url: e.target.value,
+      }));
     }
   };
 
@@ -181,7 +231,7 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
     } else {
       setSponsor((prev) => ({
         ...prev,
-        url: baseUrl + "/" + e.target.value,
+        url: urlPath ? sponsor.baseUrl + "/" + urlPath : sponsor.baseUrl,
       }));
     }
   };
@@ -195,11 +245,10 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
       }));
     }
   };
+
+
   const handleSubmit = async () => {
     try {
-      const url = "test" + (baseUrl + "/" + sponsor.url);
-      setSponsor((prev) => ({ ...prev, url: url }));
-
       let duplicate;
       if (existingSponsor) {
         currentSponsors?.forEach((current: any) => {
@@ -215,34 +264,20 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
           }
         });
       }
-
       if (duplicate) return;
-
-      if (existingSponsor && !sponsor.url) {
-        toast({
-          title: "Error",
-          description: "Please add a url",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-        return;
-      }
-      if (!existingSponsor && !sponsor.baseUrl) {
-        toast({
-          title: "Error",
-          description: "Please add a url",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-        return;
-      } else {
+      else {
+        /* Fix URL: if (existing), set url to baseURL */
         await createSponsor({
           variables: {
             input: {
               podcast,
               sponsor,
+              backgroundColor,
+              category: currentCategory,
+              image: spotifyPodcast.spotifyImage,
+              publisher: spotifyPodcast.spotifyPublisher,
+              description: spotifyPodcast.spotifyDescription,
+              externalUrl: spotifyPodcast.spotifyExternalUrl,
             },
           },
         });
@@ -278,13 +313,9 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
       console.log(error);
     }
   };
+
   if (loading) return <Spinner />;
   if (sponsorLoading) return <Spinner />;
-
-  const drawerData = sponsorList?.getSponsors.filter((current: any) => {
-    return current.name === sponsor.name;
-  });
-  const baseUrl = drawerData[0]?.url;
 
   return (
     <div className="">
@@ -348,26 +379,14 @@ const CreateSponsor = ({ podcast, refetchPodcast }: Props) => {
               <Box>
                 <FormLabel>Url</FormLabel>
                 <InputGroup>
-                  {existingSponsor ? (
-                    <InputLeftAddon>{baseUrl}</InputLeftAddon>
-                  ) : null}
+                  {existingSponsor && (
+                    <InputLeftAddon>{sponsor.baseUrl}</InputLeftAddon>
+                  )}
                   <Input
                     type="url"
                     placeholder={existingSponsor ? "Path?" : "Please enter Url"}
-                    value={existingSponsor ? sponsor.baseUrl : sponsor.url}
-                    onChange={
-                      existingSponsor
-                        ? (e) =>
-                            setSponsor({
-                              ...sponsor,
-                              baseUrl: e.target.value,
-                            })
-                        : (e) =>
-                            setSponsor((prev) => ({
-                              ...prev,
-                              url: e.target.value,
-                            }))
-                    }
+                    value={existingSponsor ? urlPath : sponsor.url}
+                    onChange={(e) => handleUrlInput(e)}
                     onBlur={(e) => handleURLBlur(e)}
                     onFocus={handleURLFocus}
                   />

@@ -84,7 +84,26 @@ export const Operations = {
         fetchCategory(input: $input)
       }
     `,
+    FetchCategoryPodcasts: gql`
+      query ($input: PodcastInput!) {
+        fetchCategoryPodcasts(input: $input) {
+          title
+          imageUrl
+          publisher
+          id
+        }
+      }
+    `,
+    GetCategories: gql`
+      query {
+        getCategories {
+          name
+          podcastId
+        }
+      }
+    `,
   },
+
   Mutations: {
     CreatePodcast: gql`
       mutation ($input: PodcastInput!) {

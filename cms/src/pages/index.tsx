@@ -17,7 +17,7 @@ import { capitalizeString } from "../utils/functions";
 import DeleteModal from "../components/DeleteModal";
 import { REDUCER_ACTION_TYPE, initState, reducer } from "../utils/reducer";
 import { AiOutlineEllipsis } from "react-icons/ai";
-import EditModal from "../components/EditModal";
+import EditModal from "../components/EditOfferModal";
 import { Tooltip } from "@chakra-ui/react";
 
 const App = () => {
@@ -196,13 +196,14 @@ const App = () => {
     }
   };
 
-  const spotifyExternalUrl =
-    spotifyData?.fetchSpotifyPodcast[0].external_urls.spotify;
-
-  const spotifyImage = spotifyData?.fetchSpotifyPodcast[0]?.images[0].url;
-  const spotifyName = spotifyData?.fetchSpotifyPodcast[0]?.name;
-  const spotifyPublisher = spotifyData?.fetchSpotifyPodcast[0]?.publisher;
-  const spotifyDescription = spotifyData?.fetchSpotifyPodcast[0]?.description;
+  const spotifyPodcast = {
+    spotifyImage: spotifyData?.fetchSpotifyPodcast[0]?.images[0].url,
+    spotifyName: spotifyData?.fetchSpotifyPodcast[0]?.name,
+    spotifyPublisher: spotifyData?.fetchSpotifyPodcast[0]?.publisher,
+    spotifyDescription: spotifyData?.fetchSpotifyPodcast[0]?.descriptions,
+    spotifyExternalUrl:
+      spotifyData?.fetchSpotifyPodcast[0].external_urls.spotify,
+  };
 
   const handleSave = async () => {
     /* Add to database */
@@ -211,12 +212,12 @@ const App = () => {
         variables: {
           input: {
             category: state.category,
-            podcast: spotifyName,
-            image: spotifyImage,
-            publisher: spotifyPublisher,
-            description: spotifyDescription,
             backgroundColor: state.extractedColor,
-            externalUrl: spotifyExternalUrl,
+            podcast: spotifyPodcast.spotifyName,
+            image: spotifyPodcast.spotifyImage,
+            publisher: spotifyPodcast.spotifyPublisher,
+            description: spotifyPodcast.spotifyDescription,
+            externalUrl: spotifyPodcast.spotifyExternalUrl,
           },
         },
       });
@@ -255,7 +256,6 @@ const App = () => {
       } else console.log(error);
     }
   };
-
 
   const handleUpdateColor = async () => {
     await updateColor({
@@ -341,7 +341,7 @@ const App = () => {
       />
 
       {/* Theme Preview */}
-      {spotifyName && state.display.title && (
+      {spotifyPodcast.spotifyName && state.display.title && (
         <div className="bg-[#101010] fixed w-full h-[320px] top-[170px] z-1">
           <div
             className="w-full h-[260px] fixed z-10"
@@ -354,11 +354,13 @@ const App = () => {
       <h1 className="text-white absolute font-extrabold top-[-180px] text-3xl sm:text-4xl lg:text-5xl mb-4 ">
         {state.isExistingPodcast && state.display.title
           ? state.currentPodcast.title
-          : spotifyName && state.display.title && spotifyName}
+          : spotifyPodcast.spotifyName &&
+            state.display.title &&
+            spotifyPodcast.spotifyName}
       </h1>
       {/* Category */}
       <h2 className="text-white absolute font-semibold top-[-115px] text-lg sm:text-2xl lg:text-xl mb-4 ">
-        {spotifyName &&
+        {spotifyPodcast.spotifyName &&
           state.display.title &&
           capitalizeString(state.currentPodcast.category)}
       </h2>
@@ -377,7 +379,7 @@ const App = () => {
             image={
               state.isExistingPodcast
                 ? state.currentPodcast.image
-                : spotifyImage
+                : spotifyPodcast.spotifyImage
             }
             dispatch={dispatch}
           />
@@ -435,9 +437,13 @@ const App = () => {
               podcast={
                 state.isExistingPodcast && state.display.title
                   ? state.currentPodcast.title
-                  : spotifyName && state.display.title && spotifyName
+                  : spotifyPodcast.spotifyName &&
+                    state.display.title &&
+                    spotifyPodcast.spotifyName
               }
-              state={state}
+              spotifyPodcast={spotifyPodcast}
+              backgroundColor={state.extractedColor}
+              category={state.category}
               refetchPodcast={refetchCurrentPodcast}
             />
           ) : null}

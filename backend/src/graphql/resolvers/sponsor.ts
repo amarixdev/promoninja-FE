@@ -14,14 +14,7 @@ export const productResolvers = {
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      let { podcast, sponsor, category, publisher, backgroundColor } = input;
-      category = category?.toLowerCase();
-
-      const getCategory = await prisma.category.findFirst({
-        where: {
-          name: category,
-        },
-      });
+      let { podcast, sponsor } = input;
 
       const getSponsorCategory = await prisma.sponsorCategory.findFirst({
         where: {
@@ -29,98 +22,57 @@ export const productResolvers = {
         },
       });
 
-      const existingPodcast = await prisma.podcast.findFirst({
-        where: {
-          title: podcast,
-        },
-      });
+      try {
+        console.log("updating... ");
 
-      if (!existingPodcast) {
-        console.log(1, sponsor);
-        try {
-          await prisma.sponsor.create({
-            data: {
-              name: sponsor.name,
-              imageUrl: sponsor.image,
-              url: sponsor.baseUrl,
-              offer: sponsor.offer,
-              category: {
-                connect: {
-                  id: getSponsorCategory?.id,
+        await prisma.podcast.update({
+          where: {
+            title: podcast,
+          },
+          data: {
+            offer: {
+              push: {
+                sponsor: sponsor.name,
+                promoCode: sponsor.promoCode,
+                url: sponsor.url,
+              },
+            },
+
+            sponsors: {
+              connectOrCreate: {
+                where: {
+                  name: sponsor.name,
+                },
+                create: {
+                  name: sponsor.name,
+                  imageUrl: sponsor.image,
+                  url: sponsor.baseUrl,
+                  offer: sponsor.offer,
+                  summary: sponsor.summary,
                 },
               },
-              podcast: {
-                create: {
-                  title: podcast,
-                  offer: {
-                    sponsor: sponsor.name,
-                    promoCode: sponsor.promoCode,
-                    url: sponsor.url,
-                  },
-                  publisher,
-                  backgroundColor,
+              update: {
+                where: {
+                  name: sponsor.name,
+                },
+                data: {
                   category: {
                     connect: {
-                      id: getCategory?.id,
+                      id: getSponsorCategory?.id,
                     },
                   },
                 },
               },
             },
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        try {
-          console.log("updating... ");
-          await prisma.podcast.update({
-            where: {
-              title: podcast,
-            },
-            data: {
-              offer: {
-                push: {
-                  sponsor: sponsor.name,
-                  promoCode: sponsor.promoCode,
-                  url: sponsor.url,
-                },
-              },
-
-              sponsors: {
-                connectOrCreate: {
-                  where: {
-                    name: sponsor.name,
-                  },
-                  create: {
-                    name: sponsor.name,
-                    imageUrl: sponsor.image,
-                    url: sponsor.baseUrl,
-                    offer: sponsor.offer,
-                  },
-                },
-                update: {
-                  where: {
-                    name: sponsor.name,
-                  },
-                  data: {
-                    category: {
-                      connect: {
-                        id: getSponsorCategory?.id,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          });
-        } catch (error) {
-          console.log(error);
-        }
+          },
+        });
+      } catch (error) {
+        (error);
       }
 
       return true;
     },
+
     deletePodcastSponsor: async (
       parent: any,
       { input }: DeleteInput,
@@ -188,7 +140,7 @@ export const productResolvers = {
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      const { sponsor, podcast } = input;
+      const { sponsor, podcast, category } = input;
 
       const getSponsor = await prisma.sponsor.findFirst({
         where: {

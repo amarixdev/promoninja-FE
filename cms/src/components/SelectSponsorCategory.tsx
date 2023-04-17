@@ -1,5 +1,6 @@
 import { Select } from "@chakra-ui/react";
 import { useState } from "react";
+import Sponsors from "../pages/sponsors";
 
 interface Props {
   newCategory?: string;
@@ -26,7 +27,10 @@ const SelectSponsorCategory = ({
         textColor={"black"}
         textAlign={"center"}
         onChange={(e) => {
-          setSponsor((prev: any) => ({ ...prev, category: e.target.value }));
+          setSponsor((prev: any) => ({
+            ...prev,
+            category: e.target.value,
+          }));
         }}
         value={isExisting ? currentCategory : newCategory}
       >
@@ -37,6 +41,7 @@ const SelectSponsorCategory = ({
         <option value="Home Decor">Home Decor</option>
         <option value="Outdoors">Outdoors</option>
         <option value="Smoke & Vape">Smoke & Vape</option>
+        <option value="Alcohol">Alcohol</option>
       </Select>
     </div>
   );
