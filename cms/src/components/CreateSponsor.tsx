@@ -30,14 +30,11 @@ import Fuse from "fuse.js";
 import { useEffect, useRef, useState } from "react";
 import { Operations } from "../graphql/operations";
 import { Sponsor } from "../utils/types";
-import { initState } from "../utils/reducer";
 import SelectSponsorCategory from "./SelectSponsorCategory";
-import { url } from "inspector";
 
 interface Props {
   podcast: string;
   backgroundColor: string;
-  category: string;
   spotifyPodcast: {
     spotifyImage: string;
     spotifyName: string;
@@ -55,7 +52,6 @@ const CreateSponsor = ({
   refetchPodcast,
   spotifyPodcast,
   backgroundColor,
-  category,
 }: Props) => {
   const {
     data: sponsorList,
@@ -63,7 +59,8 @@ const CreateSponsor = ({
     refetch: refetchGetSponsors,
   } = useQuery(Operations.Queries.GetSponsors);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen, isOpen, onClose } = useDisclosure();
+
   const firstField = useRef(null);
   const [display, setDisplay] = useState({
     preview: false,
@@ -79,7 +76,6 @@ const CreateSponsor = ({
     summary: "",
   });
   const [urlPath, setUrlPath] = useState("");
-  let baseUrl: any;
   let drawerData: any;
 
   const [currentCategory, setCurrentCategory] = useState("");
@@ -246,7 +242,6 @@ const CreateSponsor = ({
     }
   };
 
-
   const handleSubmit = async () => {
     try {
       let duplicate;
@@ -264,9 +259,9 @@ const CreateSponsor = ({
           }
         });
       }
+
       if (duplicate) return;
       else {
-        /* Fix URL: if (existing), set url to baseURL */
         await createSponsor({
           variables: {
             input: {

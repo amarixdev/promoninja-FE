@@ -211,7 +211,7 @@ const App = () => {
     spotifyImage: spotifyData?.fetchSpotifyPodcast[0]?.images[0].url,
     spotifyName: spotifyData?.fetchSpotifyPodcast[0]?.name,
     spotifyPublisher: spotifyData?.fetchSpotifyPodcast[0]?.publisher,
-    spotifyDescription: spotifyData?.fetchSpotifyPodcast[0]?.descriptions,
+    spotifyDescription: spotifyData?.fetchSpotifyPodcast[0]?.description,
     spotifyExternalUrl:
       spotifyData?.fetchSpotifyPodcast[0].external_urls.spotify,
   };
@@ -232,6 +232,7 @@ const App = () => {
           },
         },
       });
+
       dispatch({
         type: REDUCER_ACTION_TYPE.UPDATE_DISPLAY,
         payload: {
@@ -431,7 +432,7 @@ const App = () => {
             {state.display.submit ||
               (state.isExistingPodcast && (
                 <Tooltip label="Edit Offer" placement={"end"}>
-                  <div className="relative w-[40px] left-[260px] flex justify-end bottom-8 text-white z-1 hover:cursor-pointer">
+                  <div className="relative w-[40px] left-[260px] bottom-8 text-white z-1 hover:cursor-pointer">
                     <AiOutlineEllipsis
                       size="40px"
                       onClick={() => handleDetails()}
@@ -468,7 +469,6 @@ const App = () => {
               }
               spotifyPodcast={spotifyPodcast}
               backgroundColor={state.extractedColor}
-              category={state.category}
               refetchPodcast={refetchCurrentPodcast}
             />
           ) : null}

@@ -24,7 +24,6 @@ import React, { useEffect, useState } from "react";
 import { Operations } from "../graphql/operations";
 import { AiFillCloseCircle, AiFillEdit } from "react-icons/ai";
 import DeleteModal from "./DeleteModal";
-import { off } from "process";
 import { OfferData } from "../utils/types";
 
 type Props = {
@@ -122,7 +121,7 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
 
   const handleUpdate = async () => {
     try {
-      const status = await updateOffers({
+      const { data } = await updateOffers({
         variables: {
           input: {
             podcast: podcastTitle,
@@ -130,6 +129,8 @@ const EditModal = ({ isOpen, onClose, podcastTitle, refetch }: Props) => {
           },
         },
       });
+
+      const status = data?.updateOffers;
 
       await refetchPodcast();
 
