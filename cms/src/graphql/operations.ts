@@ -136,6 +136,12 @@ export const Operations = {
       }
     `,
 
+    UpdatePodcastCategory: gql`
+      mutation ($input: UpdateCategoryInput!) {
+        updatePodcastCategory(input: $input)
+      }
+    `,
+
     DeletePodcast: gql`
       mutation ($input: PodcastInput!) {
         deletePodcast(input: $input)

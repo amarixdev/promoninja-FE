@@ -2,10 +2,53 @@ import {
   GraphQLContext,
   PodcastInput,
   SponsorCategoryInput,
+  UpdateCategoryInput,
 } from "../../util/types";
 
 export const categoryResolvers = {
-  Mutation: {},
+  Mutation: {
+    updatePodcastCategory: async (
+      parent: any,
+      { input }: UpdateCategoryInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { newCategory, oldCategory, podcastTitle } = input;
+
+      const getOldCategory = await prisma.category.findFirst({
+        where: {
+          name: oldCategory,
+        },
+      });
+
+      const getNewCategory = await prisma.category.findFirst({
+        where: {
+          name: newCategory,
+        },
+      });
+
+      console.log(getOldCategory);
+      console.log(getNewCategory);
+
+      await prisma.podcast.update({
+        where: {
+          title: podcastTitle,
+        },
+        data: {
+          category: {
+            disconnect: {
+              id: getOldCategory?.id,
+            },
+            connect: {
+              id: getNewCategory?.id,
+            },
+          },
+        },
+      });
+
+      return true;
+    },
+  },
   Query: {
     fetchCategory: async (
       parent: any,

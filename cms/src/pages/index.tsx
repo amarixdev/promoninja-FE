@@ -16,18 +16,29 @@ import Extractor from "../components/Extractor";
 import { capitalizeString } from "../utils/functions";
 import DeleteModal from "../components/DeleteModal";
 import { REDUCER_ACTION_TYPE, initState, reducer } from "../utils/reducer";
-import { AiOutlineEllipsis } from "react-icons/ai";
+import { AiOutlineEllipsis, AiFillEdit } from "react-icons/ai";
 import EditModal from "../components/EditOfferModal";
 import { Tooltip } from "@chakra-ui/react";
+import EditPodcastCategory from "../components/EditPodcastCategory";
 
 const App = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenCreateSponsor,
+    onOpen: onOpenCreateSponsor,
+    onClose: onCloseCreateSponsor,
+  } = useDisclosure();
   const {
     isOpen: isOpenDetails,
     onOpen: onOpenDetails,
     onClose: onCloseDetails,
   } = useDisclosure();
 
+  const {
+    isOpen: isOpenEditCategory,
+    onOpen: onOpenEditCategory,
+    onClose: onCloseEditCategory,
+  } = useDisclosure();
   const toast = useToast();
   const [state, dispatch] = useReducer(reducer, initState);
   const [createPodcast] = useMutation(Operations.Mutations.CreatePodcast);
@@ -339,6 +350,16 @@ const App = () => {
         podcastTitle={state.currentPodcast.title}
         refetch={refetchPodcasts}
       />
+      <EditPodcastCategory
+        isOpen={isOpenEditCategory}
+        onClose={onCloseEditCategory}
+        onOpen={onOpenEditCategory}
+        podcastTitle={state.currentPodcast.title}
+        oldCategory={state.currentPodcast.category}
+        state={state}
+        dispatch={dispatch}
+        refetchCurrentPodcast={refetchCurrentPodcast}
+      />
 
       {/* Theme Preview */}
       {spotifyPodcast.spotifyName && state.display.title && (
@@ -359,11 +380,15 @@ const App = () => {
             spotifyPodcast.spotifyName}
       </h1>
       {/* Category */}
-      <h2 className="text-white absolute font-semibold top-[-115px] text-lg sm:text-2xl lg:text-xl mb-4 ">
-        {spotifyPodcast.spotifyName &&
-          state.display.title &&
-          capitalizeString(state.currentPodcast.category)}
-      </h2>
+
+      <div className="flex w-full relative items-center justify-center">
+        {spotifyPodcast.spotifyName && state.display.title && (
+          <h2 className="text-white absolute flex items-center gap-5 font-semibold top-[-115px] text-lg sm:text-2xl lg:text-xl mb-4 ">
+            {capitalizeString(state.currentPodcast.category)}
+            <AiFillEdit onClick={onOpenEditCategory} />
+          </h2>
+        )}
+      </div>
 
       {/* Image Color Extraction */}
       {state.podcast && (

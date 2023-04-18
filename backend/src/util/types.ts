@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Sponsor } from "../../../data-collection/src/utils/types";
+import { Sponsor } from "../../../cms/src/utils/types";
 
 export interface GraphQLContext {
   prisma: PrismaClient;
@@ -46,6 +46,7 @@ export interface DeleteInput {
 interface DeleteData {
   sponsor: string;
   podcast: string;
+  category: string;
 }
 
 export interface SpotifyAPI {
@@ -69,4 +70,12 @@ export interface SponsorCategory {
 export interface SponsorCategoryInput {
   category: string;
   sponsor: string;
+}
+
+export interface UpdateCategoryInput {
+  input: {
+    oldCategory: string;
+    newCategory: string;
+    podcastTitle: string;
+  };
 }
