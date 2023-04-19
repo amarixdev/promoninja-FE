@@ -67,7 +67,7 @@ export const productResolvers = {
           },
         });
       } catch (error) {
-        (error);
+        error;
       }
 
       return true;
@@ -167,7 +167,7 @@ export const productResolvers = {
         },
       });
 
-      /* Delete individual offers from sponsor */
+      /* Delete individual offers from podcasts */
 
       await prisma.podcast.updateMany({
         where: {
@@ -189,17 +189,12 @@ export const productResolvers = {
       });
 
       /* Disconnect Sponsors from multiple podcasts */
-
-      await prisma.podcast.updateMany({
+      await prisma.sponsor.update({
         where: {
-          sponsors: {
-            some: {
-              id: getSponsor?.id,
-            },
-          },
+          name: sponsor,
         },
         data: {
-          sponsorId: {
+          podcast: {
             set: [],
           },
         },
