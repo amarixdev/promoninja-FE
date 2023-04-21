@@ -1,4 +1,5 @@
 import {
+  Button,
   Drawer,
   DrawerBody,
   DrawerContent,
@@ -41,6 +42,10 @@ const DescriptionDrawer = ({
   podcastPage,
   externalUrl,
 }: Props) => {
+  const gradientStyle = {
+    backgroundImage: `linear-gradient(to bottom, ${drawer.color}, #000000)`,
+  };
+
   return (
     <>
       <Drawer
@@ -54,9 +59,8 @@ const DescriptionDrawer = ({
           backgroundColor={"transparent"}
           className={"backdrop-blur-sm"}
         >
-          <DrawerHeader></DrawerHeader>
           <DrawerBody>
-            <div className="w-full">
+            <div className="w-full" style={!hideLink ? gradientStyle : {}}>
               <div className="base:p-2 xs:p-4 flex w-full">
                 <Image
                   src={drawer.image}
@@ -64,7 +68,9 @@ const DescriptionDrawer = ({
                   height={80}
                   alt=""
                   priority
-                  className="h-[80px]"
+                  className={`h-[80px] ${
+                    hideLink || "shadow-2xl shadow-black"
+                  } `}
                 />
 
                 <div className="base:px-3 xs:px-4">
@@ -73,7 +79,7 @@ const DescriptionDrawer = ({
                       {drawer.title}
                     </Link>
                   </h1>
-                  <h3 className="base:text-xs xs:text-sm font-bold text-[#aaaaaa]">
+                  <h3 className="base:text-xs xs:text-sm font-bold text-[#b3b3b3]">
                     {drawer.subtitle}
                   </h3>
                 </div>
@@ -104,14 +110,9 @@ const DescriptionDrawer = ({
                       <Link
                         href={convertToFullURL(drawer.url)}
                         target="_blank"
-                        className={`text-lg active:scale-95 underline underline-offset-2 mt-5 p-4 rounded-md bg-[#242424] ${
-                          podcastPage ? "border-2" : "border-[3px]"
-                        } `}
-                        style={{ borderColor: drawer.color }}
+                        className={`text-lg active:scale-95 underline underline-offset-2 mt-5 p-4 rounded-md`}
                       >
-                        <p className="font-bold" style={{}}>
-                          {drawer.url}
-                        </p>
+                        <Button className="font-bold">{drawer.url}</Button>
                       </Link>
                     </>
                   )}

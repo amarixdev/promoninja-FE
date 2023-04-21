@@ -4,6 +4,7 @@ import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
 import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
 import Image from "next/image";
+import Ninja4 from "../../public/assets/ninja4.png";
 import {
   Box,
   Button,
@@ -32,6 +33,8 @@ interface Podcast {
 }
 
 const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
+
+
   const isBreakPoint = useMediaQuery(1023);
   const [getPodcasts, { data: podcastData }] = useLazyQuery<Podcast>(
     Operations.Queries.GetSponsorPodcasts
@@ -75,6 +78,7 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
         title: input.name,
         description: input.summary,
         url: input.url,
+        subtitle: input.url,
       }));
       onOpenDrawer();
     } else {
@@ -132,8 +136,8 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
       />
       <div className="h-screen w-full">
         <Image
-          src={categoryData?.imageUrl}
-          alt={categoryData?.name}
+          src={categoryData?.imageUrl || Ninja4}
+          alt={categoryData?.name || "/"}
           width={2000}
           height={2000}
           className="fixed z-15 w-full lg:top-[-100px] xl:top-[-150px] shadow-2xl shadow-black"
@@ -200,22 +204,29 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
                       <div className="w-full font-light p-2 mb-4">
                         {sponsor.offer}
                       </div>
-                      <div className="w-full flex">
+                      <div className="w-full flex overflow-x-auto pb-4">
                         {sponsorPodcasts?.map((pod) => (
-                          <div key={pod.title} className="px-4">
-                            <Image
-                              src={pod?.imageUrl}
-                              width={100}
-                              height={100}
-                              alt={pod.title}
-                              className="rounded-3xl"
-                            />
-                            <h1 className="text-sm font-semibold">
-                              {truncateString(pod.title, 15)}
-                            </h1>
-                            <h3 className="text-xs text-[#6f6f6f]">
-                              {truncateString(pod.publisher, 20)}
-                            </h3>
+                          <div
+                            key={pod.title}
+                            className="px-4 flex flex-col justify-between"
+                          >
+                            <div>
+                              <Image
+                                src={pod?.imageUrl}
+                                width={100}
+                                height={100}
+                                alt={pod.title}
+                                className="rounded-3xl mb-2"
+                              />
+
+                              <h1 className="text-sm font-semibold">
+                                {truncateString(pod.title, 15)}
+                              </h1>
+                              <h3 className="text-xs text-[#6f6f6f] pb-2">
+                                {truncateString(pod.publisher, 20)}
+                              </h3>
+                            </div>
+
                             <Button
                               width={"20"}
                               h={"5"}
