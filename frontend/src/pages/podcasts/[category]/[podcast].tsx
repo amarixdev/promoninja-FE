@@ -191,7 +191,10 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         <div
           className={`w-full base:mt-14 lg:mt-20 text-[#aaaaaa] flex flex-col`}
         >
-          <div className="flex justify-center items-center">
+          <div className="flex flex-col justify-evenly items-center">
+            <h1 className="font-extralight text-lg w-full text-center relative p-4 top-[70px] tracking-widest">
+              {`Support ${podcastData.title}`}
+            </h1>
             <div className="w-[95%] border-b-[1px] py-8 mt-2 mb-6"></div>
           </div>
           <DescriptionDrawer
@@ -216,7 +219,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                     <Image
                       src={
                         sponsorData.filter(
-                          (sponsor) => sponsor.name === offer.sponsor
+                          (sponsor) => sponsor.name === offer?.sponsor
                         )[0].imageUrl
                       }
                       width={40}
