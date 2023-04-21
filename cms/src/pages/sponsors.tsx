@@ -1,12 +1,18 @@
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { Button, Spinner, useDisclosure, useToast } from "@chakra-ui/react";
-import { GetServerSideProps, GetStaticProps } from "next";
+import {
+  Button,
+  Input,
+  Spinner,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { Operations } from "../graphql/operations";
 import DeleteModal from "../components/DeleteModal";
+import EditSponsorModal from "../components/EditSponsorModal";
 
-interface SponsorsData {
+export interface SponsorsData {
   getSponsors: Sponsor[];
 }
 
@@ -16,93 +22,109 @@ export interface Sponsor {
   imageUrl: string;
 }
 
+interface GetSponsor {
+  getSponsor: Sponsor;
+}
+
 const Sponsors = () => {
   const toast = useToast();
-  const { onOpen, isOpen, onClose } = useDisclosure();
-  const [deleteSponsor] = useMutation(Operations.Mutations.DeleteSponsor);
+  const [searchText, setSearchText] = useState("");
+  const [searchPreview, setSearchPreview] = useState<Sponsor[]>([]);
+  const [selectedSponsor, setSelectedSponsor] = useState<Sponsor>({
+    name: "",
+    imageUrl: "",
+    url: "",
+  });
+  const [currentCategory, setCurrentCategory] = useState("");
+  const [displayPreview, setDisplayPreview] = useState(true);
+  const {
+    onOpen: onOpenEdit,
+    isOpen: isOpenEdit,
+    onClose: onCloseEdit,
+  } = useDisclosure();
+  const [getSponsor] = useLazyQuery<GetSponsor>(Operations.Queries.GetSponsor);
   const {
     data,
     refetch: refetchSponsors,
     loading,
   } = useQuery<SponsorsData>(Operations.Queries.GetSponsors);
-  const [sponsorToDelete, setSponsorToDelete] = useState<Sponsor>({
-    name: "",
-    url: "",
-    imageUrl: "",
-  });
-
-  const [getSponsorCategory, { data: sponsorCategoryData }] = useLazyQuery(
-    Operations.Queries.GetSponsorCategory
-  );
-
   const sponsorsData = data?.getSponsors;
+  const [
+    getSponsorCategory,
+    { data: sponsorCategoryData, refetch: refetchSponsorCategory },
+  ] = useLazyQuery(Operations.Queries.GetSponsorCategory);
 
-  const handleDeleteSponsor = async (sponsor: Sponsor | undefined) => {
-    onClose();
-    await deleteSponsor({
+  const handleSearch = (event: any) => {
+    setDisplayPreview(true);
+    setSearchText(event.target.value);
+    const result = sponsorsData?.filter((sponsor) =>
+      sponsor.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    if (result) {
+      setSearchPreview(result);
+    }
+  };
+
+  const handleSelectSponsor = async (sponsor: Sponsor) => {
+    setDisplayPreview(false);
+    const { data } = await getSponsor({
       variables: {
         input: {
-          sponsor: sponsor?.name,
-          category: sponsorCategoryData?.getSponsorCategory?.name,
+          name: sponsor.name,
         },
       },
     });
-    await refetchSponsors();
 
-    toast({
-      title: "Success.",
-      description: "Deleted.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-  };
-
-  const openDeleteModal = async (sponsor: Sponsor) => {
     await getSponsorCategory({
-      variables: { input: { sponsor: sponsor.name } },
+      variables: {
+        input: {
+          sponsor: sponsor.name,
+        },
+      },
     });
+    setCurrentCategory(sponsorCategoryData?.getSponsorCategory?.name);
 
-    setSponsorToDelete(sponsor);
-    onOpen();
+    const sponsorData = data?.getSponsor;
+    if (sponsorData) {
+      setSelectedSponsor(sponsorData);
+    }
+    onOpenEdit();
   };
+
   if (loading) return <Spinner />;
+
   return (
-    <div className="grid grid-cols-8 mt-10 space-y-4 px-6">
-      <DeleteModal
-        isOpen={isOpen}
-        onClose={onClose}
-        handleDeleteSponsor={handleDeleteSponsor}
-        sponsor={sponsorToDelete}
+    <div className="w-full h-[80vh] flex-col flex justify-center items-center">
+      <div className="w-3/12">
+        <Input
+          value={searchText}
+          onChange={(e) => handleSearch(e)}
+          className="text-white text-center"
+          placeholder="Search Sponsors"
+        />
+      </div>
+      <div className="flex absolute top-[450px] flex-col gap-1 justify-start items-center">
+        {displayPreview &&
+          searchPreview.map((preview) => (
+            <div key={preview.name}>
+              <Button onClick={() => handleSelectSponsor(preview)}>
+                {preview.name}
+              </Button>
+            </div>
+          ))}
+      </div>
+      <EditSponsorModal
+        isOpen={isOpenEdit}
+        onClose={onCloseEdit}
+        onOpen={onOpenEdit}
+        sponsor={selectedSponsor}
+        sponsorsData={sponsorsData}
+        refetchSponsors={refetchSponsors}
+        currentCategory={sponsorCategoryData?.getSponsorCategory?.name}
+        setCurrentCategory={setCurrentCategory}
+        refetchSponsorCategory={refetchSponsorCategory}
       />
-      {sponsorsData?.map((sponsor: Sponsor) => (
-        <div
-          key={sponsor.name}
-          className=" flex flex-col justify-center items-center border-r-2 border-[#7b7b7b]"
-        >
-          <Image
-            src={sponsor?.imageUrl}
-            alt={sponsor?.name}
-            width={100}
-            height={100}
-            className={"rounded-3xl"}
-            onClick={() => setSponsorToDelete(sponsor)}
-          />
-          <h1 className="text-white text-xs font-semibold">{sponsor.name}</h1>
-          <div className="flex item-center justify-center w-full">
-            <Button colorScheme={"cyan"} className="mt-2 mx-2">
-              Edit
-            </Button>
-            <Button
-              colorScheme={"red"}
-              className="mt-2 mx-2"
-              onClick={() => openDeleteModal(sponsor)}
-            >
-              Delete
-            </Button>
-          </div>
-        </div>
-      ))}
     </div>
   );
 };

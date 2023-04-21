@@ -7,44 +7,74 @@ import {
 
 export const categoryResolvers = {
   Mutation: {
-    updatePodcastCategory: async (
+    updateCategory: async (
       parent: any,
       { input }: UpdateCategoryInput,
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      const { newCategory, oldCategory, podcastTitle } = input;
+      const { newCategory, oldCategory, podcastTitle, sponsorName } = input;
 
-      const getOldCategory = await prisma.category.findFirst({
-        where: {
-          name: oldCategory,
-        },
-      });
+      let getOldCategory;
+      let getNewCategory;
 
-      const getNewCategory = await prisma.category.findFirst({
-        where: {
-          name: newCategory,
-        },
-      });
+      if (!sponsorName) {
+        getNewCategory = await prisma.category.findFirst({
+          where: {
+            name: newCategory,
+          },
+        });
+        getOldCategory = await prisma.category.findFirst({
+          where: {
+            name: oldCategory,
+          },
+        });
 
-      console.log(getOldCategory);
-      console.log(getNewCategory);
-
-      await prisma.podcast.update({
-        where: {
-          title: podcastTitle,
-        },
-        data: {
-          category: {
-            disconnect: {
-              id: getOldCategory?.id,
-            },
-            connect: {
-              id: getNewCategory?.id,
+        await prisma.podcast.update({
+          where: {
+            title: podcastTitle,
+          },
+          data: {
+            category: {
+              disconnect: {
+                id: getOldCategory?.id,
+              },
+              connect: {
+                id: getNewCategory?.id,
+              },
             },
           },
-        },
-      });
+        });
+      }
+
+      if (!podcastTitle) {
+        getNewCategory = await prisma.sponsorCategory.findFirst({
+          where: {
+            name: newCategory,
+          },
+        });
+        getOldCategory = await prisma.sponsorCategory.findFirst({
+          where: {
+            name: oldCategory,
+          },
+        });
+
+        await prisma.sponsor.update({
+          where: {
+            name: sponsorName,
+          },
+          data: {
+            category: {
+              disconnect: {
+                id: getOldCategory?.id,
+              },
+              connect: {
+                id: getNewCategory?.id,
+              },
+            },
+          },
+        });
+      }
 
       return true;
     },

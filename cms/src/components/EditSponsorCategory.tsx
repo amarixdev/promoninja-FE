@@ -23,12 +23,13 @@ import {
   useMutation,
 } from "@apollo/client";
 import { Operations } from "../graphql/operations";
+import SelectSponsorCategory from "./SelectSponsorCategory";
 
 interface Props {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
-  podcastTitle: string;
+  sponsor: string;
   oldCategory: string;
   dispatch: Dispatch<ReducerAction>;
   state: typeof initState;
@@ -37,11 +38,11 @@ interface Props {
   ) => Promise<ApolloQueryResult<any>>;
 }
 
-function EditPodcastCategory({
+function EditSponsorCategory({
   isOpen,
   onOpen,
   onClose,
-  podcastTitle,
+  sponsor,
   oldCategory,
   state,
   dispatch,
@@ -59,7 +60,7 @@ function EditPodcastCategory({
           input: {
             newCategory,
             oldCategory,
-            podcastTitle,
+            sponsorName: sponsor,
           },
         },
       });
@@ -103,10 +104,10 @@ function EditPodcastCategory({
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bgColor={"#222"} color={"white"}>
-          <ModalHeader>Update Category</ModalHeader>
+          <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <SelectCategory state={state} dispatch={dispatch} />
+            <SelectSponsorCategory setSponsor={setSponsor} />
           </ModalBody>
 
           <ModalFooter>
@@ -127,4 +128,4 @@ function EditPodcastCategory({
   );
 }
 
-export default EditPodcastCategory;
+export default EditSponsorCategory;

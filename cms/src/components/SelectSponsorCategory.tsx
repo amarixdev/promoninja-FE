@@ -1,24 +1,25 @@
 import { Select } from "@chakra-ui/react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Sponsors from "../pages/sponsors";
+import { Sponsor } from "../utils/types";
 
 interface Props {
   newCategory?: string;
-  setSponsor: (prev: any) => void;
-  isExisting: boolean;
+  setSponsor?: Dispatch<SetStateAction<Sponsor>>;
+  isExisting?: boolean;
   currentCategory?: string;
+  setCurrentCategory?: Dispatch<SetStateAction<string>>;
+  setNewCategory?: Dispatch<SetStateAction<string>>;
+  editing?: boolean;
 }
-
-/* TODO: 
-1. Work on adding sponsor categories
-2. Add back accidentally deleted sponsors
-3. Work on sponsor page */
 
 const SelectSponsorCategory = ({
   newCategory,
+  setNewCategory,
   currentCategory,
   setSponsor,
   isExisting,
+  editing,
 }: Props) => {
   return (
     <div>
@@ -28,11 +29,12 @@ const SelectSponsorCategory = ({
         textAlign={"center"}
         onChange={(e) => {
           {
-            isExisting ||
-              setSponsor((prev: any) => ({
-                ...prev,
-                category: e.target.value,
-              }));
+            editing
+              ? setNewCategory?.(e.target.value)
+              : setSponsor?.((prev: Sponsor) => ({
+                  ...prev,
+                  category: e.target.value,
+                }));
           }
         }}
         value={isExisting ? currentCategory : newCategory}

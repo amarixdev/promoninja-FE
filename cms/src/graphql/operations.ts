@@ -136,9 +136,9 @@ export const Operations = {
       }
     `,
 
-    UpdatePodcastCategory: gql`
+    UpdateCategory: gql`
       mutation ($input: UpdateCategoryInput!) {
-        updatePodcastCategory(input: $input)
+        updateCategory(input: $input)
       }
     `,
 

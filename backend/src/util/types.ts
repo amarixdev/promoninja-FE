@@ -77,5 +77,6 @@ export interface UpdateCategoryInput {
     oldCategory: string;
     newCategory: string;
     podcastTitle: string;
+    sponsorName: string;
   };
 }
