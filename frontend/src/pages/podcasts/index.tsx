@@ -8,7 +8,6 @@ import Footer from "../../components/Footer";
 import { CategoryPodcast } from "../../utils/types";
 import useSetHomePage, { useMediaQuery } from "../../utils/hooks";
 
-
 interface Props {
   categoryPreviews: CategoryPodcast[];
 }
@@ -54,7 +53,7 @@ export const getStaticProps: GetStaticProps = async () => {
     "comedy",
     "technology",
     "news & politics",
-    "lifestyle",
+    "society & culture",
     "educational",
     "sports",
     "true crime",

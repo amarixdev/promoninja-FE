@@ -4,7 +4,7 @@ export interface CategoryPodcast {
   "news & politics": PodcastData[];
   technology: PodcastData[];
   educational: PodcastData[];
-  lifestyle: PodcastData[];
+  society: PodcastData[];
   "true crime": PodcastData[];
   sports: PodcastData[];
 }

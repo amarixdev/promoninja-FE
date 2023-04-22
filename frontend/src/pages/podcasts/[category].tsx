@@ -6,7 +6,7 @@ import { Operations } from "../../graphql/operations";
 import Comedy from "../../public/assets/comedy2.avif";
 import Technology from "../../public/assets/technology.avif";
 import News from "../../public/assets/news.avif";
-import Lifestyle from "../../public/assets/lifestyle.avif";
+import Society from "../../public/assets/society.avif";
 import Sports from "../../public/assets/sports.avif";
 import Crime from "../../public/assets/crime.avif";
 import Education from "../../public/assets/education.avif";
@@ -50,8 +50,8 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
       case "comedy":
         backdrop = Comedy;
         break;
-      case "lifestyle":
-        backdrop = Lifestyle;
+      case "society & culture":
+        backdrop = Society;
         break;
       case "sports":
         backdrop = Sports;
@@ -110,6 +110,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
                       height={190}
                       className="rounded-xl"
                       onClick={() => handlePreviousPage}
+                      loading="lazy"
                     />
                   </Link>
                   <div className="flex flex-col">

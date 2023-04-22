@@ -32,7 +32,7 @@ const SelectCategory = ({ state, dispatch }: Props) => {
         <option value="technology">Technology</option>
         <option value="news & politics">News & Politics</option>
         <option value="educational">Educational</option>
-        <option value="lifestyle">Lifestyle</option>
+        <option value="society">Society & Culture</option>
         <option value="true crime">True Crime</option>
         <option value="sports">Sports</option>
       </Select>
