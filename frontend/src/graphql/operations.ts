@@ -58,6 +58,8 @@ export const Operations = {
           name
           imageUrl
           url
+          summary
+          offer
         }
       }
     `,
