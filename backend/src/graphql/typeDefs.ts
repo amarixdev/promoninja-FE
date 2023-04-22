@@ -12,6 +12,7 @@ const typeDefs = gql`
     getSponsorPodcasts(input: SponsorInput!): [Podcast]
     getCategorySponsors(input: SponsorCategoryInput!): [Sponsor]
     getCategoryPodcasts(input: String!): [Podcast]
+    getTopPicks(input: TopPicksInput!): [Podcast]
     fetchCategory(input: PodcastInput!): String
     getCategories: [Category]
     fetchSponsors(input: PodcastInput!): [Sponsor]
@@ -88,6 +89,10 @@ const typeDefs = gql`
     summary: String
     promoCode: String
     offer: String
+  }
+
+  input TopPicksInput {
+    podcastTitles: [String]
   }
 
   type Podcast {

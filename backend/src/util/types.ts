@@ -80,3 +80,9 @@ export interface UpdateCategoryInput {
     sponsorName: string;
   };
 }
+
+export interface TopPicksInput {
+  input: {
+    podcastTitles: string[];
+  };
+}

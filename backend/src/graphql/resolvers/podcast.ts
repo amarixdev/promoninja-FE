@@ -4,6 +4,7 @@ import {
   SponsorData,
   SponsorInput,
   SpotifyAPI,
+  TopPicksInput,
 } from "../../util/types";
 import fetch from "node-fetch";
 
@@ -280,6 +281,24 @@ export const podcastResolvers = {
       });
 
       return podcasts;
+    },
+    getTopPicks: async (
+      parent: any,
+      { input }: TopPicksInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { podcastTitles } = input;
+
+      const topPicks = await prisma.podcast.findMany({
+        where: {
+          title: {
+            in: podcastTitles,
+          },
+        },
+      });
+
+      return topPicks;
     },
   },
 };

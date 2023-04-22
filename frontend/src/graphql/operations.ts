@@ -123,6 +123,18 @@ export const Operations = {
           title
           imageUrl
           publisher
+          backgroundColor
+          description
+          externalUrl
+        }
+      }
+    `,
+    GetTopPicks: gql`
+      query ($input: TopPicksInput!) {
+        getTopPicks(input: $input) {
+          title
+          imageUrl
+          publisher
         }
       }
     `,
