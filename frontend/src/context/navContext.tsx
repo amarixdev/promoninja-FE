@@ -7,6 +7,8 @@ interface ContextType {
   setCategoryType: React.Dispatch<
     React.SetStateAction<string | undefined | any>
   >;
+  homePage: boolean;
+  setHomePage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<ContextType>({
@@ -14,6 +16,8 @@ const AppContext = createContext<ContextType>({
   setPreviousPage: () => {},
   categoryType: {} as string,
   setCategoryType: () => {},
+  setHomePage: () => {},
+  homePage: {} as boolean,
 });
 
 interface ContextProviderProps {
@@ -23,6 +27,7 @@ interface ContextProviderProps {
 export function ContextProvider({ children }: ContextProviderProps) {
   const [previousPage, setPreviousPage] = useState("category");
   const [categoryType, setCategoryType] = useState("");
+  const [homePage, setHomePage] = useState(true);
 
   return (
     <AppContext.Provider
@@ -31,6 +36,8 @@ export function ContextProvider({ children }: ContextProviderProps) {
         setPreviousPage,
         categoryType,
         setCategoryType,
+        homePage,
+        setHomePage,
       }}
     >
       {children}

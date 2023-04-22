@@ -6,8 +6,8 @@ import client from "../../graphql/apollo-client";
 import Sidebar from "../../components/Sidebar";
 import Footer from "../../components/Footer";
 import { CategoryPodcast } from "../../utils/types";
-import { useMediaQuery } from "../../utils/hooks";
-import PreviousPage from "../../components/PreviousPage";
+import useSetHomePage, { useMediaQuery } from "../../utils/hooks";
+
 
 interface Props {
   categoryPreviews: CategoryPodcast[];
@@ -15,6 +15,8 @@ interface Props {
 
 const podcasts = ({ categoryPreviews }: Props) => {
   const isBreakPoint = useMediaQuery(1023);
+  useSetHomePage(false);
+
   return (
     <>
       <div className="flex">

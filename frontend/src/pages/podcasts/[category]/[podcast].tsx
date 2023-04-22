@@ -8,7 +8,7 @@ import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
 import { FaEllipsisV } from "react-icons/fa";
-import { useMediaQuery } from "../../../utils/hooks";
+import useSetHomePage, { useMediaQuery } from "../../../utils/hooks";
 import { OfferData, PodcastData, SponsorData } from "../../../utils/types";
 import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import { convertToFullURL, truncateString } from "../../../utils/functions";
@@ -25,8 +25,13 @@ interface Props {
 
 const podcast = ({ podcastData, sponsorData, category }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { setPreviousPage, previousPage, categoryType, setCategoryType } =
-    NavContext();
+  const {
+    setPreviousPage,
+    previousPage,
+    categoryType,
+    setCategoryType,
+    setHomePage,
+  } = NavContext();
 
   const imageSrc = podcastData?.imageUrl;
   const isBreakPoint = useMediaQuery(1023);
@@ -39,11 +44,10 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     description: "",
     url: "",
   });
-
   let existingSponsor: boolean = true;
+  useSetHomePage(false);
   useEffect(() => {
     setCategoryType(category);
-
     if (categoryType !== null) {
       setPreviousPage("category");
     } else {

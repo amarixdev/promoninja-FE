@@ -29,3 +29,14 @@ export const useMediaQuery = (width: number) => {
 
   return targetReached;
 };
+
+import { NavContext } from "../context/navContext";
+function useSetHomePage(bool: boolean) {
+  const { setHomePage } = NavContext();
+
+  useEffect(() => {
+    setHomePage(bool);
+  }, [setHomePage, bool]);
+}
+
+export default useSetHomePage;

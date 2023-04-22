@@ -14,7 +14,7 @@ import BackdropMain from "../../public/assets/backdropMain.jpeg";
 import styles from "../../../styles/style.module.css";
 
 import { capitalizeString, truncateString } from "../../utils/functions";
-import { useMediaQuery } from "../../utils/hooks";
+import useSetHomePage, { useMediaQuery } from "../../utils/hooks";
 import { PodcastData } from "../../utils/types";
 import Sidebar from "../../components/Sidebar";
 import Link from "next/link";
@@ -30,7 +30,9 @@ interface Props {
 
 const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   const isBreakPoint = useMediaQuery(1023);
-  const { setPreviousPage, setCategoryType, categoryType } = NavContext();
+  const { setPreviousPage, setCategoryType, categoryType, setHomePage } =
+    NavContext();
+  useSetHomePage(false);
   let backdrop: StaticImageData = BackdropMain;
 
   useEffect(() => {

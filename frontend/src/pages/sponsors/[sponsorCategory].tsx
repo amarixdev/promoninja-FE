@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import Sidebar from "../../components/Sidebar";
-import { useMediaQuery } from "../../utils/hooks";
+import useSetHomePage, { useMediaQuery } from "../../utils/hooks";
 import Link from "next/link";
 import { truncateString } from "../../utils/functions";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
@@ -33,8 +33,7 @@ interface Podcast {
 }
 
 const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
-
-
+  useSetHomePage(false);
   const isBreakPoint = useMediaQuery(1023);
   const [getPodcasts, { data: podcastData }] = useLazyQuery<Podcast>(
     Operations.Queries.GetSponsorPodcasts
