@@ -11,6 +11,7 @@ import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 import FeaturedGIF from "../public/assets/optimizedGIF.gif";
 import { AiFillCaretLeft } from "react-icons/ai";
 import { AiFillCaretRight } from "react-icons/ai";
+import Logo from "../public/assets/ninja4.png";
 
 import Link from "next/link";
 import Carousel from "../components/Carousel";
@@ -28,7 +29,7 @@ type GroupedSponsors = { [key: string]: string[] };
 
 const Home = ({ loading, categoryData, sponsorsData, topPicksData }: Props) => {
   useSetHomePage(true);
-  
+
   const isBreakPoint = useMediaQuery(1023);
   const [currDeg, setCurrDeg] = useState(0);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
@@ -43,8 +44,6 @@ const Home = ({ loading, categoryData, sponsorsData, topPicksData }: Props) => {
     groupedSponsors[firstLetter].push(str);
   });
 
-  console.log(topPicksData);
-
   const handleRotate = (direction: any) => {
     if (direction === "next") {
       setCurrDeg(currDeg + 45);
@@ -58,7 +57,7 @@ const Home = ({ loading, categoryData, sponsorsData, topPicksData }: Props) => {
     <>
       <div className="flex">
         <Sidebar />
-        <div className="w-full flex flex-col h-screen bg-[#151515] relative overflow-x-hidden z-1 mt-10">
+        <div className="w-full flex flex-col h-screen bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] relative overflow-x-hidden z-1 mt-10">
           <div className="flex items-center justify-between w-full relative">
             <h1
               className={`text-3xl sm:text-5xl p-8 fixed font-bold z-10 text-white bg-[#121212] w-full `}
@@ -66,9 +65,23 @@ const Home = ({ loading, categoryData, sponsorsData, topPicksData }: Props) => {
               Home
             </h1>
           </div>
-          <div className="w-full mt-20 flex flex-col items-start justify-center">
-            <div className="w-full flex flex-col justify-center items-center">
-              <h1 className="text-4xl font-extrabold p-4 mb-6 text-white ">
+          <div className="w-full flex flex-col items-start justify-center ">
+            <div className="w-full mt-14 p-5 flex justify-center items-center h-[200px]">
+              <div className="flex w-full items-center justify-center">
+                <Image
+                  src={Logo}
+                  width={120}
+                  alt="logo"
+                  className="mx-2 w-[80px] lg:w-[120px]"
+                />
+                <p className=" font-light text-md sm:text-lg text-[#909090] tracking-widest ">
+                  "Support your favorite creators when you shop with PromoNinja
+                  approved sponsors!"
+                </p>
+              </div>
+            </div>
+            <div className="w-full flex flex-col justify-center items-center ">
+              <h1 className="text-xl lg:text-2xl font-bold p-4 text-white w-full ">
                 Editor's Top Picks
               </h1>
               <div
@@ -95,13 +108,13 @@ const Home = ({ loading, categoryData, sponsorsData, topPicksData }: Props) => {
 
                     <div>
                       <h1
-                        className={`text-sm sm:text-md lg:text-lg base:text-left lg:text-center px-2 pt-6 font-semibold text-white whitespace-nowrap`}
+                        className={`text-sm sm:text-md lg:text-lg text-center px-2 pt-6 font-semibold text-white whitespace-nowrap`}
                       >
                         {!isBreakPoint
                           ? truncateString(podcast.title, 20)
                           : truncateString(podcast.title, 14)}
                       </h1>
-                      <p className="text-xs sm:text-sm lg:text-md base:text-left lg:text-center px-2 font-medium text-[#909090]">
+                      <p className="text-xs sm:text-sm lg:text-md text-center px-2 font-medium text-[#909090]">
                         {!isBreakPoint
                           ? podcast.publisher
                           : truncateString(podcast.publisher, 30)}
@@ -111,15 +124,7 @@ const Home = ({ loading, categoryData, sponsorsData, topPicksData }: Props) => {
                 ))}
               </div>
             </div>
-            <div className="w-full flex justify-center items-center h-[200px]">
-              <div className="max-w-[60%] max-h-[100px] py-2">
-                <p className="font-regular base:text-md xs:text-lg text-[#909090] tracking-widest">
-                  Support your favorite creators when you shop with PromoNinja
-                  approved sponsors.
-                </p>
-              </div>
-            </div>
-            <h1 className="font-extrabold px-4 base:text-4xl">
+            {/* <h1 className=" text-xl lg:text-2xl font-bold px-4 mt-6">
               Featured Sponsor
             </h1>
             <div className="w-full flex flex-col items-center justify-center bg-gradient-to-b to-[#3d3d3d0a] from-[#5655552a] p-6 mt-6 shadow-2xl shadow-black">
@@ -134,44 +139,45 @@ const Home = ({ loading, categoryData, sponsorsData, topPicksData }: Props) => {
                 priority
                 className="rounded-3xl "
               />
-
-              <Button className="ml-4 mt-4">More Info</Button>
-            </div>
+              <Link href={`/${"Athletic Greens"}`}>
+                <Button className="ml-4 mt-4">More Info</Button>
+              </Link>
+            </div> */}
             <div className="w-full flex justify-center items-center h-[200px]">
               <div className="max-w-[60%] max-h-[100px] py-2">
-                <p className="font-regular base:text-md xs:text-lg text-[#909090] tracking-widest">
-                  As a podcast listener, you have access to exclusive deals that
-                  have been secured with various partners to help you save
-                  money.
+                <p className="font-light text-md sm:text-lg text-[#909090] tracking-widest">
+                  "As a podcast listener, you have access to exclusive deals
+                  that have been secured with various partners to help you save
+                  money."
                 </p>
               </div>
             </div>
-            <div className="h-[60vh] mt-10 w-full items-center ">
+            <div className="w-full items-center ">
               <div className="w-full flex items-center justify-start">
-                <h1 className="text-4xl font-extrabold p-4 text-white">
+                <h1 className="text-xl lg:text-2xl font-bold p-4 mb-4 relative top-14 text-white">
                   Shop Categories
                 </h1>
               </div>
-              <div className="flex flex-col items-center px-10">
+              <div className="flex flex-col items-center px-10 relative bottom-14 ">
                 <Carousel
                   handleRotate={handleRotate}
                   currDeg={currDeg}
                   categoryData={categoryData}
                 />
                 <div className="flex gap-10 relative bottom-10">
-                  <Button w={100} onClick={() => handleRotate("prev")}>
+                  <Button w={100} onClick={() => handleRotate("next")}>
                     <AiFillCaretLeft />
                   </Button>
-                  <Button w={100} onClick={() => handleRotate("next")}>
+                  <Button w={100} onClick={() => handleRotate("prev")}>
                     <AiFillCaretRight />
                   </Button>
                 </div>
               </div>
 
-              <div className="w-full flex justify-center items-center h-[200px] py-5">
+              <div className="w-full flex justify-center items-center relative bottom-10 lg:bottom-10 py-5">
                 <div className="max-w-[60%] max-h-[100px] py-2">
-                  <p className="font-regular base:text-md xs:text-lg text-[#909090] tracking-widest">
-                    Did you know some podcast sponsorships are for charitable
+                  <p className="font-light text-md sm:text-lg  text-[#909090] tracking-widest">
+                    "Did you know some podcast sponsorships are for charitable
                     causes? For example, {""}
                     <span>
                       <Link
@@ -183,51 +189,52 @@ const Home = ({ loading, categoryData, sponsorsData, topPicksData }: Props) => {
                       </Link>
                     </span>
                     has partnered with organizations such as the National Center
-                    for Missing and Exploited Children.
+                    for Missing and Exploited Children."
                   </p>
                 </div>
               </div>
+              <div className="relative">
+                <div className="w-full flex items-center base:mt-[120px]  justify-start">
+                  <h1 className="text-xl lg:text-2xl font-bold p-4 text-white">
+                    Sponsors A-Z
+                  </h1>
+                </div>
+                <div className="w-full h-screen flex flex-col items-center">
+                  {Object.keys(groupedSponsors).map((letter) => (
+                    <div className="w-full p-4 my-4" key={letter}>
+                      <p className="text-[#909090] text-3xl font-bold">
+                        {letter}
+                      </p>
+                      <div className="w-full flex flex-wrap p-1 gap-y-16 gap-x-2 items-center base:justify-center lg:justify-start">
+                        {groupedSponsors[letter].map((sponsor) =>
+                          sponsorsData
+                            .filter((data) => data.name === sponsor)
+                            .map((sponsor) => (
+                              <div key={sponsor.name} className="flex flex-col">
+                                <div className="flex flex-col w-[100px] mx-5">
+                                  <Link href={`/${sponsor.name}`}>
+                                    <Image
+                                      src={sponsor.imageUrl}
+                                      alt={sponsor.name}
+                                      width={100}
+                                      height={100}
+                                      className="rounded-lg"
+                                    />
+                                  </Link>
 
-              <div className="w-full flex items-center base:mt-[180px] sm:mt-[100px] justify-start">
-                <h1 className="text-4xl font-extrabold p-4 text-white">
-                  Sponsors A-Z
-                </h1>
-              </div>
-              <div className="w-full h-screen flex flex-col items-center">
-                {Object.keys(groupedSponsors).map((letter) => (
-                  <div className="w-full p-4 my-4" key={letter}>
-                    <p className="text-[#909090] text-3xl font-bold">
-                      {letter}
-                    </p>
-                    <div className="w-full flex flex-wrap p-1 gap-y-16 gap-x-2 items-center base:justify-center lg:justify-start">
-                      {groupedSponsors[letter].map((sponsor) =>
-                        sponsorsData
-                          .filter((data) => data.name === sponsor)
-                          .map((sponsor) => (
-                            <div className="flex flex-col">
-                              <div
-                                key={sponsor.name}
-                                className="flex flex-col w-[100px] mx-5"
-                              >
-                                <Image
-                                  src={sponsor.imageUrl}
-                                  alt={sponsor.name}
-                                  width={100}
-                                  height={100}
-                                  className="rounded-lg"
-                                />
-                                <div>
-                                  <h1 className="font-semibold absolute text-sm mt-2 text-center max-w-[100px]">
-                                    {sponsor.name}
-                                  </h1>
+                                  <div>
+                                    <h1 className="font-semibold absolute text-sm mt-2 text-center max-w-[100px]">
+                                      {sponsor.name}
+                                    </h1>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ))
-                      )}
+                            ))
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>

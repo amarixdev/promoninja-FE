@@ -21,12 +21,13 @@ import { GoChevronDown, GoChevronUp } from "react-icons/go";
 import { FaEllipsisV } from "react-icons/fa";
 import DescriptionDrawer from "../../components/DescriptionDrawer";
 import { useLazyQuery } from "@apollo/client";
+import { ClassNames } from "@emotion/react";
 
-type Props = {
+interface Props {
   categoryData: SponsorCategory;
   loading: boolean;
   sponsorsData: SponsorData[];
-};
+}
 
 interface Podcast {
   getSponsorPodcasts: PodcastData[];
@@ -133,42 +134,34 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
         podcastButton={true}
         currentPodcast={selectedPodcast}
       />
-      <div className="h-screen w-full">
-        <Image
-          src={categoryData?.imageUrl || Ninja4}
-          alt={categoryData?.name || "/"}
-          width={2000}
-          height={2000}
-          className="fixed z-15 w-full lg:top-[-100px] xl:top-[-150px] shadow-2xl shadow-black"
-          priority
-        />
-        <div className="w-full h-screen bg-gradient-to-tr bg-black/10 from-black/40 fixed"></div>
-        {/* {<PreviousPage previousPageText="podcasts" />} */}
-
-        <h1 className="font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-8xl text-white px-4 absolute z-2 top-[8rem] sm:top-[12rem]">
-          {categoryData?.name}
-        </h1>
-
+      <div className="w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727]">
         {
-          <div
-            className={`bg-[#151515] h-[260vh]  ${
-              isBreakPoint && "h-full"
-            } relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] items-center flex flex-col p-5`}
-          >
+          <div className="p-6">
+            <div className="w-full ">
+              <h1 className="text-5xl font-extrabold text-center p-6">
+                {categoryData?.name}
+              </h1>
+            </div>
             {sponsorsData?.map((sponsor: SponsorData) => (
-              <div key={`${sponsor.name}`} className="w-full my-4">
+              <div key={`${sponsor.name}`} className="w-full  py-4">
                 <div
-                  className="min-w-[75%] my-3 base:max-h-[80px] max-h-[120px] flex rounded-l-[9999px] rounded-r-[4000px] transition ease-in-out duration-150 hover:bg-[#222222]"
+                  className="min-w-[75%] my-3 base:max-h-[80px] max-h-[120px] flex rounded-l-[9999px] rounded-r-[4000px] transition ease-in-out duration-150"
                   onClick={() => setHideOffer((prev) => !prev)}
                 >
-                  <Image
-                    src={sponsor?.imageUrl}
-                    alt=""
-                    width={120}
-                    height={120}
-                    loading="lazy"
-                    className="base:w-[80px] base:h-[80px] rounded-full"
-                  />
+                  <Link
+                    href={`/${sponsor?.name}`}
+                    className="w-4/12 hover:cursor-pointer"
+                  >
+                    <Image
+                      src={sponsor?.imageUrl}
+                      alt={sponsor.name}
+                      width={120}
+                      height={120}
+                      loading="lazy"
+                      className="base:w-[80px] base:h-[80px] shadow-black shadow-2xl"
+                    />
+                  </Link>
+
                   <div className="w-full flex items-center justify-between ml-4">
                     <h1 className="base:text-lg font-semibold">
                       {sponsor.name}

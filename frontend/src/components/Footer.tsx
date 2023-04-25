@@ -12,13 +12,12 @@ import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 
 const Footer = () => {
   const { homePage, setHomePage } = NavContext();
-  console.log(homePage);
   const isBreakPoint = useMediaQuery(1023);
   return (
     <div
       className={
         isBreakPoint
-          ? `w-[100vw] bg-[#0e0e0eae] fixed bottom-[0] footer backdrop-blur-md`
+          ? `w-[100vw] bg-[#0e0e0eae] fixed bottom-[0] backdrop-blur-md`
           : "hidden"
       }
     >
@@ -44,7 +43,7 @@ const Footer = () => {
             Home
           </p>
         </Link>
-        <Link href="/" className="flex flex-col items-center">
+        <Link href="/search" className="flex flex-col items-center">
           <BiSearch
             color={"#e3e3e3ae"}
             size={24}

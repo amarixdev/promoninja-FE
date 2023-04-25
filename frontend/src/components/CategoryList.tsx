@@ -31,27 +31,27 @@ const CategoryList = ({ category }: CategoryProps) => {
           <div className="flex items-center justify-center">
             <h1
               className={`text-lg sm:text-2xl font-bold text-white ${
-                !isBreakPoint ? "ml-6 px-4" : "ml-2 text-xl p-4 "
+                !isBreakPoint ? "ml-6 px-4" : "ml-2 text-xl p-4 relative z-15 "
               }`}
               onClick={() => setPreviousPage("podcasts")}
             >
               {capitalizeString(categoryName)}
             </h1>
-
             <FaChevronRight className="relative right-2 top-[1px]" />
           </div>
         </Link>
       </div>
       <div
-        className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative  ${
+        className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative ${
           !isBreakPoint ? "ml-6" : "ml-2 bottom-10"
         }`}
       >
         {podcastData?.slice(0, 8).map((podcast: PodcastData) => (
+
           <div
             className={
               !isBreakPoint
-                ? `from-[#0d0d0d] bg-gradient-radial to-[#202020] hover:bg-[#292727] hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[240px] h-[255px] sm:h-[283px] md:h-[312px] lg:h-[340px] rounded-lg mx-3`
+                ? `from-[#0d0d0d] bg-gradient-radial to-[#202020] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[240px] h-[255px] sm:h-[283px] md:h-[312px] lg:h-[340px] rounded-lg mx-3`
                 : "hover:cursor-pointer flex flex-col items-center min-w-[120px] md:min-w-[140px] h-[255px] sm:h-[285px] ml-2 rounded-lg overflow-y-visible sm:mx-5"
             }
             key={podcast.title}

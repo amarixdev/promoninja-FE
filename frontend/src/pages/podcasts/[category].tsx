@@ -96,7 +96,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
 
           {
             <div
-              className={`bg-[#121212] ${styles.shadow}  ${
+              className={`bg-[#151515] ${styles.shadow}  ${
                 isBreakPoint && "h-fit"
               } relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-8 p-5`}
             >

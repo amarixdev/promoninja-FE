@@ -155,7 +155,7 @@ const Search = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="h-screen w-full bg-gradient-to-t  from-[#151515] to-[#1a1a1a]">
+      <div className="h-screen w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727]">
         <div className="w-full p-6">
           <div className="flex items-center justify-center text-[#5b5a5a]">
             <div className="bg-[#292929] h-10 rounded-l-md flex items-center justify-center p-2">
@@ -217,9 +217,11 @@ const Search = () => {
                             className=" shadow-black shadow-2xl min-w-[100px] rounded-lg"
                           />
                         </div>
-                        <div className="flex flex-col p-4">
-                          <h1 className=" font-extrabold">{podcast.title}</h1>
-                          <p>{podcast.publisher}</p>
+                        <div className="flex flex-col p-4 ">
+                          <h1 className="font-extrabold">{podcast.title}</h1>
+                          <p className="text-[#aaaaaa] base:text-xs xs:text-sm">
+                            {podcast.publisher}
+                          </p>
                         </div>
                       </div>
                     </Link>
@@ -237,19 +239,21 @@ const Search = () => {
                 >
                   {sponsor.imageUrl ? (
                     <Link href={`/${sponsor.name}`} className="w-full">
-                      <div className=" w-full sm:w-10/12 md:w-8/12 lg:w-6/12 flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f]">
+                      <div className="sm:w-10/12 md:w-8/12 lg:w-6/12 flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f]">
                         <div className="p-4">
                           <Image
                             src={sponsor.imageUrl}
                             width={100}
                             height={100}
                             alt={sponsor.name}
-                            className="shadow-black shadow-2xl min-w-[100px] rounded-lg"
+                            className=" shadow-black shadow-2xl min-w-[100px] rounded-lg"
                           />
                         </div>
-                        <div className="flex flex-col p-4">
-                          <h1 className=" font-extrabold">{sponsor.name}</h1>
-                          <p>{sponsor.url}</p>
+                        <div className="flex flex-col p-4 ">
+                          <h1 className="font-extrabold">{sponsor.name}</h1>
+                          <p className="text-[#aaaaaa] text-xs">
+                            {sponsor.url}
+                          </p>
                         </div>
                       </div>
                     </Link>

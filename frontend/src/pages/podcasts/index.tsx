@@ -20,7 +20,7 @@ const podcasts = ({ categoryPreviews }: Props) => {
     <>
       <div className="flex">
         <Sidebar />
-        <div className="w-full h-screen bg-[#151515] relative overflow-x-hidden z-1 mt-10">
+        <div className="w-full h-screen bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] relative overflow-x-hidden z-1 mt-10">
           <div className="flex items-center justify-between w-full relative">
             <h1
               className={`text-3xl sm:text-5xl p-8 fixed font-bold z-10 text-white bg-[#121212] w-full `}

@@ -46,6 +46,7 @@ const DescriptionDrawer = ({
     backgroundImage: `linear-gradient(to bottom, ${drawer.color}, #000000)`,
   };
 
+
   return (
     <>
       <Drawer
@@ -68,7 +69,7 @@ const DescriptionDrawer = ({
                   height={80}
                   alt=""
                   priority
-                  className={`h-[80px] ${
+                  className={`h-[80px] w-[80px] ${
                     hideLink || "shadow-2xl shadow-black"
                   } `}
                 />
@@ -97,7 +98,7 @@ const DescriptionDrawer = ({
                     </p>
                   </Link>
                 )}
-                <div className="p-6 text-white h-[40vh] flex flex-col items-center">
+                <div className="p-6 first-letter: text-white h-[40vh] flex flex-col items-center">
                   <h1>{drawer.description}</h1>
                   {hideLink || !sponsorDrawer || (
                     <>
