@@ -39,7 +39,7 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
   const [getPodcasts, { data: podcastData }] = useLazyQuery<Podcast>(
     Operations.Queries.GetSponsorPodcasts
   );
-  const { isOpen, onToggle } = useDisclosure();
+  const { onToggle } = useDisclosure();
   const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
@@ -49,6 +49,7 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
   const [hideOffer, setHideOffer] = useState(true);
   const [selectedSponsor, setSelectedSponsor] = useState("");
   const [selectedPodcast, setSelectedPodcast] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const [drawerData, setDrawerData] = useState({
     image: "",
@@ -114,9 +115,16 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
         },
       },
     });
-
-    onToggle();
     setSelectedSponsor(sponsor);
+
+    if (selectedSponsor !== sponsor) {
+      setIsOpen(true);
+    }
+
+    if (selectedSponsor === sponsor) {
+      setIsOpen((prev) => !prev);
+    }
+    onToggle();
   };
 
   const sponsorPodcasts = podcastData?.getSponsorPodcasts;
