@@ -54,7 +54,6 @@ model SponsorCategory {
   name      String
   sponsor   Sponsor[] @relation(fields: [sponsorId], references: [id])
   sponsorId String[]  @db.ObjectId
-  imageUrl  String?
 }
 
 type Offer {

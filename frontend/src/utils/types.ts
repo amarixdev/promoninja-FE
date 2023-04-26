@@ -35,5 +35,4 @@ export interface OfferData {
 
 export interface SponsorCategory {
   name: string;
-  imageUrl: string;
 }

@@ -14,7 +14,7 @@ const typeDefs = gql`
     getCategoryPodcasts(input: String!): [Podcast]
     getTopPicks(input: TopPicksInput!): [Podcast]
     fetchCategory(input: PodcastInput!): String
-    getCategories: [Category]
+    getPodcastCategories: [Category]
     fetchSponsors(input: PodcastInput!): [Sponsor]
     fetchSpotifyPodcast(input: SpotifyAPI!): [Items]
     fetchCategoryPodcasts(input: PodcastInput!): [Podcast]
@@ -142,7 +142,6 @@ const typeDefs = gql`
 
   type SponsorCategory {
     name: String!
-    imageUrl: String
   }
 `;
 

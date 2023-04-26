@@ -6,6 +6,8 @@ export const Operations = {
       query {
         getPodcasts {
           title
+          imageUrl
+          publisher
         }
       }
     `,
@@ -40,6 +42,7 @@ export const Operations = {
           imageUrl
           offer
           url
+          summary
         }
       }
     `,
@@ -66,7 +69,6 @@ export const Operations = {
     GetSponsorCategories: gql`
       query {
         getSponsorCategories {
-          imageUrl
           name
         }
       }
@@ -75,7 +77,6 @@ export const Operations = {
       query ($input: SponsorCategoryInput!) {
         getSponsorCategory(input: $input) {
           name
-          imageUrl
         }
       }
     `,
@@ -92,6 +93,15 @@ export const Operations = {
             promoCode
             url
           }
+        }
+      }
+    `,
+
+    GetPodcastCategories: gql`
+      query {
+        getPodcastCategories {
+          name
+          podcastId
         }
       }
     `,
