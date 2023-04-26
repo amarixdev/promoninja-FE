@@ -1,5 +1,11 @@
 // import ColorExtractor from "../../../components/ColorExtractor";
-import { Button, Spinner, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Collapse,
+  Spinner,
+  useDisclosure,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -24,7 +30,13 @@ interface Props {
 }
 
 const podcast = ({ podcastData, sponsorData, category }: Props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenDrawer,
+    onOpen: onOpenDrawer,
+    onClose: onCloseDrawer,
+  } = useDisclosure();
+
+  const { onToggle } = useDisclosure();
   const {
     setPreviousPage,
     previousPage,
@@ -32,10 +44,11 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     setCategoryType,
     setHomePage,
   } = NavContext();
-
+  const [isOpen, setIsOpen] = useState(false);
   const imageSrc = podcastData?.imageUrl;
   const isBreakPoint = useMediaQuery(1023);
-  const [sponsorDrawer, setSponsorDrawer] = useState(true);
+  const [sponsorOfferDrawer, setSponsorOfferDrawer] = useState(true);
+  const [podcastDrawer, setPodcastDrawer] = useState(false);
   const [truncated, setTruncated] = useState(true);
   const [drawerData, setDrawerData] = useState({
     image: "",
@@ -45,6 +58,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     url: "",
   });
   let existingSponsor: boolean = true;
+  const [selectedSponsor, setSelectedSponsor] = useState("");
   useSetHomePage(false);
   useEffect(() => {
     setCategoryType(category);
@@ -71,12 +85,26 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, #000000)`,
   };
 
-  const handleDrawer = (sponsor: string, isSponsorDrawer: boolean) => {
-    setSponsorDrawer(isSponsorDrawer);
+  const handleCollapse = async (sponsor: string) => {
+    if (selectedSponsor !== sponsor) {
+      setIsOpen(true);
+    }
+    if (selectedSponsor === sponsor) {
+      setIsOpen((prev) => !prev);
+    }
+    onToggle();
+    setSelectedSponsor(sponsor);
+    // setTimeout(() => {
+    //   setPodcastOffer(podcastOffer[0].url);
+    // }, 75);
+  };
 
+  const handleDrawer = (sponsor: string, isSponsorOfferDrawer: boolean) => {
     let sponsorPromotionUrl = "";
 
-    if (isSponsorDrawer) {
+    if (isSponsorOfferDrawer) {
+      setSponsorOfferDrawer(true);
+      setPodcastDrawer(false);
       const filteredSponsor = sponsorData.filter(
         (data) => data.name === sponsor
       )[0];
@@ -99,6 +127,8 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         url: sponsorPromotionUrl,
       });
     } else {
+      setSponsorOfferDrawer(false);
+      setPodcastDrawer(true);
       const podcastImage = podcastData.imageUrl;
       const podcastTitle = podcastData.title;
       const podcastDescription = podcastData.description;
@@ -113,7 +143,11 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
       });
     }
 
-    onOpen();
+    onOpenDrawer();
+  };
+
+  const getSponsor = (offerSponsor: string) => {
+    return sponsorData.filter((sponsor) => sponsor.name === offerSponsor)[0];
   };
 
   return (
@@ -123,6 +157,15 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         <PreviousPage />
         {
           <div className="flex flex-col items-center relative h-[50vh] gradient bg-[#000000] w-full">
+            <DescriptionDrawer
+              isOpen={isOpenDrawer}
+              onClose={onCloseDrawer}
+              drawer={drawerData}
+              sponsorOfferDrawer={sponsorOfferDrawer}
+              podcastDrawer={podcastDrawer}
+              podcastPage={true}
+              externalUrl={podcastData?.externalUrl}
+            />
             <div
               className={`items-center w-full h-full flex justify-center`}
               style={gradientStyle}
@@ -201,83 +244,130 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
             </h1>
             <div className="w-[95%] border-b-[1px] py-8 mt-2 mb-6"></div>
           </div>
-          <DescriptionDrawer
-            isOpen={isOpen}
-            onClose={onClose}
-            drawer={drawerData}
-            sponsorDrawer={sponsorDrawer}
-            podcastPage={true}
-            externalUrl={podcastData?.externalUrl}
-          />
-          <div className="flex flex-wrap mx-4 justify-between">
+          <div className="w-full flex flex-col lg:gap-6 overflow-y-scroll h-[350px] lg:h-fit lg:overflow-visible">
             {podcastData.offer.map((offer: OfferData, index) => (
               <div
                 key={offer.sponsor}
-                className="w-full h-[50px] flex justify-between items-center hover:bg-[#101010]"
+                className={`flex flex-col justify-between"`}
               >
-                <div className="flex items-center">
-                  <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
-                    {index + 1}
-                  </p>
-                  {isBreakPoint || (
+                {isBreakPoint ? (
+                  <div className="flex justify-between items-center px-6">
                     <Image
                       src={
                         sponsorData.filter(
                           (sponsor) => sponsor.name === offer?.sponsor
                         )[0].imageUrl
                       }
-                      width={40}
-                      height={40}
+                      width={50}
+                      height={50}
                       priority
                       alt={offer.sponsor}
-                      className="mx-2"
+                      className="base:w-[40px] xs:w-[50px] ml-4 rounded-md base:pr-2 xs:p-0"
                     />
-                  )}
+                    <div className="w-full justify-between flex items-center">
+                      <div className="base: py-4 xs:p-4">
+                        <h1 className="font-bold text-md">
+                          {truncateString(offer.sponsor, 20)}
+                        </h1>
+                        <p className="text-[#909090] text-sm">{getSponsor(offer.sponsor).url}</p>
+                      </div>
+                    </div>
+                    <div className=" xs:p-4 flex ">
+                      <FaEllipsisV
+                        onClick={() => handleDrawer(offer.sponsor, true)}
+                        className=""
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="w-full ">
+                      <div className=" flex justify-between">
+                        <div className="w-full flex justify-between items-center hover:bg-[#222222]">
+                          <div className="flex px-8 items-center">
+                            <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
+                              {index + 1}
+                            </p>
+                            <Link href={`/${getSponsor(offer.sponsor).name}`}>
+                              <Image
+                                src={getSponsor(offer.sponsor).imageUrl}
+                                width={80}
+                                height={80}
+                                priority
+                                alt={offer.sponsor}
+                                className="ml-4 rounded-md"
+                              />
+                            </Link>
 
-                  <div className="w-full items-start px-2">
-                    <h1 className="text-white font-semibold base:text-sm ">
-                      {offer.sponsor}
-                    </h1>
-                    <h3 className="base:text-xs">{offer.url}</h3>
-                  </div>
-                </div>
-                {isBreakPoint || (
-                  <div className="flex w-[50vw] absolute justify-start right-[100px] px-[140px] items-center">
-                    <p className="text-sm self-start font-medium">
-                      {
-                        sponsorData.filter(
-                          (sponsor) => sponsor.name === offer.sponsor
-                        )[0].offer
-                      }
-                    </p>
-                  </div>
-                )}
-                {isBreakPoint || (
-                  <div className="relative right-10 text-xs">
-                    <Link
-                      href={convertToFullURL(offer.url)}
-                      target="_blank"
-                      className=""
-                    >
-                      <Button>Visit Site</Button>
-                    </Link>
-                  </div>
-                )}
-                {isBreakPoint && (
-                  <FaEllipsisV
-                    className="mr-4 hover:cursor-pointer"
-                    onClick={() => handleDrawer(offer.sponsor, true)}
-                  />
+                            <div className="p-4">
+                              <h1 className="font-bold text-lg">
+                                {offer.sponsor}
+                              </h1>
+                              <p className="text-[#909090] text-md">
+                                {offer.url}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="flex justify-end px-6">
+                            <Button
+                              onClick={() => handleCollapse(offer.sponsor)}
+                            >
+                              View Details
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex-col ">
+                        <Collapse
+                          in={selectedSponsor === offer.sponsor && isOpen}
+                          animateOpacity
+                        >
+                          <Box
+                            p="10px"
+                            bg="transparent"
+                            rounded="md"
+                            shadow="md"
+                          >
+                            <div className="flex flex-col w-full p-2">
+                              <div className="flex justify-start p-2">
+                                <Link
+                                  href={convertToFullURL("podcastOffer")}
+                                  target="_blank"
+                                  className="hover:underline underline-offset-4"
+                                >
+                                  <p className="mx-2 py-2 px-4 rounded-md font-light text-3xl">
+                                    {
+                                      sponsorData.filter(
+                                        (sponsor) =>
+                                          sponsor.name === offer?.sponsor
+                                      )[0].offer
+                                    }
+                                  </p>
+                                </Link>
+                              </div>
+                              <div className="w-full font-light p-2 mb-4 flex">
+                                <p className="mx-2 text-sm py-2 px-4 rounded-xl">
+                                  {
+                                    sponsorData.filter(
+                                      (sponsor) =>
+                                        sponsor.name === offer?.sponsor
+                                    )[0].summary
+                                  }
+                                </p>
+                              </div>
+                            </div>
+                          </Box>
+                        </Collapse>
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             ))}
           </div>
         </div>
-        {isBreakPoint && (
-          <div className="w-full text-[#000000] base:text-[50px] xs:text-[60px] relative">
-            margin
-          </div>
-        )}
       </div>
       <Footer />
     </div>
@@ -296,6 +386,8 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { podcast, category } = params;
+
+ 
 
   try {
     let { data: podcastData, loading } = await client.query({
