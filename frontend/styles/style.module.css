@@ -112,7 +112,6 @@
 .neonText {
   animation: flicker 1.5s infinite alternate;
   color: #fff;
-  text-align: center;
   text-shadow: 1px 0px 2px #d6ffd5, 2px 0px 0px #d6ffd5, 3px 0px 1px #d6ffd5,
     2px 0px 3px #45d42c, 2px 3px 25px #45d42c;
 }

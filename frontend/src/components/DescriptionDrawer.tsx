@@ -16,9 +16,10 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   drawer: DrawerData;
-  sponsorDrawer: boolean;
-  hideLink?: boolean;
-  podcastButton?: boolean;
+  sponsorDrawer?: boolean;
+  podcastDrawer?: boolean;
+  sponsorOfferDrawer?: boolean;
+  podcastOfferDrawer?: boolean;
   currentPodcast?: string;
   podcastPage?: boolean;
   externalUrl?: string;
@@ -38,14 +39,17 @@ const DescriptionDrawer = ({
   onClose,
   drawer,
   sponsorDrawer,
-  hideLink,
-  podcastPage,
+  podcastDrawer,
+  sponsorOfferDrawer,
+  podcastOfferDrawer,
   externalUrl,
+  currentPodcast,
 }: Props) => {
   const gradientStyle = {
     backgroundImage: `linear-gradient(to bottom, ${drawer.color}, #000000)`,
   };
 
+  console.log(currentPodcast);
 
   return (
     <>
@@ -61,32 +65,43 @@ const DescriptionDrawer = ({
           className={"backdrop-blur-sm"}
         >
           <DrawerBody>
-            <div className="w-full" style={!hideLink ? gradientStyle : {}}>
-              <div className="base:p-2 xs:p-4 flex w-full">
-                <Image
-                  src={drawer.image}
-                  width={80}
-                  height={80}
-                  alt=""
-                  priority
-                  className={`h-[80px] w-[80px] ${
-                    hideLink || "shadow-2xl shadow-black"
-                  } `}
-                />
-
-                <div className="base:px-3 xs:px-4">
-                  <h1 className="base:text-lg xs:text-xl font-bold hover:underline">
-                    <Link href={convertToFullURL(drawer.url)} target="_blank">
+            <div
+              className="w-full"
+              style={podcastOfferDrawer ? gradientStyle : {}}
+            >
+              <div className="base:p-2 xs:p-4 flex items-center">
+                <Link
+                  className="base:p-2 xs:p-4 flex w-full"
+                  href={`/${
+                    podcastDrawer || podcastOfferDrawer
+                      ? `podcasts/category/${drawer.title}`
+                      : sponsorDrawer || sponsorOfferDrawer
+                      ? `${drawer.title}`
+                      : ""
+                  }`}
+                >
+                  <Image
+                    src={drawer.image}
+                    width={80}
+                    height={80}
+                    alt=""
+                    priority
+                    className={`h-[80px] w-[80px] ${
+                      podcastOfferDrawer && "shadow-2xl shadow-black"
+                    } `}
+                  />
+                  <div className="base:px-3 xs:px-4">
+                    <h1 className="base:text-lg xs:text-xl font-bold hover:underline">
                       {drawer.title}
-                    </Link>
-                  </h1>
-                  <h3 className="base:text-xs xs:text-sm font-bold text-[#b3b3b3]">
-                    {drawer.subtitle}
-                  </h3>
-                </div>
+                    </h1>
+                    <h3 className="base:text-xs xs:text-sm font-semibold text-[#b3b3b3]">
+                      {drawer.subtitle}
+                    </h3>
+                  </div>
+                </Link>
               </div>
               <div>
-                {sponsorDrawer || (
+                {podcastDrawer && (
                   <Link
                     href={externalUrl || "/"}
                     target="_blank"
@@ -98,9 +113,19 @@ const DescriptionDrawer = ({
                     </p>
                   </Link>
                 )}
-                <div className="p-6 first-letter: text-white h-[40vh] flex flex-col items-center">
-                  <h1>{drawer.description}</h1>
-                  {hideLink || !sponsorDrawer || (
+                <div className="p-6 first-letter: text-white h-[60vh] flex flex-col items-center">
+                  {(podcastDrawer || sponsorDrawer) && (
+                    <h1 className="p-y overflow-y-auto">
+                      {drawer.description}
+                    </h1>
+                  )}
+                  {(sponsorOfferDrawer || podcastOfferDrawer) && (
+                    <h1 className="p-y text-xl font-extralight overflow-y-auto">
+                      {drawer.description}
+                    </h1>
+                  )}
+
+                  {(podcastOfferDrawer || sponsorOfferDrawer) && (
                     <>
                       <h1
                         style={{ color: "white" }}
@@ -116,18 +141,6 @@ const DescriptionDrawer = ({
                         <Button className="font-bold">{drawer.url}</Button>
                       </Link>
                     </>
-                  )}
-                </div>
-
-                <div className="flex flex-col">
-                  {hideLink && (
-                    <div className="w-full flex justify-center items-center">
-                      <Link href={`/${drawer.title}`}>
-                        <button className="base:w-[125px] rounded-full border-[1px] active:scale-95 text-sm font-semibold text-[#aaaaaa] border-[#aaaaaa] p-2">
-                          Visit Page
-                        </button>
-                      </Link>
-                    </div>
                   )}
                 </div>
               </div>

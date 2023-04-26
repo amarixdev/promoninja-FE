@@ -50,7 +50,8 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
   const [selectedSponsor, setSelectedSponsor] = useState("");
   const [selectedPodcast, setSelectedPodcast] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
+  const [sponsorDrawer, setSponsorDrawer] = useState(false);
+  const [podcastOfferDrawer, setPodcastOfferDrawer] = useState(true);
   const [drawerData, setDrawerData] = useState({
     image: "",
     title: "",
@@ -72,6 +73,8 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
   ) => {
     /* Sponsor */
     if (isSponsorData(input)) {
+      setSponsorDrawer(true);
+      setPodcastOfferDrawer(false);
       setHideLink(true);
       setDrawerData((prev) => ({
         ...prev,
@@ -94,6 +97,8 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
 
       /* Podcast */
       setSelectedPodcast(input.title);
+      setSponsorDrawer(false);
+      setPodcastOfferDrawer(true);
       setDrawerData((prev) => ({
         ...prev,
         image: input.imageUrl,
@@ -137,10 +142,10 @@ const SponsorCategory = ({ categoryData, sponsorsData, loading }: Props) => {
         isOpen={isOpenDrawer}
         onClose={onCloseDrawer}
         drawer={drawerData}
-        sponsorDrawer={true}
-        hideLink={hideLink}
-        podcastButton={true}
+        sponsorDrawer={sponsorDrawer}
+        podcastOfferDrawer={podcastOfferDrawer}
         currentPodcast={selectedPodcast}
+        
       />
       <div className="w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727]">
         {
