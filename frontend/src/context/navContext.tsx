@@ -9,6 +9,8 @@ interface ContextType {
   >;
   homePage: boolean;
   setHomePage: React.Dispatch<React.SetStateAction<boolean>>;
+  pageNavigate: boolean;
+  setPageNavigate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<ContextType>({
@@ -18,6 +20,8 @@ const AppContext = createContext<ContextType>({
   setCategoryType: () => {},
   setHomePage: () => {},
   homePage: {} as boolean,
+  setPageNavigate: () => {},
+  pageNavigate: {} as boolean,
 });
 
 interface ContextProviderProps {
@@ -28,6 +32,7 @@ export function ContextProvider({ children }: ContextProviderProps) {
   const [previousPage, setPreviousPage] = useState("category");
   const [categoryType, setCategoryType] = useState("");
   const [homePage, setHomePage] = useState(true);
+  const [pageNavigate, setPageNavigate] = useState(false);
 
   return (
     <AppContext.Provider
@@ -38,6 +43,8 @@ export function ContextProvider({ children }: ContextProviderProps) {
         setCategoryType,
         homePage,
         setHomePage,
+        pageNavigate,
+        setPageNavigate,
       }}
     >
       {children}
