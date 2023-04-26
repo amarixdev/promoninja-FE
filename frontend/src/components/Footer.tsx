@@ -9,31 +9,42 @@ import { HiOutlineShoppingCart } from "react-icons/hi";
 import Link from "next/link";
 import { NavContext } from "../context/navContext";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
+import { useRouter } from "next/router";
+import { IconType } from "react-icons/lib";
+import { BsSearch } from "react-icons/bs";
 
-const Footer = () => {
-  const { homePage, setHomePage } = NavContext();
+const Footer = (href: any) => {
+  const { homePage, setPageNavigate } = NavContext();
   const isBreakPoint = useMediaQuery(1023);
-  return (
-    <div
-      className={
-        isBreakPoint
-          ? `w-[100vw] bg-[#0e0e0eae] fixed bottom-[0] backdrop-blur-md`
-          : "hidden"
-      }
-    >
-      <div className="flex justify-evenly relative items-center base:h-[60px] xs:h-[70px] ">
-        <Link
-          href={"/"}
-          className={`flex flex-col items-center ${styles.hoverIcon}`}
-        >
-          {homePage ? (
-            <AiFillHome
+  const { pathname } = useRouter();
+  console.log(pathname === "/");
+
+  interface LinkWrapperProps {
+    href: string;
+    activeIcon: IconType;
+    icon: IconType;
+    page: string;
+    homeButton?: boolean;
+  }
+
+  const LinkWrapper = ({
+    href,
+    activeIcon: ActiveIcon,
+    icon: Icon,
+    page,
+    homeButton,
+  }: LinkWrapperProps) => {
+    if (href == pathname) {
+      return (
+        <div className={`flex flex-col items-center ${styles.hoverIcon}`}>
+          {homeButton && homePage ? (
+            <ActiveIcon
               color={"#e3e3e3ae"}
               size={24}
               className={`relative base:w-[22px] xs:w-[24px] ${styles.hoverIcon}`}
             />
           ) : (
-            <AiOutlineHome
+            <Icon
               color={"#e3e3e3ae"}
               size={24}
               className={`relative base:w-[22px] xs:w-[24px] ${styles.hoverIcon}`}
@@ -42,37 +53,71 @@ const Footer = () => {
           <p className="base:text-[10px] xs:text-xs font-medium text-[#e3e3e3ae]">
             Home
           </p>
-        </Link>
-        <Link href="/search" className="flex flex-col items-center">
-          <BiSearch
-            color={"#e3e3e3ae"}
-            size={24}
-            className="relative base:w-[22px] xs:w-[24px]"
-          />
-          <p className="base:text-[10px] xs:text-xs font-medium text-[#e3e3e3ae]">
-            Search
-          </p>
-        </Link>
-        <Link href={"/podcasts"} className="flex flex-col items-center">
-          <BiPodcast
+        </div>
+      );
+    }
+    return (
+      <Link
+        href={href}
+        className={`flex flex-col items-center ${styles.hoverIcon}`}
+      >
+        {homeButton && homePage ? (
+          <ActiveIcon
             color={"#e3e3e3ae"}
             size={24}
             className={`relative base:w-[22px] xs:w-[24px] ${styles.hoverIcon}`}
           />
-          <p className="base:text-[10px] xs:text-xs font-medium text-[#e3e3e3ae]">
-            Podcasts
-          </p>
-        </Link>
-        <Link href="/" className="flex flex-col items-center">
-          <IoMdContact
+        ) : (
+          <Icon
             color={"#e3e3e3ae"}
             size={24}
-            className="relative base:w-[22px] xs:w-[24px]"
+            className={`relative base:w-[22px] xs:w-[24px] ${styles.hoverIcon}`}
           />
-          <p className="base:text-[10px] xs:text-xs font-medium text-[#e3e3e3ae]">
-            About
-          </p>
-        </Link>
+        )}
+        <p className="base:text-[10px] xs:text-xs font-medium text-[#e3e3e3ae]">
+          Home
+        </p>
+      </Link>
+    );
+  };
+
+  return (
+    <div
+      onClick={() => setPageNavigate(true)}
+      className={
+        isBreakPoint
+          ? `w-[100vw] fixed bottom-[0] bg-black/60 backdrop-blur-md`
+          : "hidden"
+      }
+    >
+      <div className="flex justify-evenly relative items-center base:h-[60px] xs:h-[70px] ">
+        <LinkWrapper
+          href="/"
+          activeIcon={AiFillHome}
+          icon={AiOutlineHome}
+          page="Home"
+          homeButton={true}
+        />
+        <LinkWrapper
+          href="/search"
+          activeIcon={BsSearch}
+          icon={BiSearch}
+          page="Search"
+        />
+
+        <LinkWrapper
+          href="/podcasts"
+          activeIcon={BiPodcast}
+          icon={BiPodcast}
+          page="Podcasts"
+        />
+
+        <LinkWrapper
+          href="/"
+          activeIcon={IoMdContact}
+          icon={IoMdContact}
+          page="About"
+        />
       </div>
     </div>
   );
