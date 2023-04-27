@@ -49,19 +49,14 @@ const podcasts = ({ categoryPreviews }: Props) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const categories = [
-    "comedy",
-    "technology",
-    "news & politics",
-    "society & culture",
-    "educational",
-    "sports",
-    "true crime",
-  ];
+  const { data: podcastCategories } = await client.query({
+    query: Operations.Queries.GetPodcastCategories,
+  });
 
-  const categoryData = [];
-
-  for (const category of categories) {
+  const categoryTitles = podcastCategories?.getPodcastCategories.map(
+    (category: any) => category.name
+  );
+  const categoryPromises = categoryTitles.map(async (category: string) => {
     const { data } = await client.query({
       query: Operations.Queries.FetchCategoryPodcasts,
       variables: {
@@ -70,10 +65,12 @@ export const getStaticProps: GetStaticProps = async () => {
         },
       },
     });
-    categoryData.push({ [category]: data });
-  }
+    return { [category]: data };
+  });
 
-  const categoryPreviews = categoryData.map((category) => {
+  const categoriesData = await Promise.all(categoryPromises);
+
+  const categoryPreviews = categoriesData.map((category) => {
     const key = Object.keys(category)[0];
     const value = category[key].fetchCategoryPodcasts;
     return { [key]: value };

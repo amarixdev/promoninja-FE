@@ -135,9 +135,6 @@ export const Operations = {
           title
           imageUrl
           publisher
-          backgroundColor
-          description
-          externalUrl
         }
       }
     `,
