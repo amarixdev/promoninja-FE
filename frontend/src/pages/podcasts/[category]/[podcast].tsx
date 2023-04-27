@@ -14,7 +14,10 @@ import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
 import { FaEllipsisV } from "react-icons/fa";
-import useSetHomePage, { useMediaQuery } from "../../../utils/hooks";
+import useSetHomePage, {
+  useLoadingScreen,
+  useMediaQuery,
+} from "../../../utils/hooks";
 import { OfferData, PodcastData, SponsorData } from "../../../utils/types";
 import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import { convertToFullURL, truncateString } from "../../../utils/functions";
@@ -60,6 +63,8 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   let existingSponsor: boolean = true;
   const [selectedSponsor, setSelectedSponsor] = useState("");
   useSetHomePage(false);
+  const isLoading = useLoadingScreen();
+
   useEffect(() => {
     setCategoryType(category);
     if (categoryType !== null) {
@@ -170,14 +175,14 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
               className={`items-center w-full h-full flex justify-center`}
               style={gradientStyle}
             >
-              <div className="flex flex-col justify-center items-center w-full relative top-[60px]">
+              <div className="flex flex-col justify-center items-center w-full relative top-[60px] lg:mt-12">
                 <Image
                   src={imageSrc}
                   alt="/"
                   width={250}
                   height={250}
                   priority
-                  className={`z-10 top-4 mt-10 relative base:w-[150px] xs:w-[180px] sm:w-[250px] shadow-2xl shadow-black`}
+                  className={`z-10 lg:top-6 mt-6 lg:mb-4 relative base:w-[150px] xs:w-[180px] sm:w-[250px] shadow-2xl shadow-black`}
                 />
                 <div className="w-full my-10">
                   <h1 className=" base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold ml-6 px-2">
@@ -238,7 +243,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         <div
           className={`w-full base:mt-14 lg:mt-20 text-[#aaaaaa] flex flex-col`}
         >
-          <div className="flex flex-col justify-evenly items-center">
+          <div className="flex flex-col lg:my-6 justify-evenly items-center">
             <h1 className="font-extralight text-lg w-full text-center relative p-4 top-[70px] tracking-widest">
               {`Support ${podcastData.title}`}
             </h1>
@@ -269,7 +274,9 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                         <h1 className="font-bold text-md">
                           {truncateString(offer.sponsor, 20)}
                         </h1>
-                        <p className="text-[#909090] text-sm">{getSponsor(offer.sponsor).url}</p>
+                        <p className="text-[#909090] text-sm">
+                          {getSponsor(offer.sponsor).url}
+                        </p>
                       </div>
                     </div>
                     <div className=" xs:p-4 flex ">
@@ -312,6 +319,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                           <div className="flex justify-end px-6">
                             <Button
                               onClick={() => handleCollapse(offer.sponsor)}
+                              className="active:scale-95"
                             >
                               View Details
                             </Button>
@@ -386,8 +394,6 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { podcast, category } = params;
-
- 
 
   try {
     let { data: podcastData, loading } = await client.query({
