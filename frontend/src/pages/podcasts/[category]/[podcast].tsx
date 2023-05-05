@@ -14,16 +14,15 @@ import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
 import { FaEllipsisV } from "react-icons/fa";
-import useSetHomePage, {
-  useLoadingScreen,
-  useMediaQuery,
-} from "../../../utils/hooks";
+import { useMediaQuery, useSetCurrentPage } from "../../../utils/hooks";
 import { OfferData, PodcastData, SponsorData } from "../../../utils/types";
 import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import { convertToFullURL, truncateString } from "../../../utils/functions";
 import { BsPlayCircle } from "react-icons/bs";
 import PreviousPage from "../../../components/PreviousPage";
 import { NavContext } from "../../../context/navContext";
+import style from "../../../../styles/style.module.css";
+import { BsShareFill } from "react-icons/bs";
 
 interface Props {
   podcastData: PodcastData;
@@ -40,13 +39,8 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   } = useDisclosure();
 
   const { onToggle } = useDisclosure();
-  const {
-    setPreviousPage,
-    previousPage,
-    categoryType,
-    setCategoryType,
-    setHomePage,
-  } = NavContext();
+  const { setPreviousPage, previousPage, categoryType, setCategoryType } =
+    NavContext();
   const [isOpen, setIsOpen] = useState(false);
   const imageSrc = podcastData?.imageUrl;
   const isBreakPoint = useMediaQuery(1023);
@@ -62,8 +56,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   });
   let existingSponsor: boolean = true;
   const [selectedSponsor, setSelectedSponsor] = useState("");
-  useSetHomePage(false);
-  const isLoading = useLoadingScreen();
+  useSetCurrentPage({ home: false, podcasts: true, search: false });
 
   useEffect(() => {
     setCategoryType(category);
@@ -93,15 +86,11 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   const handleCollapse = async (sponsor: string) => {
     if (selectedSponsor !== sponsor) {
       setIsOpen(true);
+      setSelectedSponsor(sponsor);
     }
     if (selectedSponsor === sponsor) {
       setIsOpen((prev) => !prev);
     }
-    onToggle();
-    setSelectedSponsor(sponsor);
-    // setTimeout(() => {
-    //   setPodcastOffer(podcastOffer[0].url);
-    // }, 75);
   };
 
   const handleDrawer = (sponsor: string, isSponsorOfferDrawer: boolean) => {

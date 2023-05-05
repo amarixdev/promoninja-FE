@@ -14,7 +14,7 @@ import BackdropMain from "../../public/assets/backdropMain.jpeg";
 import styles from "../../../styles/style.module.css";
 
 import { capitalizeString, truncateString } from "../../utils/functions";
-import useSetHomePage, { useMediaQuery } from "../../utils/hooks";
+import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { PodcastData } from "../../utils/types";
 import Sidebar from "../../components/Sidebar";
 import Link from "next/link";
@@ -22,6 +22,7 @@ import { GetStaticProps } from "next";
 import { Spinner } from "@chakra-ui/react";
 import { NavContext } from "../../context/navContext";
 import PreviousPage from "../../components/PreviousPage";
+import style from "../../../styles/style.module.css";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -30,9 +31,9 @@ interface Props {
 
 const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   const isBreakPoint = useMediaQuery(1023);
-  const { setPreviousPage, setCategoryType, categoryType, setHomePage } =
-    NavContext();
-  useSetHomePage(false);
+
+  const { setPreviousPage, setCategoryType, categoryType } = NavContext();
+  useSetCurrentPage({ home: false, podcasts: true, search: false });
   let backdrop: StaticImageData = BackdropMain;
 
   useEffect(() => {

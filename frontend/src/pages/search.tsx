@@ -2,7 +2,7 @@ import React, { ChangeEvent, SetStateAction, useState } from "react";
 import Fuse from "fuse.js";
 import Footer from "../components/Footer";
 import { BiSearch } from "react-icons/bi";
-import useSetHomePage from "../utils/hooks";
+import { useSetCurrentPage } from "../utils/hooks";
 import { Operations } from "../graphql/operations";
 import { useLazyQuery } from "@apollo/client";
 import Image from "next/image";
@@ -42,7 +42,7 @@ interface SponsorSearchResults {
   imageUrl: string;
 }
 const Search = () => {
-  useSetHomePage(false);
+  useSetCurrentPage({ home: false, podcasts: false, search: true });
   const searchCategories = ["Podcasts", "Sponsors"];
   const [podcastFilter, setPodcastFilter] = useState(true);
   const [sponsorFilter, setSponsorFilter] = useState(false);
