@@ -20,11 +20,11 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { Operations } from "../graphql/operations";
+import { useEffect, useState } from "react";
 import { AiFillCloseCircle, AiFillEdit } from "react-icons/ai";
-import DeleteModal from "./DeleteModal";
+import { Operations } from "../graphql/operations";
 import { OfferData } from "../utils/types";
+import DeleteModal from "./DeleteModal";
 
 type Props = {
   isOpen: boolean;

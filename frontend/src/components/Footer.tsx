@@ -1,18 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useMediaQuery } from "../utils/hooks";
-import { BiPodcast, BiSearch } from "react-icons/bi";
-import { RiMoneyDollarCircleFill } from "react-icons/ri";
+import { BiPodcast } from "react-icons/bi";
 import { IoMdContact } from "react-icons/io";
-import styles from "../../styles/style.module.css";
-import { HiOutlineShoppingCart } from "react-icons/hi";
+import { useMediaQuery } from "../utils/hooks";
 
 import Link from "next/link";
-import { NavContext } from "../context/navContext";
-import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { useRouter } from "next/router";
+import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { IconType } from "react-icons/lib";
 import { RiSearch2Fill, RiSearch2Line } from "react-icons/ri";
-import { RiHome2Fill } from "react-icons/ri";
+import { NavContext } from "../context/navContext";
 
 export interface LinkWrapperProps {
   href: string;

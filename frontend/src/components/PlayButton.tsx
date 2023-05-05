@@ -1,10 +1,4 @@
-import { useDisclosure } from "@chakra-ui/react";
-import Image from "next/image";
-import React, { useState } from "react";
 import styles from "../../styles/style.module.css";
-import { SponsorData } from "../utils/types";
-import Logo from "../public/assets/logo.png";
-import { FaForward, FaBackward } from "react-icons/fa";
 
 interface Props {
   isActive: boolean;

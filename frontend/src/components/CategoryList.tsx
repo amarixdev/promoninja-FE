@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CategoryPodcast, PodcastData } from "../utils/types";
+import { FaChevronRight } from "react-icons/fa";
+import { NavContext } from "../context/navContext";
 import { capitalizeString, truncateString } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
-import { NavContext } from "../context/navContext";
-import { FaChevronRight } from "react-icons/fa";
+import { CategoryPodcast, PodcastData } from "../utils/types";
 interface CategoryProps {
   category: CategoryPodcast;
 }

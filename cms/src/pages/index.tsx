@@ -1,25 +1,25 @@
-import { FormEvent, useState, useReducer, ChangeEvent } from "react";
 import {
   Button,
   Input,
   VStack,
-  useToast,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
+import { ChangeEvent, FormEvent, useReducer } from "react";
 
-import CreateSponsor from "../components/CreateSponsor";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { Operations } from "../graphql/operations";
-import Fuse from "fuse.js";
-import SelectCategory from "../components/SelectCategory";
-import Extractor from "../components/Extractor";
-import { capitalizeString } from "../utils/functions";
-import DeleteModal from "../components/DeleteModal";
-import { REDUCER_ACTION_TYPE, initState, reducer } from "../utils/reducer";
-import { AiOutlineEllipsis, AiFillEdit } from "react-icons/ai";
-import EditModal from "../components/EditOfferModal";
 import { Tooltip } from "@chakra-ui/react";
+import Fuse from "fuse.js";
+import { AiFillEdit, AiOutlineEllipsis } from "react-icons/ai";
+import CreateSponsor from "../components/CreateSponsor";
+import DeleteModal from "../components/DeleteModal";
+import EditModal from "../components/EditOfferModal";
 import EditPodcastCategory from "../components/EditPodcastCategory";
+import Extractor from "../components/Extractor";
+import SelectCategory from "../components/SelectCategory";
+import { Operations } from "../graphql/operations";
+import { capitalizeString } from "../utils/functions";
+import { REDUCER_ACTION_TYPE, initState, reducer } from "../utils/reducer";
 
 const App = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

@@ -1,4 +1,9 @@
 import {
+  ApolloQueryResult,
+  OperationVariables,
+  useMutation
+} from "@apollo/client";
+import {
   Box,
   Button,
   Modal,
@@ -11,17 +16,11 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { Sponsor, SponsorsData } from "../pages/sponsors";
-import {
-  ApolloQueryResult,
-  OperationVariables,
-  useLazyQuery,
-  useMutation,
-} from "@apollo/client";
-import { Operations } from "../graphql/operations";
-import DeleteModal from "./DeleteModal";
 import Image from "next/image";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Operations } from "../graphql/operations";
+import { Sponsor } from "../pages/sponsors";
+import DeleteModal from "./DeleteModal";
 import SelectSponsorCategory from "./SelectSponsorCategory";
 
 interface Props {

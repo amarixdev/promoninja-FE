@@ -1,22 +1,15 @@
-import React, { ChangeEvent, SetStateAction, useState } from "react";
-import Fuse from "fuse.js";
-import Footer from "../components/Footer";
-import { BiSearch } from "react-icons/bi";
-import { useSetCurrentPage } from "../utils/hooks";
-import { Operations } from "../graphql/operations";
 import { useLazyQuery } from "@apollo/client";
-import Image from "next/image";
-import { PodcastData, SponsorData } from "../utils/types";
-import Logo from "../public/assets/ninja4.png";
 import { Spinner } from "@chakra-ui/react";
+import Fuse from "fuse.js";
+import Image from "next/image";
 import Link from "next/link";
-import Comedy from "../public/assets/comedy2.avif";
-import News from "../public/assets/news.avif";
-import Crime from "../public/assets/crime.avif";
-import Society from "../public/assets/society.avif";
-import Technology from "../public/assets/technology.avif";
-import Sports from "../public/assets/sports.avif";
+import { ChangeEvent, useState } from "react";
+import { BiSearch } from "react-icons/bi";
+import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
+import { Operations } from "../graphql/operations";
+import { useSetCurrentPage } from "../utils/hooks";
+import { PodcastData, SponsorData } from "../utils/types";
 
 interface PodcastQuery {
   getPodcasts: PodcastData[];

@@ -1,21 +1,14 @@
-import { Spinner } from "@chakra-ui/react";
-import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { AiFillHome, AiOutlineHome } from "react-icons/ai";
+import { MdOutlinePodcasts, MdPodcasts } from "react-icons/md";
+import { RiSearch2Fill, RiSearch2Line } from "react-icons/ri";
+import { NavContext } from "../context/navContext";
 import * as LogoText from "../public/assets/logo-text.png";
 import * as Ninja4 from "../public/assets/logo.png";
 import { useMediaQuery } from "../utils/hooks";
-import { AiFillHome, AiOutlineHome } from "react-icons/ai";
-import { RiHome2Line, RiSearch2Fill, RiSearch2Line } from "react-icons/ri";
-import { IoMdContact } from "react-icons/io";
-import { MdOutlinePodcasts, MdPodcasts } from "react-icons/md";
-import { IconType } from "react-icons";
 import { LinkWrapperProps } from "./Footer";
-import { useRouter } from "next/router";
-import { NavContext } from "../context/navContext";
 
 interface Props {}
 

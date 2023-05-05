@@ -1,15 +1,13 @@
-import React from "react";
-import CategoryList from "../../components/CategoryList";
-import { Operations } from "../../graphql/operations";
 import { GetStaticProps } from "next";
-import client from "../../graphql/apollo-client";
-import Sidebar from "../../components/Sidebar";
+import CategoryList from "../../components/CategoryList";
 import Footer from "../../components/Footer";
-import { CategoryPodcast } from "../../utils/types";
+import Sidebar from "../../components/Sidebar";
+import client from "../../graphql/apollo-client";
+import { Operations } from "../../graphql/operations";
 import {
   useMediaQuery, useSetCurrentPage,
 } from "../../utils/hooks";
-import style from "../../../styles/style.module.css";
+import { CategoryPodcast } from "../../utils/types";
 
 interface Props {
   categoryPreviews: CategoryPodcast[];

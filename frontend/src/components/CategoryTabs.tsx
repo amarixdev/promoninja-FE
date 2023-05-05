@@ -1,18 +1,14 @@
 import {
-  Button,
   Spinner,
   Tab,
   TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
+  Tabs
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
-import { SponsorCategory } from "../utils/types";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { NavContext } from "../context/navContext";
+import { useEffect, useState } from "react";
 import style from "../../styles/style.module.css";
+import { NavContext } from "../context/navContext";
+import { SponsorCategory } from "../utils/types";
 
 interface Props {
   sponsorCategoryData: SponsorCategory[];

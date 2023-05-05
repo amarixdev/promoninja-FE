@@ -1,5 +1,5 @@
-import { podcastResolvers } from "./podcast";
 import { categoryResolvers } from "./category";
+import { podcastResolvers } from "./podcast";
 import { productResolvers } from "./sponsor";
 
 import merge from "lodash.merge";

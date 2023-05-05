@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import {
   Button,
   Input,
@@ -6,11 +6,9 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import Image from "next/image";
-import React, { useState } from "react";
-import { Operations } from "../graphql/operations";
-import DeleteModal from "../components/DeleteModal";
+import { useState } from "react";
 import EditSponsorModal from "../components/EditSponsorModal";
+import { Operations } from "../graphql/operations";
 
 export interface SponsorsData {
   getSponsors: Sponsor[];

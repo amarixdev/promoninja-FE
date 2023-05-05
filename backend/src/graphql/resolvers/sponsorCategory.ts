@@ -1,7 +1,6 @@
 import {
   GraphQLContext,
-  SponsorCategory,
-  SponsorCategoryInput,
+  SponsorCategory
 } from "../../util/types";
 
 export const sponsorCategory = {

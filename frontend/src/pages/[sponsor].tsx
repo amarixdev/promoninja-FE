@@ -1,29 +1,27 @@
-import React, { useState } from "react";
-import client from "../graphql/apollo-client";
-import { Operations } from "../graphql/operations";
-import Image from "next/image";
-import Footer from "../components/Footer";
-import {
-  useMediaQuery,
-  useSetCurrentPage,
-} from "../utils/hooks";
 import {
   Box,
   Button,
   Collapse,
   Spinner,
-  Tooltip,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
-import style from "../../styles/style.module.css";
-import Ninja4 from "../public/assets/ninja4.png";
-import { PodcastData, SponsorData } from "../utils/types";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { BsShareFill } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
 import DescriptionDrawer from "../components/DescriptionDrawer";
-import { convertToFullURL, truncateString } from "../utils/functions";
+import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
-import Link from "next/link";
-import { BsShareFill } from "react-icons/bs";
+import client from "../graphql/apollo-client";
+import { Operations } from "../graphql/operations";
+import Ninja4 from "../public/assets/ninja4.png";
+import { convertToFullURL, truncateString } from "../utils/functions";
+import {
+  useMediaQuery,
+  useSetCurrentPage,
+} from "../utils/hooks";
+import { PodcastData, SponsorData } from "../utils/types";
 
 interface Props {
   sponsorData: SponsorData;

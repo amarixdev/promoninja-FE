@@ -1,8 +1,7 @@
-import React, { use, useEffect, useRef, useState } from "react";
-import style from "../../styles/style.module.css";
 import Link from "next/link";
+import React from "react";
+import style from "../../styles/style.module.css";
 import { SponsorCategory } from "../utils/types";
-import { NavContext } from "../context/navContext";
 
 interface Props {
   handleRotate: (direction: string) => void;

@@ -1,12 +1,11 @@
+import fetch from "node-fetch";
 import {
   GraphQLContext,
   PodcastInput,
-  SponsorData,
   SponsorInput,
   SpotifyAPI,
-  TopPicksInput,
+  TopPicksInput
 } from "../../util/types";
-import fetch from "node-fetch";
 
 export const podcastResolvers = {
   Mutation: {

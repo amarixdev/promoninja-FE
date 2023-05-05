@@ -1,6 +1,5 @@
 import { Select } from "@chakra-ui/react";
-import { Dispatch, SetStateAction, useState } from "react";
-import Sponsors from "../pages/sponsors";
+import { Dispatch, SetStateAction } from "react";
 import { Sponsor } from "../utils/types";
 
 interface Props {

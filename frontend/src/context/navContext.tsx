@@ -1,5 +1,4 @@
-import App from "next/app";
-import { createContext, useState, ReactNode, useContext } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 
 interface ContextType {
   previousPage: string;

@@ -1,32 +1,31 @@
-import React, { SetStateAction, useEffect, useState } from "react";
-import Footer from "../../components/Footer";
-import client from "../../graphql/apollo-client";
-import { Operations } from "../../graphql/operations";
-import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
-import Image from "next/image";
+import { useLazyQuery } from "@apollo/client";
 import {
   Box,
   Button,
   Collapse,
   Spinner,
-  Text,
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { FaEllipsisV } from "react-icons/fa";
+import { GoChevronDown, GoChevronUp } from "react-icons/go";
+import CategoryTabs from "../../components/CategoryTabs";
+import DescriptionDrawer from "../../components/DescriptionDrawer";
+import Footer from "../../components/Footer";
 import Sidebar from "../../components/Sidebar";
+import { NavContext } from "../../context/navContext";
+import client from "../../graphql/apollo-client";
+import { Operations } from "../../graphql/operations";
+import { truncateString } from "../../utils/functions";
 import {
   useLoadingScreen,
   useMediaQuery,
   useSetCurrentPage,
 } from "../../utils/hooks";
-import Link from "next/link";
-import { truncateString } from "../../utils/functions";
-import { GoChevronDown, GoChevronUp } from "react-icons/go";
-import { FaEllipsisV } from "react-icons/fa";
-import DescriptionDrawer from "../../components/DescriptionDrawer";
-import { useLazyQuery } from "@apollo/client";
-import CategoryTabs from "../../components/CategoryTabs";
-import { NavContext } from "../../context/navContext";
+import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
 
 interface Props {
   categoryData: SponsorCategory;
@@ -44,7 +43,6 @@ interface SponsorState {
   selectedSponsor: string;
   previousSponsor: string;
 }
-
 
 const SponsorCategory = ({
   categoryData,
@@ -135,7 +133,7 @@ const SponsorCategory = ({
   };
 
   const isLoading = useLoadingScreen();
-  /* Handle randomized, set Sponsor array to 5 max. Implement View More */
+  /* TODO: Implement View More */
 
   const handleCollapse = async (sponsor: string) => {
     setCurrent(sponsor);
@@ -199,6 +197,7 @@ const SponsorCategory = ({
                     </div>
 
                     {isBreakPoint ? (
+                      /* Mobile */
                       <div>
                         {sponsorsData?.map(
                           (sponsor: SponsorData, index: number) => (
@@ -324,6 +323,14 @@ const SponsorCategory = ({
                                             </Button>
                                           </div>
                                         ))}
+                                        <Link
+                                          className="min-w-[150px] h-[100px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
+                                          href={`/${sponsor.name}`}
+                                        >
+                                          <p className="font-semibold">
+                                            View All
+                                          </p>
+                                        </Link>
                                       </div>
                                     </div>
                                   </Box>
@@ -334,6 +341,7 @@ const SponsorCategory = ({
                         )}
                       </div>
                     ) : (
+                      /* Desktop */
                       <div>
                         {sponsorsData?.map(
                           (sponsor: SponsorData, index: number) => (
@@ -498,6 +506,14 @@ const SponsorCategory = ({
                                             </Button>
                                           </div>
                                         ))}
+                                        <Link
+                                          className="w-[110px] h-[110px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
+                                          href={`/${sponsor.name}`}
+                                        >
+                                          <p className="font-semibold">
+                                            View All
+                                          </p>
+                                        </Link>
                                       </div>
                                     </div>
                                   </Box>

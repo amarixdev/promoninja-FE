@@ -1,25 +1,21 @@
-import { Button, Spinner } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
+import LogoText from "../public/assets/logo-text.png";
+import Logo from "../public/assets/ninja4.png";
 import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
-import FeaturedGIF from "../public/assets/optimizedGIF.gif";
-import { AiFillCaretLeft } from "react-icons/ai";
-import { AiFillCaretRight } from "react-icons/ai";
-import Logo from "../public/assets/ninja4.png";
-import LogoText from "../public/assets/logo-text.png";
 
-import style from "../../styles/style.module.css";
 import Link from "next/link";
 import Carousel from "../components/Carousel";
-import { truncateString } from "../utils/functions";
 import { NavContext } from "../context/navContext";
-import { useRouter } from "next/router";
+import { truncateString } from "../utils/functions";
 
 interface Props {
   topPicksData: PodcastData[];

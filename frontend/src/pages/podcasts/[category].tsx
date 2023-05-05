@@ -1,28 +1,25 @@
 import Image, { StaticImageData } from "next/image";
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect } from "react";
+import styles from "../../../styles/style.module.css";
 import Footer from "../../components/Footer";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
+import BackdropMain from "../../public/assets/backdropMain.jpeg";
 import Comedy from "../../public/assets/comedy2.avif";
-import Technology from "../../public/assets/technology.avif";
+import Crime from "../../public/assets/crime.avif";
+import Education from "../../public/assets/education.avif";
 import News from "../../public/assets/news.avif";
 import Society from "../../public/assets/society.avif";
 import Sports from "../../public/assets/sports.avif";
-import Crime from "../../public/assets/crime.avif";
-import Education from "../../public/assets/education.avif";
-import LogoText from "../../public/assets/logo-text.png";
-import styles from "../../../styles/style.module.css";
+import Technology from "../../public/assets/technology.avif";
 
+import Link from "next/link";
+import PreviousPage from "../../components/PreviousPage";
+import Sidebar from "../../components/Sidebar";
+import { NavContext } from "../../context/navContext";
 import { capitalizeString, truncateString } from "../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { PodcastData } from "../../utils/types";
-import Sidebar from "../../components/Sidebar";
-import Link from "next/link";
-import { GetStaticProps } from "next";
-import { Spinner } from "@chakra-ui/react";
-import { NavContext } from "../../context/navContext";
-import PreviousPage from "../../components/PreviousPage";
-import style from "../../../styles/style.module.css";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -34,7 +31,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
 
   const { setPreviousPage, setCategoryType, categoryType } = NavContext();
   useSetCurrentPage({ home: false, podcasts: true, search: false });
-  let backdrop: StaticImageData = LogoText;
+  let backdrop: StaticImageData = BackdropMain;
 
   useEffect(() => {
     if (categoryName) {
@@ -67,7 +64,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
         backdrop = Crime;
         break;
       default:
-        LogoText;
+        BackdropMain;
     }
   }
   console.log(2, categoryType);

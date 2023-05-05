@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import React from "react";
 import { REDUCER_ACTION_TYPE } from "../utils/reducer";
 const Extractor = ({ image, dispatch, setExtractedColor }: any) => {
   const canvasRef = useRef() as any;

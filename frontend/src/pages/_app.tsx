@@ -1,11 +1,11 @@
-import type { AppProps } from "next/app";
 import { ApolloProvider } from "@apollo/client";
-import client from "../graphql/apollo-client";
 import { ChakraProvider } from "@chakra-ui/react";
-import { theme, ForceDarkMode } from "../../styles/chakra/theme";
+import type { AppProps } from "next/app";
+import { ForceDarkMode, theme } from "../../styles/chakra/theme";
 import "../../styles/globals.css";
-import { ContextProvider } from "../context/navContext";
 import style from "../../styles/style.module.css";
+import { ContextProvider } from "../context/navContext";
+import client from "../graphql/apollo-client";
 import { useLoadingScreen } from "../utils/hooks";
 
 function MyApp({ Component, pageProps }: AppProps) {

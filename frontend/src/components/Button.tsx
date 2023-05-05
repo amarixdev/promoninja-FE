@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import styles from "../../styles/style.module.css";
 
 function Button() {

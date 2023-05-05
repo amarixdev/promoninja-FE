@@ -3,17 +3,14 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerHeader,
   DrawerOverlay,
-  Tooltip,
+  Tooltip
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import { convertToFullURL, truncateString } from "../utils/functions";
 import { BsPlayCircle } from "react-icons/bs";
-import { useLoadingScreen, useMediaQuery } from "../utils/hooks";
-import style from "../../styles/style.module.css";
+import { convertToFullURL } from "../utils/functions";
+import { useMediaQuery } from "../utils/hooks";
 
 type Props = {
   isOpen: boolean;

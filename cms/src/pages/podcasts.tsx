@@ -1,9 +1,8 @@
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
-import Link from "next/link";
 import { PodcastData } from "../utils/types";
 
 type Props = {

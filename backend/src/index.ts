@@ -1,16 +1,11 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import {  PrismaClient } from "@prisma/client";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { PrismaClient } from "@prisma/client";
+import fetch from "node-fetch";
+import { env } from "../environment";
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
-import Axios from "axios";
-import express from "express";
-import * as dotenv from "dotenv";
-import { createServer } from "http";
-import { makeExecutableSchema } from "@graphql-tools/schema";
-import cors from "cors";
-import { env } from "../environment";
-import fetch from "node-fetch";
 
 const { CLIENT_ID, CLIENT_SECRET } = env;
 

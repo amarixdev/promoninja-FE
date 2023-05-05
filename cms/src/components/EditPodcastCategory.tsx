@@ -1,4 +1,9 @@
 import {
+  ApolloQueryResult,
+  OperationVariables,
+  useMutation,
+} from "@apollo/client";
+import {
   Box,
   Button,
   Modal,
@@ -11,18 +16,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { Dispatch } from "react";
-import SelectCategory from "./SelectCategory";
+import { Operations } from "../graphql/operations";
 import {
   REDUCER_ACTION_TYPE,
   ReducerAction,
   initState,
 } from "../utils/reducer";
-import {
-  ApolloQueryResult,
-  OperationVariables,
-  useMutation,
-} from "@apollo/client";
-import { Operations } from "../graphql/operations";
+import SelectCategory from "./SelectCategory";
 
 interface Props {
   isOpen: boolean;

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useLayoutEffect } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 
 export const useMediaQuery = (width: number) => {
   const [targetReached, setTargetReached] = useState(false);
@@ -30,8 +30,8 @@ export const useMediaQuery = (width: number) => {
   return targetReached;
 };
 
-import { CurrentPage, NavContext } from "../context/navContext";
 import { useRouter } from "next/router";
+import { CurrentPage, NavContext } from "../context/navContext";
 
 export const useSetCurrentPage = (currentPage: CurrentPage) => {
   const { setCurrentPage } = NavContext();

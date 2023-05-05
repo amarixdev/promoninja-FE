@@ -1,9 +1,9 @@
 import { Select } from "@chakra-ui/react";
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch } from "react";
 import {
-  initState,
-  ReducerAction,
   REDUCER_ACTION_TYPE,
+  ReducerAction,
+  initState,
 } from "../utils/reducer";
 
 interface Props {

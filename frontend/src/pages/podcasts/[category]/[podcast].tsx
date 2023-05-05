@@ -9,20 +9,18 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { BsPlayCircle, BsShareFill } from "react-icons/bs";
+import { FaEllipsisV } from "react-icons/fa";
+import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import Footer from "../../../components/Footer";
+import PreviousPage from "../../../components/PreviousPage";
 import Sidebar from "../../../components/Sidebar";
+import { NavContext } from "../../../context/navContext";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
-import { FaEllipsisV } from "react-icons/fa";
+import { convertToFullURL, truncateString } from "../../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../../utils/hooks";
 import { OfferData, PodcastData, SponsorData } from "../../../utils/types";
-import DescriptionDrawer from "../../../components/DescriptionDrawer";
-import { convertToFullURL, truncateString } from "../../../utils/functions";
-import { BsPlayCircle } from "react-icons/bs";
-import PreviousPage from "../../../components/PreviousPage";
-import { NavContext } from "../../../context/navContext";
-import style from "../../../../styles/style.module.css";
-import { BsShareFill } from "react-icons/bs";
 
 interface Props {
   podcastData: PodcastData;
@@ -38,8 +36,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     onClose: onCloseDrawer,
   } = useDisclosure();
 
-  const { onToggle } = useDisclosure();
-  const { setPreviousPage, previousPage, categoryType, setCategoryType } =
+  const { setPreviousPage, categoryType, setCategoryType } =
     NavContext();
   const [isOpen, setIsOpen] = useState(false);
   const imageSrc = podcastData?.imageUrl;
