@@ -41,7 +41,6 @@ const CategoryTabs = ({ sponsorCategoryData, categoryData }: Props) => {
     }
   };
 
-
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -62,17 +61,19 @@ const CategoryTabs = ({ sponsorCategoryData, categoryData }: Props) => {
           className={` ${style.offset} overflow-x-scroll scrollbar-hide px-2 relative`}
         >
           {sponsorCategoryData.map((category: SponsorCategory) => (
-            <Link key={category.name} href={`/sponsors/${category.name}`}>
+            <Link
+              key={category.name}
+              href={`/sponsors/${category.name}`}
+              className=" mx-2 rounded-2xl"
+            >
               <Tab
-                className={
-                  "text-xs mx-2 font-medium whitespace-nowrap categoryRef"
-                }
+                className={"text-xs font-medium whitespace-nowrap "}
                 onClick={() => setPageNavigate(false)}
                 _selected={{ color: "black", bg: "white" }}
                 rounded={"xl"}
                 bg={"whiteAlpha.100"}
               >
-                {category.name}
+                <p>{category.name} </p>
               </Tab>
             </Link>
           ))}
