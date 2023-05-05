@@ -89,6 +89,7 @@ const typeDefs = gql`
     summary: String
     promoCode: String
     offer: String
+    isCategoryPage: Boolean
   }
 
   input TopPicksInput {

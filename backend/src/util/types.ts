@@ -37,6 +37,7 @@ export interface SponsorData {
   url?: string;
   description?: string;
   image?: string;
+  isCategoryPage?: boolean;
 }
 
 export interface DeleteInput {
@@ -60,7 +61,6 @@ interface SpotifyAPIData {
 
 export interface SponsorCategory {
   name: string;
-  imageUrl: string;
 }
 
 export interface SponsorCategory {

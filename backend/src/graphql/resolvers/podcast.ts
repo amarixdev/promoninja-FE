@@ -264,7 +264,7 @@ export const podcastResolvers = {
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      const { name } = input;
+      const { name, isCategoryPage } = input;
 
       const getSponsor = await prisma.sponsor.findFirst({
         where: {
@@ -279,8 +279,9 @@ export const podcastResolvers = {
           },
         },
       });
-
-      return podcasts;
+      if (isCategoryPage) {
+        return podcasts.sort(() => Math.random() - 0.5).slice(0, 5);
+      } else return podcasts.sort(() => Math.random() - 0.5);
     },
     getTopPicks: async (
       parent: any,
@@ -298,7 +299,7 @@ export const podcastResolvers = {
         },
       });
 
-      return topPicks;
+      return topPicks.sort(() => Math.random() - 0.5);
     },
   },
 };
