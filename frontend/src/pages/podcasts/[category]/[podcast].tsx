@@ -36,8 +36,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     onClose: onCloseDrawer,
   } = useDisclosure();
 
-  const { setPreviousPage, categoryType, setCategoryType } =
-    NavContext();
+  const { setPreviousPage, categoryType, setCategoryType } = NavContext();
   const [isOpen, setIsOpen] = useState(false);
   const imageSrc = podcastData?.imageUrl;
   const isBreakPoint = useMediaQuery(1023);
@@ -147,7 +146,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
       <div className="flex-col w-full">
         <PreviousPage />
         {
-          <div className="flex flex-col items-center relative h-[50vh] gradient bg-[#000000] w-full">
+          <div className="flex flex-col items-center relative h-[50vh] w-full">
             <DescriptionDrawer
               isOpen={isOpenDrawer}
               onClose={onCloseDrawer}
@@ -243,7 +242,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         <div
           className={`w-full base:mt-14 lg:mt-20 text-[#aaaaaa] flex flex-col`}
         >
-          <div className="flex flex-col lg:my-6 justify-evenly">
+          <div className="flex flex-col mt-6 justify-evenly bg-gradient-to-b from-black to-[#0e0e0e]">
             <div className="flex relative p-4 lg:pl-8">
               {isBreakPoint || (
                 <p className="font-light text-sm sm:text-md relative p-4 top-[70px] tracking-widest">
@@ -256,12 +255,13 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
             </div>
             <div className="w-[95%] border-b-[1px] pb-8 pt-2 mt-2 mb-6"></div>
           </div>
-          <div className="w-full flex flex-col lg:gap-6 lg:h-fit lg:overflow-visible">
+          <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col lg:gap-6 lg:h-fit lg:overflow-visible">
             {podcastData.offer.map((offer: OfferData, index) => (
               <div
                 key={offer.sponsor}
                 className={`flex flex-col py-2 justify-between"`}
               >
+                {/* Mobile */}
                 {isBreakPoint ? (
                   <div className="flex justify-between items-center px-6">
                     <Image
@@ -294,6 +294,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                     </div>
                   </div>
                 ) : (
+                  /* Desktop */
                   <>
                     <div className="w-full ">
                       <div className=" flex justify-between">
