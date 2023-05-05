@@ -45,7 +45,6 @@ interface SponsorState {
   previousSponsor: string;
 }
 
-
 const SponsorCategory = ({
   categoryData,
   sponsorsData,
@@ -135,7 +134,7 @@ const SponsorCategory = ({
   };
 
   const isLoading = useLoadingScreen();
-  /* Handle randomized, set Sponsor array to 5 max. Implement View More */
+  /* TODO: Implement View More */
 
   const handleCollapse = async (sponsor: string) => {
     setCurrent(sponsor);
@@ -199,6 +198,7 @@ const SponsorCategory = ({
                     </div>
 
                     {isBreakPoint ? (
+                      /* Mobile */
                       <div>
                         {sponsorsData?.map(
                           (sponsor: SponsorData, index: number) => (
@@ -324,6 +324,14 @@ const SponsorCategory = ({
                                             </Button>
                                           </div>
                                         ))}
+                                        <Link
+                                          className="min-w-[150px] h-[100px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
+                                          href={`/${sponsor.name}`}
+                                        >
+                                          <p className="font-semibold">
+                                            View All
+                                          </p>
+                                        </Link>
                                       </div>
                                     </div>
                                   </Box>
@@ -334,6 +342,7 @@ const SponsorCategory = ({
                         )}
                       </div>
                     ) : (
+                      /* Desktop */
                       <div>
                         {sponsorsData?.map(
                           (sponsor: SponsorData, index: number) => (
@@ -498,6 +507,14 @@ const SponsorCategory = ({
                                             </Button>
                                           </div>
                                         ))}
+                                        <Link
+                                          className="w-[110px] h-[110px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
+                                          href={`/${sponsor.name}`}
+                                        >
+                                          <p className="font-semibold">
+                                            View All
+                                          </p>
+                                        </Link>
                                       </div>
                                     </div>
                                   </Box>

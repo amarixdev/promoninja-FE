@@ -10,7 +10,7 @@ import Society from "../../public/assets/society.avif";
 import Sports from "../../public/assets/sports.avif";
 import Crime from "../../public/assets/crime.avif";
 import Education from "../../public/assets/education.avif";
-import BackdropMain from "../../public/assets/backdropMain.jpeg";
+import LogoText from "../../public/assets/logo-text.png";
 import styles from "../../../styles/style.module.css";
 
 import { capitalizeString, truncateString } from "../../utils/functions";
@@ -34,7 +34,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
 
   const { setPreviousPage, setCategoryType, categoryType } = NavContext();
   useSetCurrentPage({ home: false, podcasts: true, search: false });
-  let backdrop: StaticImageData = BackdropMain;
+  let backdrop: StaticImageData = LogoText;
 
   useEffect(() => {
     if (categoryName) {
@@ -67,7 +67,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
         backdrop = Crime;
         break;
       default:
-        BackdropMain;
+        LogoText;
     }
   }
   console.log(2, categoryType);
