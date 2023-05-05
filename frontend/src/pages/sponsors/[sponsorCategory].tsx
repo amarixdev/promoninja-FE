@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
 import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
 import Image from "next/image";
-import Ninja4 from "../../public/assets/ninja4.png";
 import {
   Box,
   Button,
   Collapse,
   Spinner,
   Text,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import Sidebar from "../../components/Sidebar";
-import useSetHomePage, {
+import {
   useLoadingScreen,
   useMediaQuery,
+  useSetCurrentPage,
 } from "../../utils/hooks";
 import Link from "next/link";
 import { truncateString } from "../../utils/functions";
@@ -24,9 +25,7 @@ import { GoChevronDown, GoChevronUp } from "react-icons/go";
 import { FaEllipsisV } from "react-icons/fa";
 import DescriptionDrawer from "../../components/DescriptionDrawer";
 import { useLazyQuery } from "@apollo/client";
-import { ClassNames } from "@emotion/react";
 import CategoryTabs from "../../components/CategoryTabs";
-import { useRouter } from "next/router";
 import { NavContext } from "../../context/navContext";
 
 interface Props {

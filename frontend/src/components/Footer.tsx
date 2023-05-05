@@ -11,71 +11,81 @@ import { NavContext } from "../context/navContext";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { IconType } from "react-icons/lib";
-import { BsSearch } from "react-icons/bs";
+import { RiSearch2Fill, RiSearch2Line } from "react-icons/ri";
+import { RiHome2Fill } from "react-icons/ri";
 
-const Footer = (href: any) => {
-  const { homePage, setPageNavigate } = NavContext();
+export interface LinkWrapperProps {
+  href: string;
+  activeIcon: IconType;
+  icon: IconType;
+  pageTitle: string;
+  current?: "home" | "podcasts" | "search";
+}
+
+const Footer = () => {
+  const { currentPage, setPageNavigate } = NavContext();
   const isBreakPoint = useMediaQuery(1023);
   const { pathname } = useRouter();
-  console.log(pathname === "/");
-
-  interface LinkWrapperProps {
-    href: string;
-    activeIcon: IconType;
-    icon: IconType;
-    page: string;
-    homeButton?: boolean;
-  }
 
   const LinkWrapper = ({
     href,
     activeIcon: ActiveIcon,
     icon: Icon,
-    page,
-    homeButton,
+    pageTitle,
+    current,
   }: LinkWrapperProps) => {
+
     if (href == pathname) {
       return (
-        <div className={`flex flex-col items-center ${styles.hoverIcon}`}>
-          {homeButton && homePage ? (
+        <div className={`flex flex-col items-center`}>
+          {currentPage[current || "home"] ? (
             <ActiveIcon
-              color={"#e3e3e3ae"}
+              color={"#d6d6d6"}
               size={24}
-              className={`relative base:w-[22px] xs:w-[24px] ${styles.hoverIcon}`}
+              className={`text-[#d6d6d6] active:scale-95 relative base:w-[22px] xs:w-[24px] `}
             />
           ) : (
             <Icon
               color={"#e3e3e3ae"}
               size={24}
-              className={`relative base:w-[22px] xs:w-[24px] ${styles.hoverIcon}`}
+              className={`relative active:scale-95 base:w-[22px] xs:w-[24px]`}
             />
           )}
-          <p className="base:text-[10px] xs:text-xs font-medium text-[#e3e3e3ae]">
-            Home
+          <p
+            className={`base:text-[10px] xs:text-xs font-medium ${
+              currentPage[current || "home"]
+                ? "text-[#d6d6d6]"
+                : "text-[#e3e3e3ae]"
+            }`}
+          >
+            {pageTitle}
           </p>
         </div>
       );
     }
     return (
-      <Link
-        href={href}
-        className={`flex flex-col items-center ${styles.hoverIcon}`}
-      >
-        {homeButton && homePage ? (
+      <Link href={href} className={`flex flex-col items-center `}>
+        {currentPage[current || "home"] ? (
           <ActiveIcon
-            color={"#e3e3e3ae"}
+            color={"#d6d6d6"}
             size={24}
-            className={`relative base:w-[22px] xs:w-[24px] ${styles.hoverIcon}`}
+            className={`text-[#d6d6d6] active:scale-95 relative base:w-[22px] xs:w-[24px] `}
           />
         ) : (
           <Icon
             color={"#e3e3e3ae"}
             size={24}
-            className={`relative base:w-[22px] xs:w-[24px] ${styles.hoverIcon}`}
+            className={`relative  active:scale-95 base:w-[22px] xs:w-[24px] `}
           />
         )}
-        <p className="base:text-[10px] xs:text-xs font-medium text-[#e3e3e3ae]">
-          Home
+        <p
+          className={`base:text-[10px] xs:text-xs font-medium ${
+            currentPage[current || "home"]
+              ? "text-[#d6d6d6]"
+              : "text-[#e3e3e3ae]"
+          }`}
+        >
+          {pageTitle}
         </p>
       </Link>
     );
@@ -95,28 +105,30 @@ const Footer = (href: any) => {
           href="/"
           activeIcon={AiFillHome}
           icon={AiOutlineHome}
-          page="Home"
-          homeButton={true}
+          pageTitle="Home"
+          current="home"
         />
         <LinkWrapper
           href="/search"
-          activeIcon={BsSearch}
-          icon={BiSearch}
-          page="Search"
+          activeIcon={RiSearch2Fill}
+          icon={RiSearch2Line}
+          pageTitle="Search"
+          current="search"
         />
 
         <LinkWrapper
           href="/podcasts"
           activeIcon={BiPodcast}
           icon={BiPodcast}
-          page="Podcasts"
+          pageTitle="Podcasts"
+          current="podcasts"
         />
 
         <LinkWrapper
-          href="/"
+          href=""
           activeIcon={IoMdContact}
           icon={IoMdContact}
-          page="About"
+          pageTitle="About"
         />
       </div>
     </div>

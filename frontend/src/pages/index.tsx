@@ -1,39 +1,42 @@
 import { Button, Spinner } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
-import useSetHomePage, { useMediaQuery } from "../utils/hooks";
+import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 import FeaturedGIF from "../public/assets/optimizedGIF.gif";
 import { AiFillCaretLeft } from "react-icons/ai";
 import { AiFillCaretRight } from "react-icons/ai";
 import Logo from "../public/assets/ninja4.png";
+import LogoText from "../public/assets/logo-text.png";
 
+import style from "../../styles/style.module.css";
 import Link from "next/link";
 import Carousel from "../components/Carousel";
 import { truncateString } from "../utils/functions";
 import { NavContext } from "../context/navContext";
+import { useRouter } from "next/router";
 
 interface Props {
+  topPicksData: PodcastData[];
   sponsorsData: SponsorData[];
   categoryData: SponsorCategory[];
-  loading: boolean;
-  topPicksData: PodcastData[];
 }
 
 type GroupedSponsors = { [key: string]: string[] };
 
-const Home = ({ loading, categoryData, sponsorsData, topPicksData }: Props) => {
-  useSetHomePage(true);
-
+const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
+  useSetCurrentPage({ home: true, podcasts: false, search: false });
   const isBreakPoint = useMediaQuery(1023);
   const [currDeg, setCurrDeg] = useState(0);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
   const groupedSponsors: GroupedSponsors = {};
+  const [loading, setLoading] = useState(true);
+  const { setCategoryIndex, categoryIndex } = NavContext();
 
   sortedSponsors.forEach((str) => {
     const firstLetter = str.charAt(0).toUpperCase();

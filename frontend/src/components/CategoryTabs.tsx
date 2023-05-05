@@ -1,20 +1,35 @@
-import { Spinner, Tab, TabList, Tabs } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import client from "../graphql/apollo-client";
-import { Operations } from "../graphql/operations";
+import {
+  Button,
+  Spinner,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+} from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
 import { SponsorCategory } from "../utils/types";
-import { GetStaticProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { NavContext } from "../context/navContext";
+import style from "../../styles/style.module.css";
 
 interface Props {
   sponsorCategoryData: SponsorCategory[];
+  categoryData: SponsorCategory;
 }
 
-const CategoryTabs = ({ sponsorCategoryData }: Props) => {
+const CategoryTabs = ({ sponsorCategoryData, categoryData }: Props) => {
   const [filled, setFilled] = useState(false);
-  const { setPageNavigate } = NavContext();
+  const { setPageNavigate, categoryIndex, setCategoryIndex } = NavContext();
+
+  const index = sponsorCategoryData?.findIndex(
+    (category) => category.name === categoryData.name
+  );
+
+  useEffect(() => {
+    setPageNavigate;
+  }, []);
 
   const handleScroll = () => {
     const currentScrollPosition = window.pageYOffset;
@@ -27,8 +42,6 @@ const CategoryTabs = ({ sponsorCategoryData }: Props) => {
   };
 
 
-
-  
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -44,13 +57,20 @@ const CategoryTabs = ({ sponsorCategoryData }: Props) => {
       }`}
       id="navbar"
     >
-      <Tabs>
-        <TabList className="overflow-x-scroll scrollbar-hide px-2 relative">
+      <Tabs defaultIndex={index || categoryIndex} variant={"unstyled"}>
+        <TabList
+          className={` ${style.offset} overflow-x-scroll scrollbar-hide px-2 relative`}
+        >
           {sponsorCategoryData.map((category: SponsorCategory) => (
             <Link key={category.name} href={`/sponsors/${category.name}`}>
               <Tab
-                className="text-xs font-light whitespace-nowrap"
+                className={
+                  "text-xs mx-2 font-medium whitespace-nowrap categoryRef"
+                }
                 onClick={() => setPageNavigate(false)}
+                _selected={{ color: "black", bg: "white" }}
+                rounded={"xl"}
+                bg={"whiteAlpha.100"}
               >
                 {category.name}
               </Tab>
@@ -63,3 +83,21 @@ const CategoryTabs = ({ sponsorCategoryData }: Props) => {
 };
 
 export default CategoryTabs;
+
+export const getStaticPaths = async () => {
+  const paths = [{ params: { sponsorCategory: "" } }];
+  return {
+    paths,
+    fallback: true,
+  };
+};
+
+export const getStaticProps = async ({ params }: any) => {
+  const { sponsorCategory: category } = params;
+
+  return {
+    props: {
+      category,
+    },
+  };
+};

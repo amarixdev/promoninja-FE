@@ -30,18 +30,21 @@ export const useMediaQuery = (width: number) => {
   return targetReached;
 };
 
-import { NavContext } from "../context/navContext";
+import { CurrentPage, NavContext } from "../context/navContext";
 import { useRouter } from "next/router";
 
-function useSetHomePage(bool: boolean) {
-  const { setHomePage } = NavContext();
+export const useSetCurrentPage = (currentPage: CurrentPage) => {
+  const { setCurrentPage } = NavContext();
 
   useEffect(() => {
-    setHomePage(bool);
-  }, [setHomePage, bool]);
-}
-
-export default useSetHomePage;
+    setCurrentPage((prev) => ({
+      ...prev,
+      home: currentPage.home,
+      podcasts: currentPage.podcasts,
+      search: currentPage.search,
+    }));
+  }, [setCurrentPage]);
+};
 
 export const useLoadingScreen = () => {
   const router = useRouter();
