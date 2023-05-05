@@ -65,7 +65,7 @@ const CreateSponsor = ({
   const [display, setDisplay] = useState({
     preview: false,
   });
-  const [sponsor, setSponsor] = useState({
+  const [sponsor, setSponsor] = useState<Sponsor>({
     name: "",
     url: "",
     baseUrl: "",

@@ -24,11 +24,6 @@ import EditPodcastCategory from "../components/EditPodcastCategory";
 const App = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: isOpenCreateSponsor,
-    onOpen: onOpenCreateSponsor,
-    onClose: onCloseCreateSponsor,
-  } = useDisclosure();
-  const {
     isOpen: isOpenDetails,
     onOpen: onOpenDetails,
     onClose: onCloseDetails,

@@ -92,10 +92,13 @@ const Sponsors = () => {
     onOpenEdit();
   };
 
+  console.log(sponsorCategoryData)
+
   if (loading) return <Spinner />;
 
   return (
     <div className="w-full h-[80vh] flex-col flex justify-center items-center">
+    
       <div className="w-3/12">
         <Input
           value={searchText}
