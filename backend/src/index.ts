@@ -1,6 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
-import { prisma, PrismaClient } from "@prisma/client";
+import {  PrismaClient } from "@prisma/client";
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
 import Axios from "axios";

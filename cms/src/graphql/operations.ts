@@ -40,7 +40,6 @@ export const Operations = {
       query ($input: SponsorCategoryInput!) {
         getSponsorCategory(input: $input) {
           name
-          imageUrl
         }
       }
     `,
@@ -94,9 +93,9 @@ export const Operations = {
         }
       }
     `,
-    GetCategories: gql`
+    GetPodcastCategories: gql`
       query {
-        getCategories {
+        getPodcastCategories {
           name
           podcastId
         }

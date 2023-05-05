@@ -142,7 +142,7 @@ export const categoryResolvers = {
         },
       });
 
-      getCategory?.podcastId.forEach((id) =>
+      getCategory?.podcastId.forEach((id: string) =>
         prisma.podcast.findFirst({
           where: {
             id: id,
@@ -159,7 +159,11 @@ export const categoryResolvers = {
       });
       return podcasts;
     },
-    getCategories: async (parent: any, args: any, context: GraphQLContext) => {
+    getPodcastCategories: async (
+      parent: any,
+      args: any,
+      context: GraphQLContext
+    ) => {
       const { prisma } = context;
       const categories = await prisma.category.findMany();
       return categories;

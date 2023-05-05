@@ -1,4 +1,3 @@
-import { GraphQLBoolean } from "graphql";
 import {
   DeleteInput,
   GraphQLContext,
