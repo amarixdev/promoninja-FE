@@ -182,17 +182,23 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                   width={250}
                   height={250}
                   priority
-                  className={`z-10 lg:top-6 mt-6 lg:mb-4 relative base:w-[150px] xs:w-[180px] sm:w-[250px] shadow-2xl shadow-black`}
+                  className={`z-10 lg:top-6 mt-6 lg:mb-4 relative base:w-[150px] xs:w-[180px] sm:w-[220px] shadow-2xl shadow-black`}
                 />
                 <div className="w-full my-10">
                   <h1 className=" base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold ml-6 px-2">
                     {podcastData?.title}
                   </h1>
-                  <h2 className="base:text-md font-medium xs:text-lg ml-6 my-4 text-[#aaaaaa] p-2">
+                  <h2 className="base:text-md font-medium xs:text-lg ml-6 mb-4 text-[#aaaaaa] p-2">
                     {podcastData?.publisher}{" "}
                   </h2>
                   {isBreakPoint || (
-                    <div className="w-full">
+                    <div className="w-full flex items-center pb-4">
+                      <div className="px-6">
+                        <Button>
+                          <BsShareFill />
+                          <p className="ml-3">Share</p>
+                        </Button>
+                      </div>
                       <Link
                         href={podcastData?.externalUrl}
                         target="_blank"
@@ -203,6 +209,14 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                           Listen on Spotify
                         </p>
                       </Link>
+                    </div>
+                  )}
+                  {isBreakPoint && (
+                    <div className="px-6">
+                      <Button>
+                        <BsShareFill />
+                        <p className="ml-3">Share</p>
+                      </Button>
                     </div>
                   )}
                   {isBreakPoint && (
@@ -243,17 +257,24 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         <div
           className={`w-full base:mt-14 lg:mt-20 text-[#aaaaaa] flex flex-col`}
         >
-          <div className="flex flex-col lg:my-6 justify-evenly items-center">
-            <h1 className="font-extralight text-lg w-full text-center relative p-4 top-[70px] tracking-widest">
-              {`Support ${podcastData.title}`}
-            </h1>
-            <div className="w-[95%] border-b-[1px] py-8 mt-2 mb-6"></div>
+          <div className="flex flex-col lg:my-6 justify-evenly">
+            <div className="flex relative p-4 lg:pl-8">
+              {isBreakPoint || (
+                <p className="font-light text-sm sm:text-md relative p-4 top-[70px] tracking-widest">
+                  {`#`}
+                </p>
+              )}
+              <p className="font-light text-sm sm:text-md relative p-4 top-[70px] tracking-widest">
+                {`Sponsor`}
+              </p>
+            </div>
+            <div className="w-[95%] border-b-[1px] pb-8 pt-2 mt-2 mb-6"></div>
           </div>
-          <div className="w-full flex flex-col lg:gap-6 overflow-y-scroll h-[350px] lg:h-fit lg:overflow-visible">
+          <div className="w-full flex flex-col lg:gap-6 lg:h-fit lg:overflow-visible">
             {podcastData.offer.map((offer: OfferData, index) => (
               <div
                 key={offer.sponsor}
-                className={`flex flex-col justify-between"`}
+                className={`flex flex-col py-2 justify-between"`}
               >
                 {isBreakPoint ? (
                   <div className="flex justify-between items-center px-6">
@@ -267,11 +288,11 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                       height={50}
                       priority
                       alt={offer.sponsor}
-                      className="base:w-[40px] xs:w-[50px] ml-4 rounded-md base:pr-2 xs:p-0"
+                      className="base:w-[50px] xs:w-[60px] ml-4 base:pr-2 xs:p-0"
                     />
                     <div className="w-full justify-between flex items-center">
                       <div className="base: py-4 xs:p-4">
-                        <h1 className="font-bold text-md">
+                        <h1 className="font-bold text-white text-sm">
                           {truncateString(offer.sponsor, 20)}
                         </h1>
                         <p className="text-[#909090] text-sm">
@@ -307,7 +328,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                             </Link>
 
                             <div className="p-4">
-                              <h1 className="font-bold text-lg">
+                              <h1 className="text-white font-bold text-lg">
                                 {offer.sponsor}
                               </h1>
                               <p className="text-[#909090] text-md">
@@ -316,7 +337,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                             </div>
                           </div>
 
-                          <div className="flex justify-end px-6">
+                          <div className="flex justify-end pl-6 pr-14">
                             <Button
                               onClick={() => handleCollapse(offer.sponsor)}
                               className="active:scale-95"
@@ -338,10 +359,10 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                             rounded="md"
                             shadow="md"
                           >
-                            <div className="flex flex-col w-full p-2">
+                            <div className="flex flex-col text-white w-full p-2">
                               <div className="flex justify-start p-2">
                                 <Link
-                                  href={convertToFullURL("podcastOffer")}
+                                  href={`${convertToFullURL(offer.url)}`}
                                   target="_blank"
                                   className="hover:underline underline-offset-4"
                                 >
@@ -356,7 +377,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                                 </Link>
                               </div>
                               <div className="w-full font-light p-2 mb-4 flex">
-                                <p className="mx-2 text-sm py-2 px-4 rounded-xl">
+                                <p className="text-white mx-2 text-sm py-2 px-4 rounded-xl">
                                   {
                                     sponsorData.filter(
                                       (sponsor) =>
