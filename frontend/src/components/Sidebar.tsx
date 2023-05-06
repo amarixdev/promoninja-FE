@@ -9,6 +9,7 @@ import * as LogoText from "../public/assets/logo-text.png";
 import * as Ninja4 from "../public/assets/logo.png";
 import { useMediaQuery } from "../utils/hooks";
 import { LinkWrapperProps } from "./Footer";
+import { scrollToTop } from "../utils/functions";
 
 interface Props {}
 
@@ -26,7 +27,10 @@ const Sidebar = (props: Props) => {
   }: LinkWrapperProps) => {
     if (href === pathname) {
       return (
-        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#282828a1] hover:cursor-pointer">
+        <button
+          className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#282828a1] hover:cursor-pointer"
+          onClick={() => scrollToTop()}
+        >
           {currentPage[current || "home"] ? (
             <ActiveIcon
               size={28}
@@ -45,7 +49,7 @@ const Sidebar = (props: Props) => {
           >
             {pageTitle}
           </p>
-        </div>
+        </button>
       );
     }
     return (
@@ -77,18 +81,33 @@ const Sidebar = (props: Props) => {
   return (
     <div className={!isBreakpoint ? "min-w-[250px] bg-black" : "hidden"}>
       <div className="fixed">
-        <Link
-          href={"/"}
-          className="w-[230px] flex justify-center items-center pl-8 p-6"
-        >
-          <Image src={Ninja4} alt="" className="h-fit mx-3" width={60} />
-          <Image
-            alt="/"
-            src={LogoText}
-            width={160}
-            className="px-4 py-2 right-6  relative h-fit"
-          />
-        </Link>
+        {pathname !== "/" ? (
+          <Link
+            href={"/"}
+            className="w-[230px] flex justify-center items-center pl-8 p-6"
+          >
+            <Image src={Ninja4} alt="" className="h-fit mx-3" width={60} />
+            <Image
+              alt="/"
+              src={LogoText}
+              width={160}
+              className="px-4 py-2 right-6  relative h-fit"
+            />
+          </Link>
+        ) : (
+          <button
+            className="w-[230px] flex justify-center items-center pl-8 p-6"
+            onClick={() => scrollToTop()}
+          >
+            <Image src={Ninja4} alt="" className="h-fit mx-3" width={60} />
+            <Image
+              alt="/"
+              src={LogoText}
+              width={160}
+              className="px-4 py-2 right-6  relative h-fit"
+            />
+          </button>
+        )}
 
         <div className="flex flex-col px-4 relative gap-2">
           <LinkWrapper

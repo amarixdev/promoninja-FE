@@ -46,3 +46,10 @@ export const callToAction = (input: string) => {
 
   return output;
 };
+
+export const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};

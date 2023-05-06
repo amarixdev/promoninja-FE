@@ -8,6 +8,7 @@ import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { IconType } from "react-icons/lib";
 import { RiSearch2Fill, RiSearch2Line } from "react-icons/ri";
 import { NavContext } from "../context/navContext";
+import { scrollToTop } from "../utils/functions";
 
 export interface LinkWrapperProps {
   href: string;
@@ -29,10 +30,12 @@ const Footer = () => {
     pageTitle,
     current,
   }: LinkWrapperProps) => {
-
     if (href == pathname) {
       return (
-        <div className={`flex flex-col items-center`}>
+        <button
+          className={`flex flex-col items-center`}
+          onClick={() => scrollToTop()}
+        >
           {currentPage[current || "home"] ? (
             <ActiveIcon
               color={"#d6d6d6"}
@@ -55,7 +58,7 @@ const Footer = () => {
           >
             {pageTitle}
           </p>
-        </div>
+        </button>
       );
     }
     return (

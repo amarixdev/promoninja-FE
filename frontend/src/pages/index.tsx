@@ -15,7 +15,7 @@ import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 import Link from "next/link";
 import Carousel from "../components/Carousel";
 import { NavContext } from "../context/navContext";
-import { truncateString } from "../utils/functions";
+import { scrollToTop, truncateString } from "../utils/functions";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -66,6 +66,9 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
             <div className="flex items-center justify-between w-full relative">
               <h1
                 className={`text-3xl sm:text-5xl p-8 fixed font-bold z-10 text-white bg-[#121212] w-full`}
+                onClick={() => {
+                  isBreakPoint ? scrollToTop() : null;
+                }}
               >
                 Home
               </h1>
