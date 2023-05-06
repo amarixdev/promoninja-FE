@@ -21,6 +21,7 @@ import { Operations } from "../../../graphql/operations";
 import { convertToFullURL, truncateString } from "../../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../../utils/hooks";
 import { OfferData, PodcastData, SponsorData } from "../../../utils/types";
+import PromoCodeButton from "../../../components/PromoCodeButton";
 
 interface Props {
   podcastData: PodcastData;
@@ -49,6 +50,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     subtitle: "",
     description: "",
     url: "",
+    promoCode: "",
   });
   let existingSponsor: boolean = true;
   const [selectedSponsor, setSelectedSponsor] = useState("");
@@ -92,6 +94,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   const handleDrawer = (sponsor: string, isSponsorOfferDrawer: boolean) => {
     let sponsorPromotionUrl = "";
 
+    /* SponsorOfferDrawer */
     if (isSponsorOfferDrawer) {
       setSponsorOfferDrawer(true);
       setPodcastDrawer(false);
@@ -107,16 +110,20 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
       const sponsorOffer = filteredSponsor.offer;
       const sponsorBaseUrl = filteredSponsor.url;
       const sponsorName = filteredPodcast.sponsor;
+      const sponsorPromoCode = filteredPodcast.promoCode;
       sponsorPromotionUrl = filteredPodcast.url;
 
+      console.log(sponsorOffer);
       setDrawerData({
         image: sponsorImage,
         title: sponsorName,
         subtitle: sponsorBaseUrl,
         description: sponsorOffer,
         url: sponsorPromotionUrl,
+        promoCode: sponsorPromoCode,
       });
     } else {
+      /* Podcast Drawer */
       setSponsorOfferDrawer(false);
       setPodcastDrawer(true);
       const podcastImage = podcastData.imageUrl;
@@ -130,6 +137,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         subtitle: publisher,
         description: podcastDescription,
         url: sponsorPromotionUrl,
+        promoCode: "",
       });
     }
 
@@ -362,6 +370,21 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                                     }
                                   </p>
                                 </Link>
+                                {offer.promoCode && (
+                                  <div className="flex">
+                                    <div className="border-r border-[1px] border-white"></div>
+
+                                    <div className="ml-4 flex items-center gap-4 font-bold text-lg">
+                                      <p className="">Use Code</p>
+
+                                      <PromoCodeButton
+                                        promoCode={offer.promoCode}
+                                      />
+
+                                      <p>At Checkout</p>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                               <div className="w-full font-light p-2 mb-4 flex">
                                 <p className="text-white mx-2 text-sm py-2 px-4 rounded-xl">

@@ -3,7 +3,7 @@ import {
   Button,
   Collapse,
   Spinner,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,11 +17,9 @@ import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import Ninja4 from "../public/assets/ninja4.png";
 import { convertToFullURL, truncateString } from "../utils/functions";
-import {
-  useMediaQuery,
-  useSetCurrentPage,
-} from "../utils/hooks";
+import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import { PodcastData, SponsorData } from "../utils/types";
+import PromoCodeButton from "../components/PromoCodeButton";
 
 interface Props {
   sponsorData: SponsorData;
@@ -45,7 +43,6 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
     onClose: onCloseDrawer,
   } = useDisclosure();
 
-  const { onToggle } = useDisclosure();
   const [isOpen, setIsOpen] = useState(false);
 
   const [drawerData, setDrawerData] = useState({
@@ -55,6 +52,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
     url: "",
     subtitle: "",
     color: "",
+    promoCode: "",
   });
 
   const handleDrawer = (podcast: PodcastData) => {
@@ -62,7 +60,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
       (offer) => offer.sponsor === sponsorData?.name
     );
 
-    console.log(sponsorData?.name);
+    console.log(podcastOffer[0].promoCode);
 
     setSelectedPodcast(podcast.title);
     setDrawerData((prev) => ({
@@ -70,9 +68,10 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
       image: podcast.imageUrl,
       title: podcast.title,
       description: sponsorData.offer,
-      url: podcastOffer[0].url,
       color: podcast.backgroundColor,
       subtitle: podcast.publisher,
+      url: podcastOffer[0].url,
+      promoCode: podcastOffer[0].promoCode,
     }));
     onOpenDrawer();
   };
@@ -99,15 +98,11 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
     }
   };
 
-  console.log(podcastOfferState);
-
-  const getPodcastUrl = (podcast: PodcastData) => {
+  const getPodcast = (podcast: PodcastData) => {
     return podcast.offer.filter(
       (offer) => offer.sponsor === sponsorData?.name
-    )[0].url;
+    )[0];
   };
-
-  console.log(podcastsData);
 
   if (!sponsorData) return <Spinner />;
 
@@ -371,7 +366,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                               shadow="md"
                             >
                               <div className="flex flex-col w-full px-10">
-                                {getPodcastUrl(podcast) === previousPodcast ? (
+                                {getPodcast(podcast).url === previousPodcast ? (
                                   <div>
                                     {" "}
                                     <div>
@@ -379,20 +374,39 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                                     </div>
                                   </div>
                                 ) : (
-                                  <div className="flex justify-start p-2">
+                                  <div className="flex justify-start items-center p-2">
+                                    <h2 className="font-bold text-3xl">
+                                      Visit:
+                                    </h2>
                                     <Link
                                       href={convertToFullURL(
                                         podcastOfferState.selectedUrl
                                       )}
                                       target="_blank"
                                     >
-                                      <div className="mx-2 py-2 px-4 flex gap-2 items-center font-bold text-3xl">
-                                        <h2>Visit:</h2>
+                                      <div className="py-2 px-3 flex gap-2 items-center ">
                                         <p className="hover:underline underline-offset-4 rounded-md font-light text-3xl">
                                           {podcastOfferState.selectedUrl}
                                         </p>
                                       </div>
                                     </Link>
+                                    {getPodcast(podcast).promoCode && (
+                                      <div className="flex">
+                                        <div className="border-r border-[1px] border-white"></div>
+
+                                        <div className="ml-4 flex items-center gap-4 font-bold text-lg">
+                                          <p className="">Use Code</p>
+
+                                          <PromoCodeButton
+                                            promoCode={
+                                              getPodcast(podcast).promoCode
+                                            }
+                                          />
+
+                                          <p>At Checkout</p>
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
                                 )}
                                 <div className="w-full font-light p-2 mb-4 flex">

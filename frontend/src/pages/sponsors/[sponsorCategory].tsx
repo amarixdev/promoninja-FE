@@ -78,6 +78,7 @@ const SponsorCategory = ({
     url: "",
     subtitle: "",
     color: "",
+    promoCode: "",
   });
   const { pageNavigate, setPageNavigate } = NavContext();
   useEffect(() => {
@@ -124,9 +125,10 @@ const SponsorCategory = ({
         image: input.imageUrl,
         title: input.title,
         description: promotion,
-        url: podcastOffer[0].url,
         color: input.backgroundColor,
         subtitle: input.publisher,
+        url: podcastOffer[0].url,
+        promoCode: podcastOffer[0].promoCode,
       }));
       onOpenDrawer();
     }
@@ -324,7 +326,7 @@ const SponsorCategory = ({
                                           </div>
                                         ))}
                                         <Link
-                                          className="min-w-[150px] h-[100px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
+                                          className="min-w-[120px] h-[100px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
                                           href={`/${sponsor.name}`}
                                         >
                                           <p className="font-semibold">

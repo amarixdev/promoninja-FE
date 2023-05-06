@@ -4,13 +4,14 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerOverlay,
-  Tooltip
+  Tooltip,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { BsPlayCircle } from "react-icons/bs";
 import { convertToFullURL } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
+import PromoCodeButton from "./PromoCodeButton";
 
 type Props = {
   isOpen: boolean;
@@ -32,6 +33,7 @@ interface DrawerData {
   image: string;
   description: string;
   color?: string;
+  promoCode?: string;
 }
 
 const DescriptionDrawer = ({
@@ -62,7 +64,7 @@ const DescriptionDrawer = ({
         <DrawerOverlay bgColor={"rgb(0,0,0,0.65)"} />
         <DrawerContent
           backgroundColor={"transparent"}
-          className={"backdrop-blur-sm z-[90]"}
+          className={"backdrop-blur-md z-[90]"}
         >
           {isBreakPoint ? (
             <DrawerBody>
@@ -99,7 +101,7 @@ const DescriptionDrawer = ({
                     <h1 className="base:text-lg xs:text-xl font-bold hover:underline">
                       {drawer.title}
                     </h1>
-                    <h3 className="base:text-xs xs:text-sm font-semibold text-[#b3b3b3]">
+                    <h3 className="base:text-xs xs:text-sm font-semibold text-[#c8c8c8]">
                       {drawer.subtitle}
                     </h3>
                   </div>
@@ -117,7 +119,7 @@ const DescriptionDrawer = ({
                       </p>
                     </Link>
                   )}
-                  <div className="p-6 first-letter: text-white h-[60vh] flex flex-col items-center">
+                  <div className="p-6 text-white h-[60vh] flex flex-col items-center">
                     {(podcastDrawer || sponsorDrawer) && (
                       <h1 className="p-y overflow-y-auto tracking-wide">
                         <p className="text-white font-bold text-xl pb-2">
@@ -127,28 +129,43 @@ const DescriptionDrawer = ({
                       </h1>
                     )}
                     {(sponsorOfferDrawer || podcastOfferDrawer) && (
-                      <h1 className="p-y text-xl font-extralight overflow-y-auto">
-                        {drawer.description}
-                      </h1>
+                      <div className="w-full flex items-center justify-center">
+                        <h1 className="p-y text-center font-semibold text-xl text-[#d5d5d5] overflow-y-auto">
+                          {drawer.description}
+                        </h1>
+                      </div>
                     )}
-
                     {(podcastOfferDrawer || sponsorOfferDrawer) && (
                       <>
                         <h1
                           style={{ color: "white" }}
-                          className="text-3xl font-extrabold mt-4"
+                          className="text-3xl font-extrabold mt-10"
                         >
                           Visit{" "}
                         </h1>
                         <Link
                           href={convertToFullURL(drawer.url)}
                           target="_blank"
-                          className={`text-lg active:scale-95 underline underline-offset-2 mt-5 p-4 rounded-md`}
+                          className={`text-lg active:scale-95 underline underline-offset-2 p-4 rounded-md`}
                         >
                           <Button className="font-bold">
                             <p className="text-sm">{drawer.url}</p>
                           </Button>
                         </Link>
+                        {drawer.promoCode &&
+                          (podcastOfferDrawer || sponsorOfferDrawer) && (
+                            <div className="flex flex-col justify-center items-center">
+                              <h2 className="text-lg font-bold my-2 tracking-wide">
+                                Use Code
+                              </h2>
+                              <PromoCodeButton
+                                promoCode={drawer.promoCode || ""}
+                              />
+                              <h2 className="text-lg font-bold my-2 tracking-wide">
+                                At Checkout
+                              </h2>
+                            </div>
+                          )}
                       </>
                     )}
                   </div>
@@ -229,6 +246,21 @@ const DescriptionDrawer = ({
                                 {drawer.url}
                               </p>
                             </Link>
+                            {drawer.promoCode && (
+                              <div className="flex">
+                                <div className="border-r border-[1px] ml-3 border-white"></div>
+
+                                <div className="ml-4 flex items-center gap-4 font-bold text-lg">
+                                  <p className="">Use Code</p>
+
+                                  <PromoCodeButton
+                                    promoCode={drawer.promoCode}
+                                  />
+
+                                  <p>At Checkout</p>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         )}
                         {sponsorDrawer && (
@@ -246,7 +278,7 @@ const DescriptionDrawer = ({
                 {podcastOfferDrawer && (
                   <div className="w-full flex justify-center items-center gap-2">
                     <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
-                    <h2 className="text-xl font-light">
+                    <h2 className="text-xl font-semibold">
                       {drawer.description}{" "}
                     </h2>
                   </div>
