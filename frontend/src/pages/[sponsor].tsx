@@ -107,7 +107,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
   if (!sponsorData) return <Spinner />;
 
   return (
-    <div className="flex">
+    <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
       <Sidebar />
       {
         <div className="bg-gradient-to-b from-[#454545] to-[#101010] flex flex-col items-center w-full">
@@ -201,13 +201,10 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                       <div className="relative">
                         <div className="flex items-center gap-2">
                           <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
-                          <p className="text-xl font-semibold">
-                            {" "}
-                            Exclusive Offer:
-                          </p>
+                          <p className="text-xl font-bold"> Exclusive Offer:</p>
                         </div>
                         <div className="px-4 py-2">
-                          <p className={`font-thin text-lg `}>
+                          <p className={` font-normal text-xl text-[#aaaaaa]`}>
                             {sponsorData?.offer}
                           </p>
                         </div>
@@ -280,7 +277,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
               <div className="w-[95%] border-b-[1px] "></div>
             </div>
 
-            <div className="w-full flex flex-col gap-6 lg:gap-6 overflow-y-scroll h-[250px] lg:h-fit lg:overflow-visible pt-4 pb-14">
+            <div className="w-full flex flex-col gap-6 lg:gap-6 lg:h-fit  pt-4 pb-14">
               {podcastsData.map((podcast, index) => (
                 <div
                   key={podcast.title}

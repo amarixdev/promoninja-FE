@@ -149,7 +149,13 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   };
 
   return (
-    <div className={`${isBreakPoint ? "flex flex-col" : "flex"}`}>
+    <div
+      className={`${
+        isBreakPoint
+          ? "flex flex-col base:mb-[60px] xs:mb-[70px] lg:mb-0"
+          : "flex"
+      }`}
+    >
       <Sidebar />
       <div className="flex-col w-full">
         <PreviousPage />
@@ -263,7 +269,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
             </div>
             <div className="w-[95%] border-b-[1px] pb-8 pt-2 mt-2 mb-6"></div>
           </div>
-          <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col lg:gap-6 lg:h-fit lg:overflow-visible">
+          <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col lg:gap-6 lg:h-fit lg:overflow-visible pb-6">
             {podcastData.offer.map((offer: OfferData, index) => (
               <div
                 key={offer.sponsor}

@@ -146,7 +146,7 @@ const Search = () => {
   console.log(category);
 
   return (
-    <div className="flex">
+    <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
       <Sidebar />
       <div className="h-screen w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727]">
         <div className="w-full p-6">

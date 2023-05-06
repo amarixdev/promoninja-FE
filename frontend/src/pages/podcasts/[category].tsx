@@ -29,6 +29,10 @@ interface Props {
 const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   const isBreakPoint = useMediaQuery(1023);
 
+  if (categoryName) {
+    console.log(categoryName.split("").length);
+  }
+
   const { setPreviousPage, setCategoryType, categoryType } = NavContext();
   useSetCurrentPage({ home: false, podcasts: true, search: false });
   let backdrop: StaticImageData = LogoText;
@@ -67,7 +71,6 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
         LogoText;
     }
   }
-  console.log(2, categoryType);
 
   const handlePreviousPage = () => {
     setPreviousPage("category");
@@ -75,7 +78,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
       <Sidebar />
       {categoryPodcasts && (
         <div className="h-screen w-full">
@@ -88,7 +91,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
           <div className="w-full h-screen bg-gradient-to-tr bg-black/10 from-black/40 fixed"></div>
           {<PreviousPage previousPageText="podcasts" />}
 
-          <h1 className="font-bold sm:font-extrabold text-5xl sm:text-7xl md:text-8xl lg:text-8xl text-white px-4 absolute z-2 top-[8rem] sm:top-[12rem]">
+          <h1 className="base:font-bold xs:font-extrabold base:text-3xl xs:text-4xl  sm:text-7xl lg:text-8xl text-white px-4 absolute z-2 base:top-[4rem] xs:top-[6rem] sm:top-[12rem] md:top-[14rem]">
             {capitalizeString(categoryName)}
           </h1>
 
@@ -96,7 +99,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
             <div
               className={`bg-[#151515] ${styles.shadow}  ${
                 isBreakPoint && "h-fit"
-              } relative top-[30%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-8 p-5`}
+              } relative top-[23%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-8 p-5`}
             >
               {categoryPodcasts?.map((podcast) => (
                 <div key={`${podcast.title}`}>
@@ -125,9 +128,6 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
                   </div>
                 </div>
               ))}
-              <div className="w-full text-[#121212] mt-16 text-[60px] relative">
-                margin
-              </div>
             </div>
           }
           <Footer />

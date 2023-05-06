@@ -59,10 +59,10 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
         <Sidebar />
         {
-          <div className="w-full flex flex-col h-screen bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] relative overflow-x-hidden z-1 mt-10">
+          <div className=" w-full flex flex-col bg-gradient-to-b from-[#1d1d1d] via-[#191919] to-[#202020] relative overflow-x-hidden z-1 mt-10">
             <div className="flex items-center justify-between w-full relative">
               <h1
                 className={`text-3xl sm:text-5xl p-8 fixed font-bold z-10 text-white bg-[#121212] w-full`}
@@ -90,16 +90,23 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
               </div>
 
               <div className="w-full flex flex-col justify-center items-center ">
-                <h1 className="text-xl lg:text-2xl font-bold px-4 mb-4 text-white w-full ">
-                  Popular Podcasts
-                  {/* TODO: Create Category Links */}
-                </h1>
+                <div className="w-full flex justify-between items-center mb-4">
+                  <h1 className="text-xl lg:text-2xl font-bold px-4 text-white w-full ">
+                    Popular Podcasts
+                  </h1>
+                  <Link href={"/podcasts"}>
+                    <p className="px-4 active:scale-95 text-white whitespace-nowrap text-sm font-bold sm:pr-4 md:pr-6 lg:pr-8 lg:text-base hover:underline-offset-2 hover:underline">
+                      View All
+                    </p>
+                  </Link>
+                </div>
+
                 <div
                   className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full`}
                 >
                   {topPicksData.map((podcast) => (
                     <div
-                      className={`from-[#0d0d0d] bg-gradient-radial to-[#202020] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[240px] h-[255px] sm:h-[283px] md:h-[312px] lg:h-[340px] rounded-lg mx-3`}
+                      className={`from-[#181818] bg-gradient-radial to-[#2c2c2c] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[240px] h-[255px] sm:h-[283px] md:h-[312px] lg:h-[340px] rounded-lg mx-3`}
                       key={podcast.title}
                     >
                       <Link
@@ -200,7 +207,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                       Sponsors A-Z
                     </h1>
                   </div>
-                  <div className="w-full h-screen flex flex-col items-center">
+                  <div className="w-full mb-14 flex flex-col items-center">
                     {Object.keys(groupedSponsors).map((letter) => (
                       <div className="w-full p-4 my-4" key={letter}>
                         <p className="text-[#909090] text-3xl font-bold">
@@ -270,6 +277,10 @@ export const getStaticProps: GetStaticProps = async () => {
     "Lex Fridman Podcast",
     "Duncan Trussell Family Hour",
     "Pardon My Take",
+    "This Past Weekend",
+    "Science Vs",
+    "The Always Sunny Podcast",
+    "Normal Gossip",
   ];
   let { data: topPicksData } = await client.query({
     query: Operations.Queries.GetTopPicks,

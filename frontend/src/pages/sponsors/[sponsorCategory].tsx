@@ -177,7 +177,7 @@ const SponsorCategory = ({
         currentPodcast={selectedPodcast}
       />
 
-      <div className="w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] overflow-x-scroll">
+      <div className="w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] overflow-x-scroll base:mb-[60px] xs:mb-[70px]">
         {
           <>
             <CategoryTabs

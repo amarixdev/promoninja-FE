@@ -26,7 +26,7 @@ const Sidebar = (props: Props) => {
   }: LinkWrapperProps) => {
     if (href === pathname) {
       return (
-        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#282828a1] hover:text-[white] hover:cursor-pointer">
+        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#282828a1] hover:cursor-pointer">
           {currentPage[current || "home"] ? (
             <ActiveIcon
               size={28}
@@ -37,7 +37,7 @@ const Sidebar = (props: Props) => {
             <Icon color={"#e3e3e3ae"} size={28} className={`active:scale-95`} />
           )}
           <p
-            className={`font-semibold text-sm ${
+            className={`font-semibold text-sm  ${
               currentPage[current || "home"]
                 ? "text-[#d6d6d6]"
                 : "text-[#e3e3e3ae]"
@@ -50,7 +50,7 @@ const Sidebar = (props: Props) => {
     }
     return (
       <Link href={href}>
-        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#282828a1] hover:text-[white]">
+        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#282828a1]">
           {currentPage[current || "home"] ? (
             <ActiveIcon
               size={28}
@@ -79,18 +79,18 @@ const Sidebar = (props: Props) => {
       <div className="fixed">
         <Link
           href={"/"}
-          className="w-[230px] flex justify-center items-center p-4"
+          className="w-[230px] flex justify-center items-center pl-8 p-6"
         >
           <Image src={Ninja4} alt="" className="h-fit mx-3" width={60} />
           <Image
             alt="/"
             src={LogoText}
             width={160}
-            className="p-6 sm:p-4 relative right-6 h-fit"
+            className="px-4 py-2 right-6  relative h-fit"
           />
         </Link>
 
-        <div className="flex flex-col text-[#cdcdcd] px-4 relative mt-4 gap-2">
+        <div className="flex flex-col px-4 relative gap-2">
           <LinkWrapper
             href="/"
             activeIcon={AiFillHome}

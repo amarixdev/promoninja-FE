@@ -4,9 +4,7 @@ import Footer from "../../components/Footer";
 import Sidebar from "../../components/Sidebar";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
-import {
-  useMediaQuery, useSetCurrentPage,
-} from "../../utils/hooks";
+import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { CategoryPodcast } from "../../utils/types";
 
 interface Props {
@@ -19,9 +17,9 @@ const podcasts = ({ categoryPreviews }: Props) => {
   useSetCurrentPage({ home: false, podcasts: true, search: false });
   return (
     <>
-      <div className="flex">
+      <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
         <Sidebar />
-        <div className="w-full h-screen bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] relative overflow-x-hidden z-1 mt-10">
+        <div className="w-full bg-gradient-to-b from-[#1e1e1e] via-[#1a1a1a] to-[#1f1f1f] relative overflow-x-hidden z-1 mt-10">
           <div className="flex items-center justify-between w-full relative">
             <h1
               className={`text-3xl sm:text-5xl p-8 fixed font-bold z-10 text-white bg-[#121212] w-full `}
@@ -29,18 +27,13 @@ const podcasts = ({ categoryPreviews }: Props) => {
               Podcasts
             </h1>
           </div>
-          <div
-            className={`w-full ${
-              isBreakPoint && "h-[200px]"
-            } relative mt-20 flex flex-col`}
-          >
+          <div className={`w-full relative mt-14 flex flex-col pb-20`}>
             {categoryPreviews.map((category: CategoryPodcast) => (
               <CategoryList
                 key={Object.keys(category)[0]}
                 category={category}
               />
             ))}
-            <div className="w-full mt-6 text-[#121212] relative">margin</div>
           </div>
         </div>
       </div>
