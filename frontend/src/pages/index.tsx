@@ -15,7 +15,7 @@ import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 import Link from "next/link";
 import Carousel from "../components/Carousel";
 import { NavContext } from "../context/navContext";
-import { scrollToTop, truncateString } from "../utils/functions";
+import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -107,13 +107,15 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                 <div
                   className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full`}
                 >
-                  {topPicksData.map((podcast) => (
+                  {topPicksData.map((podcast: PodcastData) => (
                     <div
                       className={`from-[#181818] bg-gradient-radial to-[#2c2c2c] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[240px] h-[255px] sm:h-[283px] md:h-[312px] lg:h-[340px] rounded-lg mx-3`}
                       key={podcast.title}
                     >
                       <Link
-                        href={`/podcasts/${"categoryName"}/${podcast.title}`}
+                        href={`/podcasts/${
+                          podcast.category[0].name
+                        }/${convertToSlug(podcast.title)}`}
                         key={podcast.title}
                       >
                         <Image
@@ -192,7 +194,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                       causes? For example, {""}
                       <span>
                         <Link
-                          href={`/podcasts/society/${"Crime Junkie"}`}
+                          href={`/podcasts/society/${"crime-junkie"}`}
                           target="_blank"
                           className="hover:text-yellow-200 font-semibold mr-1 italic"
                         >
@@ -226,7 +228,9 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                                   className="flex flex-col"
                                 >
                                   <div className="flex flex-col w-[100px] mx-5">
-                                    <Link href={`/${sponsor.name}`}>
+                                    <Link
+                                      href={`/${convertToSlug(sponsor.name)}`}
+                                    >
                                       <div className="hover:bg-[#ffffff0e] active:scale-95 hover: h-[100px] w-[100px] rounded-lg absolute transition ease-in-out duration-300 "></div>
                                       <Image
                                         src={sponsor.imageUrl}

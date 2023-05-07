@@ -19,7 +19,7 @@ import Sidebar from "../../components/Sidebar";
 import { NavContext } from "../../context/navContext";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
-import { truncateString } from "../../utils/functions";
+import { convertToSlug, truncateString } from "../../utils/functions";
 import {
   useLoadingScreen,
   useMediaQuery,
@@ -79,6 +79,7 @@ const SponsorCategory = ({
     subtitle: "",
     color: "",
     promoCode: "",
+    category: "",
   });
   const { pageNavigate, setPageNavigate } = NavContext();
   useEffect(() => {
@@ -127,6 +128,7 @@ const SponsorCategory = ({
         description: promotion,
         color: input.backgroundColor,
         subtitle: input.publisher,
+        category: input.category[0]?.name,
         url: podcastOffer[0].url,
         promoCode: podcastOffer[0].promoCode,
       }));
@@ -147,6 +149,8 @@ const SponsorCategory = ({
         },
       },
     });
+
+    console.log(podcastData);
 
     if (sponsorState.selectedSponsor === sponsor) {
       setIsOpen((prev) => !prev);
@@ -327,7 +331,9 @@ const SponsorCategory = ({
                                         ))}
                                         <Link
                                           className="min-w-[120px] h-[100px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
-                                          href={`/${sponsor.name}`}
+                                          href={`/${convertToSlug(
+                                            sponsor.name
+                                          )}`}
                                         >
                                           <p className="font-semibold">
                                             View All
@@ -510,7 +516,9 @@ const SponsorCategory = ({
                                         ))}
                                         <Link
                                           className="w-[110px] h-[110px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
-                                          href={`/${sponsor.name}`}
+                                          href={`/${convertToSlug(
+                                            sponsor.name
+                                          )}`}
                                         >
                                           <p className="font-semibold">
                                             View All
@@ -550,18 +558,20 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { sponsorCategory: category } = params;
+  const slugToCategory = category.split("-").join(" ").toLowerCase();
+  console.log(slugToCategory)
 
   let { data: categoryData, loading } = await client.query({
     query: Operations.Queries.GetSponsorCategory,
     variables: {
-      input: { category },
+      input: { category: slugToCategory },
     },
   });
 
   let { data: sponsorsData } = await client.query({
     query: Operations.Queries.GetCategorySponsors,
     variables: {
-      input: { category },
+      input: { category: slugToCategory },
     },
   });
 

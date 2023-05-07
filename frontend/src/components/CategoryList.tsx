@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
 import { NavContext } from "../context/navContext";
-import { capitalizeString, truncateString } from "../utils/functions";
+import { capitalizeString, convertToSlug, truncateString } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
 import { CategoryPodcast, PodcastData } from "../utils/types";
 import { Tooltip } from "@chakra-ui/react";
@@ -58,7 +58,7 @@ const CategoryList = ({ category }: CategoryProps) => {
             key={podcast.title}
           >
             <Link
-              href={`/podcasts/${categoryName}/${podcast.title}`}
+              href={`/podcasts/${categoryName}/${convertToSlug(podcast.title)}`}
               key={podcast.title}
             >
               <Image

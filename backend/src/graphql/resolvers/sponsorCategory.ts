@@ -1,7 +1,4 @@
-import {
-  GraphQLContext,
-  SponsorCategory
-} from "../../util/types";
+import { GraphQLContext, SponsorCategory } from "../../util/types";
 
 export const sponsorCategory = {
   Query: {
@@ -29,7 +26,10 @@ export const sponsorCategory = {
       if (sponsor === undefined) {
         result = await prisma.sponsorCategory.findFirst({
           where: {
-            name: category,
+            name: {
+              equals: category,
+              mode: "insensitive",
+            },
           },
         });
       } else {
@@ -46,7 +46,6 @@ export const sponsorCategory = {
             },
           },
         });
-
       }
       return result;
     },
@@ -60,7 +59,10 @@ export const sponsorCategory = {
 
       const getCategoryId = await prisma.sponsorCategory.findFirst({
         where: {
-          name: category,
+          name: {
+            equals: category,
+            mode: "insensitive",
+          },
         },
       });
 

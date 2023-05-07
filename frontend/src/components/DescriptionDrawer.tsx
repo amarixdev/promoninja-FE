@@ -9,11 +9,11 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { BsPlayCircle } from "react-icons/bs";
-import { convertToFullURL } from "../utils/functions";
+import { convertToFullURL, convertToSlug } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
 import PromoCodeButton from "./PromoCodeButton";
 
-type Props = {
+interface Props {
   isOpen: boolean;
   onClose: () => void;
   drawer: DrawerData;
@@ -24,7 +24,7 @@ type Props = {
   currentPodcast?: string;
   podcastPage?: boolean;
   externalUrl?: string;
-};
+}
 
 interface DrawerData {
   title: string;
@@ -34,6 +34,7 @@ interface DrawerData {
   description: string;
   color?: string;
   promoCode?: string;
+  category: string;
 }
 
 const DescriptionDrawer = ({
@@ -78,9 +79,11 @@ const DescriptionDrawer = ({
                       className="base:p-2 xs:p-4 flex w-full"
                       href={`/${
                         podcastDrawer || podcastOfferDrawer
-                          ? `podcasts/category/${drawer.title}`
+                          ? `podcasts/${drawer.category}/${convertToSlug(
+                              drawer.title
+                            )}`
                           : sponsorDrawer || sponsorOfferDrawer
-                          ? `${drawer.title}`
+                          ? `${convertToSlug(drawer.title)}`
                           : ""
                       }`}
                     >
@@ -204,7 +207,9 @@ const DescriptionDrawer = ({
                       className="flex"
                       href={`/${
                         podcastDrawer || podcastOfferDrawer
-                          ? `podcasts/category/${drawer.title}`
+                          ? `podcasts/${drawer.category}/${convertToSlug(
+                              drawer.title
+                            )}`
                           : sponsorDrawer || sponsorOfferDrawer
                           ? `${drawer.title}`
                           : ""

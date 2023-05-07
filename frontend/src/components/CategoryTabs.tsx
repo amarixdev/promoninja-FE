@@ -1,14 +1,10 @@
-import {
-  Spinner,
-  Tab,
-  TabList,
-  Tabs
-} from "@chakra-ui/react";
+import { Spinner, Tab, TabList, Tabs } from "@chakra-ui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import style from "../../styles/style.module.css";
 import { NavContext } from "../context/navContext";
 import { SponsorCategory } from "../utils/types";
+import { convertToSlug } from "../utils/functions";
 
 interface Props {
   sponsorCategoryData: SponsorCategory[];
@@ -59,7 +55,7 @@ const CategoryTabs = ({ sponsorCategoryData, categoryData }: Props) => {
           {sponsorCategoryData.map((category: SponsorCategory) => (
             <Link
               key={category.name}
-              href={`/sponsors/${category.name}`}
+              href={`/category/${convertToSlug(category.name)}`}
               className=" mx-2 rounded-2xl"
             >
               <Tab

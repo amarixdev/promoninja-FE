@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import style from "../../styles/style.module.css";
 import { SponsorCategory } from "../utils/types";
+import { convertToSlug } from "../utils/functions";
 
 interface Props {
   handleRotate: (direction: string) => void;
@@ -40,7 +41,7 @@ const Carousel = ({
       >
         {categoryData.map((category: SponsorCategory, i) => (
           <Link
-            href={`/sponsors/${category.name}`}
+            href={`/category/${convertToSlug(category.name)}`}
             className={`${style.item} ${carouselDiv[i]} ${style.category}`}
             key={category.name}
             onClick={() => setCategoryIndex(i)}

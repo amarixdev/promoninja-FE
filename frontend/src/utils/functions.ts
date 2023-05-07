@@ -17,10 +17,7 @@ export const truncateString = (string: string, num: number) => {
 };
 
 export const convertToSlug = (title: string) => {
-  return title
-    .toLowerCase()
-    .replace(/ /g, "-")
-    .replace(/[^\w-]+/g, "");
+  return title.toLowerCase().replace(/\s+/g, "-");
 };
 
 export const convertToFullURL = (link: string) => {

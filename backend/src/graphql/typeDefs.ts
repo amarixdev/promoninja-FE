@@ -100,7 +100,8 @@ const typeDefs = gql`
     id: ID!
     title: String!
     imageUrl: String
-    categoryId: ID
+    categoryId: [Int]
+    category: [Category]
     offer: [Offer]
     sponsorId: [ID]
     publisher: String
@@ -110,7 +111,7 @@ const typeDefs = gql`
   }
 
   type Category {
-    id: ID!
+    id: ID
     name: String!
     podcastId: [ID]
   }

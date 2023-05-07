@@ -1,3 +1,4 @@
+import { equal } from "assert";
 import {
   DeleteInput,
   GraphQLContext,
@@ -220,7 +221,10 @@ export const productResolvers = {
       try {
         const selectedPodcast = await prisma.podcast.findFirst({
           where: {
-            title: podcast,
+            title: {
+              equals: podcast,
+              mode: "insensitive",
+            },
           },
         });
         let sponsors;
@@ -256,7 +260,10 @@ export const productResolvers = {
 
       const sponsor = await prisma.sponsor.findFirst({
         where: {
-          name: name,
+          name: {
+            equals: name,
+            mode: "insensitive",
+          },
         },
       });
 

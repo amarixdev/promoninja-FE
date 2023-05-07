@@ -18,7 +18,11 @@ import Sidebar from "../../../components/Sidebar";
 import { NavContext } from "../../../context/navContext";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
-import { convertToFullURL, truncateString } from "../../../utils/functions";
+import {
+  convertToFullURL,
+  convertToSlug,
+  truncateString,
+} from "../../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../../utils/hooks";
 import { OfferData, PodcastData, SponsorData } from "../../../utils/types";
 import PromoCodeButton from "../../../components/PromoCodeButton";
@@ -51,6 +55,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     description: "",
     url: "",
     promoCode: "",
+    category: "",
   });
   let existingSponsor: boolean = true;
   const [selectedSponsor, setSelectedSponsor] = useState("");
@@ -121,6 +126,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         description: sponsorOffer,
         url: sponsorPromotionUrl,
         promoCode: sponsorPromoCode,
+        category: "",
       });
     } else {
       /* Podcast Drawer */
@@ -137,6 +143,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         subtitle: publisher,
         description: podcastDescription,
         url: sponsorPromotionUrl,
+        category,
         promoCode: "",
       });
     }
@@ -317,7 +324,11 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                             <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
                               {index + 1}
                             </p>
-                            <Link href={`/${getSponsor(offer.sponsor).name}`}>
+                            <Link
+                              href={`/${convertToSlug(
+                                getSponsor(offer.sponsor).name
+                              )}`}
+                            >
                               <Image
                                 src={getSponsor(offer.sponsor).imageUrl}
                                 width={80}
@@ -431,13 +442,14 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { podcast, category } = params;
+  const slugToPodcast = podcast.split("-").join(" ").toLowerCase();
 
   try {
     let { data: podcastData, loading } = await client.query({
       query: Operations.Queries.GetPodcast,
       variables: {
         input: {
-          podcast,
+          podcast: slugToPodcast,
         },
       },
     });
@@ -446,7 +458,7 @@ export const getStaticProps = async ({ params }: any) => {
       query: Operations.Queries.FetchSponsors,
       variables: {
         input: {
-          podcast,
+          podcast: slugToPodcast,
         },
       },
     });

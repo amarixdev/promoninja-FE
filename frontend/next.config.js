@@ -10,4 +10,13 @@ module.exports = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/category",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
 };

@@ -8,6 +8,9 @@ export const Operations = {
           title
           imageUrl
           publisher
+          category {
+            name
+          }
         }
       }
     `,
@@ -24,6 +27,9 @@ export const Operations = {
             sponsor
             promoCode
             url
+          }
+          category {
+            name
           }
         }
       }
@@ -93,6 +99,9 @@ export const Operations = {
             promoCode
             url
           }
+          category {
+            name
+          }
         }
       }
     `,
@@ -144,6 +153,9 @@ export const Operations = {
           title
           imageUrl
           publisher
+          category {
+            name
+          }
         }
       }
     `,

@@ -4,7 +4,7 @@ import {
   PodcastInput,
   SponsorInput,
   SpotifyAPI,
-  TopPicksInput
+  TopPicksInput,
 } from "../../util/types";
 
 export const podcastResolvers = {
@@ -175,8 +175,13 @@ export const podcastResolvers = {
     getPodcasts: async (parent: any, args: any, context: GraphQLContext) => {
       const { prisma } = context;
       try {
-        const all_podcasts = await prisma.podcast.findMany();
+        const all_podcasts = await prisma.podcast.findMany({
+          include: {
+            category: true,
+          },
+        });
 
+        console.log(all_podcasts);
         return all_podcasts;
       } catch (error) {
         console.log(error);
@@ -193,7 +198,10 @@ export const podcastResolvers = {
       try {
         const podcast = await prisma.podcast.findFirst({
           where: {
-            title: podcastTitle,
+            title: {
+              equals: podcastTitle,
+              mode: "insensitive",
+            },
           },
         });
 
@@ -267,7 +275,10 @@ export const podcastResolvers = {
 
       const getSponsor = await prisma.sponsor.findFirst({
         where: {
-          name: name,
+          name: {
+            equals: name,
+            mode: "insensitive",
+          },
         },
       });
 
@@ -276,6 +287,9 @@ export const podcastResolvers = {
           sponsorId: {
             has: getSponsor?.id,
           },
+        },
+        include: {
+          category: true,
         },
       });
       if (isCategoryPage) {
@@ -295,6 +309,9 @@ export const podcastResolvers = {
           title: {
             in: podcastTitles,
           },
+        },
+        include: {
+          category: true,
         },
       });
 

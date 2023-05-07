@@ -17,7 +17,11 @@ import Link from "next/link";
 import PreviousPage from "../../components/PreviousPage";
 import Sidebar from "../../components/Sidebar";
 import { NavContext } from "../../context/navContext";
-import { capitalizeString, truncateString } from "../../utils/functions";
+import {
+  capitalizeString,
+  convertToSlug,
+  truncateString,
+} from "../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { PodcastData } from "../../utils/types";
 
@@ -103,7 +107,11 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
             >
               {categoryPodcasts?.map((podcast) => (
                 <div key={`${podcast.title}`}>
-                  <Link href={`/podcasts/${categoryName}/${podcast.title}`}>
+                  <Link
+                    href={`/podcasts/${categoryName}/${convertToSlug(
+                      podcast.title
+                    )}`}
+                  >
                     <Image
                       src={podcast.imageUrl}
                       alt=""

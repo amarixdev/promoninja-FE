@@ -16,7 +16,11 @@ import Sidebar from "../components/Sidebar";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import Ninja4 from "../public/assets/ninja4.png";
-import { convertToFullURL, truncateString } from "../utils/functions";
+import {
+  convertToFullURL,
+  convertToSlug,
+  truncateString,
+} from "../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import { PodcastData, SponsorData } from "../utils/types";
 import PromoCodeButton from "../components/PromoCodeButton";
@@ -53,6 +57,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
     subtitle: "",
     color: "",
     promoCode: "",
+    category: "",
   });
 
   const handleDrawer = (podcast: PodcastData) => {
@@ -72,6 +77,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
       subtitle: podcast.publisher,
       url: podcastOffer[0].url,
       promoCode: podcastOffer[0].promoCode,
+      category: podcast.category[0].name,
     }));
     onOpenDrawer();
   };
@@ -317,7 +323,11 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                             <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
                               {index + 1}
                             </p>
-                            <Link href={`/podcasts/category/${podcast.title}`}>
+                            <Link
+                              href={`/podcasts/category/${convertToSlug(
+                                podcast.title
+                              )}`}
+                            >
                               <Image
                                 src={podcast.imageUrl}
                                 width={80}
@@ -442,12 +452,13 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { sponsor } = params;
+  const slugToSponsor = sponsor.split("-").join(" ").toLowerCase();
 
-  let { data: sponsorData, loading } = await client.query({
+  let { data: sponsorData } = await client.query({
     query: Operations.Queries.GetSponsor,
     variables: {
       input: {
-        name: sponsor,
+        name: slugToSponsor,
       },
     },
   });
@@ -456,7 +467,7 @@ export const getStaticProps = async ({ params }: any) => {
     query: Operations.Queries.GetSponsorPodcasts,
     variables: {
       input: {
-        name: sponsor,
+        name: slugToSponsor,
       },
     },
   });

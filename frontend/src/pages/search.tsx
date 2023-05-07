@@ -9,7 +9,8 @@ import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import { Operations } from "../graphql/operations";
 import { useSetCurrentPage } from "../utils/hooks";
-import { PodcastData, SponsorData } from "../utils/types";
+import { Category, PodcastData, SponsorData } from "../utils/types";
+import { convertToSlug } from "../utils/functions";
 
 interface PodcastQuery {
   getPodcasts: PodcastData[];
@@ -19,14 +20,11 @@ interface SponsorQuery {
   getSponsors: SponsorData[];
 }
 
-interface CategoryData {
-  name: string;
-}
-
 interface PodcastSearchResults {
   title: string;
   imageUrl: string;
   publisher: string;
+  category: [Category];
 }
 
 interface SponsorSearchResults {
@@ -42,7 +40,7 @@ const Search = () => {
   const [searchText, setSearchText] = useState("");
   const [display, setDisplay] = useState({ filter: false });
   const [podcastSearch, setPodcastSearch] = useState<PodcastSearchResults[]>([
-    { imageUrl: "", title: "", publisher: "" },
+    { imageUrl: "", title: "", publisher: "", category: [{ name: "" }] },
   ]);
 
   const [sponsorSearch, setSponsorSearch] = useState<SponsorSearchResults[]>([
@@ -51,9 +49,6 @@ const Search = () => {
 
   const [getPodcasts] = useLazyQuery(Operations.Queries.GetPodcasts);
   const [getSponsors] = useLazyQuery(Operations.Queries.GetSponsors);
-  const [getPodcastCategory, { data: categoryData }] = useLazyQuery(
-    Operations.Queries.GetPodcastCategory
-  );
 
   const handleSearch = async (event: ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
@@ -65,6 +60,7 @@ const Search = () => {
     if (podcastFilter) {
       const { data: podcastsData }: { data: PodcastQuery } =
         await getPodcasts();
+
       const podcastList = podcastsData?.getPodcasts;
       const fuse = new Fuse(podcastList, {
         keys: ["title", "publisher"],
@@ -132,19 +128,6 @@ const Search = () => {
     }
   };
 
-  const handleSelect = async (podcast: string) => {
-    await getPodcastCategory({
-      variables: {
-        input: {
-          podcast,
-        },
-      },
-    });
-  };
-
-  const category = categoryData?.getPodcastCategory.name;
-  console.log(category);
-
   return (
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
       <Sidebar />
@@ -194,13 +177,12 @@ const Search = () => {
                 >
                   {podcast.imageUrl ? (
                     <Link
-                      href={`/podcasts/${category}/${podcast.title}`}
+                      href={`/podcasts/${
+                        podcast.category[0].name
+                      }/${convertToSlug(podcast.title)}`}
                       className="w-full"
                     >
-                      <div
-                        onClick={() => handleSelect(podcast.title)}
-                        className="sm:w-10/12 md:w-8/12 lg:w-6/12 flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f]"
-                      >
+                      <div className="sm:w-10/12 md:w-8/12 lg:w-6/12 flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f]">
                         <div className="p-4">
                           <Image
                             src={podcast.imageUrl}
@@ -231,7 +213,10 @@ const Search = () => {
                   className="p-2 flex items-center justify-center"
                 >
                   {sponsor.imageUrl ? (
-                    <Link href={`/${sponsor.name}`} className="w-full">
+                    <Link
+                      href={`/${convertToSlug(sponsor.name)}`}
+                      className="w-full"
+                    >
                       <div className="sm:w-10/12 md:w-8/12 lg:w-6/12 flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f]">
                         <div className="p-4">
                           <Image
