@@ -54,7 +54,7 @@ const Sidebar = (props: Props) => {
     }
     return (
       <Link href={href}>
-        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#282828a1]">
+        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#282828a1] ">
           {currentPage[current || "home"] ? (
             <ActiveIcon
               size={28}
@@ -79,7 +79,9 @@ const Sidebar = (props: Props) => {
   };
 
   return (
-    <div className={!isBreakpoint ? "min-w-[250px] bg-black" : "hidden"}>
+    <div
+      className={!isBreakpoint ? "min-w-[250px] bg-black z-[100]" : "hidden"}
+    >
       <div className="fixed">
         {pathname !== "/" ? (
           <Link

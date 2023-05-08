@@ -29,7 +29,10 @@ const CategoryTabs = ({
 
   const handleScroll = () => {
     const currentScrollPosition = window.pageYOffset;
-    const navbarHeight = document.getElementById("navbar")?.offsetHeight;
+    let navbarHeight = document.getElementById("navbar")?.offsetHeight;
+    if (navbarHeight) {
+      navbarHeight -= 50;
+    }
     if (currentScrollPosition > navbarHeight!) {
       setFilled(true);
     } else {

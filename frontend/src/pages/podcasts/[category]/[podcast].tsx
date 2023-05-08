@@ -26,6 +26,7 @@ import {
 import { useMediaQuery, useSetCurrentPage } from "../../../utils/hooks";
 import { OfferData, PodcastData, SponsorData } from "../../../utils/types";
 import PromoCodeButton from "../../../components/PromoCodeButton";
+import { scrollToTop } from "../../../utils/functions";
 
 interface Props {
   podcastData: PodcastData;
@@ -57,10 +58,39 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     promoCode: "",
     category: "",
   });
+
+  const [banner, setBanner] = useState(false);
+
+  const handleScroll = () => {
+    const currentScrollPosition = window.pageYOffset;
+    let navbarHeight = document.getElementById("banner")?.offsetHeight;
+
+    if (navbarHeight && !isBreakPoint) {
+      navbarHeight -= 230;
+    }
+
+    if (navbarHeight && isBreakPoint) {
+      navbarHeight -= 100;
+    }
+
+    if (currentScrollPosition > navbarHeight!) {
+      setBanner(true);
+    } else {
+      setBanner(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [banner]);
+
   let existingSponsor: boolean = true;
   const [selectedSponsor, setSelectedSponsor] = useState("");
   useSetCurrentPage({ home: false, podcasts: true, search: false });
-
   useEffect(() => {
     setCategoryType(category);
     if (categoryType !== null) {
@@ -118,7 +148,6 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
       const sponsorPromoCode = filteredPodcast.promoCode;
       sponsorPromotionUrl = filteredPodcast.url;
 
-      console.log(sponsorOffer);
       setDrawerData({
         image: sponsorImage,
         title: sponsorName,
@@ -160,14 +189,17 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
       className={`${
         isBreakPoint
           ? "flex flex-col base:mb-[60px] xs:mb-[70px] lg:mb-0"
-          : "flex"
+          : "flex "
       }`}
     >
       <Sidebar />
-      <div className="flex-col w-full">
+      <div className="flex-col w-full overflow-hidden ">
         <PreviousPage />
         {
-          <div className="flex flex-col items-center relative h-[50vh] w-full">
+          <div
+            className="flex flex-col items-center relative h-[50vh] w-full"
+            // id="banner"
+          >
             <DescriptionDrawer
               isOpen={isOpenDrawer}
               onClose={onCloseDrawer}
@@ -177,14 +209,59 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
               podcastPage={true}
               externalUrl={podcastData?.externalUrl}
             />
+            {
+              <div className={`fixed w-full z-50 lg:ml-[250px]`}>
+                {
+                  <div
+                    className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 ${
+                      banner && `bottom-0 `
+                    } `}
+                  >
+                    <Image
+                      src={imageSrc}
+                      alt={podcastData.title}
+                      width={70}
+                      height={70}
+                      priority
+                      className={`min-w-70 lg:min-w-[60px] rounded-md p-2 relative bottom-[500px] transition-all duration-300 ${
+                        banner && "lg:hover:cursor-pointer bottom-0"
+                      } `}
+                      onClick={() => scrollToTop()}
+                    />
+                    <div className="flex flex-col justify-center px-2">
+                      <h1
+                        className={`font-bold lg:font-extrabold relative bottom-[500px] text-xl lg:text-3xl transition-all duration-300 ${
+                          banner && "bottom-0"
+                        } `}
+                      >
+                        {truncateString(podcastData.title, 50)}
+                      </h1>
+                      <div className="flex gap-2">
+                        <h3
+                          className={`font-semibold text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
+                            banner && "bottom-0"
+                          } `}
+                        >
+                          {podcastData.publisher}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
             <div
               className={`items-center w-full h-full flex justify-center`}
               style={gradientStyle}
+              // id="banner"
             >
-              <div className="flex flex-col justify-center items-center w-full relative top-[60px] lg:mt-12">
+              <div
+                className="flex flex-col justify-center items-center w-full relative top-[60px] lg:mt-12"
+                id="banner"
+              >
                 <Image
                   src={imageSrc}
-                  alt="/"
+                  alt={podcastData.title}
                   width={250}
                   height={250}
                   priority
@@ -240,7 +317,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                           {
                             <button
                               onClick={() => setTruncated((prev) => !prev)}
-                              className="hover:text-white active:scale-95"
+                              className="hover:text-white active:scale-95 relative z-[99]"
                             >
                               {podcastData.description.length > 280 && truncated
                                 ? "Read More"
@@ -276,7 +353,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
             </div>
             <div className="w-[95%] border-b-[1px] pb-8 pt-2 mt-2 mb-6"></div>
           </div>
-          <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col lg:gap-6 lg:h-fit lg:overflow-visible pb-6">
+          <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col lg:gap-4 lg:h-fit lg:overflow-visible pb-6">
             {podcastData.offer.map((offer: OfferData, index) => (
               <div
                 key={offer.sponsor}
@@ -319,8 +396,8 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                   /* Desktop */
                   <>
                     <div className="w-full ">
-                      <div className=" flex justify-between">
-                        <div className="w-full flex justify-between items-center hover:bg-[#222222]">
+                      <div className=" flex justify-between bg-[#2b2b2b53] py-2 shadow-xl shadow-black ">
+                        <div className="w-full flex justify-between items-center ">
                           <div className="flex px-8 items-center">
                             <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
                               {index + 1}
@@ -355,7 +432,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                               onClick={() => handleCollapse(offer.sponsor)}
                               className="active:scale-95"
                             >
-                              View Details
+                              View Offer
                             </Button>
                           </div>
                         </div>
@@ -379,14 +456,19 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                                   target="_blank"
                                   className="hover:underline underline-offset-4"
                                 >
-                                  <p className="mx-2 py-2 px-4 rounded-md font-light text-3xl">
-                                    {
-                                      sponsorData.filter(
-                                        (sponsor) =>
-                                          sponsor.name === offer?.sponsor
-                                      )[0].offer
-                                    }
-                                  </p>
+                                  <div className="flex">
+                                    <div
+                                      className={`rounded-full bg-[#0ec10e] min-w-[6px] top-6 relative h-[6px] `}
+                                    ></div>
+                                    <p className="mx-2 py-2 rounded-md font-light text-3xl">
+                                      {
+                                        sponsorData.filter(
+                                          (sponsor) =>
+                                            sponsor.name === offer?.sponsor
+                                        )[0].offer
+                                      }
+                                    </p>
+                                  </div>
                                 </Link>
                                 {offer.promoCode && (
                                   <div className="flex">

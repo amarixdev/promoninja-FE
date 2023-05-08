@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsShareFill } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
 import DescriptionDrawer from "../components/DescriptionDrawer";
@@ -19,6 +19,7 @@ import Ninja4 from "../public/assets/ninja4.png";
 import {
   convertToFullURL,
   convertToSlug,
+  scrollToTop,
   truncateString,
 } from "../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
@@ -46,9 +47,36 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
   } = useDisclosure();
+  const [banner, setBanner] = useState(false);
 
+  const handleScroll = () => {
+    const currentScrollPosition = window.pageYOffset;
+    let navbarHeight = document.getElementById("banner")?.offsetHeight;
+
+    if (navbarHeight && !isBreakPoint) {
+      navbarHeight -= 300;
+    }
+
+    if (navbarHeight && isBreakPoint) {
+      navbarHeight -= 100;
+    }
+
+    if (currentScrollPosition > navbarHeight!) {
+      setBanner(true);
+      console.log("banner");
+    } else {
+      setBanner(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [banner]);
   const [isOpen, setIsOpen] = useState(false);
-
   const [drawerData, setDrawerData] = useState({
     image: "",
     title: "",
@@ -64,8 +92,6 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
     const podcastOffer = podcast.offer.filter(
       (offer) => offer.sponsor === sponsorData?.name
     );
-
-    console.log(podcastOffer[0].promoCode);
 
     setSelectedPodcast(podcast.title);
     setDrawerData((prev) => ({
@@ -124,8 +150,55 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
             currentPodcast={selectedPodcast}
             podcastOfferDrawer={true}
           />
+          {
+            <div className={`fixed w-full z-50 lg:ml-[250px]`}>
+              {
+                <div
+                  className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 ${
+                    banner && `bottom-0 `
+                  } `}
+                >
+                  <Image
+                    src={sponsorData.imageUrl}
+                    alt={sponsorData.name}
+                    width={70}
+                    height={70}
+                    priority
+                    className={`min-w-70 lg:min-w-[60px] rounded-md p-2 relative bottom-[500px] transition-all duration-300 ${
+                      banner && "lg:hover:cursor-pointer bottom-0"
+                    } `}
+                    onClick={() => scrollToTop()}
+                  />
+                  <div className="flex flex-col justify-center px-2">
+                    <h1
+                      className={`font-bold lg:font-extrabold relative bottom-[500px] text-xl lg:text-3xl transition-all duration-300 ${
+                        banner && "bottom-0"
+                      } `}
+                    >
+                      {truncateString(sponsorData.name, 50)}
+                    </h1>
+                    <div className="flex gap-2">
+                      <div
+                        className={`rounded-full bg-[#0ec10e] transition duration-300 min-w-[6px] relative h-[6px] top-2 ${
+                          banner && ""
+                        }`}
+                      ></div>
+                      <h3
+                        className={`font-semibold text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
+                          banner && "bottom-0"
+                        } `}
+                      >
+                        {sponsorData.offer}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+          {/* Mobile */}
           {isBreakPoint ? (
-            <>
+            <div id={"banner"}>
               <div className="flex-col w-full items-center justify-center py-2">
                 <div className="p-10  flex items-center justify-center relative ">
                   <Image
@@ -172,9 +245,13 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                   </div>
                 </div>
               </div>
-            </>
+            </div>
           ) : (
-            <div className="flex-col w-full items-center justify-center z-10 relative">
+            /* Desktop */
+            <div
+              className="flex-col w-full items-center justify-center z-10 relative"
+              id={"banner"}
+            >
               <div className="p-10 flex items-center w-full">
                 <Image
                   src={sponsorData?.imageUrl}
@@ -203,7 +280,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                     </Button>
                   </div>
                   <div className="flex m-4 mt-8">
-                    <div className="w-full bg-gradient-to-b rounded-lg from-[#2020201d]  to-[#20202091] p-10">
+                    <div className="w-full bg-gradient-to-b rounded-lg border-red-500 from-[#2020201d]  to-[#20202091] p-10">
                       <div className="relative">
                         <div className="flex items-center gap-2">
                           <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
@@ -283,12 +360,14 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
               <div className="w-[95%] border-b-[1px] "></div>
             </div>
 
-            <div className="w-full flex flex-col gap-6 lg:gap-6 lg:h-fit  pt-4 pb-14">
+            <div className="w-full flex flex-col gap-6  lg:h-fit  pt-6">
               {podcastsData.map((podcast, index) => (
                 <div
                   key={podcast.title}
-                  className={`flex flex-col justify-between`}
+                  className={`flex flex-col justify-between pb-6`}
                 >
+                  {/* Mobile */}
+
                   {isBreakPoint ? (
                     <div className="flex justify-between items-center px-6 overflow-x-hidden">
                       <Image
@@ -296,7 +375,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                         width={80}
                         height={80}
                         alt={podcast.title}
-                        className=" base:w-[60px] ml-4 rounded-md shadow-md shadow-black"
+                        className=" base:w-[60px] ml-4 rounded-md shadow-sm shadow-black"
                       />
 
                       <div className="w-full justify-between flex items-center">
@@ -314,10 +393,11 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                       </div>
                     </div>
                   ) : (
+                    /* Desktop */
                     <div className="w-full ">
                       <div className=" flex justify-between">
                         <div
-                          className={`w-full flex justify-between items-center hover:bg-[#1c1c1c] `}
+                          className={`w-full flex justify-between items-center bg-[#3c3c3c53] py-2 `}
                         >
                           <div className="flex px-8 items-center">
                             <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
