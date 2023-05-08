@@ -443,7 +443,8 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }: any) => {
   const { podcast, category } = params;
   const slugToPodcast = podcast.split("-").join(" ").toLowerCase();
-
+  const slugToCategory = category.split("-").join(" ").toLowerCase();
+  
   try {
     let { data: podcastData, loading } = await client.query({
       query: Operations.Queries.GetPodcast,
@@ -472,7 +473,7 @@ export const getStaticProps = async ({ params }: any) => {
       return {
         props: {
           podcastData,
-          category,
+          category: slugToCategory,
         },
       };
     }

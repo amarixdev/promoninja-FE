@@ -28,7 +28,7 @@ const CategoryList = ({ category }: CategoryProps) => {
   return (
     <div>
       <div className={`flex justify-between items-center lg:my-4 `}>
-        <Link href={`/podcasts/${categoryName}`}>
+        <Link href={`/podcasts/${convertToSlug(categoryName)}`}>
           <Tooltip label="View All" placement="end" openDelay={500}>
             <div className="flex items-center justify-center mt-8">
               <h1
@@ -61,7 +61,9 @@ const CategoryList = ({ category }: CategoryProps) => {
             key={podcast.title}
           >
             <Link
-              href={`/podcasts/${categoryName}/${convertToSlug(podcast.title)}`}
+              href={`/podcasts/${convertToSlug(categoryName)}/${convertToSlug(
+                podcast.title
+              )}`}
               key={podcast.title}
             >
               <Image

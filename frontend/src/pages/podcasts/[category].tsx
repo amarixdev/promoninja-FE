@@ -110,9 +110,9 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
               {categoryPodcasts?.map((podcast) => (
                 <div key={`${podcast.title}`} className="relative z-10">
                   <Link
-                    href={`/podcasts/${categoryName}/${convertToSlug(
-                      podcast.title
-                    )}`}
+                    href={`/podcasts/${convertToSlug(
+                      categoryName
+                    )}/${convertToSlug(podcast.title)}`}
                   >
                     <Image
                       src={podcast.imageUrl}
@@ -159,12 +159,13 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { category } = params;
+  const slugToCategory = category.split("-").join(" ").toLowerCase();
 
   const { data } = await client.query({
     query: Operations.Queries.FetchCategoryPodcasts,
     variables: {
       input: {
-        category,
+        category: slugToCategory,
       },
     },
   });
@@ -173,7 +174,7 @@ export const getStaticProps = async ({ params }: any) => {
   return {
     props: {
       categoryPodcasts,
-      category,
+      category: slugToCategory,
     },
   };
 };
