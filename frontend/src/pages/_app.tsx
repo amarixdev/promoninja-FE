@@ -7,9 +7,13 @@ import style from "../../styles/style.module.css";
 import { ContextProvider } from "../context/navContext";
 import client from "../graphql/apollo-client";
 import { useLoadingScreen } from "../utils/hooks";
+import { useEffect, useState } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const isLoading = useLoadingScreen();
+
+
+
   return (
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
@@ -19,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <div className={`${style.loader}`} />
             </div>
           )}
+
           <ForceDarkMode>
             <Component {...pageProps} />
           </ForceDarkMode>

@@ -1,27 +1,31 @@
 import { Spinner, Tab, TabList, Tabs } from "@chakra-ui/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import style from "../../styles/style.module.css";
 import { NavContext } from "../context/navContext";
 import { SponsorCategory } from "../utils/types";
 import { convertToSlug } from "../utils/functions";
+import { useRouter } from "next/router";
 
 interface Props {
   sponsorCategoryData: SponsorCategory[];
   categoryData: SponsorCategory;
+  setPressed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CategoryTabs = ({ sponsorCategoryData, categoryData }: Props) => {
+const CategoryTabs = ({
+  sponsorCategoryData,
+  categoryData,
+  setPressed,
+}: Props) => {
   const [filled, setFilled] = useState(false);
-  const { setPageNavigate, categoryIndex, setCategoryIndex } = NavContext();
+  const { categoryIndex } = NavContext();
+
+  const [shouldRender, setShouldRender] = useState(true);
 
   const index = sponsorCategoryData?.findIndex(
     (category) => category.name === categoryData.name
   );
-
-  useEffect(() => {
-    setPageNavigate;
-  }, []);
 
   const handleScroll = () => {
     const currentScrollPosition = window.pageYOffset;
@@ -34,6 +38,7 @@ const CategoryTabs = ({ sponsorCategoryData, categoryData }: Props) => {
   };
 
   useEffect(() => {
+    setPressed(false);
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -48,29 +53,30 @@ const CategoryTabs = ({ sponsorCategoryData, categoryData }: Props) => {
       }`}
       id="navbar"
     >
-      <Tabs defaultIndex={index || categoryIndex} variant={"unstyled"}>
-        <TabList
-          className={` ${style.offset} overflow-x-scroll scrollbar-hide px-2 relative`}
-        >
-          {sponsorCategoryData.map((category: SponsorCategory) => (
-            <Link
-              key={category.name}
-              href={`/category/${convertToSlug(category.name)}`}
-              className=" mx-2 rounded-2xl"
-            >
-              <Tab
-                className={"text-xs font-medium whitespace-nowrap "}
-                onClick={() => setPageNavigate(false)}
-                _selected={{ color: "black", bg: "white" }}
-                rounded={"xl"}
-                bg={"whiteAlpha.100"}
+      {shouldRender ? (
+        <Tabs defaultIndex={index || categoryIndex} variant={"unstyled"}>
+          <TabList
+            className={` ${style.offset} overflow-x-scroll scrollbar-hide px-2 relative`}
+          >
+            {sponsorCategoryData.map((category: SponsorCategory) => (
+              <Link
+                key={category.name}
+                href={`/category/${convertToSlug(category.name)}`}
+                className=" mx-2 rounded-2xl"
               >
-                <p>{category.name} </p>
-              </Tab>
-            </Link>
-          ))}
-        </TabList>
-      </Tabs>
+                <Tab
+                  className={"text-xs font-medium whitespace-nowrap "}
+                  _selected={{ color: "black", bg: "white" }}
+                  rounded={"xl"}
+                  bg={"whiteAlpha.100"}
+                >
+                  <p>{category.name} </p>
+                </Tab>
+              </Link>
+            ))}
+          </TabList>
+        </Tabs>
+      ) : null}
     </div>
   );
 };

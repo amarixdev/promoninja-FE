@@ -26,6 +26,7 @@ import {
   useSetCurrentPage,
 } from "../../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
+import { useRouter } from "next/router";
 
 interface Props {
   categoryData: SponsorCategory;
@@ -70,6 +71,7 @@ const SponsorCategory = ({
   const [sponsorDrawer, setSponsorDrawer] = useState(false);
   const [podcastOfferDrawer, setPodcastOfferDrawer] = useState(true);
   const [current, setCurrent] = useState("");
+  const [navigateButtonPressed, setNavigateButtonPressed] = useState(false);
 
   const [drawerData, setDrawerData] = useState({
     image: "",
@@ -81,10 +83,12 @@ const SponsorCategory = ({
     promoCode: "",
     category: "",
   });
-  const { pageNavigate, setPageNavigate } = NavContext();
   useEffect(() => {
-    setPageNavigate(false);
+    window.onpopstate = (e) => {
+      setNavigateButtonPressed(true);
+    };
   });
+
   const isSponsorData = (
     input: SponsorData | PodcastData
   ): input is SponsorData => {
@@ -150,8 +154,6 @@ const SponsorCategory = ({
       },
     });
 
-    console.log(podcastData);
-
     if (sponsorState.selectedSponsor === sponsor) {
       setIsOpen((prev) => !prev);
       setSponsorState((prev) => ({ ...prev, selectedSponsor: sponsor }));
@@ -184,11 +186,14 @@ const SponsorCategory = ({
       <div className="w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] overflow-x-scroll base:mb-[60px] xs:mb-[70px]">
         {
           <>
-            <CategoryTabs
-              sponsorCategoryData={sponsorCategoryData}
-              categoryData={categoryData}
-            />
-            {isLoading && !pageNavigate ? (
+            {navigateButtonPressed || (
+              <CategoryTabs
+                sponsorCategoryData={sponsorCategoryData}
+                categoryData={categoryData}
+                setPressed={setNavigateButtonPressed}
+              />
+            )}
+            {isLoading ? (
               <div className="w-full h-screen bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] flex justify-center items-center">
                 <Spinner />
               </div>
@@ -196,6 +201,13 @@ const SponsorCategory = ({
               <div>
                 {
                   <div className="p-6">
+                    {navigateButtonPressed && (
+                      <CategoryTabs
+                        sponsorCategoryData={sponsorCategoryData}
+                        categoryData={categoryData}
+                        setPressed={setNavigateButtonPressed}
+                      />
+                    )}
                     <div className="w-full mt-14">
                       <h1 className="base:text-3xl xs:text-4xl sm:text-5xl font-extrabold text-center p-6 break-normal ">
                         {categoryData?.name}
@@ -559,7 +571,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }: any) => {
   const { sponsorCategory: category } = params;
   const slugToCategory = category.split("-").join(" ").toLowerCase();
-  console.log(slugToCategory)
+  console.log(slugToCategory);
 
   let { data: categoryData, loading } = await client.query({
     query: Operations.Queries.GetSponsorCategory,

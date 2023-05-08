@@ -7,8 +7,6 @@ interface ContextType {
   setCategoryType: React.Dispatch<
     React.SetStateAction<string | undefined | any>
   >;
-  pageNavigate: boolean;
-  setPageNavigate: React.Dispatch<React.SetStateAction<boolean>>;
   categoryIndex: number;
   setCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
 
@@ -27,10 +25,8 @@ const AppContext = createContext<ContextType>({
   setPreviousPage: () => {},
   categoryType: {} as string,
   setCategoryType: () => {},
-  currentPage: {} as { home: boolean ; search: boolean; podcasts: boolean },
+  currentPage: {} as { home: boolean; search: boolean; podcasts: boolean },
   setCurrentPage: () => {},
-  setPageNavigate: () => {},
-  pageNavigate: {} as boolean,
   setCategoryIndex: () => {},
   categoryIndex: {} as number,
 });
@@ -57,8 +53,6 @@ export function ContextProvider({ children }: ContextProviderProps) {
         setPreviousPage,
         categoryType,
         setCategoryType,
-        pageNavigate,
-        setPageNavigate,
         categoryIndex,
         setCategoryIndex,
         currentPage,

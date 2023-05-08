@@ -19,7 +19,7 @@ export interface LinkWrapperProps {
 }
 
 const Footer = () => {
-  const { currentPage, setPageNavigate } = NavContext();
+  const { currentPage } = NavContext();
   const isBreakPoint = useMediaQuery(1023);
   const { pathname } = useRouter();
 
@@ -91,7 +91,6 @@ const Footer = () => {
 
   return (
     <div
-      onClick={() => setPageNavigate(true)}
       className={
         isBreakPoint
           ? `w-[100vw] fixed bottom-[0] z-[90] bg-black/60 backdrop-blur-md`
