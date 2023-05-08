@@ -105,8 +105,10 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
                 isBreakPoint && "h-fit"
               } relative top-[23%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-8 p-5 pb-24`}
             >
+              <div className="absolute top-0 from-[#5757574e] bg-gradient-to-b to-[#151515] w-full h-[400px] z-0"></div>
+
               {categoryPodcasts?.map((podcast) => (
-                <div key={`${podcast.title}`}>
+                <div key={`${podcast.title}`} className="relative z-10">
                   <Link
                     href={`/podcasts/${categoryName}/${convertToSlug(
                       podcast.title

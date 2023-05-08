@@ -2,7 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaChevronRight } from "react-icons/fa";
 import { NavContext } from "../context/navContext";
-import { capitalizeString, convertToSlug, truncateString } from "../utils/functions";
+import {
+  capitalizeString,
+  convertToSlug,
+  truncateString,
+} from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
 import { CategoryPodcast, PodcastData } from "../utils/types";
 import { Tooltip } from "@chakra-ui/react";
@@ -21,12 +25,11 @@ const CategoryList = ({ category }: CategoryProps) => {
     setPreviousPage("podcasts");
   };
 
-
   return (
     <div>
       <div className={`flex justify-between items-center lg:my-4 `}>
         <Link href={`/podcasts/${categoryName}`}>
-          <Tooltip label="View All" placement="right">
+          <Tooltip label="View All" placement="end" openDelay={500}>
             <div className="flex items-center justify-center mt-8">
               <h1
                 className={`text-lg sm:text-2xl font-bold text-white ${

@@ -62,10 +62,11 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
       <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
         <Sidebar />
         {
-          <div className=" w-full flex flex-col bg-gradient-to-b from-[#1d1d1d] via-[#191919] to-[#202020] relative overflow-x-hidden z-1 mt-10">
+          <div className=" w-full flex flex-col bg-gradient-to-b from-[#1d1d1d] via-[#191919] to-[#111111] relative overflow-x-hidden z-1 mt-10">
+            <div className="absolute top-10 from-[#5757577d] bg-gradient-to-b to-[#1d1d1d] w-full h-[400px] z-0"></div>
             <div className="flex items-center justify-between w-full relative">
               <h1
-                className={`text-3xl sm:text-5xl p-8 fixed font-bold z-10 text-white bg-[#121212] w-full`}
+                className={`text-3xl sm:text-5xl p-8 fixed font-bold z-[20] text-white bg-[#121212] w-full`}
                 onClick={() => {
                   isBreakPoint ? scrollToTop() : null;
                 }}
@@ -73,8 +74,8 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                 Home
               </h1>
             </div>
-            <div className="w-full flex flex-col items-start justify-center ">
-              <div className="w-full mt-20 mb-6 gap-2 flex flex-col items-center justify-center">
+            <div className="w-full flex flex-col items-start justify-center z-10">
+              <div className="w-full mt-20 mb-6 gap-2 flex flex-col items-center justify-center relative ">
                 <Image src={LogoText} alt="logo-text" width={225} />
                 <Image
                   src={Logo}

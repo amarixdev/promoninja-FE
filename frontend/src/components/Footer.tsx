@@ -62,7 +62,7 @@ const Footer = () => {
       );
     }
     return (
-      <Link href={href} className={`flex flex-col items-center `}>
+      <Link href={href} className={`flex flex-col items-center`}>
         {currentPage[current || "home"] ? (
           <ActiveIcon
             color={"#d6d6d6"}
@@ -94,7 +94,7 @@ const Footer = () => {
       onClick={() => setPageNavigate(true)}
       className={
         isBreakPoint
-          ? `w-[100vw] fixed bottom-[0] bg-black/60 backdrop-blur-md`
+          ? `w-[100vw] fixed bottom-[0] z-[90] bg-black/60 backdrop-blur-md`
           : "hidden"
       }
     >
