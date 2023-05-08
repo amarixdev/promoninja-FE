@@ -284,19 +284,20 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
               >
                 {/* Mobile */}
                 {isBreakPoint ? (
-                  <div className="flex justify-between items-center px-6">
+                  <div className="flex justify-between items-center px-6 gap-2">
                     <Image
                       src={
                         sponsorData.filter(
                           (sponsor) => sponsor.name === offer?.sponsor
                         )[0].imageUrl
                       }
-                      width={50}
-                      height={50}
+                      width={40}
+                      height={40}
                       priority
                       alt={offer.sponsor}
-                      className="base:w-[50px] xs:w-[60px] ml-4 base:pr-2 xs:p-0"
+                      className="base:min-w-[40px] xs:min-w-[50px] xs:p-0 shadow-md shadow-black rounded-md"
                     />
+
                     <div className="w-full justify-between flex items-center">
                       <div className="base: py-4 xs:p-4">
                         <h1 className="font-bold text-white text-sm">
@@ -335,7 +336,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                                 height={80}
                                 priority
                                 alt={offer.sponsor}
-                                className="ml-4 rounded-md"
+                                className="rounded-md shadow-md shadow-black"
                               />
                             </Link>
 
@@ -444,7 +445,7 @@ export const getStaticProps = async ({ params }: any) => {
   const { podcast, category } = params;
   const slugToPodcast = podcast.split("-").join(" ").toLowerCase();
   const slugToCategory = category.split("-").join(" ").toLowerCase();
-  
+
   try {
     let { data: podcastData, loading } = await client.query({
       query: Operations.Queries.GetPodcast,

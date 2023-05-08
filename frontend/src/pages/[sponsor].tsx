@@ -296,7 +296,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                         width={80}
                         height={80}
                         alt={podcast.title}
-                        className=" base:w-[60px] ml-4 rounded-md"
+                        className=" base:w-[60px] ml-4 rounded-md shadow-md shadow-black"
                       />
 
                       <div className="w-full justify-between flex items-center">
@@ -333,7 +333,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                                 width={80}
                                 height={80}
                                 alt={podcast.title}
-                                className="ml-4 rounded-md"
+                                className="ml-4 rounded-md shadow-md shadow-black"
                               />
                             </Link>
 
