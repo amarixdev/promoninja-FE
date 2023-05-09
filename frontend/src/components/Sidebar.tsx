@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { MdOutlinePodcasts, MdPodcasts } from "react-icons/md";
-import style from "../../styles/style.module.css";
 import {
   RiHome6Fill,
   RiHome6Line,
@@ -12,10 +12,9 @@ import {
 import { NavContext } from "../context/navContext";
 import * as LogoText from "../public/assets/logo-text.png";
 import * as Ninja4 from "../public/assets/logo.png";
+import { scrollToTop } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
 import { LinkWrapperProps } from "./Footer";
-import { scrollToTop } from "../utils/functions";
-import { useEffect, useState } from "react";
 
 interface Props {}
 

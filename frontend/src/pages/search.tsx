@@ -8,10 +8,9 @@ import { BiSearch } from "react-icons/bi";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import { Operations } from "../graphql/operations";
+import { convertToSlug, truncateString } from "../utils/functions";
 import { useSetCurrentPage } from "../utils/hooks";
 import { Category, PodcastData, SponsorData } from "../utils/types";
-import { convertToSlug, truncateString } from "../utils/functions";
-import { truncate } from "fs";
 
 interface PodcastQuery {
   getPodcasts: PodcastData[];

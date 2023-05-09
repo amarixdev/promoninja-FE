@@ -16,7 +16,6 @@ import CategoryTabs from "../../components/CategoryTabs";
 import DescriptionDrawer from "../../components/DescriptionDrawer";
 import Footer from "../../components/Footer";
 import Sidebar from "../../components/Sidebar";
-import { NavContext } from "../../context/navContext";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
 import { convertToSlug, truncateString } from "../../utils/functions";
@@ -26,7 +25,6 @@ import {
   useSetCurrentPage,
 } from "../../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
-import { useRouter } from "next/router";
 
 interface Props {
   categoryData: SponsorCategory;

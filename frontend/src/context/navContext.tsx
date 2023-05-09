@@ -44,8 +44,6 @@ export function ContextProvider({ children }: ContextProviderProps) {
     podcasts: false,
     search: false,
   });
-  const [pageNavigate, setPageNavigate] = useState(false);
-
   return (
     <AppContext.Provider
       value={{

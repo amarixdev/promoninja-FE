@@ -1,11 +1,10 @@
 import { Spinner, Tab, TabList, Tabs } from "@chakra-ui/react";
 import Link from "next/link";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import style from "../../styles/style.module.css";
 import { NavContext } from "../context/navContext";
-import { SponsorCategory } from "../utils/types";
 import { convertToSlug } from "../utils/functions";
-import { useRouter } from "next/router";
+import { SponsorCategory } from "../utils/types";
 
 interface Props {
   sponsorCategoryData: SponsorCategory[];
