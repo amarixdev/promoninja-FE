@@ -51,16 +51,14 @@ const CategoryTabs = ({
   if (!sponsorCategoryData) return <Spinner />;
   return (
     <div
-      className={`z-[99] fixed top-0 w-full py-5 transition ease-in-out duration-500  ${
+      className={`z-[99] fixed top-0 w-full py-5 transition ease-in-out duration-300 overflow-x-scroll scrollbar-hide  ${
         filled && "bg-black/60 backdrop-blur-lg"
       }`}
       id="navbar"
     >
       {shouldRender ? (
         <Tabs defaultIndex={index || categoryIndex} variant={"unstyled"}>
-          <TabList
-            className={` ${style.offset} overflow-x-scroll scrollbar-hide px-2 relative`}
-          >
+          <TabList className={` ${style.offset}   px-2 relative`}>
             {sponsorCategoryData.map((category: SponsorCategory) => (
               <Link
                 key={category.name}

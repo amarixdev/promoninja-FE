@@ -296,8 +296,16 @@ const SponsorCategory = ({
                                     shadow="md"
                                   >
                                     <div className="flex flex-col w-full">
-                                      <div className="w-full font-light p-2 mb-4">
-                                        {sponsor.offer}
+                                      <div className="w-full  mb-4">
+                                        <div className="flex gap-2">
+                                          <div className="rounded-full bg-[#0ec10e] relative top-2 min-w-[6px] max-h-[6px]"></div>
+                                          <h1 className="font-bold">
+                                            Exclusive Offer
+                                          </h1>
+                                        </div>
+                                        <p className="font-light text-sm p-2">
+                                          {sponsor.offer}
+                                        </p>
                                       </div>
                                       <div className="w-full flex overflow-x-auto pb-4">
                                         {sponsorPodcasts?.map((pod) => (
@@ -312,7 +320,7 @@ const SponsorCategory = ({
                                                   width={100}
                                                   height={100}
                                                   alt={pod.title}
-                                                  className=" mb-2"
+                                                  className="rounded-md mb-2"
                                                 />
 
                                                 <h1 className="text-sm font-semibold">
@@ -449,8 +457,8 @@ const SponsorCategory = ({
                                     shadow="md"
                                   >
                                     <div className="flex flex-col w-full">
-                                      <div className="w-full flex items-center gap-2 py-6 mb-4 px-4">
-                                        <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
+                                      <div className="w-full flex gap-2 py-6 mb-4 px-4">
+                                        <div className="rounded-full bg-[#0ec10e] relative top-3 w-2 h-2"></div>
                                         <p className="font-bold text-xl whitespace-nowrap">
                                           Exclusive Offer:
                                         </p>
@@ -479,8 +487,8 @@ const SponsorCategory = ({
                                     shadow="md"
                                   >
                                     <div className="flex flex-col w-full ">
-                                      <div className="w-full flex items-center gap-2 py-6 mb-4 px-4">
-                                        <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
+                                      <div className="w-full flex gap-2 py-6 mb-4 px-4">
+                                        <div className="rounded-full bg-[#0ec10e] w-2 relative top-3 h-2"></div>
                                         <p className="font-bold text-xl whitespace-nowrap">
                                           Exclusive Offer:
                                         </p>
@@ -500,7 +508,7 @@ const SponsorCategory = ({
                                                 width={110}
                                                 height={110}
                                                 alt={pod.title}
-                                                className="min-w-[110px] min-h-[110px]rounded-xl mb-2 "
+                                                className="min-w-[110px] min-h-[110px] rounded-md mb-2 "
                                               />
 
                                               <h1 className="text-sm font-semibold">

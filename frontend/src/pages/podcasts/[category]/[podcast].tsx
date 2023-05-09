@@ -185,21 +185,12 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   };
 
   return (
-    <div
-      className={`${
-        isBreakPoint
-          ? "flex flex-col base:mb-[60px] xs:mb-[70px] lg:mb-0"
-          : "flex "
-      }`}
-    >
+    <div className={`${isBreakPoint ? "flex flex-col" : "flex "}`}>
       <Sidebar />
       <div className="flex-col w-full overflow-hidden ">
         <PreviousPage />
         {
-          <div
-            className="flex flex-col items-center relative h-[50vh] w-full"
-            // id="banner"
-          >
+          <div className="flex flex-col items-center relative h-[50vh] w-full">
             <DescriptionDrawer
               isOpen={isOpenDrawer}
               onClose={onCloseDrawer}
@@ -210,7 +201,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
               externalUrl={podcastData?.externalUrl}
             />
             {
-              <div className={`fixed w-full z-50 lg:ml-[250px]`}>
+              <div className={`fixed w-full z-50 lg:ml-[240px]`}>
                 {
                   <div
                     className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 ${
@@ -342,26 +333,41 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
         >
           <div className="flex flex-col mt-6 justify-evenly bg-gradient-to-b from-black to-[#0e0e0e]">
             <div className="flex relative p-4 lg:pl-8">
-              {isBreakPoint || (
-                <p className="font-light text-sm sm:text-md relative p-4 top-[70px] tracking-widest">
-                  {`#`}
-                </p>
-              )}
-              <p className="font-light text-sm sm:text-md relative p-4 top-[70px] tracking-widest">
-                {`Sponsor`}
-              </p>
+              <div className="flex justify-between lg:justify-start items-center w-full">
+                <div className="flex items-center">
+                  <p className="font-light text-sm sm:text-md relative right-2 lg:right-0 p-4 top-[70px] tracking-widest">
+                    {`#`}
+                  </p>
+                  <p className="font-light text-sm sm:text-md relative top-[70px] tracking-widest">
+                    {`Sponsor`}
+                  </p>
+                </div>
+
+                {isBreakPoint && (
+                  <p className="font-light text-sm sm:text-md relative pr-2 top-[70px] tracking-widest">
+                    {`Offer`}
+                  </p>
+                )}
+              </div>
             </div>
             <div className="w-[95%] border-b-[1px] pb-8 pt-2 mt-2 mb-6"></div>
           </div>
-          <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col lg:gap-4 lg:h-fit lg:overflow-visible pb-6">
+          <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col h-[600px] overflow-y-scroll pb-24 lg:pb-16">
             {podcastData.offer.map((offer: OfferData, index) => (
               <div
                 key={offer.sponsor}
-                className={`flex flex-col py-2 justify-between"`}
+                className={`flex flex-col lg:py-2 justify-between"`}
               >
                 {/* Mobile */}
                 {isBreakPoint ? (
-                  <div className="flex justify-between items-center px-6 gap-2">
+                  <div className="flex justify-between items-center px-6 gap-2 max-h-[80px]">
+                    <p
+                      className={`"text-[#aaaaaa] ${
+                        index > 8 ? "pr-[6px]" : "pr-3"
+                      } text-xs font-semibold"`}
+                    >
+                      {index + 1}
+                    </p>
                     <Image
                       src={
                         sponsorData.filter(
@@ -388,7 +394,6 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                     <div className=" xs:p-4 flex ">
                       <FaEllipsisV
                         onClick={() => handleDrawer(offer.sponsor, true)}
-                        className=""
                       />
                     </div>
                   </div>
@@ -396,7 +401,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                   /* Desktop */
                   <>
                     <div className="w-full ">
-                      <div className=" flex justify-between bg-[#2b2b2b53] py-2 shadow-xl shadow-black ">
+                      <div className=" flex justify-between bg-[#2b2b2b53] py-2  ">
                         <div className="w-full flex justify-between items-center ">
                           <div className="flex px-8 items-center">
                             <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">

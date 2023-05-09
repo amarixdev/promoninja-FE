@@ -73,7 +73,7 @@ const DescriptionDrawer = ({
                 className="w-full flex flex-col items-center justify-center"
                 style={podcastOfferDrawer ? gradientStyle : {}}
               >
-                <div className="base:p-2 xs:p-4 flex items-center">
+                <div className="base:py-2 xs:py-4 flex items-center w-full">
                   <div>
                     <Link
                       className="base:p-2 xs:p-4 flex w-full"
@@ -89,11 +89,11 @@ const DescriptionDrawer = ({
                     >
                       <Image
                         src={drawer.image}
-                        width={80}
-                        height={80}
+                        width={100}
+                        height={100}
                         alt=""
                         priority
-                        className={`min-h-[80px] min-w-[80px] ${
+                        className={`min-h-[100px] min-w-[100px] ${
                           podcastOfferDrawer && "shadow-2xl shadow-black"
                         } `}
                       />
@@ -101,7 +101,7 @@ const DescriptionDrawer = ({
                   </div>
 
                   <div className="base:px-3 xs:px-4">
-                    <h1 className="base:text-lg xs:text-xl font-bold hover:underline">
+                    <h1 className="base:text-lg xs:text-xl font-extrabold hover:underline">
                       {drawer.title}
                     </h1>
                     <h3 className="base:text-xs xs:text-sm font-semibold text-[#c8c8c8]">
@@ -158,17 +158,20 @@ const DescriptionDrawer = ({
                         {drawer.promoCode &&
                           (podcastOfferDrawer || sponsorOfferDrawer) && (
                             <div className="flex flex-col justify-center items-center">
-                              <h2 className="text-lg font-bold my-2 tracking-wide">
+                              <h2 className="text-base font-semibold my-2 tracking-wide">
                                 Use Code
                               </h2>
                               <PromoCodeButton
                                 promoCode={drawer.promoCode || ""}
                               />
-                              <h2 className="text-lg font-bold my-2 tracking-wide">
+                              <h2 className="text-base  font-semibold my-2 tracking-wide">
                                 At Checkout
                               </h2>
                             </div>
                           )}
+                        <p className="font-thin mt-10 text-lg">
+                          "Thanks for supporting the show!"
+                        </p>
                       </>
                     )}
                   </div>

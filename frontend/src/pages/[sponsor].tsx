@@ -139,7 +139,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
   if (!sponsorData) return <Spinner />;
 
   return (
-    <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
+    <div className="flex ">
       <Sidebar />
       {
         <div className="bg-gradient-to-b from-[#454545] to-[#101010] flex flex-col items-center w-full">
@@ -151,7 +151,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
             podcastOfferDrawer={true}
           />
           {
-            <div className={`fixed w-full z-50 lg:ml-[250px]`}>
+            <div className={`fixed w-full z-50 lg:ml-[240px]`}>
               {
                 <div
                   className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 ${
@@ -164,7 +164,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                     width={70}
                     height={70}
                     priority
-                    className={`min-w-70 lg:min-w-[60px] rounded-md p-2 relative bottom-[500px] transition-all duration-300 ${
+                    className={`min-w-[70px] min-h-[70px]  rounded-md p-2 relative bottom-[500px] transition-all duration-300 ${
                       banner && "lg:hover:cursor-pointer bottom-0"
                     } `}
                     onClick={() => scrollToTop()}
@@ -184,7 +184,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                         }`}
                       ></div>
                       <h3
-                        className={`font-semibold text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
+                        className={`font-semibold pb-1 text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
                           banner && "bottom-0"
                         } `}
                       >
@@ -346,50 +346,64 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
             ) : (
               <></>
             )}
-            <div className="flex flex-col justify-evenly w-full text-[#aaaaaa]">
-              <div className="flex relative pt-14 base:mb-2 lg:mb-0 pl-6 lg:pt-8 lg:pl-8 lg:pb-2">
-                {isBreakPoint || (
-                  <p className="font-light text-md relative px-4 tracking-widest">
+            <div className="flex flex-col justify-evenly w-full text-[#aaaaaa] ">
+              <div className="flex justify-between w-full relative pt-14 base:mb-2 lg:mb-0 pl-6 lg:pt-8 lg:pl-8 lg:pb-2">
+                <div className="flex relative right-4 lg:right-0">
+                  <p className="font-light text-md relative pl-4 lg:px-4 tracking-widest">
                     {`#`}
                   </p>
+
+                  <p className="font-light text-sm sm:text-md relative px-4 tracking-widest">
+                    {`Podcast`}
+                  </p>
+                </div>
+                {isBreakPoint && (
+                  <p className="font-light text-sm sm:text-md relative xs:pr-8 base:pr-4 tracking-widest">
+                    {`Link`}
+                  </p>
                 )}
-                <p className="font-light text-sm sm:text-md relative px-4 tracking-widest">
-                  {`Podcast`}
-                </p>
               </div>
               <div className="w-[95%] border-b-[1px] "></div>
             </div>
 
-            <div className="w-full flex flex-col gap-6  lg:h-fit  pt-6">
+            <div className="w-full flex flex-col lg:h-[500px] pt-6 overflow-y-scroll base:h-[400px] xs:h-[450px] base:pb-24 lg:pb-16">
               {podcastsData.map((podcast, index) => (
                 <div
                   key={podcast.title}
-                  className={`flex flex-col justify-between pb-6`}
+                  className={`flex flex-col justify-between lg:py-2`}
                 >
                   {/* Mobile */}
 
                   {isBreakPoint ? (
-                    <div className="flex justify-between items-center px-6 overflow-x-hidden">
+                    <div className="flex justify-between items-center px-6 max-h-[80px] gap-2">
+                      <p
+                        className={`"text-[#aaaaaa] text-xs ${
+                          index > 8 ? "pr-[6px]" : "pr-3"
+                        }  font-semibold"`}
+                      >
+                        {index + 1}
+                      </p>
                       <Image
                         src={podcast.imageUrl}
-                        width={80}
-                        height={80}
-                        alt={podcast.title}
-                        className=" base:w-[60px] ml-4 rounded-md shadow-sm shadow-black"
+                        width={50}
+                        height={50}
+                        priority
+                        alt={podcast.publisher}
+                        className="base:min-w-[40px] xs:min-w-[50px] xs:p-0 shadow-md shadow-black rounded-md"
                       />
 
                       <div className="w-full justify-between flex items-center">
-                        <div className="p-4">
-                          <h1 className="font-bold text-sm">
+                        <div className="base: py-4 xs:p-4">
+                          <h1 className="font-bold text-white text-sm">
                             {truncateString(podcast.title, 20)}
                           </h1>
                           <p className="text-[#909090] text-sm">
-                            {podcast.publisher}
+                            {truncateString(podcast.publisher, 40)}
                           </p>
                         </div>
-                        <div className="p-4">
-                          <FaEllipsisV onClick={() => handleDrawer(podcast)} />
-                        </div>
+                      </div>
+                      <div className=" xs:p-4 flex ">
+                        <FaEllipsisV onClick={() => handleDrawer(podcast)} />
                       </div>
                     </div>
                   ) : (
@@ -428,11 +442,21 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                           </div>
 
                           <div className="flex justify-end pr-16 pl-6">
+                            <p
+                              className={`base:hidden xl:flex pr-10 font-light transition duration-300 text-[#909090] italic ${
+                                isOpen && selectedPodcast === podcast.title
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              }`}
+                            >
+                              {`"Thanks for supporting the show!"`}
+                            </p>
+
                             <Button
                               onClick={() => handleCollapse(podcast)}
                               className="active:scale-95"
                             >
-                              View Details
+                              View Link
                             </Button>
                           </div>
                         </div>

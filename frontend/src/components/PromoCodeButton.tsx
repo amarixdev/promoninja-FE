@@ -20,7 +20,7 @@ const PromoCodeButton = ({ promoCode }: Props) => {
   const CopyToast = () => {
     return toast({
       title: "Copied To Clipboard",
-      description: `Thanks for supporting the Podcast! `,
+      description: `"Your purchase helps us continue to produce engaging, quality content." `,
       status: "success",
       duration: 9000,
       isClosable: true,

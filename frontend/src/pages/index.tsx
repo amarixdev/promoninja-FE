@@ -125,7 +125,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                           width={190}
                           height={190}
                           loading="lazy"
-                          className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px] md:w-[190px] lg:w-[190px] "
+                          className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px] md:w-[190px] lg:w-[190px]  "
                         />
                       </Link>
 
@@ -232,13 +232,13 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                                     <Link
                                       href={`/${convertToSlug(sponsor.name)}`}
                                     >
-                                      <div className="hover:bg-[#ffffff0e] active:scale-95 hover: h-[100px] w-[100px] rounded-lg absolute transition ease-in-out duration-300 "></div>
+                                      <div className="hover:bg-[#ffffff0e] active:scale-95 h-[100px] w-[100px] rounded-lg absolute transition ease-in-out duration-300"></div>
                                       <Image
                                         src={sponsor.imageUrl}
                                         alt={sponsor.name}
                                         width={100}
                                         height={100}
-                                        className="rounded-lg"
+                                        className="rounded-lg min-w-[100px] min-h-[100px]"
                                         loading="lazy"
                                       />
                                     </Link>
