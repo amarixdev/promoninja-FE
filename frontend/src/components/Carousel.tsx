@@ -3,9 +3,10 @@ import React from "react";
 import style from "../../styles/style.module.css";
 import { SponsorCategory } from "../utils/types";
 import { convertToSlug } from "../utils/functions";
+import { HandleRotate } from "../utils/hooks";
 
 interface Props {
-  handleRotate: (direction: string) => void;
+  handleRotate: HandleRotate;
   currDeg: number;
   categoryData: SponsorCategory[];
   categoryIndex: number;

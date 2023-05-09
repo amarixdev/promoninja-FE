@@ -67,3 +67,60 @@ export const useLoadingScreen = () => {
 
   return isLoading;
 };
+
+export const useCarouselSpeed = (
+  clickCount: number,
+  startTime: number,
+  setDisplayEasterEgg: React.Dispatch<React.SetStateAction<boolean>>,
+  setNinjaMode: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  useEffect(() => {
+    if (clickCount > 1) {
+      const elapsedTime = Date.now() - startTime;
+      const clickSpeed = clickCount / (elapsedTime / 1000);
+
+      if (clickSpeed >= 3 && clickCount > 6) {
+        setDisplayEasterEgg(true);
+        setNinjaMode(true);
+      }
+    }
+  }, [clickCount, startTime]);
+};
+
+type RotateDirection = "next" | "prev";
+
+export type HandleRotate = (direction: RotateDirection) => void;
+
+export const useRotate = (
+  startTime: number,
+  clickCount: number,
+  setClickCount: React.Dispatch<React.SetStateAction<number>>,
+  setStartTime: React.Dispatch<React.SetStateAction<number>>
+): [number, HandleRotate] => {
+  const [currDeg, setCurrDeg] = useState(0);
+  const [rotateDirection, setRotateDirection] =
+    useState<RotateDirection>("next");
+
+  const handleRotate: HandleRotate = (direction) => {
+    setClickCount((prev) => prev + 1);
+
+    if (clickCount === 0) {
+      setStartTime(Date.now());
+    }
+
+    if (rotateDirection !== direction) {
+      setClickCount(0);
+      setStartTime(Date.now());
+    }
+
+    if (direction === "next") {
+      setCurrDeg(currDeg + 45);
+      setRotateDirection("next");
+    } else if (direction === "prev") {
+      setCurrDeg(currDeg - 45);
+      setRotateDirection("prev");
+    }
+  };
+
+  return [currDeg, handleRotate];
+};

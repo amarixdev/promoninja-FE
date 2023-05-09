@@ -1,21 +1,28 @@
-import { Button } from "@chakra-ui/react";
+import { Button, useToast } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
+import { GiNinjaHead } from "react-icons/gi";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import LogoText from "../public/assets/logo-text.png";
 import Logo from "../public/assets/ninja4.png";
-import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
+import {
+  useCarouselSpeed,
+  useMediaQuery,
+  useRotate,
+  useSetCurrentPage,
+} from "../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 
 import Link from "next/link";
 import Carousel from "../components/Carousel";
 import { NavContext } from "../context/navContext";
 import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
+import { FaLock } from "react-icons/fa";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -28,11 +35,23 @@ type GroupedSponsors = { [key: string]: string[] };
 const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
   useSetCurrentPage({ home: true, podcasts: false, search: false });
   const isBreakPoint = useMediaQuery(1023);
-  const [currDeg, setCurrDeg] = useState(0);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
   const groupedSponsors: GroupedSponsors = {};
   const [loading, setLoading] = useState(true);
   const { setCategoryIndex, categoryIndex } = NavContext();
+  const [clickCount, setClickCount] = useState(0);
+  const [startTime, setStartTime] = useState(0);
+  const [displayEasterEgg, setDisplayEasterEgg] = useState(false);
+  const [ninjaMode, setNinjaMode] = useState(false);
+  const [displayToast, setDisplayToast] = useState(false);
+  const toast = useToast();
+  useCarouselSpeed(clickCount, startTime, setDisplayEasterEgg, setNinjaMode);
+  const [currDeg, handleRotate] = useRotate(
+    startTime,
+    clickCount,
+    setClickCount,
+    setStartTime
+  );
 
   sortedSponsors.forEach((str) => {
     const firstLetter = str.charAt(0).toUpperCase();
@@ -43,45 +62,110 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
     groupedSponsors[firstLetter].push(str);
   });
 
-  const handleRotate = (direction: any) => {
-    if (direction === "next") {
-      setCurrDeg(currDeg + 45);
-    } else if (direction === "prev") {
-      setCurrDeg(currDeg - 45);
+  const NinjaModeToast = () => {
+    if (isBreakPoint) {
+      toast({
+        title: "Ninja Mode Locked",
+        duration: 1500,
+        isClosable: true,
+        position: "bottom",
+        render: () => (
+          <div
+            className={`z-[99] rounded-md py-6 relative bottom-[100px] bg-[#0f0f0f] shadow-sm shadow-black min-w-[150px] flex justify-center gap-2 items-center`}
+          >
+            <FaLock />
+            <h2 className="font-bold text-base text-[#bebebe]">
+              Ninja Mode Locked
+            </h2>
+          </div>
+        ),
+      });
+    } else {
     }
   };
-
-  useEffect(() => {
-    if (sponsorsData && topPicksData && topPicksData) {
-      setLoading(false);
-    }
-  }, [sponsorsData, topPicksData, topPicksData]);
-
+  console.log(displayToast);
   return (
     <>
       <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
         <Sidebar />
         {
-          <div className=" w-full flex flex-col bg-gradient-to-b from-[#1d1d1d] via-[#191919] to-[#111111] relative overflow-x-hidden z-1 mt-10">
-            <div className="absolute top-10 from-[#5757577d] bg-gradient-to-b to-[#1d1d1d] w-full h-[400px] z-0"></div>
+          <div
+            className={`w-full flex flex-col bg-gradient-to-b ${
+              displayEasterEgg && ninjaMode
+                ? "from-[#121212] via-[#0e0e0e] to-[black]"
+                : "from-[#151515] via-[#151515] to-[#121212] "
+            } relative overflow-x-hidden z-1 mt-10`}
+          >
+            {(displayEasterEgg && ninjaMode) || (
+              <div
+                className={` "to-[#151515] from-[#434343c9] bg-gradient-to-b " absolute top-10   w-full h-[350px] z-0 `}
+              ></div>
+            )}
             <div className="flex items-center justify-between w-full relative">
-              <h1
-                className={`text-3xl sm:text-5xl p-8 fixed font-bold z-[20] text-white bg-[#121212] w-full`}
-                onClick={() => {
-                  isBreakPoint ? scrollToTop() : null;
-                }}
+              <div
+                className={
+                  "fixed bg-[#121212] p-8  w-full z-[20] flex justify-between"
+                }
               >
-                Home
-              </h1>
+                <h1
+                  className={`text-3xl sm:text-5xl font-bold text-white `}
+                  onClick={() => {
+                    isBreakPoint ? scrollToTop() : null;
+                  }}
+                >
+                  {displayEasterEgg && ninjaMode ? "Ninja" : "Home"}
+                </h1>
+                {displayEasterEgg ? (
+                  <button
+                    className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer active:scale-95 text-white `}
+                    onClick={() => setNinjaMode((prev) => !prev)}
+                  >
+                    <GiNinjaHead />
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative active:cursor-not-allowed hover:cursor-not-allowed text-[#414141]`}
+                    >
+                      <GiNinjaHead
+                        onClick={() => NinjaModeToast()}
+                        onMouseEnter={() => {
+                          setTimeout(() => {
+                            setDisplayToast(true);
+                          }, 450);
+                        }}
+                        onMouseLeave={() => {
+                          setTimeout(() => {
+                            setDisplayToast(false);
+                          }, 300);
+                        }}
+                      />
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
             <div className="w-full flex flex-col items-start justify-center z-10">
               <div className="w-full mt-20 mb-6 gap-2 flex flex-col items-center justify-center relative ">
+                {isBreakPoint || (
+                  <div
+                    className={`z-[99] rounded-md fixed right-[20px] p-2 transition-all  duration-300 ${
+                      displayToast
+                        ? "top-[105px] opacity-100"
+                        : "top-[-500px] opacity-0"
+                    }  bg-[#0f0f0f] shadow-sm shadow-black px-8 py-4 text-[#bebebe] min-w-[200px] flex items-center gap-2`}
+                  >
+                    <FaLock />
+                    <h2 className="font-bold text-base">Ninja Mode Locked</h2>
+                  </div>
+                )}
+
                 <Image src={LogoText} alt="logo-text" width={225} />
                 <Image
                   src={Logo}
                   width={120}
                   alt="logo"
-                  className="mx-2 w-[100px] lg:w-[120px]"
+                  className="mx-2 w-[100px] lg:w-[120px] "
                 />
               </div>
               <div className="w-full flex items-center justify-center">
@@ -95,22 +179,38 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
 
               <div className="w-full flex flex-col justify-center items-center ">
                 <div className="w-full flex justify-between items-center mb-4">
-                  <h1 className="text-xl lg:text-2xl font-bold px-4 text-white w-full ">
+                  <h1
+                    className={`"text-xl lg:text-2xl font-bold px-4 ${
+                      ninjaMode && displayEasterEgg
+                        ? "text-[#cdcdcd]"
+                        : "text-[#dedede]"
+                    }   w-full "`}
+                  >
                     Popular Podcasts
                   </h1>
                   <Link href={"/podcasts"}>
-                    <p className="px-4 active:scale-95 text-white whitespace-nowrap text-sm font-bold sm:pr-4 md:pr-6 lg:pr-8 lg:text-base hover:underline-offset-2 hover:underline">
+                    <p
+                      className={`"px-4 active:scale-95 ${
+                        ninjaMode && displayEasterEgg
+                          ? "text-[#cdcdcd]"
+                          : "text-[#dedede]"
+                      } transition-all duration-[200ms] ease-in hover:text-white whitespace-nowrap text-sm font-bold sm:pr-4 md:pr-6 lg:pr-8 lg:text-base "`}
+                    >
                       View All
                     </p>
                   </Link>
                 </div>
 
                 <div
-                  className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full`}
+                  className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-11/12 lg:w-full`}
                 >
                   {topPicksData.map((podcast: PodcastData) => (
                     <div
-                      className={`from-[#181818] bg-gradient-radial to-[#2c2c2c] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[240px] h-[255px] sm:h-[283px] md:h-[312px] lg:h-[340px] rounded-lg mx-3`}
+                      className={`  ${
+                        displayEasterEgg && ninjaMode
+                          ? "bg-[#0d0d0d] hover:bg-[#242424] "
+                          : " bg-gradient-radial from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
+                      }  hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
                       key={podcast.title}
                     >
                       <Link
@@ -125,19 +225,19 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                           width={190}
                           height={190}
                           loading="lazy"
-                          className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px] md:w-[190px] lg:w-[190px]  "
+                          className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px]  "
                         />
                       </Link>
 
-                      <div>
+                      <div className="">
                         <h1
-                          className={`text-sm sm:text-md lg:text-lg text-center px-2 pt-6 font-semibold text-white whitespace-nowrap`}
+                          className={`text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-white whitespace-nowrap`}
                         >
                           {!isBreakPoint
                             ? truncateString(podcast.title, 20)
                             : truncateString(podcast.title, 14)}
                         </h1>
-                        <p className="text-xs sm:text-sm lg:text-md text-center px-2 font-medium text-[#909090]">
+                        <p className="text-xs sm:text-sm text-center px-2 font-medium text-[#909090]">
                           {!isBreakPoint
                             ? podcast.publisher
                             : truncateString(podcast.publisher, 30)}
@@ -148,8 +248,8 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                 </div>
               </div>
               <div className="w-full flex justify-center items-center h-[200px]">
-                <div className="max-w-[60%] max-h-[100px] py-2">
-                  <p className="font-light text-md sm:text-lg text-[#909090] tracking-widest italic">
+                <div className="lg:max-w-[40%] max-w-[60%] sm:max-w-[50%] max-h-[100px] py-2">
+                  <p className="font-light text-md sm:text-lg text-[#909090]  tracking-widest italic">
                     "As a podcast listener, you have access to exclusive deals
                     to help you save money.
                   </p>
@@ -157,11 +257,17 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
               </div>
               <div className="w-full items-center ">
                 <div className="w-full flex items-center justify-start">
-                  <h1 className="text-xl lg:text-2xl font-bold px-4 mb-12 relative top-9 text-white">
+                  <h1
+                    className={`"text-xl lg:text-2xl font-bold px-4 mb-12 relative top-9 ${
+                      ninjaMode && displayEasterEgg
+                        ? "text-[#cdcdcd]"
+                        : "text-[#dedede]"
+                    }  z-20"`}
+                  >
                     Sponsor Categories
                   </h1>
                 </div>
-                <div className="flex flex-col items-center px-10 py-4 relative bottom-14 ">
+                <div className="flex flex-col items-center relative bottom-14 py-6 rounded-lg">
                   <Carousel
                     handleRotate={handleRotate}
                     currDeg={currDeg}
@@ -169,12 +275,15 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                     setCategoryIndex={setCategoryIndex}
                     categoryIndex={categoryIndex}
                   />
-                  <div className="flex gap-10 relative bottom-10">
+                  <div className="flex gap-10 relative bottom-10 z-20">
                     <Button
                       w={100}
                       colorScheme="gray"
                       onClick={() => handleRotate("next")}
-                      className="active:scale-95 bg-[#1f2937]"
+                      className={`active:scale-95 `}
+                      onMouseLeave={() => {
+                        setClickCount(0);
+                      }}
                     >
                       <AiFillCaretLeft />
                     </Button>
@@ -182,6 +291,9 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                       w={100}
                       onClick={() => handleRotate("prev")}
                       className="active:scale-95"
+                      onMouseLeave={() => {
+                        setClickCount(0);
+                      }}
                     >
                       <AiFillCaretRight />
                     </Button>
@@ -209,7 +321,13 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                 </div>
                 <div className="relative">
                   <div className="w-full flex items-center base:mt-[120px] sm:mt-[60px] lg:mt-0 justify-start">
-                    <h1 className="text-xl lg:text-2xl font-bold p-4 text-white">
+                    <h1
+                      className={`"text-xl lg:text-2xl font-bold p-4 ${
+                        ninjaMode && displayEasterEgg
+                          ? "text-[#cdcdcd]"
+                          : "text-[#dedede]"
+                      } "`}
+                    >
                       Sponsors A-Z
                     </h1>
                   </div>

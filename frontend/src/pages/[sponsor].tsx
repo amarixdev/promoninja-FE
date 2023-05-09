@@ -441,7 +441,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
                             </div>
                           </div>
 
-                          <div className="flex justify-end pr-16 pl-6">
+                          <div className="flex justify-end pr-16 pl-6 items-center">
                             <p
                               className={`base:hidden xl:flex pr-10 font-light transition duration-300 text-[#909090] italic ${
                                 isOpen && selectedPodcast === podcast.title

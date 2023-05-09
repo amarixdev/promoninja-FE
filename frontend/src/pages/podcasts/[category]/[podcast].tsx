@@ -492,7 +492,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                                 )}
                               </div>
                               <div className="w-full font-light p-2 mb-4 flex">
-                                <p className="text-white mx-2 text-sm py-2 px-4 rounded-xl">
+                                <p className="text-white mx-2 text-sm lg:text-base py-2 px-4 rounded-xl">
                                   {
                                     sponsorData.filter(
                                       (sponsor) =>
