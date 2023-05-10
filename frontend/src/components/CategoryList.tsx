@@ -10,6 +10,7 @@ import {
 import { useMediaQuery } from "../utils/hooks";
 import { CategoryPodcast, PodcastData } from "../utils/types";
 import { Tooltip } from "@chakra-ui/react";
+import AnimatedLink from "./AnimatedLink";
 interface CategoryProps {
   category: CategoryPodcast;
 }
@@ -28,26 +29,14 @@ const CategoryList = ({ category }: CategoryProps) => {
   return (
     <div>
       <div className={`flex justify-between items-center lg:my-4 `}>
-        <Link href={`/podcasts/${convertToSlug(categoryName)}`}>
-          <Tooltip label="View All" placement="end" openDelay={500}>
-            <div className="flex items-center justify-center mt-8">
-              <h1
-                className={`text-lg sm:text-2xl font-bold text-white ${
-                  !isBreakPoint
-                    ? "ml-6 px-4"
-                    : "ml-2 text-xl px-4 relative z-15"
-                }`}
-                onClick={() => setPreviousPage("podcasts")}
-              >
-                {capitalizeString(categoryName)}
-              </h1>
-              <FaChevronRight className="relative right-2 top-[1px]" />
-            </div>
-          </Tooltip>
-        </Link>
+        <AnimatedLink
+          title={capitalizeString(categoryName)}
+          location={convertToSlug(categoryName)}
+          separateLink={false}
+        />
       </div>
       <div
-        className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative ${
+        className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative bottom-4 ${
           !isBreakPoint ? "ml-6" : "ml-2"
         }`}
       >

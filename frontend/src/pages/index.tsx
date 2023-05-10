@@ -1,7 +1,7 @@
 import { Button, useToast } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { JSXElementConstructor, useEffect, useRef, useState } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import { GiNinjaHead } from "react-icons/gi";
 import Footer from "../components/Footer";
@@ -24,6 +24,7 @@ import { NavContext } from "../context/navContext";
 import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
 import { FaLock } from "react-icons/fa";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import AnimatedLink from "../components/AnimatedLink";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -46,10 +47,13 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
   const [ninjaMode, setNinjaMode] = useState(false);
   const [displayToast, setDisplayToast] = useState(false);
   const toast = useToast();
+  const [hover, setHover] = useState(false);
+
   const sliderRef = useRef<HTMLDivElement>(null);
+
   const { showLeftArrow, showRightArrow, slideTopPicks } = useSlider(
     sliderRef.current,
-    800
+    1100
   );
   useCarouselSpeed(clickCount, startTime, setDisplayEasterEgg, setNinjaMode);
   const [currDeg, handleRotate] = useRotate(
@@ -183,35 +187,29 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
               </div>
 
               <div className="w-full flex flex-col justify-center items-center ">
-                <div className="w-full flex justify-between items-center mb-4">
-                  <h1
-                    className={`"text-xl lg:text-2xl font-bold px-4 ${
-                      ninjaMode && displayEasterEgg
-                        ? "text-[#cdcdcd]"
-                        : "text-[#dedede]"
-                    }   w-full "`}
-                  >
-                    Popular Podcasts
-                  </h1>
-                  <Link href={"/podcasts"}>
+                {/* <div className="w-full flex items-center justify-between group h-fit mb-4 hover:cursor-point "> */}
+                <AnimatedLink
+                  location=""
+                  title="Popular Podcasts"
+                  separateLink={true}
+                />
+                {/* <Link href={"/podcasts"}>
                     <p
-                      className={`"px-4 active:scale-95 ${
-                        ninjaMode && displayEasterEgg
-                          ? "text-[#cdcdcd]"
-                          : "text-[#dedede]"
-                      } transition-all duration-[200ms] ease-in hover:text-white whitespace-nowrap text-sm font-bold pr-3 sm:pr-4 md:pr-6 lg:pr-8 lg:text-base "`}
+                      className={`"px-4 active:scale-95 text-[#cdcdcd] transition-all duration-[200ms] ${
+                        isBreakPoint ? "block" : "hidden"
+                      } ease-in hover:text-white whitespace-nowrap text-sm font-bold pr-3 sm:pr-4 md:pr-6 lg:pr-8 lg:text-base "`}
                     >
                       View All
                     </p>
-                  </Link>
-                </div>
+                  </Link> */}
+                {/* </div> */}
                 <div className="relative flex w-full items-center group z-[1]">
                   <div
                     className={`absolute left-0 ${
                       showLeftArrow
                         ? "hover:cursor-pointer"
                         : "hover:cursor-auto"
-                    } group-hover:bg-[#00000042] opacity-100 hover:opacity-100 w-20 h-[300px] flex items-center z-10`}
+                    } group-hover:bg-[#00000026] opacity-100 hover:opacity-100 w-20 h-[300px] flex items-center z-10`}
                     onClick={() => slideTopPicks("left")}
                   >
                     <MdChevronLeft
@@ -227,7 +225,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                       showRightArrow
                         ? "hover:cursor-pointer"
                         : "hover:cursor-auto"
-                    }  hover:cursor-pointer group-hover:bg-[#00000042] opacity-100 hover:opacity-100 w-20 h-[300px] flex items-center z-10`}
+                    }  hover:cursor-pointer group-hover:bg-[#00000026] opacity-100 hover:opacity-100 w-20 h-[300px] flex items-center z-10`}
                     onClick={() => slideTopPicks("right")}
                   >
                     <MdChevronRight
@@ -240,7 +238,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                   </div>
 
                   <div
-                    className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-11/12 lg:w-full`}
+                    className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full`}
                     ref={sliderRef}
                   >
                     {topPicksData.map((podcast: PodcastData) => (
@@ -448,6 +446,12 @@ export const getStaticProps: GetStaticProps = async () => {
     "Science Vs",
     "The Always Sunny Podcast",
     "Normal Gossip",
+    "KILL TONY",
+    "Murder, Mystery & Makeup",
+    "The Joe Rogan Experience",
+    "On Purpose with Jay Shetty",
+    "Last Podcast On The Left",
+    "SmartLess",
   ];
   let { data: topPicksData } = await client.query({
     query: Operations.Queries.GetTopPicks,
