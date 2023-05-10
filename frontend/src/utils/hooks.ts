@@ -124,3 +124,39 @@ export const useRotate = (
 
   return [currDeg, handleRotate];
 };
+
+const useSlider = (slider: HTMLDivElement | null, scrollDistance: number) => {
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  const handleScroll = () => {
+    const cardWidth = 250;
+    if (slider) {
+      const { scrollWidth, scrollLeft, clientWidth } = slider;
+      const scrollPosition = scrollLeft + clientWidth;
+      setShowLeftArrow(scrollLeft >= cardWidth);
+      setShowRightArrow(scrollPosition < scrollWidth - cardWidth);
+    }
+  };
+
+  const slideTopPicks = (direction: string) => {
+    if (slider) {
+      if (direction === "left") {
+        slider.scrollLeft = slider.scrollLeft - scrollDistance;
+      } else if (direction === "right") {
+        slider.scrollLeft = slider.scrollLeft + scrollDistance;
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (slider) {
+      slider.addEventListener("scroll", () => handleScroll());
+      return () => slider.removeEventListener("scroll", () => handleScroll());
+    }
+  }, [slider]);
+
+  return { showLeftArrow, showRightArrow, slideTopPicks };
+};
+
+export default useSlider;

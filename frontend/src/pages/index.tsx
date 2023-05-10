@@ -1,7 +1,7 @@
 import { Button, useToast } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import { GiNinjaHead } from "react-icons/gi";
 import Footer from "../components/Footer";
@@ -10,7 +10,7 @@ import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import LogoText from "../public/assets/logo-text.png";
 import Logo from "../public/assets/ninja4.png";
-import {
+import useSlider, {
   useCarouselSpeed,
   useMediaQuery,
   useRotate,
@@ -23,6 +23,7 @@ import Carousel from "../components/Carousel";
 import { NavContext } from "../context/navContext";
 import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
 import { FaLock } from "react-icons/fa";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -45,6 +46,11 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
   const [ninjaMode, setNinjaMode] = useState(false);
   const [displayToast, setDisplayToast] = useState(false);
   const toast = useToast();
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const { showLeftArrow, showRightArrow, slideTopPicks } = useSlider(
+    sliderRef.current,
+    800
+  );
   useCarouselSpeed(clickCount, startTime, setDisplayEasterEgg, setNinjaMode);
   const [currDeg, handleRotate] = useRotate(
     startTime,
@@ -80,10 +86,9 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
           </div>
         ),
       });
-    } else {
     }
   };
-  console.log(displayToast);
+
   return (
     <>
       <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
@@ -200,51 +205,86 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                     </p>
                   </Link>
                 </div>
+                <div className="relative flex w-full items-center group z-[1]">
+                  <div
+                    className={`absolute left-0 ${
+                      showLeftArrow
+                        ? "hover:cursor-pointer"
+                        : "hover:cursor-auto"
+                    } group-hover:bg-[#00000042] opacity-100 hover:opacity-100 w-20 h-[300px] flex items-center z-10`}
+                    onClick={() => slideTopPicks("left")}
+                  >
+                    <MdChevronLeft
+                      color={"white"}
+                      className={` left-0 hidden rounded-full opacity-100 absolute cursor-pointer z-[11] ${
+                        showLeftArrow ? "group-hover:block" : "hidden"
+                      }`}
+                      size={80}
+                    />
+                  </div>
+                  <div
+                    className={`absolute right-0 ${
+                      showRightArrow
+                        ? "hover:cursor-pointer"
+                        : "hover:cursor-auto"
+                    }  hover:cursor-pointer group-hover:bg-[#00000042] opacity-100 hover:opacity-100 w-20 h-[300px] flex items-center z-10`}
+                    onClick={() => slideTopPicks("right")}
+                  >
+                    <MdChevronRight
+                      color={"white"}
+                      className={` right-0 hidden rounded-full opacity-100 absolute cursor-pointer z-[11] ${
+                        showRightArrow ? "group-hover:block" : "hidden"
+                      }`}
+                      size={80}
+                    />
+                  </div>
 
-                <div
-                  className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-11/12 lg:w-full`}
-                >
-                  {topPicksData.map((podcast: PodcastData) => (
-                    <div
-                      className={`  ${
-                        displayEasterEgg && ninjaMode
-                          ? "bg-[#1b1b1b] hover:bg-[#242424] "
-                          : " bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
-                      }  hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
-                      key={podcast.title}
-                    >
-                      <Link
-                        href={`/podcasts/${
-                          podcast.category[0].name
-                        }/${convertToSlug(podcast.title)}`}
+                  <div
+                    className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-11/12 lg:w-full`}
+                    ref={sliderRef}
+                  >
+                    {topPicksData.map((podcast: PodcastData) => (
+                      <div
+                        className={`  ${
+                          displayEasterEgg && ninjaMode
+                            ? "bg-[#1b1b1b] hover:bg-[#242424] "
+                            : " bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
+                        }  hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
                         key={podcast.title}
                       >
-                        <Image
-                          src={podcast.imageUrl}
-                          alt={podcast.title}
-                          width={190}
-                          height={190}
-                          loading="lazy"
-                          className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px]  "
-                        />
-                      </Link>
-
-                      <div className="">
-                        <h1
-                          className={`text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-white whitespace-nowrap`}
+                        <Link
+                          href={`/podcasts/${
+                            podcast.category[0].name
+                          }/${convertToSlug(podcast.title)}`}
+                          key={podcast.title}
                         >
-                          {!isBreakPoint
-                            ? truncateString(podcast.title, 20)
-                            : truncateString(podcast.title, 14)}
-                        </h1>
-                        <p className="text-xs sm:text-sm text-center px-2 font-medium text-[#909090]">
-                          {!isBreakPoint
-                            ? podcast.publisher
-                            : truncateString(podcast.publisher, 30)}
-                        </p>
+                          <Image
+                            src={podcast.imageUrl}
+                            alt={podcast.title}
+                            width={190}
+                            height={190}
+                            loading="lazy"
+                            className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px]  "
+                          />
+                        </Link>
+
+                        <div className="">
+                          <h1
+                            className={`text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-white whitespace-nowrap`}
+                          >
+                            {!isBreakPoint
+                              ? truncateString(podcast.title, 20)
+                              : truncateString(podcast.title, 14)}
+                          </h1>
+                          <p className="text-xs sm:text-sm text-center px-2 font-medium text-[#909090]">
+                            {!isBreakPoint
+                              ? podcast.publisher
+                              : truncateString(podcast.publisher, 30)}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
               <div className="w-full flex justify-center items-center h-[200px]">
