@@ -1,5 +1,5 @@
 import { BiPodcast } from "react-icons/bi";
-import { IoMdContact } from "react-icons/io";
+import { FaUserNinja } from "react-icons/fa";
 import { useMediaQuery } from "../utils/hooks";
 
 import Link from "next/link";
@@ -127,8 +127,8 @@ const Footer = () => {
 
         <LinkWrapper
           href=""
-          activeIcon={IoMdContact}
-          icon={IoMdContact}
+          activeIcon={FaUserNinja}
+          icon={FaUserNinja}
           pageTitle="About"
         />
       </div>

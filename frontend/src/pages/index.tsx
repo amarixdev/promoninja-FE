@@ -92,13 +92,13 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
           <div
             className={`w-full flex flex-col bg-gradient-to-b ${
               displayEasterEgg && ninjaMode
-                ? "from-[#121212] via-[#0e0e0e] to-[black]"
+                ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
                 : "from-[#151515] via-[#151515] to-[#121212] "
             } relative overflow-x-hidden z-1 mt-10`}
           >
             {(displayEasterEgg && ninjaMode) || (
               <div
-                className={` "to-[#151515] from-[#434343c9] bg-gradient-to-b " absolute top-10   w-full h-[350px] z-0 `}
+                className={` "to-[#1c1c1c] from-[#686868c9] bg-gradient-to-b " absolute top-10   w-full h-[400px] z-0 `}
               ></div>
             )}
             <div className="flex items-center justify-between w-full relative">
@@ -194,7 +194,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                         ninjaMode && displayEasterEgg
                           ? "text-[#cdcdcd]"
                           : "text-[#dedede]"
-                      } transition-all duration-[200ms] ease-in hover:text-white whitespace-nowrap text-sm font-bold sm:pr-4 md:pr-6 lg:pr-8 lg:text-base "`}
+                      } transition-all duration-[200ms] ease-in hover:text-white whitespace-nowrap text-sm font-bold pr-3 sm:pr-4 md:pr-6 lg:pr-8 lg:text-base "`}
                     >
                       View All
                     </p>
@@ -208,8 +208,8 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                     <div
                       className={`  ${
                         displayEasterEgg && ninjaMode
-                          ? "bg-[#0d0d0d] hover:bg-[#242424] "
-                          : " bg-gradient-radial from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
+                          ? "bg-[#1b1b1b] hover:bg-[#242424] "
+                          : " bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
                       }  hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
                       key={podcast.title}
                     >
@@ -399,6 +399,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const podcastTitles = [
     "Huberman Lab",
     "Bad Friends",
+    "Almost Adulting with Violet Benson",
     "Crime Junkie",
     "Lex Fridman Podcast",
     "Duncan Trussell Family Hour",

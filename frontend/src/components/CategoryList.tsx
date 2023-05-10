@@ -55,7 +55,7 @@ const CategoryList = ({ category }: CategoryProps) => {
           <div
             className={
               !isBreakPoint
-                ? `from-[#181818] bg-gradient-radial to-[#2c2c2c] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[240px] h-[255px] sm:h-[283px] md:h-[312px] lg:h-[340px] rounded-lg mx-3 `
+                ? `bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3 `
                 : " hover:cursor-pointer flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5 "
             }
             key={podcast.title}
@@ -72,7 +72,7 @@ const CategoryList = ({ category }: CategoryProps) => {
                 width={190}
                 height={190}
                 loading="lazy"
-                className="rounded-xl mt-4 shadow-lg shadow-black base:w-[90px] xs:w-[110px] sm:w-[170px] md:w-[190px] lg:w-[190px] "
+                className="rounded-xl mt-4 shadow-lg shadow-black base:w-[90px] xs:w-[110px] sm:w-[170px] "
                 onClick={handlePreviousPage}
               />
             </Link>
