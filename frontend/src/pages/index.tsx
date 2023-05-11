@@ -1,7 +1,7 @@
 import { Button, useToast } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import { JSXElementConstructor, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import { GiNinjaHead } from "react-icons/gi";
 import Footer from "../components/Footer";
@@ -10,7 +10,7 @@ import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import LogoText from "../public/assets/logo-text.png";
 import Logo from "../public/assets/ninja4.png";
-import useSlider, {
+import {
   useCarouselSpeed,
   useMediaQuery,
   useRotate,
@@ -19,12 +19,12 @@ import useSlider, {
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 
 import Link from "next/link";
+import { FaLock } from "react-icons/fa";
+import AnimatedLink from "../components/AnimatedLink";
 import Carousel from "../components/Carousel";
+import SliderArrows from "../components/SliderArrows";
 import { NavContext } from "../context/navContext";
 import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
-import { FaLock } from "react-icons/fa";
-import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import AnimatedLink from "../components/AnimatedLink";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -39,7 +39,6 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
   const isBreakPoint = useMediaQuery(1023);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
   const groupedSponsors: GroupedSponsors = {};
-  const [loading, setLoading] = useState(true);
   const { setCategoryIndex, categoryIndex } = NavContext();
   const [clickCount, setClickCount] = useState(0);
   const [startTime, setStartTime] = useState(0);
@@ -47,14 +46,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
   const [ninjaMode, setNinjaMode] = useState(false);
   const [displayToast, setDisplayToast] = useState(false);
   const toast = useToast();
-  const [hover, setHover] = useState(false);
-
   const sliderRef = useRef<HTMLDivElement>(null);
-
-  const { showLeftArrow, showRightArrow, slideTopPicks } = useSlider(
-    sliderRef.current,
-    1100
-  );
   useCarouselSpeed(clickCount, startTime, setDisplayEasterEgg, setNinjaMode);
   const [currDeg, handleRotate] = useRotate(
     startTime,
@@ -62,7 +54,6 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
     setClickCount,
     setStartTime
   );
-
   sortedSponsors.forEach((str) => {
     const firstLetter = str.charAt(0).toUpperCase();
     if (!groupedSponsors[firstLetter]) {
@@ -179,64 +170,21 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
               </div>
               <div className="w-full flex items-center justify-center">
                 <div className="flex w-full sm:w-[60%] md:w-[50%] items-center justify-center px-6 pb-10 lg:pb-14">
-                  <p className="text-center font-light text-md sm:text-lg text-[#909090] tracking-widest italic">
-                    "Give back to your favorite creators by shopping with
-                    PromoNinja verified sponsors"
+                  <p className="text-center  font-light text-md sm:text-lg lg:text-xl text-[#909090] tracking-widest italic">
+                    "Save money and give back to your favorite creators by
+                    shopping with PromoNinja verified sponsors"
                   </p>
                 </div>
               </div>
 
               <div className="w-full flex flex-col justify-center items-center ">
-                {/* <div className="w-full flex items-center justify-between group h-fit mb-4 hover:cursor-point "> */}
                 <AnimatedLink
                   location=""
                   title="Popular Podcasts"
                   separateLink={true}
                 />
-                {/* <Link href={"/podcasts"}>
-                    <p
-                      className={`"px-4 active:scale-95 text-[#cdcdcd] transition-all duration-[200ms] ${
-                        isBreakPoint ? "block" : "hidden"
-                      } ease-in hover:text-white whitespace-nowrap text-sm font-bold pr-3 sm:pr-4 md:pr-6 lg:pr-8 lg:text-base "`}
-                    >
-                      View All
-                    </p>
-                  </Link> */}
-                {/* </div> */}
                 <div className="relative flex w-full items-center group z-[1]">
-                  <div
-                    className={`absolute left-0 ${
-                      showLeftArrow
-                        ? "hover:cursor-pointer"
-                        : "hover:cursor-auto"
-                    } group-hover:bg-[#00000026] opacity-100 hover:opacity-100 w-20 h-[300px] flex items-center z-10`}
-                    onClick={() => slideTopPicks("left")}
-                  >
-                    <MdChevronLeft
-                      color={"white"}
-                      className={` left-0 hidden rounded-full opacity-100 absolute cursor-pointer z-[11] ${
-                        showLeftArrow ? "group-hover:block" : "hidden"
-                      }`}
-                      size={80}
-                    />
-                  </div>
-                  <div
-                    className={`absolute right-0 ${
-                      showRightArrow
-                        ? "hover:cursor-pointer"
-                        : "hover:cursor-auto"
-                    }  hover:cursor-pointer group-hover:bg-[#00000026] opacity-100 hover:opacity-100 w-20 h-[300px] flex items-center z-10`}
-                    onClick={() => slideTopPicks("right")}
-                  >
-                    <MdChevronRight
-                      color={"white"}
-                      className={` right-0 hidden rounded-full opacity-100 absolute cursor-pointer z-[11] ${
-                        showRightArrow ? "group-hover:block" : "hidden"
-                      }`}
-                      size={80}
-                    />
-                  </div>
-
+                  <SliderArrows sliderRef={sliderRef} />
                   <div
                     className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full`}
                     ref={sliderRef}
@@ -285,15 +233,15 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                   </div>
                 </div>
               </div>
-              <div className="w-full flex justify-center items-center h-[200px]">
+              {/* <div className="w-full flex justify-center items-center h-[200px]">
                 <div className="lg:max-w-[40%] max-w-[60%] sm:max-w-[50%] max-h-[100px] py-2">
                   <p className="font-light text-md sm:text-lg text-[#909090]  tracking-widest italic">
                     "As a podcast listener, you have access to exclusive deals
                     to help you save money.
                   </p>
                 </div>
-              </div>
-              <div className="w-full items-center ">
+              </div> */}
+              <div className="w-full items-center relative ">
                 <div className="w-full flex items-center justify-start">
                   <h1
                     className={`"text-xl lg:text-2xl font-bold px-4 mb-12 relative top-9 ${
@@ -338,7 +286,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                   </div>
                 </div>
 
-                <div className="w-full flex justify-center items-center relative bottom-10 lg:bottom-10">
+                {/* <div className="w-full flex justify-center items-center relative bottom-10 lg:bottom-10">
                   <div className="max-w-[60%] max-h-[100px] py-2">
                     <p className="font-light text-md sm:text-lg  text-[#909090] tracking-widest italic">
                       "Did you know some podcast sponsorships are for charitable
@@ -356,7 +304,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                       Center for Missing and Exploited Children."
                     </p>
                   </div>
-                </div>
+                </div> */}
                 <div className="relative">
                   <div className="w-full flex items-center base:mt-[120px] sm:mt-[60px] lg:mt-0 justify-start">
                     <h1
@@ -438,7 +386,6 @@ export const getStaticProps: GetStaticProps = async () => {
     "Huberman Lab",
     "Bad Friends",
     "Almost Adulting with Violet Benson",
-    "Crime Junkie",
     "Lex Fridman Podcast",
     "Duncan Trussell Family Hour",
     "Pardon My Take",
@@ -448,7 +395,6 @@ export const getStaticProps: GetStaticProps = async () => {
     "Normal Gossip",
     "KILL TONY",
     "Murder, Mystery & Makeup",
-    "The Joe Rogan Experience",
     "On Purpose with Jay Shetty",
     "Last Podcast On The Left",
     "SmartLess",

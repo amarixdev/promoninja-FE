@@ -142,9 +142,9 @@ const useSlider = (slider: HTMLDivElement | null, scrollDistance: number) => {
   const slideTopPicks = (direction: string) => {
     if (slider) {
       if (direction === "left") {
-        slider.scrollLeft = slider.scrollLeft - scrollDistance;
+        slider.scrollLeft -= scrollDistance;
       } else if (direction === "right") {
-        slider.scrollLeft = slider.scrollLeft + scrollDistance;
+        slider.scrollLeft += scrollDistance;
       }
     }
   };

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ReactNode, useState } from "react";
 import { MdChevronRight } from "react-icons/md";
 import { useMediaQuery } from "../utils/hooks";
-import { sep } from "path";
 
 interface AnimatedLinkProps {
   title: string | undefined;
