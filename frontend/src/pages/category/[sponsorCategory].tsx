@@ -25,6 +25,7 @@ import {
   useSetCurrentPage,
 } from "../../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
+import style from "../../../styles/style.module.css";
 
 interface Props {
   categoryData: SponsorCategory;
@@ -181,15 +182,26 @@ const SponsorCategory = ({
         currentPodcast={selectedPodcast}
       />
 
-      <div className="w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] overflow-x-scroll base:mb-[60px] xs:mb-[70px]">
+      <div className="w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#202020] overflow-x-scroll base:mb-[60px] xs:mb-[70px]">
         {
           <>
             {navigateButtonPressed || (
-              <CategoryTabs
-                sponsorCategoryData={sponsorCategoryData}
-                categoryData={categoryData}
-                setPressed={setNavigateButtonPressed}
-              />
+              <div className="fixed z-10 flex h-[100px] w-full lg:w-[84%] justify-center bg-black">
+                <div className="flex justify-between w-full">
+                  <div
+                    className={`right-0 w-[10px] xs:w-[25px] sm:w-[50px] md:w-[80px] lg:w-[150px]  ${style.shadow} `}
+                  ></div>
+                  <div
+                    className={`left-0 w-[10px] xs:w-[25px] sm:w-[50px]  md:w-[80px] lg:w-[150px]   ${style.shadow}`}
+                  ></div>
+                </div>
+
+                <CategoryTabs
+                  sponsorCategoryData={sponsorCategoryData}
+                  categoryData={categoryData}
+                  setPressed={setNavigateButtonPressed}
+                />
+              </div>
             )}
             {isLoading ? (
               <div className="w-full h-screen bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727] flex justify-center items-center">
@@ -200,14 +212,24 @@ const SponsorCategory = ({
                 {
                   <div className="p-6">
                     {navigateButtonPressed && (
-                      <CategoryTabs
-                        sponsorCategoryData={sponsorCategoryData}
-                        categoryData={categoryData}
-                        setPressed={setNavigateButtonPressed}
-                      />
+                      <div className="fixed z-10 flex h-[100px] top-0 border-red-500 border-2 w-full lg:w-[84%] justify-center bg-black">
+                        <div className="flex justify-between w-full">
+                          <div
+                            className={`right-0 w-[18px] lg:w-[70px] ${style.shadow} `}
+                          ></div>
+                          <div
+                            className={`left-0 w-[18px] lg:w-[70px]   ${style.shadow}`}
+                          ></div>
+                        </div>
+                        <CategoryTabs
+                          sponsorCategoryData={sponsorCategoryData}
+                          categoryData={categoryData}
+                          setPressed={setNavigateButtonPressed}
+                        />
+                      </div>
                     )}
-                    <div className="w-full mt-14">
-                      <h1 className="base:text-3xl xs:text-4xl sm:text-5xl font-extrabold text-center p-6 break-normal ">
+                    <div className="w-full mt-14 pt-14">
+                      <h1 className="base:text-2xl text-[#e2e2e2] xs:text-3xl sm:text-4xl font-extrabold text-center p-6 break-normal ">
                         {categoryData?.name}
                       </h1>
                     </div>
@@ -394,11 +416,11 @@ const SponsorCategory = ({
                                           width={100}
                                           height={100}
                                           loading="lazy"
-                                          className="base:min-w-[80px] base:min-h-[80px] shadow-black shadow-2xl border-2"
+                                          className="base:min-w-[80px] rounded-md base:min-h-[80px] shadow-black shadow-2xl border-2"
                                         />
                                       </Link>
                                       <div className="flex flex-col px-6">
-                                        <h1 className="text-3xl font-extralight">
+                                        <h1 className="text-3xl font-light text-[#cdcdcd]">
                                           {sponsor.name}
                                         </h1>
                                       </div>

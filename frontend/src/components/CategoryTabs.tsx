@@ -41,23 +41,23 @@ const CategoryTabs = ({
 
   useEffect(() => {
     setPressed(false);
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [filled]);
+  }, []);
 
   if (!sponsorCategoryData) return <Spinner />;
   return (
     <div
-      className={`z-[99] fixed top-0 w-full py-5 transition ease-in-out duration-300 overflow-x-scroll scrollbar-hide  ${
-        filled && "bg-black/60 backdrop-blur-lg"
+      className={`z-[99] fixed top-0 shadow-2xl py-8 transition ease-in-out duration-300 overflow-x-scroll scrollbar-hide flex justify-center  ${
+        !filled && ""
       }`}
       id="navbar"
     >
       {shouldRender ? (
-        <Tabs defaultIndex={index || categoryIndex} variant={"unstyled"}>
-          <TabList className={` ${style.offset}   px-2 relative`}>
+        <Tabs
+          defaultIndex={index || categoryIndex}
+          variant={"unstyled"}
+          className="lg:w-11/12 w-full  overflow-x-scroll scrollbar-hide px-[45%] xs:px-[40%] sm:px-[28%] md:px-[25%] lg:px-[20%]"
+        >
+          <TabList className={` relative w-fit overflow-scroll`}>
             {sponsorCategoryData.map((category: SponsorCategory) => (
               <Link
                 key={category.name}
@@ -65,10 +65,12 @@ const CategoryTabs = ({
                 className=" mx-2 rounded-2xl"
               >
                 <Tab
-                  className={"text-xs font-medium whitespace-nowrap "}
-                  _selected={{ color: "black", bg: "white" }}
+                  className={
+                    "text-xs text-[#cdcdcd] font-medium whitespace-nowrap "
+                  }
+                  _selected={{ color: "black", bg: "#cdcdcd" }}
                   rounded={"xl"}
-                  bg={"whiteAlpha.100"}
+                  bg={"#222222"}
                 >
                   <p>{category.name} </p>
                 </Tab>
