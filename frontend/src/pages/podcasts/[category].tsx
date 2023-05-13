@@ -76,13 +76,8 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
     }
   }
 
-  const handlePreviousPage = () => {
-    setPreviousPage("category");
-    setCategoryType(categoryName);
-  };
-
   return (
-    <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
+    <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0 bg-black h-full">
       <Sidebar />
       {categoryPodcasts && (
         <div className="h-screen w-full">
@@ -93,22 +88,25 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
             priority
           />
           <div className="w-full h-screen bg-gradient-to-tr bg-black/10 from-black/40 fixed"></div>
-          {<PreviousPage previousPageText="podcasts" />}
+          <div className="h-full flex flex-col mt-[150px] lg:mt-[230px] gap-14">
+            <h1 className="relative z-50 base:text-3xl xs:text-5xl sm:text-6xl md:text-8xl font-extrabold pl-4">
+              {capitalizeString(categoryName)}
+            </h1>
 
-          <h1 className="base:font-bold xs:font-extrabold base:text-3xl xs:text-4xl  sm:text-7xl lg:text-8xl text-white px-4 absolute z-2 base:top-[4rem] xs:top-[6rem] sm:top-[12rem] md:top-[14rem]">
-            {capitalizeString(categoryName)}
-          </h1>
-
-          {
             <div
-              className={`bg-[#151515] ${styles.shadow}  ${
-                isBreakPoint && "h-fit"
-              } relative top-[23%] sm:top-[35%] md:top-[40%] lg:top-[45%] xl:top-[50%] grid-cols-3 md:grid-cols-4 lg:grid-cols-5 grid gap-8 p-5 pb-24`}
+              className={`bg-gradient-to-b from-[#1a1a1a] via-[#282828] to-[#101010] relative grid-cols-3 md:grid-cols-4 lg:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid gap-[6px] lg:gap-x-8 lg:gap-y-10 p-6 lg:p-10 pb-24`}
             >
-              <div className="absolute top-0 from-[#5757574e] bg-gradient-to-b to-[#151515] w-full h-[400px] z-0"></div>
+              {/* <div className="absolute top-0 from-[#5757574e] bg-gradient-to-b to-[#151515] w-full h-[100%] z-0"></div> */}
 
               {categoryPodcasts?.map((podcast) => (
-                <div key={`${podcast.title}`} className="relative z-10">
+                <div
+                  key={`${podcast.title}`}
+                  className={
+                    !isBreakPoint
+                      ? ` group bg-gradient-to-b w-full from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center max-h-auto px-4 pb-10 rounded-lg min-w-[135px] max-w-[220px]`
+                      : " hover:cursor-pointer flex flex-col items-center h-fit rounded-lg overflow-y-visible p-2 sm:mx-5 "
+                  }
+                >
                   <Link
                     href={`/podcasts/${convertToSlug(
                       categoryName
@@ -116,30 +114,30 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
                   >
                     <Image
                       src={podcast.imageUrl}
-                      alt=""
-                      width={190}
-                      height={190}
-                      className="rounded-xl"
-                      onClick={() => handlePreviousPage}
+                      alt={podcast.imageUrl}
+                      width={160}
+                      height={160}
+                      className="rounded-xl mt-4 shadow-lg shadow-black base:w-[90px] xs:w-[110px] sm:w-[160px] "
                       loading="lazy"
                     />
                   </Link>
-                  <div className="flex flex-col">
-                    <h1 className="text-[10px] sm:text-md lg:text-lg text-start mt-2 font-semibold text-white whitespace-wrap">
+                  <div className="flex flex-col px-5  ">
+                    <h1 className=" whitespace-nowrap text-[10px] sm:text-sm lg:text-sm xl:text-lg text-start mt-3 font-normal lg:font-semibold text-[#dadada] group-hover:text-white whitespace-wrap">
                       {!isBreakPoint
-                        ? truncateString(podcast.title, 40)
-                        : truncateString(podcast.title, 30)}
+                        ? truncateString(podcast.title, 14)
+                        : truncateString(podcast.title, 14)}
                     </h1>
-                    <p className="base:text-[8px] xs:text-xs sm:text-sm lg:text-md text-start font-medium text-[#909090]">
+                    <p className="whitespace-nowrap base:text-[8px] xs:text-xs sm:text-sm lg:text-md text-start font-medium text-[#909090]">
                       {!isBreakPoint
-                        ? podcast.publisher
-                        : truncateString(podcast.publisher, 30)}
+                        ? truncateString(podcast.publisher, 14)
+                        : truncateString(podcast.publisher, 14)}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
-          }
+          </div>
+
           <Footer />
         </div>
       )}

@@ -9,9 +9,10 @@ import {
 import { useMediaQuery } from "../utils/hooks";
 import { CategoryPodcast, PodcastData } from "../utils/types";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import AnimatedLink from "./AnimatedLink";
 import SliderArrows from "./SliderArrows";
+import { effect, useStatStyles } from "@chakra-ui/react";
 interface CategoryProps {
   category: CategoryPodcast;
 }
@@ -27,9 +28,18 @@ const CategoryList = ({ category }: CategoryProps) => {
     setPreviousPage("podcasts");
   };
   const sliderRef = useRef<HTMLDivElement>(null);
+  const slider = sliderRef.current;
+
+  useEffect(() => {
+    console.log("effect ran");
+    if (slider && !isBreakPoint) {
+      slider.scrollLeft = 40;
+    }
+  }, [slider]);
+
   return (
     <div>
-      <div className={`flex justify-between items-center lg:my-4`}>
+      <div className={`flex justify-between items-center lg:my-4 pl-4`}>
         <AnimatedLink
           title={capitalizeString(categoryName)}
           location={convertToSlug(categoryName)}
@@ -38,16 +48,16 @@ const CategoryList = ({ category }: CategoryProps) => {
       </div>
 
       <div className="relative flex w-full items-center group z-[1]">
-        <SliderArrows sliderRef={sliderRef} />
+        <SliderArrows sliderRef={sliderRef} scrollDistance={720} />
         <div
-          className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full`}
+          className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full justify-start lg:px-10`}
           ref={sliderRef}
         >
           {podcastData?.slice(0, 8).map((podcast: PodcastData) => (
             <div
               className={
                 !isBreakPoint
-                  ? `bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3 `
+                  ? `bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center lg:min-w-[220px] h-[300px] rounded-lg mx-3 `
                   : " hover:cursor-pointer flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5 "
               }
               key={podcast.title}
@@ -69,18 +79,16 @@ const CategoryList = ({ category }: CategoryProps) => {
                 />
               </Link>
 
-              <div>
-                <h1
-                  className={`text-sm sm:text-md lg:text-lg base:text-left lg:text-center px-2 pt-6 font-semibold text-white whitespace-nowrap`}
-                >
+              <div className="group">
+                <h1 className=" whitespace-nowrap text-[10px] sm:text-sm lg:text-sm xl:text-lg text-start mt-3 font-normal lg:font-semibold text-[#dadada] group-hover:text-white whitespace-wrap">
                   {!isBreakPoint
-                    ? truncateString(podcast.title, 20)
+                    ? truncateString(podcast.title, 14)
                     : truncateString(podcast.title, 14)}
                 </h1>
-                <p className="text-xs sm:text-sm lg:text-md base:text-left lg:text-center px-2 font-medium text-[#909090]">
+                <p className="whitespace-nowrap base:text-[8px] xs:text-xs sm:text-sm lg:text-md text-start font-medium text-[#909090]">
                   {!isBreakPoint
-                    ? podcast.publisher
-                    : truncateString(podcast.publisher, 30)}
+                    ? truncateString(podcast.publisher, 14)
+                    : truncateString(podcast.publisher, 14)}
                 </p>
               </div>
             </div>

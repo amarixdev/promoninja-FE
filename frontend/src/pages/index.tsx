@@ -1,7 +1,7 @@
 import { Button, useToast } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import { GiNinjaHead } from "react-icons/gi";
 import Footer from "../components/Footer";
@@ -83,6 +83,15 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
       });
     }
   };
+
+  const slider = sliderRef.current;
+
+  useEffect(() => {
+    console.log("effect ran");
+    if (slider && !isBreakPoint) {
+      slider.scrollLeft = 40;
+    }
+  }, [slider]);
 
   return (
     <>
@@ -184,14 +193,14 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                   separateLink={true}
                 />
                 <div className="relative flex w-full items-center group z-[1]">
-                  <SliderArrows sliderRef={sliderRef} />
+                  <SliderArrows sliderRef={sliderRef} scrollDistance={1200} />
                   <div
-                    className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full`}
+                    className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full lg:px-10`}
                     ref={sliderRef}
                   >
                     {topPicksData.map((podcast: PodcastData) => (
                       <div
-                        className={`  ${
+                        className={`${
                           displayEasterEgg && ninjaMode
                             ? "bg-[#1b1b1b] hover:bg-[#242424] "
                             : " bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
@@ -210,13 +219,13 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                             width={190}
                             height={190}
                             loading="lazy"
-                            className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px]  "
+                            className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px] "
                           />
                         </Link>
 
                         <div className="">
                           <h1
-                            className={`text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-white whitespace-nowrap`}
+                            className={`text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-[#dadada] group-hover:text-white whitespace-nowrap`}
                           >
                             {!isBreakPoint
                               ? truncateString(podcast.title, 20)

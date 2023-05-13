@@ -189,10 +189,10 @@ const SponsorCategory = ({
               <div className="fixed z-10 flex h-[100px] w-full lg:w-[84%] justify-center bg-black">
                 <div className="flex justify-between w-full">
                   <div
-                    className={`right-0 w-[10px] xs:w-[25px] sm:w-[50px] md:w-[80px] lg:w-[150px]  ${style.shadow} `}
+                    className={`right-0 w-[10px] xs:w-[25px] sm:w-[50px] md:w-[20px] lg:w-[80px]  ${style.shadow} `}
                   ></div>
                   <div
-                    className={`left-0 w-[10px] xs:w-[25px] sm:w-[50px]  md:w-[80px] lg:w-[150px]   ${style.shadow}`}
+                    className={`left-0 w-[10px] xs:w-[25px] sm:w-[50px]  md:w-[20px] lg:w-[80px]   ${style.shadow}`}
                   ></div>
                 </div>
 
@@ -200,6 +200,7 @@ const SponsorCategory = ({
                   sponsorCategoryData={sponsorCategoryData}
                   categoryData={categoryData}
                   setPressed={setNavigateButtonPressed}
+                  pressed={navigateButtonPressed}
                 />
               </div>
             )}
@@ -225,6 +226,7 @@ const SponsorCategory = ({
                           sponsorCategoryData={sponsorCategoryData}
                           categoryData={categoryData}
                           setPressed={setNavigateButtonPressed}
+                          pressed={navigateButtonPressed}
                         />
                       </div>
                     )}

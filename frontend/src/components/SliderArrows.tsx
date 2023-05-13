@@ -1,16 +1,18 @@
-import { RefObject } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import useSlider, { useMediaQuery } from "../utils/hooks";
+import { RefObject } from "react";
 
 const SliderArrows = ({
   sliderRef,
+  scrollDistance,
 }: {
   sliderRef: RefObject<HTMLDivElement>;
+  scrollDistance: number;
 }) => {
   const isBreakPoint = useMediaQuery(1023);
   const { showLeftArrow, showRightArrow, slideTopPicks } = useSlider(
     sliderRef.current,
-    1100
+    scrollDistance
   );
   if (isBreakPoint) return <></>;
   else
