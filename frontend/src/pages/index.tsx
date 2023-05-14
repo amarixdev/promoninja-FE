@@ -1,7 +1,7 @@
 import { Button, useToast } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { SetStateAction, useRef, useState } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import { GiNinjaHead } from "react-icons/gi";
 import Footer from "../components/Footer";
@@ -35,6 +35,7 @@ interface Props {
 type GroupedSponsors = { [key: string]: string[] };
 
 const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
+  const [podcastSponsors, setPodcastSponsors] = useState([]);
   useSetCurrentPage({ home: true, podcasts: false, search: false });
   const isBreakPoint = useMediaQuery(1023);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
@@ -46,6 +47,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
   const [ninjaMode, setNinjaMode] = useState(false);
   const [displayToast, setDisplayToast] = useState(false);
   const toast = useToast();
+
   const sliderRef = useRef<HTMLDivElement>(null);
   useCarouselSpeed(clickCount, startTime, setDisplayEasterEgg, setNinjaMode);
   const [currDeg, handleRotate] = useRotate(
@@ -84,14 +86,25 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
     }
   };
 
-  const slider = sliderRef.current;
+  const [activeIndex, setActiveIndex] =
+    useState<SetStateAction<number | null>>(null);
+  let timerId: NodeJS.Timeout;
 
-  useEffect(() => {
-    console.log("effect ran");
-    if (slider && !isBreakPoint) {
-      slider.scrollLeft = 40;
+  const handleHoverCard = async (
+    index: number,
+    podcast: string,
+    event: string
+  ) => {
+    clearTimeout(timerId);
+    if (event == "mouseenter" && !activeIndex) {
+      timerId = setTimeout(() => {
+        setActiveIndex(index);
+      }, 700);
     }
-  }, [slider]);
+    if (event === "mouseleave") {
+      clearTimeout(timerId);
+    }
+  };
 
   return (
     <>
@@ -174,7 +187,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                   src={Logo}
                   width={120}
                   alt="logo"
-                  className="mx-2 w-[100px] lg:w-[120px] "
+                  className="mx-2 w-[100px] lg:w-[120px]"
                 />
               </div>
               <div className="w-full flex items-center justify-center">
@@ -192,26 +205,41 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                   title="Popular Podcasts"
                   separateLink={true}
                 />
+
                 <div className="relative flex w-full items-center group z-[1]">
                   <SliderArrows sliderRef={sliderRef} scrollDistance={1200} />
                   <div
-                    className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full lg:px-10`}
+                    className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full py-10 lg:px-10`}
                     ref={sliderRef}
                   >
-                    {topPicksData.map((podcast: PodcastData) => (
-                      <div
-                        className={`${
-                          displayEasterEgg && ninjaMode
-                            ? "bg-[#1b1b1b] hover:bg-[#242424] "
-                            : " bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
-                        }  hover:cursor-pointer flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
+                    {topPicksData.map((podcast: PodcastData, index: number) => (
+                      <Link
+                        href={`/podcasts/${
+                          podcast.category[0].name
+                        }/${convertToSlug(podcast.title)}`}
                         key={podcast.title}
                       >
-                        <Link
-                          href={`/podcasts/${
-                            podcast.category[0].name
-                          }/${convertToSlug(podcast.title)}`}
+                        <div
+                          className={`${
+                            displayEasterEgg && ninjaMode
+                              ? "bg-[#1b1b1b] hover:bg-[#242424] "
+                              : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
+                          } hover:cursor-pointer ${
+                            activeIndex === index
+                              ? " scale-125 transition-all duration-300 relative z-20"
+                              : "scale-100 transition-all duration-300 "
+                          } relative  flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
                           key={podcast.title}
+                          onMouseOver={() =>
+                            handleHoverCard(index, podcast.title, "mouseenter")
+                          }
+                          onMouseMove={() =>
+                            handleHoverCard(index, podcast.title, "mouseenter")
+                          }
+                          onMouseLeave={() => {
+                            handleHoverCard(index, podcast.title, "mouseleave");
+                            setActiveIndex(null);
+                          }}
                         >
                           <Image
                             src={podcast.imageUrl}
@@ -221,23 +249,55 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                             loading="lazy"
                             className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px] "
                           />
-                        </Link>
-
-                        <div className="">
-                          <h1
-                            className={`text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-[#dadada] group-hover:text-white whitespace-nowrap`}
-                          >
-                            {!isBreakPoint
-                              ? truncateString(podcast.title, 20)
-                              : truncateString(podcast.title, 14)}
-                          </h1>
-                          <p className="text-xs sm:text-sm text-center px-2 font-medium text-[#909090]">
-                            {!isBreakPoint
-                              ? podcast.publisher
-                              : truncateString(podcast.publisher, 30)}
-                          </p>
+                          <div className="">
+                            <h1
+                              className={`text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-[#dadada] group-hover:text-white whitespace-nowrap`}
+                            >
+                              {!isBreakPoint
+                                ? truncateString(podcast.title, 20)
+                                : truncateString(podcast.title, 14)}
+                            </h1>
+                            <p
+                              className={`text-xs sm:text-sm text-center px-2 font-medium text-[#909090]`}
+                            >
+                              {!isBreakPoint
+                                ? activeIndex !== index
+                                  ? truncateString(podcast.title, 20)
+                                  : "See Exclusive Deals: "
+                                : truncateString(podcast.title, 14)}
+                            </p>
+                          </div>
+                          {
+                            <div
+                              className={`${
+                                activeIndex === index
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              } flex items-center gap-3 p-2 transition duration-300 `}
+                            >
+                              {podcast.sponsors?.map((sponsor) => (
+                                <Image
+                                  src={sponsor?.imageUrl || Logo}
+                                  alt={sponsor?.imageUrl}
+                                  width={30}
+                                  height={30}
+                                  className={
+                                    sponsor?.imageUrl
+                                      ? "rounded-md"
+                                      : "opacity-0"
+                                  }
+                                  key={sponsor?.imageUrl || index}
+                                />
+                              ))}
+                              {podcast.sponsors?.length > 2 && (
+                                <p className="text-[#b4b4b4] text-2xl font-thin">
+                                  +
+                                </p>
+                              )}
+                            </div>
+                          }
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -419,7 +479,9 @@ export const getStaticProps: GetStaticProps = async () => {
 
   sponsorsData = sponsorsData?.getSponsors;
   categoryData = categoryData?.getSponsorCategories;
+
   topPicksData = topPicksData?.getTopPicks;
+  console.log(topPicksData);
 
   return {
     props: {

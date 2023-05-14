@@ -181,7 +181,6 @@ export const podcastResolvers = {
           },
         });
 
-        console.log(all_podcasts);
         return all_podcasts;
       } catch (error) {
         console.log(error);
@@ -312,8 +311,16 @@ export const podcastResolvers = {
         },
         include: {
           category: true,
+          sponsors: {
+            select: {
+              name: true,
+              imageUrl: true,
+            },
+            take: 3,
+          },
         },
       });
+      console.log("Top picks:", topPicks);
 
       return topPicks.sort(() => Math.random() - 0.5);
     },

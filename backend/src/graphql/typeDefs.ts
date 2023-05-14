@@ -5,6 +5,7 @@ const typeDefs = gql`
     getPodcasts: [Podcast]
     getPodcast(input: PodcastInput!): Podcast
     getPodcastCategory(input: PodcastInput!): Category
+    getPodcastSponsors(input: PodcastInput!): [Sponsor]
     getSponsors: [Sponsor]
     getSponsor(input: SponsorInput!): Sponsor
     getSponsorCategories: [SponsorCategory]
@@ -102,8 +103,8 @@ const typeDefs = gql`
     imageUrl: String
     categoryId: [Int]
     category: [Category]
+    sponsors: [Sponsor]
     offer: [Offer]
-    sponsorId: [ID]
     publisher: String
     description: String
     backgroundColor: String
@@ -121,13 +122,12 @@ const typeDefs = gql`
     url: String!
   }
   type Sponsor {
-    id: ID!
-    name: String!
+    name: String
     imageUrl: String
-    podcastsId: [ID]
-    url: String!
+    url: String
     summary: String
     offer: String
+    podcastId: [ID]
   }
 
   input SponsorCategoryInput {

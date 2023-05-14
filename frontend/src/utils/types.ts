@@ -15,6 +15,7 @@ export interface PodcastData {
   publisher: string;
   description: string;
   offer: OfferData[];
+  sponsors: SponsorData[];
   backgroundColor: string;
   externalUrl: string;
   category: [Category];

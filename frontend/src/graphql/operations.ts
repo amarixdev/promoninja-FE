@@ -153,6 +153,10 @@ export const Operations = {
           title
           imageUrl
           publisher
+          sponsors {
+            name
+            imageUrl
+          }
           category {
             name
           }
