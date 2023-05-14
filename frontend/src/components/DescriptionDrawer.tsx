@@ -51,7 +51,6 @@ const DescriptionDrawer = ({
   const gradientStyle = {
     backgroundImage: `linear-gradient(to bottom, ${drawer.color}, #000000)`,
   };
-
   const isBreakPoint = useMediaQuery(1023);
 
   return (

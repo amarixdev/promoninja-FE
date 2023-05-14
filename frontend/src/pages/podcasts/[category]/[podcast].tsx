@@ -14,6 +14,7 @@ import { FaEllipsisV } from "react-icons/fa";
 import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import Footer from "../../../components/Footer";
 import PreviousPage from "../../../components/PreviousPage";
+import PromoCodeButton from "../../../components/PromoCodeButton";
 import Sidebar from "../../../components/Sidebar";
 import { NavContext } from "../../../context/navContext";
 import client from "../../../graphql/apollo-client";
@@ -21,26 +22,26 @@ import { Operations } from "../../../graphql/operations";
 import {
   convertToFullURL,
   convertToSlug,
+  scrollToTop,
   truncateString,
 } from "../../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../../utils/hooks";
-import { OfferData, PodcastData, SponsorData } from "../../../utils/types";
-import PromoCodeButton from "../../../components/PromoCodeButton";
-import { scrollToTop } from "../../../utils/functions";
+import { OfferData, PodcastData } from "../../../utils/types";
 
 interface Props {
   podcastData: PodcastData;
-  sponsorData: SponsorData[];
   loading: boolean;
   category: string;
 }
 
-const podcast = ({ podcastData, sponsorData, category }: Props) => {
+const podcast = ({ podcastData, category }: Props) => {
   const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
   } = useDisclosure();
+
+  console.log(1, podcastData?.sponsors);
 
   const { setPreviousPage, categoryType, setCategoryType } = NavContext();
   const [isOpen, setIsOpen] = useState(false);
@@ -100,7 +101,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     }
   }, [category]);
 
-  if (!sponsorData) {
+  if (!podcastData?.sponsors) {
     existingSponsor = false;
   }
 
@@ -133,7 +134,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
     if (isSponsorOfferDrawer) {
       setSponsorOfferDrawer(true);
       setPodcastDrawer(false);
-      const filteredSponsor = sponsorData.filter(
+      const filteredSponsor = podcastData?.sponsors.filter(
         (data) => data.name === sponsor
       )[0];
 
@@ -181,7 +182,9 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
   };
 
   const getSponsor = (offerSponsor: string) => {
-    return sponsorData.filter((sponsor) => sponsor.name === offerSponsor)[0];
+    return podcastData?.sponsors.filter(
+      (sponsor) => sponsor.name === offerSponsor
+    )[0];
   };
 
   return (
@@ -204,7 +207,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
               <div className={`fixed w-full z-50 lg:ml-[240px]`}>
                 {
                   <div
-                    className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 ${
+                    className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 z-50 ${
                       banner && `bottom-0 `
                     } `}
                   >
@@ -308,7 +311,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                           {
                             <button
                               onClick={() => setTruncated((prev) => !prev)}
-                              className="hover:text-white active:scale-95 relative z-[99]"
+                              className="hover:text-white active:scale-95 relative z-[20]"
                             >
                               {podcastData.description.length > 280 && truncated
                                 ? "Read More"
@@ -370,7 +373,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                     </p>
                     <Image
                       src={
-                        sponsorData.filter(
+                        podcastData?.sponsors.filter(
                           (sponsor) => sponsor.name === offer?.sponsor
                         )[0].imageUrl
                       }
@@ -467,7 +470,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                                     ></div>
                                     <p className="mx-2 py-2 rounded-md font-light text-3xl">
                                       {
-                                        sponsorData.filter(
+                                        podcastData?.sponsors.filter(
                                           (sponsor) =>
                                             sponsor.name === offer?.sponsor
                                         )[0].offer
@@ -494,7 +497,7 @@ const podcast = ({ podcastData, sponsorData, category }: Props) => {
                               <div className="w-full font-light p-2 mb-4 flex">
                                 <p className="text-white mx-2 text-sm lg:text-base py-2 px-4 rounded-xl">
                                   {
-                                    sponsorData.filter(
+                                    podcastData?.sponsors.filter(
                                       (sponsor) =>
                                         sponsor.name === offer?.sponsor
                                     )[0].summary
@@ -531,8 +534,6 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }: any) => {
   const { podcast, category } = params;
   const slugToPodcast = podcast.split("-").join(" ").toLowerCase();
-  const slugToCategory = category.split("-").join(" ").toLowerCase();
-
   try {
     let { data: podcastData, loading } = await client.query({
       query: Operations.Queries.GetPodcast,
@@ -543,36 +544,10 @@ export const getStaticProps = async ({ params }: any) => {
       },
     });
 
-    let { data: sponsorData } = await client.query({
-      query: Operations.Queries.FetchSponsors,
-      variables: {
-        input: {
-          podcast: slugToPodcast,
-        },
-      },
-    });
-
-    if (!sponsorData?.fetchSponsors) {
-      console.log("NO DATA");
-    }
-
-    if (sponsorData?.fetchSponsors.length === 0) {
-      podcastData = podcastData.getPodcast;
-      return {
-        props: {
-          podcastData,
-          category: slugToCategory,
-        },
-      };
-    }
-
     podcastData = podcastData.getPodcast;
-    sponsorData = sponsorData.fetchSponsors;
-
     return {
       props: {
         podcastData,
-        sponsorData,
         loading,
         category,
       },

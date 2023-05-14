@@ -31,6 +31,7 @@ export interface SponsorData {
   url: string;
   summary: string;
   offer: string;
+  podcast: PodcastData[] 
 }
 
 export interface OfferData {
@@ -41,4 +42,5 @@ export interface OfferData {
 
 export interface SponsorCategory {
   name: string;
+  sponsor: SponsorData[]
 }

@@ -202,12 +202,16 @@ export const podcastResolvers = {
               mode: "insensitive",
             },
           },
+          include: {
+            category: true,
+            sponsors: true,
+          },
         });
 
         if (!podcast) {
           return false;
         }
-
+        console.log(podcast);
         return podcast;
       } catch (error) {
         console.log(error);

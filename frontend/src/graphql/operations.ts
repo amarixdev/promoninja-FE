@@ -31,24 +31,13 @@ export const Operations = {
           category {
             name
           }
-        }
-      }
-    `,
-    GetPodcastCategory: gql`
-      query ($input: PodcastInput!) {
-        getPodcastCategory(input: $input) {
-          name
-        }
-      }
-    `,
-    FetchSponsors: gql`
-      query ($input: PodcastInput!) {
-        fetchSponsors(input: $input) {
-          name
-          imageUrl
-          offer
-          url
-          summary
+          sponsors {
+            name
+            imageUrl
+            url
+            summary
+            offer
+          }
         }
       }
     `,
@@ -69,6 +58,21 @@ export const Operations = {
           url
           summary
           offer
+          podcast {
+            offer {
+              sponsor
+              promoCode
+              url
+            }
+            category {
+              name
+            }
+            title
+            imageUrl
+            publisher
+            description
+            backgroundColor
+          }
         }
       }
     `,
@@ -83,24 +87,27 @@ export const Operations = {
       query ($input: SponsorCategoryInput!) {
         getSponsorCategory(input: $input) {
           name
-        }
-      }
-    `,
-    GetSponsorPodcasts: gql`
-      query ($input: SponsorInput!) {
-        getSponsorPodcasts(input: $input) {
-          title
-          imageUrl
-          publisher
-          description
-          backgroundColor
-          offer {
-            sponsor
-            promoCode
-            url
-          }
-          category {
+          sponsor {
             name
+            imageUrl
+            offer
+            summary
+            url
+            podcast {
+              offer {
+                sponsor
+                promoCode
+                url
+              }
+              title
+              imageUrl
+              publisher
+              description
+              backgroundColor
+              category {
+                name
+              }
+            }
           }
         }
       }
@@ -111,30 +118,6 @@ export const Operations = {
         getPodcastCategories {
           name
           podcastId
-        }
-      }
-    `,
-
-    GetCategorySponsors: gql`
-      query ($input: SponsorCategoryInput!) {
-        getCategorySponsors(input: $input) {
-          name
-          imageUrl
-          url
-          summary
-          offer
-        }
-      }
-    `,
-    FetchSpotifyPodcast: gql`
-      query ($input: SpotifyAPI!) {
-        fetchSpotifyPodcast(input: $input) {
-          id
-          name
-          publisher
-          images {
-            url
-          }
         }
       }
     `,

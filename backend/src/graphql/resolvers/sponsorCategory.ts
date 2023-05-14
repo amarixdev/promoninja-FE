@@ -20,7 +20,6 @@ export const sponsorCategory = {
       const { prisma } = context;
 
       const { category, sponsor } = input;
-
       let result;
 
       if (sponsor === undefined) {
@@ -29,6 +28,17 @@ export const sponsorCategory = {
             name: {
               equals: category,
               mode: "insensitive",
+            },
+          },
+          include: {
+            sponsor: {
+              include: {
+                podcast: {
+                  include: {
+                    category: true,
+                  },
+                },
+              },
             },
           },
         });
@@ -47,6 +57,7 @@ export const sponsorCategory = {
           },
         });
       }
+      console.log(result);
       return result;
     },
     getCategorySponsors: async (

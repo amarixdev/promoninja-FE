@@ -1,4 +1,3 @@
-import { equal } from "assert";
 import {
   DeleteInput,
   GraphQLContext,
@@ -230,7 +229,6 @@ export const productResolvers = {
         let sponsors;
 
         if (selectedPodcast) {
-          /* Find all sponsors for given podcast */
           sponsors = await prisma.sponsor.findMany({
             where: {
               podcastId: {
@@ -265,8 +263,14 @@ export const productResolvers = {
             mode: "insensitive",
           },
         },
+        include: {
+          podcast: {
+            include: {
+              category: true,
+            },
+          },
+        },
       });
-
       return sponsor;
     },
   },

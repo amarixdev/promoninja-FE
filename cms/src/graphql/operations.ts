@@ -18,10 +18,21 @@ export const Operations = {
           publisher
           description
           backgroundColor
+          externalUrl
           offer {
             sponsor
             promoCode
             url
+          }
+          category {
+            name
+          }
+          sponsors {
+            name
+            imageUrl
+            url
+            summary
+            offer
           }
         }
       }
@@ -32,6 +43,23 @@ export const Operations = {
           name
           imageUrl
           url
+          summary
+          offer
+          podcast {
+            offer {
+              sponsor
+              promoCode
+              url
+            }
+            category {
+              name
+            }
+            title
+            imageUrl
+            publisher
+            description
+            backgroundColor
+          }
         }
       }
     `,

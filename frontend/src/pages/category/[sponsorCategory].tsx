@@ -1,4 +1,3 @@
-import { useLazyQuery } from "@apollo/client";
 import {
   Box,
   Button,
@@ -12,6 +11,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaEllipsisV } from "react-icons/fa";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
+import style from "../../../styles/style.module.css";
 import CategoryTabs from "../../components/CategoryTabs";
 import DescriptionDrawer from "../../components/DescriptionDrawer";
 import Footer from "../../components/Footer";
@@ -25,18 +25,10 @@ import {
   useSetCurrentPage,
 } from "../../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
-import style from "../../../styles/style.module.css";
 
 interface Props {
   categoryData: SponsorCategory;
-  loading: boolean;
-  sponsorsData: SponsorData[];
   sponsorCategoryData: SponsorCategory[];
-  categoryLoading: boolean;
-}
-
-interface PodcastQuery {
-  getSponsorPodcasts: PodcastData[];
 }
 
 interface SponsorState {
@@ -44,17 +36,9 @@ interface SponsorState {
   previousSponsor: string;
 }
 
-const SponsorCategory = ({
-  categoryData,
-  sponsorsData,
-  sponsorCategoryData,
-  loading,
-  categoryLoading,
-}: Props) => {
+const SponsorCategory = ({ categoryData, sponsorCategoryData }: Props) => {
   useSetCurrentPage({ home: false, podcasts: false, search: false });
   const isBreakPoint = useMediaQuery(1023);
-  let [getPodcasts, { data: podcastData, loading: getPodcastsLoading }] =
-    useLazyQuery<PodcastQuery>(Operations.Queries.GetSponsorPodcasts);
   const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
@@ -69,9 +53,10 @@ const SponsorCategory = ({
   const [isOpen, setIsOpen] = useState(false);
   const [sponsorDrawer, setSponsorDrawer] = useState(false);
   const [podcastOfferDrawer, setPodcastOfferDrawer] = useState(true);
-  const [current, setCurrent] = useState("");
+  const [placeholder, setPlaceholder] = useState(false);
   const [navigateButtonPressed, setNavigateButtonPressed] = useState(false);
-
+  const [sponsorPodcastArray, setSponsorPodcastArray] =
+    useState<PodcastData[]>();
   const [drawerData, setDrawerData] = useState({
     image: "",
     title: "",
@@ -95,63 +80,64 @@ const SponsorCategory = ({
   };
 
   const handleDrawer = (
-    input: SponsorData | PodcastData,
+    data: SponsorData | PodcastData,
     sponsorName: string
   ) => {
     /* Sponsor */
-    if (isSponsorData(input)) {
+    if (isSponsorData(data)) {
       setSponsorDrawer(true);
       setPodcastOfferDrawer(false);
       setDrawerData((prev) => ({
         ...prev,
-        image: input.imageUrl,
-        title: input.name,
-        description: input.summary,
-        url: input.url,
-        subtitle: input.url,
+        image: data.imageUrl,
+        title: data.name,
+        description: data.summary,
+        url: data.url,
+        subtitle: data.url,
       }));
       onOpenDrawer();
     } else {
-      const podcastOffer = input.offer.filter(
-        (offer) => offer.sponsor === sponsorName
-      );
-
-      const promotion = sponsorsData?.filter(
+      const promotion = categoryData?.sponsor.filter(
         (sponsor) => sponsor.name === sponsorName
       )[0].offer;
 
       /* Podcast */
-      setSelectedPodcast(input.title);
+      setSelectedPodcast(data.title);
       setSponsorDrawer(false);
       setPodcastOfferDrawer(true);
       setDrawerData((prev) => ({
         ...prev,
-        image: input.imageUrl,
-        title: input.title,
+        image: data.imageUrl,
+        title: data.title,
         description: promotion,
-        color: input.backgroundColor,
-        subtitle: input.publisher,
-        category: input.category[0]?.name,
-        url: podcastOffer[0].url,
-        promoCode: podcastOffer[0].promoCode,
+        color: data.backgroundColor,
+        subtitle: data.publisher,
+        url: data.offer[0].url,
+        promoCode: data.offer[0].promoCode,
+        category: data.category[0].name,
       }));
       onOpenDrawer();
     }
   };
 
   const isLoading = useLoadingScreen();
-  /* TODO: Implement View More */
+  const handleCollapse = async (sponsor: string, action: string) => {
+    if (action === "collapse") {
+      setPlaceholder(true);
+    }
 
-  const handleCollapse = async (sponsor: string) => {
-    setCurrent(sponsor);
-    await getPodcasts({
-      variables: {
-        input: {
-          name: sponsor,
-          isCategoryPage: true,
-        },
-      },
-    });
+    if (action === "open") {
+      setPlaceholder(false);
+    }
+
+    if (categoryData) {
+      const sponsorPodcasts = categoryData.sponsor.filter(
+        (sp) => sp.name === sponsor
+      )[0].podcast;
+      setSponsorPodcastArray(
+        sponsorPodcasts.sort(() => Math.random() - 0.5).slice(0, 5)
+      );
+    }
 
     if (sponsorState.selectedSponsor === sponsor) {
       setIsOpen((prev) => !prev);
@@ -167,9 +153,7 @@ const SponsorCategory = ({
       }));
     }
   };
-  const sponsorPodcasts = podcastData?.getSponsorPodcasts;
 
-  if (loading || categoryLoading) return <Spinner />;
   return (
     <div className="flex">
       <Sidebar />
@@ -239,7 +223,7 @@ const SponsorCategory = ({
                     {isBreakPoint ? (
                       /* Mobile */
                       <div>
-                        {sponsorsData?.map(
+                        {categoryData?.sponsor?.map(
                           (sponsor: SponsorData, index: number) => (
                             <div
                               key={`${sponsor.name}`}
@@ -281,7 +265,12 @@ const SponsorCategory = ({
                                 </div>
                               </div>
                               <Button
-                                onClick={() => handleCollapse(sponsor.name)}
+                                onClick={() =>
+                                  handleCollapse(
+                                    sponsor.name,
+                                    isOpen ? "collapse" : "open"
+                                  )
+                                }
                                 className="active:scale-95"
                               >
                                 <p className="mr-2">Shop with Creators</p>{" "}
@@ -289,9 +278,6 @@ const SponsorCategory = ({
                                 sponsorState.selectedSponsor ===
                                   sponsor.name ? (
                                   <GoChevronUp />
-                                ) : getPodcastsLoading &&
-                                  current === sponsor.name ? (
-                                  <Spinner />
                                 ) : (
                                   <GoChevronDown />
                                 )}
@@ -303,7 +289,8 @@ const SponsorCategory = ({
                                     sponsor.name &&
                                   sponsorState.selectedSponsor === sponsor.name
                                 }
-                                animateOpacity
+                                unmountOnExit
+                                
                               >
                                 {/* improve transition w/ previous state */}
                                 {sponsorState.previousSponsor ===
@@ -330,47 +317,59 @@ const SponsorCategory = ({
                                         </p>
                                       </div>
                                       <div className="w-full flex overflow-x-auto pb-4">
-                                        {sponsorPodcasts?.map((pod) => (
-                                          <div
-                                            key={pod.title}
-                                            className="px-4 flex flex-col justify-between"
-                                          >
-                                            {pod ? (
-                                              <div>
-                                                <Image
-                                                  src={pod?.imageUrl}
-                                                  width={100}
-                                                  height={100}
-                                                  alt={pod.title}
-                                                  className="rounded-md mb-2"
-                                                />
-
-                                                <h1 className="text-sm font-semibold">
-                                                  {truncateString(pod.title, 8)}
-                                                </h1>
-                                                <h3 className="text-xs text-[#6f6f6f] pb-2">
-                                                  {truncateString(
-                                                    pod.publisher,
-                                                    10
-                                                  )}
-                                                </h3>
-                                              </div>
-                                            ) : (
-                                              <div></div>
-                                            )}
-
-                                            <Button
-                                              width={"20"}
-                                              h={"5"}
-                                              fontSize={"x-small"}
-                                              onClick={() =>
-                                                handleDrawer(pod, sponsor.name)
-                                              }
+                                        {sponsorPodcastArray?.map(
+                                          (pod: PodcastData) => (
+                                            <div
+                                              key={pod.title}
+                                              className="px-4 flex flex-col justify-between"
                                             >
-                                              Support
-                                            </Button>
-                                          </div>
-                                        ))}
+                                              {pod ? (
+                                                <div>
+                                                  <Image
+                                                    src={pod?.imageUrl}
+                                                    width={100}
+                                                    height={100}
+                                                    alt={pod.title}
+                                                    className={`${
+                                                      placeholder && !isOpen
+                                                        ? "opacity-0"
+                                                        : "opacity-100"
+                                                    } "rounded-md mb-2"`}
+                                                  />
+
+                                                  <h1 className="text-sm font-semibold">
+                                                    {truncateString(
+                                                      pod.title,
+                                                      8
+                                                    )}
+                                                  </h1>
+                                                  <h3 className="text-xs text-[#6f6f6f] pb-2">
+                                                    {truncateString(
+                                                      pod.publisher,
+                                                      10
+                                                    )}
+                                                  </h3>
+                                                </div>
+                                              ) : (
+                                                <div></div>
+                                              )}
+
+                                              <Button
+                                                width={"20"}
+                                                h={"5"}
+                                                fontSize={"x-small"}
+                                                onClick={() =>
+                                                  handleDrawer(
+                                                    pod,
+                                                    sponsor.name
+                                                  )
+                                                }
+                                              >
+                                                Support
+                                              </Button>
+                                            </div>
+                                          )
+                                        )}
                                         <Link
                                           className="min-w-[120px] h-[100px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
                                           href={`/${convertToSlug(
@@ -393,7 +392,7 @@ const SponsorCategory = ({
                     ) : (
                       /* Desktop */
                       <div>
-                        {sponsorsData?.map(
+                        {categoryData?.sponsor?.map(
                           (sponsor: SponsorData, index: number) => (
                             <div
                               key={`${sponsor.name}`}
@@ -444,7 +443,12 @@ const SponsorCategory = ({
                                 </div>
                               </div>
                               <Button
-                                onClick={() => handleCollapse(sponsor.name)}
+                                onClick={() =>
+                                  handleCollapse(
+                                    sponsor.name,
+                                    isOpen ? "collapse" : "open"
+                                  )
+                                }
                                 className="active:scale-95 flex items-center"
                               >
                                 <div className="flex items-center p-5">
@@ -453,9 +457,6 @@ const SponsorCategory = ({
                                   sponsorState.selectedSponsor ===
                                     sponsor.name ? (
                                     <GoChevronUp />
-                                  ) : getPodcastsLoading &&
-                                    current == sponsor.name ? (
-                                    <Spinner />
                                   ) : (
                                     <GoChevronDown />
                                   )}
@@ -489,14 +490,16 @@ const SponsorCategory = ({
                                         </p>
                                       </div>
                                       <div className="flex overflow-x-scroll pb-4 w-full ">
-                                        {sponsorPodcasts?.map((pod) => (
-                                          <div
-                                            key={pod.title}
-                                            className="px-4 flex flex-col justify-between bg-[#15151500] h-[50px]"
-                                          >
-                                            <div></div>
-                                          </div>
-                                        ))}
+                                        {sponsorPodcastArray?.map(
+                                          (pod: PodcastData) => (
+                                            <div
+                                              key={pod.title}
+                                              className="px-4 flex flex-col justify-between bg-[#15151500] h-[50px]"
+                                            >
+                                              <div></div>
+                                            </div>
+                                          )
+                                        )}
                                       </div>
                                     </div>
                                   </Box>
@@ -519,43 +522,55 @@ const SponsorCategory = ({
                                         </p>
                                       </div>
                                       <div className="flex overflow-x-scroll pb-4 w-full ">
-                                        {sponsorPodcasts?.map((pod) => (
-                                          <div
-                                            key={pod.title}
-                                            className="px-4 flex flex-col justify-between "
-                                          >
-                                            <div>
-                                              <Image
-                                                src={pod?.imageUrl}
-                                                width={110}
-                                                height={110}
-                                                alt={pod.title}
-                                                className="min-w-[110px] min-h-[110px] rounded-md mb-2 "
-                                              />
-
-                                              <h1 className="text-sm font-semibold">
-                                                {truncateString(pod.title, 13)}
-                                              </h1>
-                                              <h3 className="text-xs text-[#6f6f6f] pb-2">
-                                                {truncateString(
-                                                  pod.publisher,
-                                                  16
-                                                )}
-                                              </h3>
-                                            </div>
-
-                                            <Button
-                                              width={"25"}
-                                              h={"5"}
-                                              fontSize={"x-small"}
-                                              onClick={() =>
-                                                handleDrawer(pod, sponsor.name)
-                                              }
+                                        {sponsorPodcastArray?.map(
+                                          (pod: PodcastData) => (
+                                            <div
+                                              key={pod.title}
+                                              className="px-4 flex flex-col justify-between "
                                             >
-                                              Support
-                                            </Button>
-                                          </div>
-                                        ))}
+                                              <div>
+                                                <Image
+                                                  src={pod?.imageUrl}
+                                                  width={110}
+                                                  height={110}
+                                                  alt={pod.title}
+                                                  className={`${
+                                                    placeholder && !isOpen
+                                                      ? "opacity-0"
+                                                      : "opacity-100"
+                                                  } " min-w-[110px] min-h-[110px] rounded-md mb-2 "`}
+                                                />
+
+                                                <h1 className="text-sm font-semibold">
+                                                  {truncateString(
+                                                    pod.title,
+                                                    13
+                                                  )}
+                                                </h1>
+                                                <h3 className="text-xs text-[#6f6f6f] pb-2">
+                                                  {truncateString(
+                                                    pod.publisher,
+                                                    16
+                                                  )}
+                                                </h3>
+                                              </div>
+
+                                              <Button
+                                                width={"25"}
+                                                h={"5"}
+                                                fontSize={"x-small"}
+                                                onClick={() =>
+                                                  handleDrawer(
+                                                    pod,
+                                                    sponsor.name
+                                                  )
+                                                }
+                                              >
+                                                Support
+                                              </Button>
+                                            </div>
+                                          )
+                                        )}
                                         <Link
                                           className="w-[110px] h-[110px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
                                           href={`/${convertToSlug(
@@ -603,36 +618,24 @@ export const getStaticProps = async ({ params }: any) => {
   const slugToCategory = category.split("-").join(" ").toLowerCase();
   console.log(slugToCategory);
 
-  let { data: categoryData, loading } = await client.query({
+  let { data: categoryData } = await client.query({
     query: Operations.Queries.GetSponsorCategory,
     variables: {
       input: { category: slugToCategory },
     },
   });
 
-  let { data: sponsorsData } = await client.query({
-    query: Operations.Queries.GetCategorySponsors,
-    variables: {
-      input: { category: slugToCategory },
-    },
+  let { data: sponsorCategoryData } = await client.query({
+    query: Operations.Queries.GetSponsorCategories,
   });
-
-  let { data: sponsorCategoryData, loading: categoryLoading } =
-    await client.query({
-      query: Operations.Queries.GetSponsorCategories,
-    });
 
   sponsorCategoryData = sponsorCategoryData?.getSponsorCategories;
   categoryData = categoryData?.getSponsorCategory;
-  sponsorsData = sponsorsData?.getCategorySponsors;
 
   return {
     props: {
       categoryData,
-      sponsorsData,
       sponsorCategoryData,
-      loading,
-      categoryLoading,
     },
   };
 };

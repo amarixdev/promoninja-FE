@@ -127,6 +127,7 @@ const typeDefs = gql`
     url: String
     summary: String
     offer: String
+    podcast: [Podcast]
     podcastId: [ID]
   }
 
@@ -144,6 +145,7 @@ const typeDefs = gql`
 
   type SponsorCategory {
     name: String!
+    sponsor: [Sponsor]
   }
 `;
 

@@ -28,11 +28,10 @@ import PromoCodeButton from "../components/PromoCodeButton";
 
 interface Props {
   sponsorData: SponsorData;
-  podcastsData: PodcastData[];
   loading: boolean;
 }
 
-const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
+const SponsorPage = ({ sponsorData }: Props) => {
   const [selectedPodcast, setSelectedPodcast] = useState("");
   const [previousPodcast, setPreviousPodcast] = useState("");
   const isBreakPoint = useMediaQuery(1023);
@@ -367,7 +366,7 @@ const SponsorPage = ({ sponsorData, podcastsData }: Props) => {
             </div>
 
             <div className="w-full flex flex-col lg:h-[500px] pt-6 overflow-y-scroll base:h-[400px] xs:h-[450px] base:pb-24 lg:pb-16">
-              {podcastsData.map((podcast, index) => (
+              {sponsorData?.podcast.map((podcast, index) => (
                 <div
                   key={podcast.title}
                   className={`flex flex-col justify-between lg:py-2`}
@@ -567,22 +566,11 @@ export const getStaticProps = async ({ params }: any) => {
     },
   });
 
-  let { data: podcastsData } = await client.query({
-    query: Operations.Queries.GetSponsorPodcasts,
-    variables: {
-      input: {
-        name: slugToSponsor,
-      },
-    },
-  });
-
   sponsorData = sponsorData?.getSponsor;
-  podcastsData = podcastsData?.getSponsorPodcasts;
 
   return {
     props: {
       sponsorData,
-      podcastsData,
     },
   };
 };

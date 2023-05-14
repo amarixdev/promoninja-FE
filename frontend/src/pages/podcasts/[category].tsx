@@ -169,6 +169,8 @@ export const getStaticProps = async ({ params }: any) => {
   });
 
   const categoryPodcasts = data.fetchCategoryPodcasts;
+  
+  console.log(categoryPodcasts);
   return {
     props: {
       categoryPodcasts,

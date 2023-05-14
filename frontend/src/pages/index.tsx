@@ -35,7 +35,6 @@ interface Props {
 type GroupedSponsors = { [key: string]: string[] };
 
 const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
-  const [podcastSponsors, setPodcastSponsors] = useState([]);
   useSetCurrentPage({ home: true, podcasts: false, search: false });
   const isBreakPoint = useMediaQuery(1023);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
@@ -443,14 +442,6 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
 export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
-  let { data: sponsorsData } = await client.query({
-    query: Operations.Queries.GetSponsors,
-  });
-
-  let { data: categoryData } = await client.query({
-    query: Operations.Queries.GetSponsorCategories,
-  });
-
   const podcastTitles = [
     "Huberman Lab",
     "Bad Friends",
@@ -476,12 +467,17 @@ export const getStaticProps: GetStaticProps = async () => {
       },
     },
   });
+  let { data: sponsorsData } = await client.query({
+    query: Operations.Queries.GetSponsors,
+  });
+
+  let { data: categoryData } = await client.query({
+    query: Operations.Queries.GetSponsorCategories,
+  });
 
   sponsorsData = sponsorsData?.getSponsors;
   categoryData = categoryData?.getSponsorCategories;
-
   topPicksData = topPicksData?.getTopPicks;
-  console.log(topPicksData);
 
   return {
     props: {
