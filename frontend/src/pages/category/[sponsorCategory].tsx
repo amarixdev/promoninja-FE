@@ -290,7 +290,6 @@ const SponsorCategory = ({ categoryData, sponsorCategoryData }: Props) => {
                                   sponsorState.selectedSponsor === sponsor.name
                                 }
                                 unmountOnExit
-                                
                               >
                                 {/* improve transition w/ previous state */}
                                 {sponsorState.previousSponsor ===
@@ -337,13 +336,25 @@ const SponsorCategory = ({ categoryData, sponsorCategoryData }: Props) => {
                                                     } "rounded-md mb-2"`}
                                                   />
 
-                                                  <h1 className="text-sm font-semibold">
+                                                  <h1
+                                                    className={`${
+                                                      placeholder && !isOpen
+                                                        ? "opacity-0"
+                                                        : "opacity-100"
+                                                    } text-sm font-semibold`}
+                                                  >
                                                     {truncateString(
                                                       pod.title,
                                                       8
                                                     )}
                                                   </h1>
-                                                  <h3 className="text-xs text-[#6f6f6f] pb-2">
+                                                  <h3
+                                                    className={`${
+                                                      placeholder && !isOpen
+                                                        ? "opacity-0"
+                                                        : "opacity-100"
+                                                    } text-xs text-[#6f6f6f] pb-2`}
+                                                  >
                                                     {truncateString(
                                                       pod.publisher,
                                                       10
@@ -538,16 +549,28 @@ const SponsorCategory = ({ categoryData, sponsorCategoryData }: Props) => {
                                                     placeholder && !isOpen
                                                       ? "opacity-0"
                                                       : "opacity-100"
-                                                  } " min-w-[110px] min-h-[110px] rounded-md mb-2 "`}
+                                                  } min-w-[110px] min-h-[110px] rounded-md mb-2`}
                                                 />
 
-                                                <h1 className="text-sm font-semibold">
+                                                <h1
+                                                  className={`${
+                                                    placeholder && !isOpen
+                                                      ? "opacity-0"
+                                                      : "opacity-100"
+                                                  } text-sm font-semibold`}
+                                                >
                                                   {truncateString(
                                                     pod.title,
                                                     13
                                                   )}
                                                 </h1>
-                                                <h3 className="text-xs text-[#6f6f6f] pb-2">
+                                                <h3
+                                                  className={`${
+                                                    placeholder && !isOpen
+                                                      ? "opacity-0"
+                                                      : "opacity-100"
+                                                  } text-xs text-[#6f6f6f] pb-2`}
+                                                >
                                                   {truncateString(
                                                     pod.publisher,
                                                     16
