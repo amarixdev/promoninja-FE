@@ -86,3 +86,9 @@ export interface TopPicksInput {
     podcastTitles: string[];
   };
 }
+
+export interface TrendingOffersInput {
+  input: {
+    sponsors: string[];
+  };
+}

@@ -1,9 +1,9 @@
 import { Button, useToast } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import { SetStateAction, useRef, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
-import { GiNinjaHead } from "react-icons/gi";
+import { GiNinjaHead, GiRunningNinja } from "react-icons/gi";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import client from "../graphql/apollo-client";
@@ -25,16 +25,23 @@ import Carousel from "../components/Carousel";
 import SliderArrows from "../components/SliderArrows";
 import { NavContext } from "../context/navContext";
 import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
+import { BiChevronRight } from "react-icons/bi";
 
 interface Props {
   topPicksData: PodcastData[];
   sponsorsData: SponsorData[];
   categoryData: SponsorCategory[];
+  trendingOffersData: SponsorData[];
 }
 
 type GroupedSponsors = { [key: string]: string[] };
 
-const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
+const Home = ({
+  categoryData,
+  sponsorsData,
+  topPicksData,
+  trendingOffersData,
+}: Props) => {
   useSetCurrentPage({ home: true, podcasts: false, search: false });
   const isBreakPoint = useMediaQuery(1023);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
@@ -46,7 +53,6 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
   const [ninjaMode, setNinjaMode] = useState(false);
   const [displayToast, setDisplayToast] = useState(false);
   const toast = useToast();
-
   const sliderRef = useRef<HTMLDivElement>(null);
   useCarouselSpeed(clickCount, startTime, setDisplayEasterEgg, setNinjaMode);
   const [currDeg, handleRotate] = useRotate(
@@ -63,6 +69,9 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
     }
     groupedSponsors[firstLetter].push(str);
   });
+
+  const [trendingOfferIndex, setTrendingOfferIndex] = useState("0");
+  const [ninjaRunningIndex, setNinjaRunningIndex] = useState(0);
 
   const NinjaModeToast = () => {
     if (isBreakPoint) {
@@ -89,21 +98,34 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
     useState<SetStateAction<number | null>>(null);
   let timerId: NodeJS.Timeout;
 
-  const handleHoverCard = async (
-    index: number,
-    podcast: string,
-    event: string
-  ) => {
+  const handleHoverCard = async (index: number, event: string) => {
     clearTimeout(timerId);
     if (event == "mouseenter" && !activeIndex) {
       timerId = setTimeout(() => {
         setActiveIndex(index);
-      }, 700);
+      }, 600);
     }
     if (event === "mouseleave") {
       clearTimeout(timerId);
     }
   };
+
+  const handleTrendingOfferIndex = () => {
+    const maxIndex = trendingOffersData.length * -100 + 100;
+    if (Number(trendingOfferIndex) !== maxIndex) {
+      setTrendingOfferIndex((prev) => (Number(prev) - 100).toString());
+      setNinjaRunningIndex((prev) => prev + 1);
+    }
+
+    if (Number(trendingOfferIndex) === maxIndex) {
+      setTrendingOfferIndex("0");
+      setNinjaRunningIndex(0);
+    }
+  };
+
+  const NinjaRunning = Array(5).fill(
+    <GiRunningNinja size={isBreakPoint ? 40 : 55} />
+  );
 
   return (
     <>
@@ -192,13 +214,15 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
               <div className="w-full flex items-center justify-center">
                 <div className="flex w-full sm:w-[60%] md:w-[50%] items-center justify-center px-6 pb-10 lg:pb-14">
                   <p className="text-center  font-light text-md sm:text-lg lg:text-xl text-[#909090] tracking-widest italic">
-                    "Save money and give back to your favorite creators by
-                    shopping with PromoNinja verified sponsors"
+                    "<span className="font-bold">Save money</span> and{" "}
+                    <span className="font-semibold">give back</span> to your
+                    favorite creators when you shop with PromoNinja verified
+                    sponsors"
                   </p>
                 </div>
               </div>
 
-              <div className="w-full flex flex-col justify-center items-center ">
+              <div className="w-full flex flex-col justify-center items-center">
                 <AnimatedLink
                   location=""
                   title="Popular Podcasts"
@@ -227,16 +251,16 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                             activeIndex === index
                               ? " scale-125 transition-all duration-300 relative z-20"
                               : "scale-100 transition-all duration-300 "
-                          } relative  flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
+                          } relative flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
                           key={podcast.title}
                           onMouseOver={() =>
-                            handleHoverCard(index, podcast.title, "mouseenter")
+                            handleHoverCard(index, "mouseenter")
                           }
                           onMouseMove={() =>
-                            handleHoverCard(index, podcast.title, "mouseenter")
+                            handleHoverCard(index, "mouseenter")
                           }
                           onMouseLeave={() => {
-                            handleHoverCard(index, podcast.title, "mouseleave");
+                            handleHoverCard(index, "mouseleave");
                             setActiveIndex(null);
                           }}
                         >
@@ -309,48 +333,272 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                   </p>
                 </div>
               </div> */}
-              <div className="w-full items-center relative ">
-                <div className="w-full flex items-center justify-start">
+
+              {/* Trending Offers */}
+              <div className="relative w-full mt-14">
+                <div className=" flex items-center justify-start ">
                   <h1
-                    className={`"text-xl lg:text-2xl font-bold px-4 mb-12 relative top-9 ${
+                    className={`text-xl lg:text-2xl font-bold px-4 pb-5 lg:mb-12 relative ${
                       ninjaMode && displayEasterEgg
                         ? "text-[#cdcdcd]"
                         : "text-[#dedede]"
                     }  z-20"`}
                   >
-                    Sponsor Categories
+                    Trending Offers
                   </h1>
                 </div>
-                <div className="flex flex-col items-center relative bottom-14 py-6 rounded-lg">
-                  <Carousel
-                    handleRotate={handleRotate}
-                    currDeg={currDeg}
-                    categoryData={categoryData}
-                    setCategoryIndex={setCategoryIndex}
-                    categoryIndex={categoryIndex}
-                  />
-                  <div className="flex gap-10 relative bottom-10 z-20">
-                    <Button
-                      w={100}
-                      colorScheme="gray"
-                      onClick={() => handleRotate("next")}
-                      className={`active:scale-95 `}
-                      onMouseLeave={() => {
-                        setClickCount(0);
-                      }}
+
+                {/* Desktop */}
+                <>
+                  {isBreakPoint || (
+                    <div
+                      className={`flex w-full transition-all duration-700 translate-x-[${trendingOfferIndex}%]`}
                     >
-                      <AiFillCaretLeft />
-                    </Button>
-                    <Button
-                      w={100}
-                      onClick={() => handleRotate("prev")}
-                      className="active:scale-95"
-                      onMouseLeave={() => {
-                        setClickCount(0);
-                      }}
+                      {trendingOffersData.map((offer) => (
+                        <div
+                          className="min-w-full flex items-center justify-center"
+                          key={offer.name}
+                        >
+                          <div
+                            className={`${
+                              displayEasterEgg && ninjaMode
+                                ? "bg-[#1b1b1b] "
+                                : "bg-gradient-to-r from-[#232323] to-[#181818]"
+                            }  w-10/12 group flex h-fit p-8 rounded-md justify-start shadow-lg shadow-[black] `}
+                          >
+                            <div className="flex w-full">
+                              <div className="flex flex-col min-w-full ">
+                                <div className="flex-col flex w-full ">
+                                  <div className="flex justify-start ">
+                                    <Image
+                                      src={offer.imageUrl}
+                                      width={225}
+                                      height={225}
+                                      alt={offer.name}
+                                      priority
+                                      className={` max-h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black`}
+                                    />
+                                    <div className="flex ml-4 flex-col rounded-sm">
+                                      <div className="p-6 rounded-md">
+                                        <div className="flex flex-col gap-2 px-4">
+                                          <h1
+                                            className={`text-[#ebebeb] text-5xl font-extrabold`}
+                                          >
+                                            {offer.name}
+                                          </h1>
+                                          <h1
+                                            className={`text-[#bababa] text-xl`}
+                                          >
+                                            {offer.offer}
+                                          </h1>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div
+                                  className={`relative pt-8 ml-2 flex w-full justify-between `}
+                                >
+                                  <div
+                                    className={`flex flex-col gap-1 w-9/12 `}
+                                  >
+                                    <h1
+                                      className={`text-2xl font-semibold text-[#ebebeb] `}
+                                    >
+                                      About
+                                    </h1>
+                                    <p className="font-light">
+                                      {offer.summary}
+                                    </p>
+                                  </div>
+                                  <Link
+                                    href={`/${convertToSlug(offer.name)}`}
+                                    className="pl-6"
+                                  >
+                                    <Button className="mt-10">
+                                      View Details
+                                    </Button>
+                                  </Link>
+                                </div>
+                              </div>
+                              <div
+                                className="mt-20 right-6 relative opacity-0 group-hover:opacity-100 h-fit hover:cursor-pointer"
+                                onClick={handleTrendingOfferIndex}
+                              >
+                                <BiChevronRight
+                                  size={60}
+                                  className="hover:fill-white fill-[#aaaaaa]"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+
+                {/* Mobile */}
+
+                <>
+                  {isBreakPoint && (
+                    <div
+                      className={`flex w-full transition-all duration-700 translate-x-[${trendingOfferIndex}%]`}
                     >
-                      <AiFillCaretRight />
-                    </Button>
+                      {trendingOffersData.map((offer) => (
+                        <div
+                          className="min-w-full flex items-center justify-center"
+                          key={offer.name}
+                        >
+                          <div
+                            className={`${
+                              displayEasterEgg && ninjaMode
+                                ? "bg-[#1b1b1b] "
+                                : "bg-gradient-to-r from-[#232323] to-[#181818]"
+                            }  w-10/12 group flex h-fit p-5 rounded-md justify-start shadow-lg shadow-[black]`}
+                          >
+                            <div className="flex w-full">
+                              <div className="flex flex-col min-w-full ">
+                                <div className="flex-col flex w-full ">
+                                  <div className="flex flex-col items-center ">
+                                    <Image
+                                      src={offer.imageUrl}
+                                      width={120}
+                                      height={120}
+                                      alt={offer.name}
+                                      priority
+                                      className={` max-h-[150px] max-w-[150px] rounded-lg shadow-xl shadow-black`}
+                                    />
+                                    <div className="flex ml-4 flex-col rounded-sm">
+                                      <div className="p-6">
+                                        <div className="flex flex-col items-center gap-2">
+                                          <h1
+                                            className={`text-[#ebebeb] text-center text-2xl font-extrabold  `}
+                                          >
+                                            {offer.name}
+                                          </h1>
+                                          <h1
+                                            className={`text-[#bababa] text-md text-center `}
+                                          >
+                                            {offer.offer}
+                                          </h1>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/*  <div
+                                  className={` transition-all ease-in-out relative flex-col w-full justify-between `}
+                                >
+                                  <div
+                                    className={`flex flex-col gap-1 w-full p-6  `}
+                                  >
+                                    <h1
+                                      className={`text-xl font-semibold text-center text-[#ebebeb] `}
+                                    >
+                                      About
+                                    </h1>
+                                    <p className="font-light text-center">
+                                      {truncateString(offer.summary, 60)}
+                                    </p>
+                                  </div>
+                                  <Link
+                                    href={`/${convertToSlug(offer.name)}`}
+                                    className="w-full flex justify-center"
+                                  >
+                                    <Button className="mt-5">
+                                      View Details
+                                    </Button>
+                                  </Link>
+                                </div> */}
+                              </div>
+                              <div
+                                className="mt-20 right-6 relative opacity-0 group-hover:opacity-100 h-fit hover:cursor-pointer"
+                                onClick={handleTrendingOfferIndex}
+                              >
+                                <BiChevronRight
+                                  size={60}
+                                  className="hover:fill-white fill-[#aaaaaa]"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+
+                <div className="w-full mt-4 lg:mt-8 flex items-center justify-center">
+                  <div className=" rounded-lg flex gap-3 px-6 bg-[#0b0b0b] shadow-black shadow-lg">
+                    {NinjaRunning.map((ninja, index) => (
+                      <div
+                        key={index}
+                        onClick={() => {
+                          setTrendingOfferIndex((index * -100).toString());
+                          setNinjaRunningIndex(index);
+                        }}
+                        className={`${
+                          ninjaRunningIndex === index
+                            ? "opacity-100"
+                            : "opacity-30"
+                        } hover:cursor-pointer transition-all duration-500 ease-in`}
+                      >
+                        {ninja}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-full items-center relative">
+                {/* Sponsor Carousel */}
+
+                <div className="mt-16 lg:mt-28">
+                  <div className="w-full flex items-center justify-start">
+                    <h1
+                      className={`text-xl lg:text-2xl font-bold px-4 mb-12 relative top-9 ${
+                        ninjaMode && displayEasterEgg
+                          ? "text-[#cdcdcd]"
+                          : "text-[#dedede]"
+                      }  z-20"`}
+                    >
+                      Sponsor Categories
+                    </h1>
+                  </div>
+                  <div className="flex flex-col items-center relative bottom-14 py-6 rounded-lg">
+                    <Carousel
+                      handleRotate={handleRotate}
+                      currDeg={currDeg}
+                      categoryData={categoryData}
+                      setCategoryIndex={setCategoryIndex}
+                      categoryIndex={categoryIndex}
+                    />
+                    <div className="flex gap-10 relative bottom-10 z-20">
+                      <Button
+                        w={100}
+                        colorScheme="gray"
+                        onClick={() => handleRotate("next")}
+                        className={`active:scale-95 `}
+                        onMouseLeave={() => {
+                          setClickCount(0);
+                        }}
+                      >
+                        <AiFillCaretLeft />
+                      </Button>
+                      <Button
+                        w={100}
+                        onClick={() => handleRotate("prev")}
+                        className="active:scale-95"
+                        onMouseLeave={() => {
+                          setClickCount(0);
+                        }}
+                      >
+                        <AiFillCaretRight />
+                      </Button>
+                    </div>
                   </div>
                 </div>
 
@@ -373,10 +621,13 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                     </p>
                   </div>
                 </div> */}
+
+                {/* Sponsors A-Z */}
+
                 <div className="relative">
-                  <div className="w-full flex items-center base:mt-[120px] sm:mt-[60px] lg:mt-0 justify-start">
+                  <div className="w-full flex items-center lg:mt-14 justify-start">
                     <h1
-                      className={`"text-xl lg:text-2xl font-bold p-4 ${
+                      className={`text-xl lg:text-2xl font-bold p-4 ${
                         ninjaMode && displayEasterEgg
                           ? "text-[#cdcdcd]"
                           : "text-[#dedede]"
@@ -404,13 +655,13 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
                                     <Link
                                       href={`/${convertToSlug(sponsor.name)}`}
                                     >
-                                      <div className="hover:bg-[#ffffff0e] active:scale-95 h-[100px] w-[100px] rounded-lg absolute transition ease-in-out duration-300"></div>
+                                      <div className="hover:bg-[#ffffff0e]  active:scale-95 h-[100px] w-[100px] rounded-lg absolute transition ease-in-out duration-300"></div>
                                       <Image
                                         src={sponsor.imageUrl}
                                         alt={sponsor.name}
                                         width={100}
                                         height={100}
-                                        className="rounded-lg min-w-[100px] min-h-[100px]"
+                                        className="rounded-lg min-w-[100px] x min-h-[100px]"
                                         loading="lazy"
                                       />
                                     </Link>
@@ -442,7 +693,7 @@ const Home = ({ categoryData, sponsorsData, topPicksData }: Props) => {
 export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const podcastTitles = [
+  const popularPodcasts = [
     "Huberman Lab",
     "Bad Friends",
     "Almost Adulting with Violet Benson",
@@ -463,10 +714,28 @@ export const getStaticProps: GetStaticProps = async () => {
     query: Operations.Queries.GetTopPicks,
     variables: {
       input: {
-        podcastTitles,
+        podcastTitles: popularPodcasts,
       },
     },
   });
+
+  const trendingOffers = [
+    "Athletic Greens",
+    "Tushy",
+    "Helix Mattress",
+    "SquareSpace",
+    "ExpressVPN",
+  ];
+
+  let { data: trendingOffersData } = await client.query({
+    query: Operations.Queries.GetTrendingOffers,
+    variables: {
+      input: {
+        sponsors: trendingOffers,
+      },
+    },
+  });
+
   let { data: sponsorsData } = await client.query({
     query: Operations.Queries.GetSponsors,
   });
@@ -478,12 +747,14 @@ export const getStaticProps: GetStaticProps = async () => {
   sponsorsData = sponsorsData?.getSponsors;
   categoryData = categoryData?.getSponsorCategories;
   topPicksData = topPicksData?.getTopPicks;
+  trendingOffersData = trendingOffersData?.getTrendingOffers;
 
   return {
     props: {
       sponsorsData,
       categoryData,
       topPicksData,
+      trendingOffersData,
     },
   };
 };

@@ -3,6 +3,7 @@ import {
   GraphQLContext,
   PodcastInput,
   SponsorInput,
+  TrendingOffersInput,
 } from "../../util/types";
 
 export const productResolvers = {
@@ -272,6 +273,24 @@ export const productResolvers = {
         },
       });
       return sponsor;
+    },
+    getTrendingOffers: async (
+      parent: any,
+      { input }: TrendingOffersInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { sponsors } = input;
+
+      const trendingOffers = await prisma.sponsor.findMany({
+        where: {
+          name: {
+            in: sponsors,
+          },
+        },
+      });
+
+      return trendingOffers.sort(() => Math.random() - 0.5);
     },
   },
 };

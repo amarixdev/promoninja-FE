@@ -146,6 +146,16 @@ export const Operations = {
         }
       }
     `,
+    GetTrendingOffers: gql`
+      query ($input: TrendingOffersInput!) {
+        getTrendingOffers(input: $input) {
+          imageUrl
+          summary
+          offer
+          name
+        }
+      }
+    `,
   },
   Mutations: {
     CreatePodcast: gql`

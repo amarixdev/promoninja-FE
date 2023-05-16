@@ -258,7 +258,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                   height={230}
                   priority
                   alt={sponsorData?.name}
-                  className="shadow-xl shadow-black relative "
+                  className="shadow-xl shadow-black relative rounded-md "
                 />
                 <div className="flex flex-col items-start mx-4 p-6 ">
                   <p className="font-bold text-sm relative top-4">Sponsor</p>
