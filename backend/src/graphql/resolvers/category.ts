@@ -64,7 +64,7 @@ export const categoryResolvers = {
             name: sponsorName,
           },
           data: {
-            category: {
+            sponsorCategory: {
               disconnect: {
                 id: getOldCategory?.id,
               },

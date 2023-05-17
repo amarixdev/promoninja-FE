@@ -38,7 +38,7 @@ interface ContextProviderProps {
 export function ContextProvider({ children }: ContextProviderProps) {
   const [previousPage, setPreviousPage] = useState("category");
   const [categoryType, setCategoryType] = useState("");
-  const [categoryIndex, setCategoryIndex] = useState(0);
+  const [categoryIndex, setCategoryIndex] = useState(-1);
   const [currentPage, setCurrentPage] = useState<CurrentPage>({
     home: true,
     podcasts: false,

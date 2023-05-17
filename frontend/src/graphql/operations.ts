@@ -44,9 +44,29 @@ export const Operations = {
     GetSponsors: gql`
       query {
         getSponsors {
+          sponsorCategory {
+            name
+          }
           name
           imageUrl
           url
+          summary
+          offer
+          podcast {
+            offer {
+              sponsor
+              promoCode
+              url
+            }
+            category {
+              name
+            }
+            title
+            imageUrl
+            publisher
+            description
+            backgroundColor
+          }
         }
       }
     `,

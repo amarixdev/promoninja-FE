@@ -96,8 +96,11 @@ const Home = ({
   };
 
   const { activeIndex, setActiveIndex, handleHoverCard } = useHoverCard();
+  const [maxIndex, setMaxIndex] = useState(
+    trendingOffersData.length * -100 + 100
+  );
   const ninjaSliderRef = useRef<HTMLDivElement>(null);
-  const ninjaSlider = ninjaSliderRef.current;
+
   const [mobileNinjaIndex, setMobileNinjaIndex] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
 
@@ -130,8 +133,12 @@ const Home = ({
     }
   }, [ninjaSliderRef, mobileNinjaIndex, isBreakPoint]);
 
+  useEffect(() => {
+    setMaxIndex(trendingOffersData.length * -100 + 100);
+  }, [trendingOfferIndex, trendingOffersData]);
+
   const handleTrendingOfferIndex = () => {
-    const maxIndex = trendingOffersData.length * -100 + 100;
+    // const maxIndex = trendingOffersData.length * -100 + 100;
     if (Number(trendingOfferIndex) !== maxIndex) {
       setTrendingOfferIndex((prev) => (Number(prev) - 100).toString());
       setNinjaRunningIndex((prev) => prev + 1);
@@ -153,7 +160,7 @@ const Home = ({
         <Sidebar />
         {
           <div
-            className={`w-full flex flex-col bg-gradient-to-b ${
+            className={`w-full flex flex-col bg-gradient-to-b  ${
               displayEasterEgg && ninjaMode
                 ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
                 : "from-[#151515] via-[#151515] to-[#121212] "
@@ -164,10 +171,10 @@ const Home = ({
                 className={` "to-[#1c1c1c] from-[#686868c9] bg-gradient-to-b " absolute top-10   w-full h-[400px] z-0 `}
               ></div>
             )}
-            <div className="flex items-center justify-between w-full relative">
+            <div className="flex items-center justify-between w-full relative ">
               <div
                 className={
-                  "fixed bg-[#121212] p-8  w-full z-[20] flex justify-between"
+                  "fixed bg-[#121212] p-8 w-full z-[20] flex justify-between"
                 }
               >
                 <h1
@@ -505,7 +512,7 @@ const Home = ({
                                 </div>
 
                                 <div
-                                  className={` transition-all ease-in-out relative flex-col w-full justify-between `}
+                                  className={`relative flex-col w-full justify-between `}
                                 >
                                   <Link
                                     href={`/${convertToSlug(offer.name)}`}
@@ -558,7 +565,7 @@ const Home = ({
                           : "text-[#dedede]"
                       }  z-20"`}
                     >
-                      Sponsor Categories
+                      Shop Categories
                     </h1>
                   </div>
                   <div className="flex flex-col items-center relative bottom-14 py-6 rounded-lg">

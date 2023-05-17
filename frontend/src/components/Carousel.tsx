@@ -42,12 +42,12 @@ const Carousel = ({
       >
         {categoryData.map((category: SponsorCategory, i) => (
           <Link
-            href={`/category/${convertToSlug(category.name)}`}
+            href={`/offers/`}
             className={`${style.item} ${carouselDiv[i]} ${style.category}`}
             key={category.name}
             onClick={() => setCategoryIndex(i)}
           >
-            <h1 className="font-extrabold relative h-fit">{category.name}</h1>
+            <h1 className="font-bold relative h-fit">{category.name}</h1>
           </Link>
         ))}
       </div>

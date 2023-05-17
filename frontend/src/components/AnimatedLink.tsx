@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ReactNode, useState } from "react";
 import { MdChevronRight } from "react-icons/md";
 import { useMediaQuery } from "../utils/hooks";
+import { NavContext } from "../context/navContext";
 
 interface AnimatedLinkProps {
   title: string | undefined;
@@ -26,12 +27,15 @@ const ConditionalLink = ({
 const AnimatedLink = ({ title, location, separateLink }: AnimatedLinkProps) => {
   const isBreakPoint = useMediaQuery(1023);
   const [hover, setHover] = useState(false);
+  const { setCategoryIndex } = NavContext();
   if (isBreakPoint) {
+    console.log(separateLink);
     return (
       <div
+        onClick={() => setCategoryIndex(-1)}
         className={`flex ${
           separateLink ? "justify-between" : "justify-start"
-        } w-full items-center "`}
+        } w-full items-center`}
       >
         <ConditionalLink location={location} separateLink={separateLink}>
           <div className="flex items-center z-10 hover:cursor-pointer py-4">
@@ -50,11 +54,11 @@ const AnimatedLink = ({ title, location, separateLink }: AnimatedLinkProps) => {
           </div>
         </ConditionalLink>
         {separateLink && (
-          <Link
-            href={`/podcasts/${location}`}
-            className="flex items-center pr-4"
-          >
-            <p className="whitespace-nowrap text-sm text-[#9c9c9c] font-bold relative`">
+          <Link href={`${location}`} className="flex items-center pr-4">
+            <p
+              onClick={() => setCategoryIndex(-1)}
+              className="whitespace-nowrap text-sm text-[#9c9c9c] font-bold relative`"
+            >
               Explore All
             </p>
             <MdChevronRight color={"#9c9c9c"} size={20} className="relative" />
@@ -64,8 +68,11 @@ const AnimatedLink = ({ title, location, separateLink }: AnimatedLinkProps) => {
     );
   } else {
     return (
-      <div className="w-full flex items-center justify-between group h-fit hover:cursor-point pt-6">
-        <Link href={`/podcasts/${location}`}>
+      <div
+        className="w-full flex items-center justify-between group h-fit hover:cursor-point pt-6"
+        onClick={() => setCategoryIndex(-1)}
+      >
+        <Link href={`${location}`}>
           <div
             className="flex items-center z-10 hover:cursor-pointer mb-4"
             onMouseEnter={() => setHover(true)}

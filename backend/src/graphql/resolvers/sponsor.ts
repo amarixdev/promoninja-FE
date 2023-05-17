@@ -56,7 +56,7 @@ export const productResolvers = {
                   name: sponsor.name,
                 },
                 data: {
-                  category: {
+                  sponsorCategory: {
                     connect: {
                       id: getSponsorCategory?.id,
                     },
@@ -245,7 +245,17 @@ export const productResolvers = {
     },
     getSponsors: async (parent: any, args: any, context: GraphQLContext) => {
       const { prisma } = context;
-      const sponsors = prisma.sponsor.findMany();
+      const sponsors = await prisma.sponsor.findMany({
+        include: {
+          podcast: {
+            include: {
+              category: true,
+            },
+          },
+          sponsorCategory: true,
+        },
+      });
+      console.log(sponsors[0].sponsorCategory[0].name);
       return sponsors;
     },
 

@@ -41,7 +41,7 @@ const CategoryList = ({ category }: CategoryProps) => {
       <div className={`flex justify-between items-center lg:my-4 pl-4`}>
         <AnimatedLink
           title={capitalizeString(categoryName)}
-          location={convertToSlug(categoryName)}
+          location={`/podcasts/${convertToSlug(categoryName)}`}
           separateLink={false}
         />
       </div>

@@ -17,12 +17,11 @@ const CategoryTabs = ({
   sponsorCategoryData,
   categoryData,
   setPressed,
-  pressed,
 }: Props) => {
-  const [filled, setFilled] = useState(false);
+  const [filled] = useState(false);
   const { categoryIndex } = NavContext();
 
-  const [shouldRender, setShouldRender] = useState(true);
+  const [shouldRender] = useState(true);
 
   const index = sponsorCategoryData?.findIndex(
     (category) => category.name === categoryData.name
@@ -33,11 +32,10 @@ const CategoryTabs = ({
   const isBreakPoint = useMediaQuery(1023);
 
   useEffect(() => {
-    console.log(pressed);
     setPressed(false);
     if (tab && !isBreakPoint) {
       tab.scrollIntoView({
-        behavior: "smooth",
+        behavior: "auto",
         block: "center",
         inline: "center",
       });
@@ -45,7 +43,7 @@ const CategoryTabs = ({
     if (tab && isBreakPoint) {
       console.log(tab);
       tab.scrollIntoView({
-        behavior: "smooth",
+        behavior: "auto",
         block: "center",
         inline: "center",
       });

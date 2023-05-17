@@ -118,7 +118,7 @@ const typeDefs = gql`
 
   type Category {
     id: ID
-    name: String!
+    name: String
     podcastId: [ID]
   }
   type Offer {
@@ -134,6 +134,7 @@ const typeDefs = gql`
     offer: String
     podcast: [Podcast]
     podcastId: [ID]
+    sponsorCategory: [Category]
   }
 
   input SponsorCategoryInput {
