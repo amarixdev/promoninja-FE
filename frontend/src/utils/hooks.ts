@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -185,4 +186,41 @@ export const useHoverCard = () => {
   };
 
   return { handleHoverCard, setActiveIndex, activeIndex };
+};
+
+const useMobileNinjaSlider = () => {
+  useEffect(() => {
+    const isBreakPoint = useMediaQuery(1023);
+    const ninjaSliderRef = useRef<HTMLDivElement>(null);
+    const ninjaSlider = ninjaSliderRef.current;
+    const [mobileNinjaIndex, setMobileNinjaIndex] = useState(0);
+    const [isScrolling, setIsScrolling] = useState(false);
+
+    if (isBreakPoint) {
+      ninjaSliderRef.current?.addEventListener("scroll", () => {
+        const ninjaSlider = ninjaSliderRef.current;
+        if (ninjaSlider) {
+          const { scrollLeft, scrollWidth } = ninjaSlider;
+          const trendingOfferLength = 5;
+          const scrollDistance = scrollWidth / trendingOfferLength;
+          const ninjaIndex = Math.round(scrollLeft / scrollDistance);
+          const snapThreshold = 10;
+          if (!isScrolling) {
+            if (
+              Math.abs(
+                scrollLeft -
+                  Math.round(scrollLeft / scrollDistance) * scrollDistance
+              ) >= snapThreshold
+            ) {
+              setIsScrolling(true);
+              setMobileNinjaIndex(ninjaIndex);
+              setTimeout(function () {
+                setIsScrolling(false);
+              }, 100);
+            }
+          }
+        }
+      });
+    }
+  }, []);
 };

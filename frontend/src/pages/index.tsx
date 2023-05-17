@@ -1,7 +1,7 @@
 import { Button, useToast } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
 import { GiNinjaHead, GiRunningNinja } from "react-icons/gi";
 import Footer from "../components/Footer";
@@ -96,6 +96,39 @@ const Home = ({
   };
 
   const { activeIndex, setActiveIndex, handleHoverCard } = useHoverCard();
+  const ninjaSliderRef = useRef<HTMLDivElement>(null);
+  const ninjaSlider = ninjaSliderRef.current;
+  const [mobileNinjaIndex, setMobileNinjaIndex] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
+
+  useEffect(() => {
+    if (isBreakPoint) {
+      ninjaSliderRef.current?.addEventListener("scroll", () => {
+        const ninjaSlider = ninjaSliderRef.current;
+        if (ninjaSlider) {
+          const { scrollLeft, scrollWidth } = ninjaSlider;
+          const trendingOfferLength = 5;
+          const scrollDistance = scrollWidth / trendingOfferLength;
+          const ninjaIndex = Math.round(scrollLeft / scrollDistance);
+          const snapThreshold = 10;
+          if (!isScrolling) {
+            if (
+              Math.abs(
+                scrollLeft -
+                  Math.round(scrollLeft / scrollDistance) * scrollDistance
+              ) >= snapThreshold
+            ) {
+              setIsScrolling(true);
+              setMobileNinjaIndex(ninjaIndex);
+              setTimeout(function () {
+                setIsScrolling(false);
+              }, 100);
+            }
+          }
+        }
+      });
+    }
+  }, [ninjaSliderRef, mobileNinjaIndex, isBreakPoint]);
 
   const handleTrendingOfferIndex = () => {
     const maxIndex = trendingOffersData.length * -100 + 100;
@@ -211,7 +244,7 @@ const Home = ({
 
               <div className="w-full flex flex-col justify-center items-center">
                 <AnimatedLink
-                  location=""
+                  location="/podcasts"
                   title="Popular Podcasts"
                   separateLink={true}
                 />
@@ -323,23 +356,17 @@ const Home = ({
 
               {/* Trending Offers */}
               <div className="relative w-full mt-14">
-                <div className=" flex items-center justify-start ">
-                  <h1
-                    className={`text-xl lg:text-2xl font-bold px-4 pb-5 lg:mb-12 relative ${
-                      ninjaMode && displayEasterEgg
-                        ? "text-[#cdcdcd]"
-                        : "text-[#dedede]"
-                    }  z-20"`}
-                  >
-                    Trending Offers
-                  </h1>
-                </div>
+                <AnimatedLink
+                  location="/offers"
+                  title="Trending Offers"
+                  separateLink={true}
+                />
 
                 {/* Desktop */}
                 <>
                   {isBreakPoint || (
                     <div
-                      className={`flex w-full transition-all duration-700 translate-x-[${trendingOfferIndex}%]`}
+                      className={`flex w-full transition-all pt-6 duration-700 translate-x-[${trendingOfferIndex}%]`}
                     >
                       {trendingOffersData.map((offer) => (
                         <div
@@ -431,11 +458,12 @@ const Home = ({
                 <>
                   {isBreakPoint && (
                     <div
-                      className={`flex w-full transition-all duration-700 translate-x-[${trendingOfferIndex}%]`}
+                      className={`flex w-full transition-all pt-6 duration-700 translate-x-[${trendingOfferIndex}%]`}
+                      ref={ninjaSliderRef}
                     >
-                      {trendingOffersData.map((offer) => (
+                      {trendingOffersData.map((offer, index) => (
                         <div
-                          className="min-w-full flex items-center justify-center"
+                          className="min-w-full flex items-center justify-center snap-center"
                           key={offer.name}
                         >
                           <div
@@ -476,21 +504,9 @@ const Home = ({
                                   </div>
                                 </div>
 
-                                {/*  <div
+                                <div
                                   className={` transition-all ease-in-out relative flex-col w-full justify-between `}
                                 >
-                                  <div
-                                    className={`flex flex-col gap-1 w-full p-6  `}
-                                  >
-                                    <h1
-                                      className={`text-xl font-semibold text-center text-[#ebebeb] `}
-                                    >
-                                      About
-                                    </h1>
-                                    <p className="font-light text-center">
-                                      {truncateString(offer.summary, 60)}
-                                    </p>
-                                  </div>
                                   <Link
                                     href={`/${convertToSlug(offer.name)}`}
                                     className="w-full flex justify-center"
@@ -499,16 +515,7 @@ const Home = ({
                                       View Details
                                     </Button>
                                   </Link>
-                                </div> */}
-                              </div>
-                              <div
-                                className="mt-20 right-6 relative opacity-0 group-hover:opacity-100 h-fit hover:cursor-pointer"
-                                onClick={handleTrendingOfferIndex}
-                              >
-                                <BiChevronRight
-                                  size={60}
-                                  className="hover:fill-white fill-[#aaaaaa]"
-                                />
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -517,9 +524,8 @@ const Home = ({
                     </div>
                   )}
                 </>
-
                 <div className="w-full mt-4 lg:mt-8 flex items-center justify-center">
-                  <div className=" rounded-lg flex gap-3 px-6 bg-[#0b0b0b] shadow-black shadow-lg">
+                  <div className=" rounded-lg flex gap-6 px-6 bg-[#0b0b0b] shadow-black shadow-lg">
                     {NinjaRunning.map((ninja, index) => (
                       <div
                         key={index}
