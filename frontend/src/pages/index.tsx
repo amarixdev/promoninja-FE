@@ -12,6 +12,7 @@ import LogoText from "../public/assets/logo-text.png";
 import Logo from "../public/assets/ninja4.png";
 import {
   useCarouselSpeed,
+  useHoverCard,
   useMediaQuery,
   useRotate,
   useSetCurrentPage,
@@ -52,6 +53,9 @@ const Home = ({
   const [displayEasterEgg, setDisplayEasterEgg] = useState(false);
   const [ninjaMode, setNinjaMode] = useState(false);
   const [displayToast, setDisplayToast] = useState(false);
+  const [trendingOfferIndex, setTrendingOfferIndex] = useState("0");
+  const [ninjaRunningIndex, setNinjaRunningIndex] = useState(0);
+
   const toast = useToast();
   const sliderRef = useRef<HTMLDivElement>(null);
   useCarouselSpeed(clickCount, startTime, setDisplayEasterEgg, setNinjaMode);
@@ -69,9 +73,6 @@ const Home = ({
     }
     groupedSponsors[firstLetter].push(str);
   });
-
-  const [trendingOfferIndex, setTrendingOfferIndex] = useState("0");
-  const [ninjaRunningIndex, setNinjaRunningIndex] = useState(0);
 
   const NinjaModeToast = () => {
     if (isBreakPoint) {
@@ -94,21 +95,7 @@ const Home = ({
     }
   };
 
-  const [activeIndex, setActiveIndex] =
-    useState<SetStateAction<number | null>>(null);
-  let timerId: NodeJS.Timeout;
-
-  const handleHoverCard = async (index: number, event: string) => {
-    clearTimeout(timerId);
-    if (event == "mouseenter" && !activeIndex) {
-      timerId = setTimeout(() => {
-        setActiveIndex(index);
-      }, 600);
-    }
-    if (event === "mouseleave") {
-      clearTimeout(timerId);
-    }
-  };
+  const { activeIndex, setActiveIndex, handleHoverCard } = useHoverCard();
 
   const handleTrendingOfferIndex = () => {
     const maxIndex = trendingOffersData.length * -100 + 100;
@@ -272,7 +259,7 @@ const Home = ({
                             loading="lazy"
                             className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px] "
                           />
-                          <div className="">
+                          <div>
                             <h1
                               className={`text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-[#dadada] group-hover:text-white whitespace-nowrap`}
                             >

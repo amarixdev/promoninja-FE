@@ -9,10 +9,9 @@ import {
 import { useMediaQuery } from "../utils/hooks";
 import { CategoryPodcast, PodcastData } from "../utils/types";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import AnimatedLink from "./AnimatedLink";
 import SliderArrows from "./SliderArrows";
-import { effect, useStatStyles } from "@chakra-ui/react";
 interface CategoryProps {
   category: CategoryPodcast;
 }
@@ -54,18 +53,18 @@ const CategoryList = ({ category }: CategoryProps) => {
           ref={sliderRef}
         >
           {podcastData?.slice(0, 8).map((podcast: PodcastData) => (
-            <div
-              className={
-                !isBreakPoint
-                  ? `bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center lg:min-w-[220px] h-[300px] rounded-lg mx-3 `
-                  : " hover:cursor-pointer flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5 "
-              }
+            <Link
+              href={`/podcasts/${convertToSlug(categoryName)}/${convertToSlug(
+                podcast.title
+              )}`}
               key={podcast.title}
             >
-              <Link
-                href={`/podcasts/${convertToSlug(categoryName)}/${convertToSlug(
-                  podcast.title
-                )}`}
+              <div
+                className={
+                  !isBreakPoint
+                    ? `bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center lg:min-w-[220px] h-[300px] rounded-lg mx-3 `
+                    : " hover:cursor-pointer flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5 "
+                }
                 key={podcast.title}
               >
                 <Image
@@ -77,21 +76,21 @@ const CategoryList = ({ category }: CategoryProps) => {
                   className="rounded-xl mt-4 shadow-lg shadow-black base:w-[90px] xs:w-[110px] sm:w-[170px] "
                   onClick={handlePreviousPage}
                 />
-              </Link>
 
-              <div className="group">
-                <h1 className=" whitespace-nowrap text-[10px] sm:text-sm lg:text-sm xl:text-lg text-start mt-3 font-normal lg:font-semibold text-[#dadada] group-hover:text-white whitespace-wrap">
-                  {!isBreakPoint
-                    ? truncateString(podcast.title, 14)
-                    : truncateString(podcast.title, 14)}
-                </h1>
-                <p className="whitespace-nowrap base:text-[8px] xs:text-xs sm:text-sm lg:text-md text-start font-medium text-[#909090]">
-                  {!isBreakPoint
-                    ? truncateString(podcast.publisher, 14)
-                    : truncateString(podcast.publisher, 14)}
-                </p>
+                <div className="group">
+                  <h1 className=" whitespace-nowrap text-[10px] sm:text-sm lg:text-sm xl:text-lg text-start mt-3 font-normal lg:font-semibold text-[#dadada] group-hover:text-white whitespace-wrap">
+                    {!isBreakPoint
+                      ? truncateString(podcast.title, 14)
+                      : truncateString(podcast.title, 14)}
+                  </h1>
+                  <p className="whitespace-nowrap base:text-[8px] xs:text-xs sm:text-sm lg:text-md text-start font-medium text-[#909090]">
+                    {!isBreakPoint
+                      ? truncateString(podcast.publisher, 14)
+                      : truncateString(podcast.publisher, 14)}
+                  </p>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

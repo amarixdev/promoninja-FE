@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import {
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 
 export const useMediaQuery = (width: number) => {
   const [targetReached, setTargetReached] = useState(false);
@@ -160,3 +166,23 @@ const useSlider = (slider: HTMLDivElement | null, scrollDistance: number) => {
 };
 
 export default useSlider;
+
+export const useHoverCard = () => {
+  const [activeIndex, setActiveIndex] =
+    useState<SetStateAction<number | null>>(null);
+  let timerId: NodeJS.Timeout;
+
+  const handleHoverCard = async (index: number, event: string) => {
+    clearTimeout(timerId);
+    if (event == "mouseenter" && !activeIndex) {
+      timerId = setTimeout(() => {
+        setActiveIndex(index);
+      }, 600);
+    }
+    if (event === "mouseleave") {
+      clearTimeout(timerId);
+    }
+  };
+
+  return { handleHoverCard, setActiveIndex, activeIndex };
+};
