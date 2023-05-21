@@ -18,6 +18,7 @@ export interface CurrentPage {
   home: boolean;
   search: boolean;
   podcasts: boolean;
+  offers: boolean;
 }
 
 const AppContext = createContext<ContextType>({
@@ -25,7 +26,12 @@ const AppContext = createContext<ContextType>({
   setPreviousPage: () => {},
   categoryType: {} as string,
   setCategoryType: () => {},
-  currentPage: {} as { home: boolean; search: boolean; podcasts: boolean },
+  currentPage: {} as {
+    home: boolean;
+    search: boolean;
+    podcasts: boolean;
+    offers: boolean;
+  },
   setCurrentPage: () => {},
   setCategoryIndex: () => {},
   categoryIndex: {} as number,
@@ -43,6 +49,7 @@ export function ContextProvider({ children }: ContextProviderProps) {
     home: true,
     podcasts: false,
     search: false,
+    offers: false,
   });
   return (
     <AppContext.Provider

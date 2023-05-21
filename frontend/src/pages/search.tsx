@@ -33,7 +33,12 @@ interface SponsorSearchResults {
   imageUrl: string;
 }
 const Search = () => {
-  useSetCurrentPage({ home: false, podcasts: false, search: true });
+  useSetCurrentPage({
+    home: false,
+    podcasts: false,
+    search: true,
+    offers: false,
+  });
   const searchCategories = ["Podcasts", "Sponsors"];
   const [podcastFilter, setPodcastFilter] = useState(true);
   const [sponsorFilter, setSponsorFilter] = useState(false);

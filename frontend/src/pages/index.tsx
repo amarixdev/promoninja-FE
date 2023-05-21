@@ -43,7 +43,12 @@ const Home = ({
   topPicksData,
   trendingOffersData,
 }: Props) => {
-  useSetCurrentPage({ home: true, podcasts: false, search: false });
+  useSetCurrentPage({
+    home: true,
+    podcasts: false,
+    search: false,
+    offers: false,
+  });
   const isBreakPoint = useMediaQuery(1023);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
   const groupedSponsors: GroupedSponsors = {};
@@ -168,7 +173,7 @@ const Home = ({
           >
             {(displayEasterEgg && ninjaMode) || (
               <div
-                className={` "to-[#1c1c1c] from-[#686868c9] bg-gradient-to-b " absolute top-10   w-full h-[400px] z-0 `}
+                className={` "to-[#1c1c1c] from-[#545353c9] bg-gradient-to-b  absolute top-10   w-full h-[400px] z-0 `}
               ></div>
             )}
             <div className="flex items-center justify-between w-full relative ">

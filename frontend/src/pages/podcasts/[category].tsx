@@ -20,10 +20,7 @@ import {
   convertToSlug,
   truncateString,
 } from "../../utils/functions";
-import {
-  useMediaQuery,
-  useSetCurrentPage
-} from "../../utils/hooks";
+import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { PodcastData } from "../../utils/types";
 
 interface Props {
@@ -38,7 +35,12 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   }
 
   const { setPreviousPage, setCategoryType, categoryType } = NavContext();
-  useSetCurrentPage({ home: false, podcasts: true, search: false });
+  useSetCurrentPage({
+    home: false,
+    podcasts: false,
+    search: false,
+    offers: false,
+  });
   let backdrop: StaticImageData = LogoText;
 
   useEffect(() => {

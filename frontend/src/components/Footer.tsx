@@ -19,7 +19,7 @@ export interface LinkWrapperProps {
   activeIcon: IconType;
   icon: IconType;
   pageTitle: string;
-  current?: "home" | "podcasts" | "search";
+  current?: "home" | "podcasts" | "search" | "offers";
 }
 
 const Footer = () => {
@@ -126,10 +126,11 @@ const Footer = () => {
         />
 
         <LinkWrapper
-          href=""
+          href="/offers"
           activeIcon={FaUserNinja}
           icon={FaUserNinja}
-          pageTitle="About"
+          pageTitle="Offers"
+          current="offers"
         />
       </div>
     </div>

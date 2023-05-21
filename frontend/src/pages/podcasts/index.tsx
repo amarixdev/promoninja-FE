@@ -12,8 +12,12 @@ interface Props {
 }
 
 const podcasts = ({ categoryPreviews }: Props) => {
-
-  useSetCurrentPage({ home: false, podcasts: true, search: false });
+  useSetCurrentPage({
+    home: false,
+    podcasts: true,
+    search: false,
+    offers: false,
+  });
   return (
     <>
       <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">

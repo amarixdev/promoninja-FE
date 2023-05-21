@@ -49,6 +49,7 @@ export const useSetCurrentPage = (currentPage: CurrentPage) => {
       home: currentPage.home,
       podcasts: currentPage.podcasts,
       search: currentPage.search,
+      offers: currentPage.offers,
     }));
   }, [setCurrentPage]);
 };

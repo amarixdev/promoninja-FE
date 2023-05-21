@@ -91,7 +91,12 @@ const podcast = ({ podcastData, category }: Props) => {
 
   let existingSponsor: boolean = true;
   const [selectedSponsor, setSelectedSponsor] = useState("");
-  useSetCurrentPage({ home: false, podcasts: true, search: false });
+  useSetCurrentPage({
+    home: false,
+    podcasts: false,
+    search: false,
+    offers: false,
+  });
   useEffect(() => {
     setCategoryType(category);
     if (categoryType !== null) {

@@ -15,6 +15,7 @@ import * as Ninja4 from "../public/assets/logo.png";
 import { scrollToTop } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
 import { LinkWrapperProps } from "./Footer";
+import { FaUserNinja } from "react-icons/fa";
 
 interface Props {}
 
@@ -22,8 +23,6 @@ const Sidebar = (props: Props) => {
   let isBreakpoint = useMediaQuery(1023);
   const { currentPage } = NavContext();
   const { pathname } = useRouter();
-  const [hoverState, setHoverState] = useState(false);
-  const [hoverColor, setHoverColor] = useState("");
 
   const [hoverPage, setHoverPage] = useState("");
 
@@ -43,7 +42,7 @@ const Sidebar = (props: Props) => {
           className="flex items-center gap-3 p-2 rounded-lg hover:cursor-pointer"
           onClick={() => scrollToTop()}
         >
-          {currentPage[current || "home"] ? (
+          {currentPage[current || "offers"] ? (
             <ActiveIcon
               size={28}
               color={"white"}
@@ -160,6 +159,13 @@ const Sidebar = (props: Props) => {
             icon={MdPodcasts}
             pageTitle="Podcasts"
             current="podcasts"
+          />
+          <LinkWrapper
+            href="/offers"
+            activeIcon={FaUserNinja}
+            icon={FaUserNinja}
+            pageTitle="Offers"
+            current="offers"
           />
         </div>
       </div>

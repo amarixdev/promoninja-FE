@@ -16,7 +16,7 @@ import {
   scrollToTop,
   truncateString,
 } from "../../utils/functions";
-import useSlider, { useMediaQuery } from "../../utils/hooks";
+import useSlider, { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
 
 interface OffersProps {
@@ -29,6 +29,12 @@ interface SponsorState {
 }
 
 const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
+  useSetCurrentPage({
+    home: false,
+    podcasts: false,
+    search: false,
+    offers: true,
+  });
   const { categoryIndex: contextIndex } = NavContext();
   const [sponsorPodcastArray, setSponsorPodcastArray] =
     useState<PodcastData[]>();

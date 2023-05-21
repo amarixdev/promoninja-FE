@@ -40,7 +40,12 @@ const SponsorPage = ({ sponsorData }: Props) => {
     previousUrl: "",
   });
 
-  useSetCurrentPage({ home: false, podcasts: false, search: false });
+  useSetCurrentPage({
+    home: false,
+    podcasts: false,
+    search: false,
+    offers: false,
+  });
   const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
