@@ -132,16 +132,16 @@ const DescriptionDrawer = ({
                     )}
                     {(sponsorOfferDrawer || podcastOfferDrawer) && (
                       <div className="w-full flex items-center justify-center">
-                        <h1 className="p-y text-center font-semibold text-xl text-[#d5d5d5] overflow-y-auto">
+                        <h1 className="p-y text-center font-semibold text-lg sm:text-2xl md:text-3xl text-[#d5d5d5] overflow-y-auto">
                           {drawer.description}
                         </h1>
                       </div>
                     )}
                     {(podcastOfferDrawer || sponsorOfferDrawer) && (
-                      <>
+                      <div className="flex flex-col items-center">
                         <h1
                           style={{ color: "white" }}
-                          className="text-3xl font-extrabold mt-10"
+                          className="text-2xl sm:text-3xl md:text-4xl font-extrabold mt-6"
                         >
                           Visit{" "}
                         </h1>
@@ -151,27 +151,29 @@ const DescriptionDrawer = ({
                           className={`text-lg active:scale-95 underline underline-offset-2 p-4 rounded-md`}
                         >
                           <Button className="font-bold">
-                            <p className="text-sm">{drawer.url}</p>
+                            <p className="text-sm sm:text-base md:text-lg">
+                              {drawer.url}
+                            </p>
                           </Button>
                         </Link>
                         {drawer.promoCode &&
                           (podcastOfferDrawer || sponsorOfferDrawer) && (
-                            <div className="flex flex-col justify-center items-center">
-                              <h2 className="text-base font-semibold my-2 tracking-wide">
-                                Use Code
-                              </h2>
-                              <PromoCodeButton
-                                promoCode={drawer.promoCode || ""}
-                              />
-                              <h2 className="text-base  font-semibold my-2 tracking-wide">
-                                At Checkout
-                              </h2>
-                            </div>
+                            <>
+                              <div className="border-t-[1px] w-full mb-3"></div>
+                              <div className="flex flex-col justify-center items-center p-2 px-10 rounded-md bg-[#b7b7b71e]">
+                                <h2 className=" text-sm sm:text-base md:text-lg font-semibold my-2 tracking-wide">
+                                  Use Code
+                                </h2>
+                                <PromoCodeButton
+                                  promoCode={drawer.promoCode || ""}
+                                />
+                                <h2 className="text-sm sm:text-base md:text-lg  font-semibold my-2 tracking-wide">
+                                  At Checkout
+                                </h2>
+                              </div>
+                            </>
                           )}
-                        <p className="font-thin mt-10 text-lg">
-                          "Thanks for supporting the show!"
-                        </p>
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -298,11 +300,11 @@ const DescriptionDrawer = ({
               colorScheme="transparent"
               color={"white"}
               className={
-                "flex items-center justify-center bottom-20 relative font-semibold text-xl hover:cursor-pointer"
+                "flex flex-col items-center justify-center bottom-20 gap-6 relative font-semibold text-xl hover:cursor-pointer"
               }
               onClick={onClose}
             >
-              Cancel
+              <p className="sm:text-lg md:text-2xl">Cancel</p>
             </Button>
           )}
         </DrawerContent>

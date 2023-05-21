@@ -106,38 +106,6 @@ const Home = ({
   );
   const ninjaSliderRef = useRef<HTMLDivElement>(null);
 
-  const [mobileNinjaIndex, setMobileNinjaIndex] = useState(0);
-  const [isScrolling, setIsScrolling] = useState(false);
-
-  useEffect(() => {
-    if (isBreakPoint) {
-      ninjaSliderRef.current?.addEventListener("scroll", () => {
-        const ninjaSlider = ninjaSliderRef.current;
-        if (ninjaSlider) {
-          const { scrollLeft, scrollWidth } = ninjaSlider;
-          const trendingOfferLength = 5;
-          const scrollDistance = scrollWidth / trendingOfferLength;
-          const ninjaIndex = Math.round(scrollLeft / scrollDistance);
-          const snapThreshold = 10;
-          if (!isScrolling) {
-            if (
-              Math.abs(
-                scrollLeft -
-                  Math.round(scrollLeft / scrollDistance) * scrollDistance
-              ) >= snapThreshold
-            ) {
-              setIsScrolling(true);
-              setMobileNinjaIndex(ninjaIndex);
-              setTimeout(function () {
-                setIsScrolling(false);
-              }, 100);
-            }
-          }
-        }
-      });
-    }
-  }, [ninjaSliderRef, mobileNinjaIndex, isBreakPoint]);
-
   useEffect(() => {
     setMaxIndex(trendingOffersData.length * -100 + 100);
   }, [trendingOfferIndex, trendingOffersData]);
@@ -564,11 +532,8 @@ const Home = ({
                 <div className="mt-16 lg:mt-28">
                   <div className="w-full flex items-center justify-start">
                     <h1
-                      className={`text-xl lg:text-2xl font-bold px-4 mb-12 relative top-9 ${
-                        ninjaMode && displayEasterEgg
-                          ? "text-[#cdcdcd]"
-                          : "text-[#dedede]"
-                      }  z-20"`}
+                      className={`text-base  lg:text-2xl font-bold px-4 mb-12 relative top-9 text-[#cdcdcd]
+                     z-20"`}
                     >
                       Shop Categories
                     </h1>
@@ -632,11 +597,7 @@ const Home = ({
                 <div className="relative">
                   <div className="w-full flex items-center lg:mt-14 justify-start">
                     <h1
-                      className={`text-xl lg:text-2xl font-bold p-4 ${
-                        ninjaMode && displayEasterEgg
-                          ? "text-[#cdcdcd]"
-                          : "text-[#dedede]"
-                      } "`}
+                      className={`text-base lg:text-2xl font-bold p-4 text-[#cdcdcd]`}
                     >
                       Sponsors A-Z
                     </h1>

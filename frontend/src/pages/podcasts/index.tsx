@@ -4,7 +4,7 @@ import Footer from "../../components/Footer";
 import Sidebar from "../../components/Sidebar";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
-import { useSetCurrentPage } from "../../utils/hooks";
+import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { CategoryPodcast } from "../../utils/types";
 
 interface Props {
@@ -12,6 +12,7 @@ interface Props {
 }
 
 const podcasts = ({ categoryPreviews }: Props) => {
+  const isBreakPoint = useMediaQuery(1023);
   useSetCurrentPage({
     home: false,
     podcasts: true,
@@ -32,14 +33,29 @@ const podcasts = ({ categoryPreviews }: Props) => {
               Podcasts
             </h1>
           </div>
-          <div className={`w-full relative mt-14 flex flex-col pb-20`}>
-            {categoryPreviews.map((category: CategoryPodcast) => (
-              <CategoryList
-                key={Object.keys(category)[0]}
-                category={category}
-              />
-            ))}
-          </div>
+          {isBreakPoint ? (
+            <div
+              className={`w-full relative mt-14 flex flex-col pb-20`}
+            >
+              {categoryPreviews.map((category: CategoryPodcast) => (
+                <CategoryList
+                  key={Object.keys(category)[0]}
+                  category={category}
+                />
+              ))}
+            </div>
+          ) : (
+            <div
+              className={`w-full relative mt-14 flex flex-col pb-20`}
+            >
+              {categoryPreviews.map((category: CategoryPodcast) => (
+                <CategoryList
+                  key={Object.keys(category)[0]}
+                  category={category}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <Footer />

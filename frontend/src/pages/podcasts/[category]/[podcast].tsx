@@ -277,8 +277,8 @@ const podcast = ({ podcastData, category }: Props) => {
                     <div className="w-full flex items-center pb-4">
                       <div className="px-6">
                         <Button>
-                          <BsShareFill />
-                          <p className="ml-3">Share</p>
+                          <BsShareFill size={18} />
+                          <p className="ml-3 text-md">Share</p>
                         </Button>
                       </div>
                       <Link
@@ -296,8 +296,8 @@ const podcast = ({ podcastData, category }: Props) => {
                   {isBreakPoint && (
                     <div className="px-6">
                       <Button>
-                        <BsShareFill />
-                        <p className="ml-3">Share</p>
+                        <BsShareFill size={15} />
+                        <p className="ml-3 text-sm">Share</p>
                       </Button>
                     </div>
                   )}

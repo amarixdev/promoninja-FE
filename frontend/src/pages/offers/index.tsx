@@ -195,7 +195,7 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
           }
         </div>
         <div
-          className="fixed scrollbar-hide lg:top-24 top-20  bg-[#151515] z-[100] overflow-x-scroll scroll-smooth w-full lg:w-[85%] flex pt-5 lg:pt-3 items-center"
+          className="fixed scrollbar-hide lg:top-24 top-20  bg-[#151515] z-[100] overflow-x-scroll scroll-smooth w-full lg:w-[85%] flex pt-5 lg:pt-0 items-center"
           ref={sliderRef}
         >
           <div className="flex items-center justify-between w-full relative z-[9999]"></div>

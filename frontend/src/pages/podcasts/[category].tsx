@@ -82,7 +82,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0 bg-black h-full">
       <Sidebar />
       {categoryPodcasts && (
-        <div className="h-screen w-full">
+        <div className="h-screen w-full ">
           <Image
             src={backdrop}
             alt="comedy"
@@ -90,50 +90,77 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
             priority
           />
           <div className="w-full h-screen bg-gradient-to-tr bg-black/10 from-black/40 fixed"></div>
-          <div className="h-full flex flex-col mt-[150px] lg:mt-[230px] gap-14">
-            <h1 className="relative z-50 base:text-3xl xs:text-5xl sm:text-6xl md:text-8xl font-extrabold pl-4">
+          <div className="h-full flex flex-col mt-[130px] lg:mt-[180px] gap-14">
+            <h1 className="relative z-50 base:text-3xl xs:text-4xl sm:text-6xl md:text-8xl font-extrabold pl-4">
               {capitalizeString(categoryName)}
             </h1>
 
             <div
-              className={`bg-gradient-to-b from-[#1a1a1a] via-[#282828] to-[#101010] relative grid-cols-3 md:grid-cols-4 lg:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid gap-[6px] lg:gap-x-8 lg:gap-y-10 p-6 lg:p-10 pb-24`}
+              className={`bg-gradient-to-b from-[#1a1a1a] via-[#282828] to-[#101010] relative grid-cols-3 md:grid-cols-4 lg:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid gap-y-8 gap-x-4 lg:gap-x-8 lg:gap-y-10 p-6 lg:p-10 pb-24`}
             >
               {categoryPodcasts?.map((podcast) => (
-                <Link
-                  href={`/podcasts/${convertToSlug(
-                    categoryName
-                  )}/${convertToSlug(podcast.title)}`}
-                  key={podcast.title}
-                >
-                  <div
-                    className={
-                      !isBreakPoint
-                        ? ` group bg-gradient-to-b w-full from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center max-h-auto px-4 pb-10 rounded-lg min-w-[135px] max-w-[220px]`
-                        : " hover:cursor-pointer flex flex-col items-center h-fit rounded-lg overflow-y-visible p-2 sm:mx-5 "
-                    }
-                  >
-                    <Image
-                      src={podcast.imageUrl}
-                      alt={podcast.imageUrl}
-                      width={160}
-                      height={160}
-                      className="rounded-xl mt-4 shadow-lg shadow-black base:w-[90px] xs:w-[110px] sm:w-[160px] "
-                      loading="lazy"
-                    />
-                    <div className="flex flex-col px-5  ">
-                      <h1 className=" whitespace-nowrap text-[10px] sm:text-sm lg:text-sm xl:text-lg text-start mt-3 font-normal lg:font-semibold text-[#dadada] group-hover:text-white whitespace-wrap">
-                        {!isBreakPoint
-                          ? truncateString(podcast.title, 14)
-                          : truncateString(podcast.title, 14)}
-                      </h1>
-                      <p className="whitespace-nowrap base:text-[8px] xs:text-xs sm:text-sm lg:text-md text-start font-medium text-[#909090]">
-                        {!isBreakPoint
-                          ? truncateString(podcast.publisher, 14)
-                          : truncateString(podcast.publisher, 14)}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
+                <div key={podcast.title}>
+                  {isBreakPoint ? (
+                    /* Mobile */
+                    <Link
+                      href={`/podcasts/${convertToSlug(
+                        categoryName
+                      )}/${convertToSlug(podcast.title)}`}
+                    >
+                      <div
+                        className={
+                          "hover:cursor-pointer flex flex-col items-center h-fit rounded-lg overflow-y-visible p-2 sm:mx-5 "
+                        }
+                      >
+                        <Image
+                          src={podcast.imageUrl}
+                          alt={podcast.imageUrl}
+                          width={130}
+                          height={130}
+                          className="rounded-xl mt-4 shadow-lg shadow-black w-[90px] sm:w-[110px] "
+                          loading="lazy"
+                        />
+                        <div className="flex flex-col max-w-[90px] sm:w-[110px] items-start justify-start ">
+                          <h1 className=" whitespace-nowrap text-[10px] font-semibold xs:text-xs sm:text-sm text-start mt-3 text-[#dadada] group-hover:text-white whitespace-wrap">
+                            {truncateString(podcast.title, 14)}
+                          </h1>
+                          <p className="whitespace-nowrap text-[10px] xs:text-xs sm:text-sm text-start font-medium text-[#909090]">
+                            {truncateString(podcast.publisher, 14)}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ) : (
+                    /* Desktop */
+                    <Link
+                      href={`/podcasts/${convertToSlug(
+                        categoryName
+                      )}/${convertToSlug(podcast.title)}`}
+                      key={podcast.title}
+                    >
+                      <div
+                        className={` group bg-gradient-to-b w-full from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center max-h-auto px-4 pb-10 rounded-lg min-w-[135px] max-w-[220px]`}
+                      >
+                        <Image
+                          src={podcast.imageUrl}
+                          alt={podcast.imageUrl}
+                          width={160}
+                          height={160}
+                          className="rounded-xl mt-4 shadow-lg shadow-black w-[160px] "
+                          loading="lazy"
+                        />
+                        <div className="flex flex-col px-5">
+                          <h1 className="whitespace-nowrap text-sm xl:text-md text-start mt-3 font-semibold text-[#dadada] group-hover:text-white">
+                            {truncateString(podcast.title, 14)}
+                          </h1>
+                          <p className="whitespace-nowrap text-sm xl:text-md text-start font-medium text-[#909090]">
+                            {truncateString(podcast.publisher, 14)}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
+                </div>
               ))}
             </div>
           </div>

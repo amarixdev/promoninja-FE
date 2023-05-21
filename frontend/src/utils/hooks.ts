@@ -170,58 +170,24 @@ const useSlider = (slider: HTMLDivElement | null, scrollDistance: number) => {
 export default useSlider;
 
 export const useHoverCard = () => {
+  const isBreakPoint = useMediaQuery(1023);
   const [activeIndex, setActiveIndex] =
     useState<SetStateAction<number | null>>(null);
   let timerId: NodeJS.Timeout;
 
   const handleHoverCard = async (index: number, event: string) => {
-    clearTimeout(timerId);
-    if (event == "mouseenter" && !activeIndex) {
-      timerId = setTimeout(() => {
-        setActiveIndex(index);
-      }, 600);
-    }
-    if (event === "mouseleave") {
+    if (!isBreakPoint) {
       clearTimeout(timerId);
+      if (event == "mouseenter" && !activeIndex) {
+        timerId = setTimeout(() => {
+          setActiveIndex(index);
+        }, 600);
+      }
+      if (event === "mouseleave") {
+        clearTimeout(timerId);
+      }
     }
   };
 
   return { handleHoverCard, setActiveIndex, activeIndex };
-};
-
-const useMobileNinjaSlider = () => {
-  useEffect(() => {
-    const isBreakPoint = useMediaQuery(1023);
-    const ninjaSliderRef = useRef<HTMLDivElement>(null);
-    const ninjaSlider = ninjaSliderRef.current;
-    const [mobileNinjaIndex, setMobileNinjaIndex] = useState(0);
-    const [isScrolling, setIsScrolling] = useState(false);
-
-    if (isBreakPoint) {
-      ninjaSliderRef.current?.addEventListener("scroll", () => {
-        const ninjaSlider = ninjaSliderRef.current;
-        if (ninjaSlider) {
-          const { scrollLeft, scrollWidth } = ninjaSlider;
-          const trendingOfferLength = 5;
-          const scrollDistance = scrollWidth / trendingOfferLength;
-          const ninjaIndex = Math.round(scrollLeft / scrollDistance);
-          const snapThreshold = 10;
-          if (!isScrolling) {
-            if (
-              Math.abs(
-                scrollLeft -
-                  Math.round(scrollLeft / scrollDistance) * scrollDistance
-              ) >= snapThreshold
-            ) {
-              setIsScrolling(true);
-              setMobileNinjaIndex(ninjaIndex);
-              setTimeout(function () {
-                setIsScrolling(false);
-              }, 100);
-            }
-          }
-        }
-      });
-    }
-  }, []);
 };

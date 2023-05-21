@@ -21,15 +21,16 @@ const ConditionalLink = ({
 }) => {
   if (separateLink) {
     return <span>{children}</span>;
-  } else return <Link href={`/podcasts/${location}`}>{children}</Link>;
+  } else return <Link href={`${location}`}>{children}</Link>;
 };
 
 const AnimatedLink = ({ title, location, separateLink }: AnimatedLinkProps) => {
   const isBreakPoint = useMediaQuery(1023);
   const [hover, setHover] = useState(false);
   const { setCategoryIndex } = NavContext();
+  console.log("location", location);
   if (isBreakPoint) {
-    console.log(separateLink);
+    /* Mobile */
     return (
       <div
         onClick={() => setCategoryIndex(-1)}
@@ -38,17 +39,17 @@ const AnimatedLink = ({ title, location, separateLink }: AnimatedLinkProps) => {
         } w-full items-center`}
       >
         <ConditionalLink location={location} separateLink={separateLink}>
-          <div className="flex items-center z-10 hover:cursor-pointer py-4">
+          <div className="flex items-center z-10 hover:cursor-pointer">
             <h1
-              className={`text-xl lg:text-2xl font-bold px-3 text-[#cdcdcd] relative bottom-[2px] group-hover:text-white whitespace-nowrap`}
+              className={` text-base font-bold px-3 text-[#cdcdcd] relative bottom-[2px] group-hover:text-white whitespace-nowrap`}
             >
               {title}
             </h1>
             {separateLink || (
               <MdChevronRight
                 color={"#9c9c9c"}
-                size={30}
-                className="right-3 relative"
+                size={23}
+                className="right-3 bottom-[1px] relative"
               />
             )}
           </div>
@@ -67,6 +68,7 @@ const AnimatedLink = ({ title, location, separateLink }: AnimatedLinkProps) => {
       </div>
     );
   } else {
+    /* Desktop */
     return (
       <div
         className="w-full flex items-center justify-between group h-fit hover:cursor-point pt-6"
