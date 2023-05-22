@@ -14,6 +14,8 @@ import { Operations } from "../graphql/operations";
 import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
 import useSlider, { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
+import { RxHamburgerMenu } from "react-icons/rx";
+import Header from "../components/Header";
 
 interface OffersProps {
   sponsorsData: SponsorData[];
@@ -31,7 +33,12 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
     search: false,
     offers: true,
   });
-  const { categoryIndex: contextIndex } = NavContext();
+  const { categoryIndex: contextIndex, ninjaMode, setNinjaMode } = NavContext();
+
+  const handleNinja = () => {
+    console.log(ninjaMode);
+  };
+
   const [sponsorPodcastArray, setSponsorPodcastArray] =
     useState<PodcastData[]>();
   const {
@@ -168,12 +175,30 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
         currentPodcast={selectedPodcast}
       />
 
-      <div className=" w-full relative z-1 mt-[100px] bg-gradient-to-b from-[#151515] via-[#151515] to-[#121212]">
-        <div
+      <div
+        className={`w-full relative z-1 mt-12 bg-gradient-to-b ${
+          ninjaMode
+            ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
+            : "from-[#151515] via-[#151515] to-[#121212]"
+        }`}
+      >
+        {ninjaMode ? (
+          <div
+            className={` from-[#222222] bg-gradient-to-b absolute top-10 w-full h-[300px] z-0 `}
+          ></div>
+        ) : (
+          <div
+            className={` from-[#313131] bg-gradient-to-b absolute top-10 w-full h-[400px] z-0 `}
+          ></div>
+        )}
+
+        <Header page="Offers" />
+        {/* <div
           className={
-            "fixed bg-[#121212] pb-8 pt-4 px-8 top-0 w-full z-[200] flex justify-between"
+            "fixed bg-[#121212] pb-8 pt-4 px-8 top-0 w-full z-[200] flex justify-between items-center"
           }
         >
+          {isBreakPoint && <RxHamburgerMenu size={20} />}
           <h1
             className={`text-3xl sm:text-5xl font-bold text-white `}
             onClick={() => {
@@ -185,19 +210,22 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
           {
             <button
               className={`text-3xl sm:text-5xl lg:right-[300px] font-bold relative hover:cursor-pointer active:scale-95 text-white `}
+              onClick={() => {
+                setNinjaMode((prev) => !prev);
+                console.log("clicked");
+              }}
             >
               <GiNinjaHead />
             </button>
           }
-        </div>
+        </div> */}
         <div
-          className="fixed scrollbar-hide lg:top-24 top-20  bg-[#151515] z-[100] overflow-x-scroll scroll-smooth w-full lg:w-[85%] flex pt-5 lg:pt-0 items-center"
+          className="fixed mt-4 lg:mt-0  scrollbar-hide lg:top-24 top-20 bg-[#151515] z-[100] overflow-x-scroll scroll-smooth w-full lg:w-[85%] flex pt-5 lg:pt-0 items-center"
           ref={sliderRef}
         >
-          <div className="flex items-center justify-between w-full relative z-[9999]"></div>
           {isBreakPoint || (
             <button
-              className={`fixed bg-[#151515] z-[200] p-5 hover:cursor-pointer`}
+              className={`fixed bg-[#151515] z-[200] p-4 hover:cursor-pointer`}
             >
               {
                 <BiChevronLeft
@@ -211,7 +239,7 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
             </button>
           )}
 
-          <div className="flex gap-5  px-6 lg:px-24 lg:pr-44 xl:pr-32 pb-4 lg:py-4">
+          <div className="flex gap-5 px-6 lg:px-24 lg:pr-44 xl:pr-32 pb-4 lg:py-4">
             <Button
               minWidth={150}
               onClick={() => {
@@ -240,6 +268,9 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                     onClick={() => filterCategory(category.name, index)}
                     key={index}
                     px={"20"}
+                    bgColor={
+                      categoryIndex === index + 1 ? "whiteAlpha.300" : ""
+                    }
                     ref={contextIndex === index ? categoryTabRef : undefined}
                     className={` active:scale-95`}
                   >
@@ -279,32 +310,9 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                   </Button>
                 ))}
           </div>
-          <div className="flex items-center justify-between w-full relative z-">
-            <div
-              className={
-                "fixed bg-[#121212] p-8 w-full z-[20] flex justify-between"
-              }
-            >
-              <h1
-                className={`text-3xl sm:text-5xl font-bold text-white `}
-                onClick={() => {
-                  isBreakPoint ? scrollToTop() : null;
-                }}
-              >
-                {"Offers"}
-              </h1>
-              {
-                <button
-                  className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer active:scale-95 text-white `}
-                >
-                  <GiNinjaHead />
-                </button>
-              }
-            </div>
-          </div>
           {isBreakPoint || (
             <button
-              className={`fixed bg-[#151515] right-0 z-[200] p-5 hover:cursor-pointer`}
+              className={`fixed bg-[#151515] right-0 z-[200] p-4 hover:cursor-pointer`}
             >
               {
                 <BiChevronRight
@@ -322,9 +330,9 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
         {/* Mobile */}
         <>
           {isBreakPoint && (
-            <div className="mt-12 ">
+            <div className="mt-24">
               <div className="pt-10 px-5 ">
-                <p className=" w-full text-3xl font-extrabold flex justify-center pb-14">
+                <p className=" w-full text-3xl font-extrabold flex justify-center pb-14 relative z-10">
                   {currentCategory}
                 </p>
                 {(filteredSponsors.length
@@ -333,7 +341,11 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                 )?.map((sponsor: SponsorData, index: number) => (
                   <div
                     key={`${sponsor.name}`}
-                    className="w-full rounded-md p-8 bg-gradient-to-r from-[#232323] to-[#181818] shadow-lg shadow-[black] mb-6"
+                    className={`w-full rounded-md p-8 bg-gradient-to-r  ${
+                      ninjaMode
+                        ? "from-[#171717] to-[#121212]"
+                        : "from-[#232323] to-[#181818]"
+                    } shadow-lg shadow-[black] mb-6`}
                   >
                     <div className="flex w-full">
                       <div className="flex flex-col min-w-full ">
@@ -351,12 +363,12 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                               <div className="p-4">
                                 <div className="flex flex-col items-center gap-2 py-2">
                                   <h1
-                                    className={`text-[#ebebeb] text-center text-xl font-extrabold  `}
+                                    className={`text-[#ebebeb] text-center text-xl font-extrabold relative z-10 `}
                                   >
                                     {sponsor.name}
                                   </h1>
                                   <h1
-                                    className={`text-[#bababa] text-sm text-center  `}
+                                    className={`text-[#bababa] text-sm text-center relative z-10   `}
                                   >
                                     {sponsor.offer}
                                   </h1>
@@ -504,9 +516,9 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
           {/* Desktop */}
 
           {isBreakPoint || (
-            <div className="mt-12">
+            <div className="mt-24">
               <div className="pt-14 px-10">
-                <p className=" w-full text-3xl font-extrabold flex justify-center pb-14">
+                <p className=" w-full text-3xl font-extrabold flex justify-center pb-14 relative z-10">
                   {currentCategory}
                 </p>
                 {(filteredSponsors.length
@@ -515,7 +527,11 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                 )?.map((sponsor: SponsorData, index: number) => (
                   <div
                     key={`${sponsor.name}`}
-                    className="w-full rounded-md p-8 bg-gradient-to-r from-[#232323] to-[#181818] shadow-lg shadow-[black] mb-6"
+                    className={`w-full rounded-md p-8 bg-gradient-to-r ${
+                      ninjaMode
+                        ? "from-[#171717] to-[#121212]"
+                        : "from-[#232323] to-[#181818]"
+                    } shadow-lg shadow-[black] mb-6`}
                   >
                     <div className="flex w-full">
                       <div className="flex flex-col min-w-full ">
@@ -533,11 +549,13 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                               <div className="p-6 rounded-md">
                                 <div className="flex flex-col gap-2 px-4">
                                   <h1
-                                    className={`text-[#ebebeb] text-5xl font-extrabold`}
+                                    className={`text-[#ebebeb] text-5xl font-extrabold relative z-10`}
                                   >
                                     {sponsor.name}
                                   </h1>
-                                  <h1 className={`text-[#bababa] text-xl`}>
+                                  <h1
+                                    className={`text-[#bababa] text-xl relative z-10 `}
+                                  >
                                     {sponsor.offer}
                                   </h1>
                                 </div>

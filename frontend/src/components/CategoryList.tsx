@@ -14,9 +14,10 @@ import AnimatedLink from "./AnimatedLink";
 import SliderArrows from "./SliderArrows";
 interface CategoryProps {
   category: CategoryPodcast;
+  ninjaMode: boolean;
 }
 
-const CategoryList = ({ category }: CategoryProps) => {
+const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
   const categoryName = Object.keys(category)[0];
   const podcastData = category[categoryName];
   const isBreakPoint = useMediaQuery(1023);
@@ -111,7 +112,11 @@ const CategoryList = ({ category }: CategoryProps) => {
                   <div
                     className={
                       !isBreakPoint
-                        ? `bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434] hover:cursor-pointer flex flex-col items-center lg:min-w-[220px] h-[300px] rounded-lg mx-3 `
+                        ? `${
+                            ninjaMode
+                              ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828] "
+                              : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
+                          } hover:cursor-pointer flex flex-col items-center lg:min-w-[220px] h-[300px] rounded-lg mx-3 `
                         : " hover:cursor-pointer flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5 "
                     }
                     key={podcast.title}

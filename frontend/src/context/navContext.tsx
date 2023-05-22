@@ -1,13 +1,10 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
 interface ContextType {
-  categoryType: string;
-  setCategoryType: React.Dispatch<
-    React.SetStateAction<string | undefined | any>
-  >;
+  ninjaMode: boolean;
+  setNinjaMode: React.Dispatch<React.SetStateAction<boolean>>;
   categoryIndex: number;
   setCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
-
   currentPage: CurrentPage;
   setCurrentPage: React.Dispatch<React.SetStateAction<CurrentPage>>;
 }
@@ -20,8 +17,6 @@ export interface CurrentPage {
 }
 
 const AppContext = createContext<ContextType>({
-  categoryType: {} as string,
-  setCategoryType: () => {},
   currentPage: {} as {
     home: boolean;
     search: boolean;
@@ -29,8 +24,10 @@ const AppContext = createContext<ContextType>({
     offers: boolean;
   },
   setCurrentPage: () => {},
-  setCategoryIndex: () => {},
   categoryIndex: {} as number,
+  setCategoryIndex: () => {},
+  ninjaMode: {} as boolean,
+  setNinjaMode: () => {},
 });
 
 interface ContextProviderProps {
@@ -38,7 +35,7 @@ interface ContextProviderProps {
 }
 
 export function ContextProvider({ children }: ContextProviderProps) {
-  const [categoryType, setCategoryType] = useState("");
+  const [ninjaMode, setNinjaMode] = useState(false);
   const [categoryIndex, setCategoryIndex] = useState(-1);
   const [currentPage, setCurrentPage] = useState<CurrentPage>({
     home: true,
@@ -49,12 +46,12 @@ export function ContextProvider({ children }: ContextProviderProps) {
   return (
     <AppContext.Provider
       value={{
-        categoryType,
-        setCategoryType,
         categoryIndex,
         setCategoryIndex,
         currentPage,
         setCurrentPage,
+        ninjaMode,
+        setNinjaMode,
       }}
     >
       {children}

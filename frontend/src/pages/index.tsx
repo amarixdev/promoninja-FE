@@ -27,6 +27,8 @@ import SliderArrows from "../components/SliderArrows";
 import { NavContext } from "../context/navContext";
 import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
 import { BiChevronRight } from "react-icons/bi";
+import { RxHamburgerMenu } from "react-icons/rx";
+import Header from "../components/Header";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -52,20 +54,17 @@ const Home = ({
   const isBreakPoint = useMediaQuery(1023);
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
   const groupedSponsors: GroupedSponsors = {};
-  const { setCategoryIndex, categoryIndex } = NavContext();
+
+  const { setCategoryIndex, categoryIndex, ninjaMode, setNinjaMode } =
+    NavContext();
   const [clickCount, setClickCount] = useState(0);
   const [startTime, setStartTime] = useState(0);
-  const [displayEasterEgg, setDisplayEasterEgg] = useState(false);
-  const [ninjaMode, setNinjaMode] = useState(false);
-  const [displayToast, setDisplayToast] = useState(false);
+
   const [trendingOfferIndex, setTrendingOfferIndex] = useState("0");
   const [ninjaRunningIndex, setNinjaRunningIndex] = useState(0);
-
-  const toast = useToast();
   const sliderRef = useRef<HTMLDivElement>(null);
-  useCarouselSpeed(clickCount, startTime, setDisplayEasterEgg, setNinjaMode);
+  useCarouselSpeed(clickCount, startTime, setNinjaMode);
   const [currDeg, handleRotate] = useRotate(
-    startTime,
     clickCount,
     setClickCount,
     setStartTime
@@ -78,27 +77,6 @@ const Home = ({
     }
     groupedSponsors[firstLetter].push(str);
   });
-
-  const NinjaModeToast = () => {
-    if (isBreakPoint) {
-      toast({
-        title: "Ninja Mode Locked",
-        duration: 1500,
-        isClosable: true,
-        position: "bottom",
-        render: () => (
-          <div
-            className={`z-[99] rounded-md py-6 relative bottom-[100px] bg-[#0f0f0f] shadow-sm shadow-black min-w-[150px] flex justify-center gap-2 items-center`}
-          >
-            <FaLock />
-            <h2 className="font-bold text-base text-[#bebebe]">
-              Ninja Mode Locked
-            </h2>
-          </div>
-        ),
-      });
-    }
-  };
 
   const { activeIndex, setActiveIndex, handleHoverCard } = useHoverCard();
   const [maxIndex, setMaxIndex] = useState(
@@ -130,6 +108,8 @@ const Home = ({
     }
   };
 
+  console.log(ninjaMode);
+
   const NinjaRunning = Array(5).fill(
     <GiRunningNinja size={isBreakPoint ? 40 : 55} />
   );
@@ -141,75 +121,19 @@ const Home = ({
         {
           <div
             className={`w-full flex flex-col bg-gradient-to-b  ${
-              displayEasterEgg && ninjaMode
+              ninjaMode
                 ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
                 : "from-[#151515] via-[#151515] to-[#121212] "
             } relative overflow-x-hidden z-1 mt-10`}
           >
-            {(displayEasterEgg && ninjaMode) || (
+            {ninjaMode || (
               <div
                 className={` from-[#313131] bg-gradient-to-b  absolute top-10   w-full h-[400px] z-0 `}
               ></div>
             )}
-            <div className="flex items-center justify-between w-full relative ">
-              <div
-                className={
-                  "fixed bg-[#121212] p-8 w-full z-[20] flex justify-between"
-                }
-              >
-                <h1
-                  className={`text-3xl sm:text-5xl font-bold text-white `}
-                  onClick={() => {
-                    isBreakPoint ? scrollToTop() : null;
-                  }}
-                >
-                  {displayEasterEgg && ninjaMode ? "Ninja" : "Home"}
-                </h1>
-                {displayEasterEgg ? (
-                  <button
-                    className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer active:scale-95 text-white `}
-                    onClick={() => setNinjaMode((prev) => !prev)}
-                  >
-                    <GiNinjaHead />
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative active:cursor-not-allowed hover:cursor-not-allowed text-[#414141]`}
-                    >
-                      <GiNinjaHead
-                        onClick={() => NinjaModeToast()}
-                        onMouseEnter={() => {
-                          setTimeout(() => {
-                            setDisplayToast(true);
-                          }, 450);
-                        }}
-                        onMouseLeave={() => {
-                          setTimeout(() => {
-                            setDisplayToast(false);
-                          }, 300);
-                        }}
-                      />
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
+            <Header page="Home" />
             <div className="w-full flex flex-col items-start justify-center z-10">
               <div className="w-full mt-20 mb-6 gap-2 flex flex-col items-center justify-center relative ">
-                {isBreakPoint || (
-                  <div
-                    className={`z-[99] rounded-md fixed right-[20px] p-2 transition-all  duration-300 ${
-                      displayToast
-                        ? "top-[105px] opacity-100"
-                        : "top-[-500px] opacity-0"
-                    }  bg-[#0f0f0f] shadow-sm shadow-black px-8 py-4 text-[#bebebe] min-w-[200px] flex items-center gap-2`}
-                  >
-                    <FaLock />
-                    <h2 className="font-bold text-base">Ninja Mode Locked</h2>
-                  </div>
-                )}
-
                 <Image src={LogoText} alt="logo-text" width={225} />
                 <Image
                   src={Logo}
@@ -251,8 +175,8 @@ const Home = ({
                       >
                         <div
                           className={`${
-                            displayEasterEgg && ninjaMode
-                              ? "bg-[#1b1b1b] hover:bg-[#242424] "
+                            ninjaMode
+                              ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828]"
                               : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
                           } hover:cursor-pointer ${
                             activeIndex === index
@@ -363,7 +287,7 @@ const Home = ({
                         >
                           <div
                             className={`${
-                              displayEasterEgg && ninjaMode
+                              ninjaMode
                                 ? "bg-[#1b1b1b] "
                                 : "bg-gradient-to-r from-[#232323] to-[#181818]"
                             }  w-10/12 group flex h-fit p-8 rounded-md justify-start shadow-lg shadow-[black] `}
@@ -456,7 +380,7 @@ const Home = ({
                         >
                           <div
                             className={`${
-                              displayEasterEgg && ninjaMode
+                              ninjaMode
                                 ? "bg-[#1b1b1b] "
                                 : "bg-gradient-to-r from-[#232323] to-[#181818]"
                             }  w-10/12 group flex h-fit p-5 rounded-md justify-start shadow-lg shadow-[black]`}
@@ -513,7 +437,7 @@ const Home = ({
                   )}
                 </>
                 <div className="w-full mt-4 lg:mt-8 flex items-center justify-center">
-                  <div className=" rounded-lg flex gap-6 px-6 bg-[#0b0b0b] shadow-black shadow-lg">
+                  <div className=" rounded-lg flex gap-6 px-6 bg-[#121212] shadow-black shadow-lg">
                     {NinjaRunning.map((ninja, index) => (
                       <div
                         key={index}

@@ -152,8 +152,30 @@
   transform: scale(0.95);
 }
 
-/* .shadow {
-  box-shadow: 8px 0px 10px 5px #151515;
-  z-index: 60;
-  background-color: "#151515";
+.glowingBorder {
+  position: relative;
+  overflow: hidden;
+}
+
+.glowingBorder::before {
+  position: absolute;
+  height: 10px;
+  box-shadow: 0 0 10px 5px rgba(61, 61, 61, 0.8);
+  pointer-events: none;
+  /* animation: glowing-border-animation 5s infinite; */
+}
+
+/* @keyframes glowing-border-animation {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
 } */

@@ -22,11 +22,17 @@ import {
   scrollToTop,
   truncateString,
 } from "../utils/functions";
-import { useMediaQuery, useScrollRestoration, useSetCurrentPage } from "../utils/hooks";
+import {
+  useMediaQuery,
+  useScrollRestoration,
+  useSetCurrentPage,
+} from "../utils/hooks";
 import { PodcastData, SponsorData } from "../utils/types";
 import PromoCodeButton from "../components/PromoCodeButton";
 import BackButton from "../components/BackButton";
 import { useRouter } from "next/router";
+import { NavContext } from "../context/navContext";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 interface Props {
   sponsorData: SponsorData;
@@ -56,7 +62,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
     onClose: onCloseDrawer,
   } = useDisclosure();
   const [banner, setBanner] = useState(false);
-
+  const { ninjaMode } = NavContext();
   const handleScroll = () => {
     const currentScrollPosition = window.pageYOffset;
     let navbarHeight = document.getElementById("banner")?.offsetHeight;
@@ -149,9 +155,26 @@ const SponsorPage = ({ sponsorData }: Props) => {
   return (
     <div className="flex ">
       <Sidebar />
+
       <BackButton sponsorPage={true} />
+
+      {ninjaMode ? (
+        <div
+          className={` from-[#151515] bg-gradient-to-b  absolute w-full h-[400px] z-0 `}
+        ></div>
+      ) : (
+        <div
+          className={` from-[#606060] bg-gradient-to-b  absolute w-full h-[400px] z-0 `}
+        ></div>
+      )}
       {
-        <div className="bg-gradient-to-b from-[#454545] to-[#101010] flex flex-col items-center w-full">
+        <div
+          className={`${
+            ninjaMode
+              ? "bg-gradient-to-b from-[#0c0c0c] to-[#000000] "
+              : "bg-gradient-to-b from-[#454545] to-[#101010] "
+          } flex flex-col items-center w-full`}
+        >
           <DescriptionDrawer
             isOpen={isOpenDrawer}
             onClose={onCloseDrawer}
@@ -222,7 +245,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                   />
                 </div>
                 <div className="flex w-full items-center justify-between">
-                  <h1 className=" base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold ml-6 px-2">
+                  <h1 className="text-[#e6e6e6] relative z-10 base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold ml-6 px-2">
                     {sponsorData?.name}
                   </h1>
                   <div className="pr-2 sm:p-6 base:hidden xs:block ">
@@ -245,7 +268,13 @@ const SponsorPage = ({ sponsorData }: Props) => {
                 </p>
                 <div className="w-[100%] pb-4 border-b-[1px] mb-10"></div>
               </div>
-              <div className="w-full bg-gradient-to-b rounded-lg from-[#2020201d]  to-[#20202091] p-10">
+              <div
+                className={`w-full bg-gradient-to-b rounded-lg ${
+                  ninjaMode
+                    ? "from-[#31313172]  to-[#20202091]"
+                    : "from-[#2020201d]  to-[#20202091]"
+                } p-10`}
+              >
                 <div className="relative">
                   <div className="flex items-center gap-2">
                     <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
@@ -274,7 +303,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                 />
                 <div className="flex flex-col items-start mx-4 p-6 ">
                   <p className="font-bold text-sm relative top-4">Sponsor</p>
-                  <h1 className="font-extrabold text-white text-7xl mt-6">
+                  <h1 className="font-extrabold text-[#dddddd] text-7xl mt-6">
                     {sponsorData?.name}
                   </h1>
                   <p className="text-[#aaaaaa] text-2xl mt-4 font-bold">
@@ -291,7 +320,13 @@ const SponsorPage = ({ sponsorData }: Props) => {
                     </Button>
                   </div>
                   <div className="flex m-4 mt-8">
-                    <div className="w-full bg-gradient-to-b rounded-lg border-red-500 from-[#2020201d]  to-[#20202091] p-10">
+                    <div
+                      className={`w-full bg-gradient-to-b rounded-lg ${
+                        ninjaMode
+                          ? "from-[#31313172]  to-[#20202091]"
+                          : "from-[#2020201d]  to-[#20202091]"
+                      } p-10`}
+                    >
                       <div className="relative">
                         <div className="flex items-center gap-2">
                           <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>

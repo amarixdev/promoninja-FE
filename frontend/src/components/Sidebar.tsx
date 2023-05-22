@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { MdOutlinePodcasts, MdPodcasts } from "react-icons/md";
 import {
+  RiExternalLinkLine,
   RiHome6Fill,
   RiHome6Line,
   RiSearch2Fill,
@@ -16,19 +17,25 @@ import { scrollToTop } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
 import { LinkWrapperProps } from "./Footer";
 import { FaUserNinja } from "react-icons/fa";
+import { IoEllipsisHorizontalSharp } from "react-icons/io5";
+import {
+  Button,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/react";
+import { BiChevronDown } from "react-icons/bi";
 
 interface Props {}
 
 const Sidebar = (props: Props) => {
   let isBreakpoint = useMediaQuery(1023);
-  const { currentPage } = NavContext();
+  const { currentPage, ninjaMode, setNinjaMode } = NavContext();
   const { pathname } = useRouter();
+  const handleOptions = () => {};
 
-  const [hoverPage, setHoverPage] = useState("");
-
-  const handleHover = (title: string) => {
-    setHoverPage(title);
-  };
   const LinkWrapper = ({
     href,
     activeIcon: ActiveIcon,
@@ -52,17 +59,15 @@ const Sidebar = (props: Props) => {
             <Icon
               color={"#e3e3e3ae"}
               size={28}
-              className={`active:scale-95 transition-all ease-in-out duration-300  ${
-                hoverPage === pageTitle ? "fill-white" : null
-              }`}
+              className={`active:scale-95 transition-all ease-in-out duration-150 `}
             />
           )}
           <p
             className={`font-semibold text-sm transition-all ease-in-out  ${
               currentPage[current || "home"]
-                ? "text-[#d6d6d6]"
+                ? "text-[white]"
                 : "text-[#e3e3e3ae]"
-            }${hoverPage === pageTitle ? "text-white" : null}`}
+            }`}
           >
             {pageTitle}
           </p>
@@ -71,32 +76,24 @@ const Sidebar = (props: Props) => {
     }
     return (
       <Link href={href}>
-        <div
-          className="flex items-center gap-3 p-2 rounded-lg"
-          onMouseEnter={() => handleHover(pageTitle)}
-          onMouseLeave={() => handleHover("")}
-        >
+        <div className="flex items-center gap-3 p-2 rounded-lg group">
           {currentPage[current || "home"] ? (
             <ActiveIcon
               size={28}
               color={"white"}
-              className="active:scale-95 "
+              className="active:scale-95  "
             />
           ) : (
             <span className={`hover:fill-[white]`}>
               <Icon
                 color={"#e3e3e3ae"}
                 size={28}
-                className={`active:scale-95 transition-all   ${
-                  hoverPage === pageTitle ? "fill-white" : null
-                }`}
+                className={`active:scale-95 group-hover:fill-white transition-all duration-150`}
               />
             </span>
           )}
           <p
-            className={`font-semibold text-sm ${
-              hoverPage === pageTitle ? "text-white" : "text-[#e3e3e3ae]"
-            }`}
+            className={`font-semibold text-sm group-hover:text-white transition-all duration-150`}
           >
             {pageTitle}
           </p>
@@ -107,7 +104,7 @@ const Sidebar = (props: Props) => {
 
   return (
     <div
-      className={!isBreakpoint ? "min-w-[240px] bg-black z-[100]" : "hidden"}
+      className={!isBreakpoint ? "min-w-[240px] bg-black z-[100] " : "hidden"}
     >
       <div className="fixed">
         {pathname !== "/" ? (
@@ -167,6 +164,69 @@ const Sidebar = (props: Props) => {
             pageTitle="Offers"
             current="offers"
           />
+        </div>
+        <div className="mt-10 px-2">
+          <Menu closeOnSelect={false}>
+            <MenuButton className="p-6 group">
+              <div className="flex gap-2 items-center relative right-2 ">
+                <p className="font-semibold text-sm text-[#e3e3e3ae] group-hover:text-white">
+                  More
+                </p>
+                <BiChevronDown
+                  onClick={handleOptions}
+                  className="fill-[#e3e3e3ae] group-hover:fill-white hover:cursor-pointer"
+                />
+              </div>
+            </MenuButton>
+            <MenuList bg={"whiteAlpha.200"}>
+              <MenuItem
+                bgColor={"transparent"}
+                _hover={{ bgColor: "#222222" }}
+                onClick={() => setNinjaMode((prev) => !prev)}
+              >
+                <p className="text-xs font-semibold text-[#e3e3e3ae]">
+                  {" "}
+                  Ninja Mode:{" "}
+                </p>
+                <span className="text-white text-xs font-bold px-2">
+                  {ninjaMode ? "ON" : "OFF"}
+                </span>
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem
+                bgColor={"transparent"}
+                _hover={{ bgColor: "#222222" }}
+                className="group"
+              >
+                <div className="flex items-center gap-4 ">
+                  <RiExternalLinkLine
+                    color="#e3e3e3ae"
+                    className="group-hover:fill-white transition-all duration-300"
+                  />
+                  <p className="text-xs font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
+                    {" "}
+                    About
+                  </p>
+                </div>
+              </MenuItem>
+              <MenuItem
+                bgColor={"transparent"}
+                _hover={{ bgColor: "#222222" }}
+                className="group"
+              >
+                <div className="flex items-center gap-4 ">
+                  <RiExternalLinkLine
+                    color="#e3e3e3ae"
+                    className="group-hover:fill-white transition-all duration-300"
+                  />
+                  <p className="text-xs font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
+                    {" "}
+                    Support
+                  </p>
+                </div>
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </div>
       </div>
     </div>

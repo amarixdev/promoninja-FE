@@ -79,7 +79,6 @@ export const useLoadingScreen = () => {
 export const useCarouselSpeed = (
   clickCount: number,
   startTime: number,
-  setDisplayEasterEgg: React.Dispatch<React.SetStateAction<boolean>>,
   setNinjaMode: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   useEffect(() => {
@@ -88,7 +87,6 @@ export const useCarouselSpeed = (
       const clickSpeed = clickCount / (elapsedTime / 1000);
 
       if (clickSpeed >= 3 && clickCount > 6) {
-        setDisplayEasterEgg(true);
         setNinjaMode(true);
       }
     }
@@ -100,7 +98,6 @@ type RotateDirection = "next" | "prev";
 export type HandleRotate = (direction: RotateDirection) => void;
 
 export const useRotate = (
-  startTime: number,
   clickCount: number,
   setClickCount: React.Dispatch<React.SetStateAction<number>>,
   setStartTime: React.Dispatch<React.SetStateAction<number>>
