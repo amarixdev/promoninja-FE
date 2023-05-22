@@ -104,14 +104,21 @@ const Home = ({
   const [maxIndex, setMaxIndex] = useState(
     trendingOffersData.length * -100 + 100
   );
-  const ninjaSliderRef = useRef<HTMLDivElement>(null);
+  const trendingOffersSliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMaxIndex(trendingOffersData.length * -100 + 100);
-  }, [trendingOfferIndex, trendingOffersData]);
+  }, [trendingOffersData]);
+
+  useEffect(() => {
+    const translateXValue = `${trendingOfferIndex}%`;
+    if (trendingOffersSliderRef.current) {
+      trendingOffersSliderRef.current.style.transitionDuration = "700ms";
+      trendingOffersSliderRef.current.style.transform = `translateX(${translateXValue})`;
+    }
+  }, [trendingOfferIndex]);
 
   const handleTrendingOfferIndex = () => {
-    // const maxIndex = trendingOffersData.length * -100 + 100;
     if (Number(trendingOfferIndex) !== maxIndex) {
       setTrendingOfferIndex((prev) => (Number(prev) - 100).toString());
       setNinjaRunningIndex((prev) => prev + 1);
@@ -346,7 +353,8 @@ const Home = ({
                 <>
                   {isBreakPoint || (
                     <div
-                      className={`flex w-full transition-all pt-6 duration-700 translate-x-[${trendingOfferIndex}%]`}
+                      ref={trendingOffersSliderRef}
+                      className={`flex w-full pt-6`}
                     >
                       {trendingOffersData.map((offer) => (
                         <div
@@ -418,7 +426,7 @@ const Home = ({
                               </div>
                               <div
                                 className="mt-20 right-6 relative opacity-0 group-hover:opacity-100 h-fit hover:cursor-pointer"
-                                onClick={handleTrendingOfferIndex}
+                                onClick={() => handleTrendingOfferIndex()}
                               >
                                 <BiChevronRight
                                   size={60}
@@ -438,8 +446,8 @@ const Home = ({
                 <>
                   {isBreakPoint && (
                     <div
-                      className={`flex w-full transition-all pt-6 duration-700 translate-x-[${trendingOfferIndex}%]`}
-                      ref={ninjaSliderRef}
+                      className={`flex w-full pt-6`}
+                      ref={trendingOffersSliderRef}
                     >
                       {trendingOffersData.map((offer, index) => (
                         <div

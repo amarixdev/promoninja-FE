@@ -5,19 +5,15 @@ import { useEffect, useRef, useState } from "react";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import { GiNinjaHead } from "react-icons/gi";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
-import DescriptionDrawer from "../../components/DescriptionDrawer";
-import Footer from "../../components/Footer";
-import Sidebar from "../../components/Sidebar";
-import { NavContext } from "../../context/navContext";
-import client from "../../graphql/apollo-client";
-import { Operations } from "../../graphql/operations";
-import {
-  convertToSlug,
-  scrollToTop,
-  truncateString,
-} from "../../utils/functions";
-import useSlider, { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
-import { PodcastData, SponsorCategory, SponsorData } from "../../utils/types";
+import DescriptionDrawer from "../components/DescriptionDrawer";
+import Footer from "../components/Footer";
+import Sidebar from "../components/Sidebar";
+import { NavContext } from "../context/navContext";
+import client from "../graphql/apollo-client";
+import { Operations } from "../graphql/operations";
+import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
+import useSlider, { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
+import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 
 interface OffersProps {
   sponsorsData: SponsorData[];
@@ -224,13 +220,16 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                 setFilteredSponsors(sponsorsData);
                 window.scrollTo({ top: 0 });
               }}
-              className={`${
-                categoryIndex === 0
-                  ? "border-b-2 border-[#cecece]"
-                  : "border-none"
-              } transition-all duration-300 active:scale-95 `}
+              bgColor={categoryIndex === 0 ? "whiteAlpha.300" : ""}
+              className={`transition-all duration-150 active:scale-95 `}
             >
-              All
+              <p
+                className={`text-sm lg:text-base ${
+                  categoryIndex === 0 ? "text-white" : "text-[#cccccc]"
+                } transition-all duration-150`}
+              >
+                All{" "}
+              </p>
             </Button>
 
             {isBreakPoint
@@ -242,13 +241,17 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                     key={index}
                     px={"20"}
                     ref={contextIndex === index ? categoryTabRef : undefined}
-                    className={`${
-                      categoryIndex === index + 1
-                        ? "border-b-2 border-[#cecece]"
-                        : "border-none"
-                    } transition-all duration-300 active:scale-95`}
+                    className={` active:scale-95`}
                   >
-                    <p className="text-sm lg:text-base">{category.name}</p>
+                    <p
+                      className={`text-sm lg:text-base ${
+                        categoryIndex === index + 1
+                          ? "text-white"
+                          : "text-[#cccccc]"
+                      } transition-all duration-150`}
+                    >
+                      {category.name}
+                    </p>
                   </Button>
                 ))
               : /* Desktop */
@@ -258,14 +261,21 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                     onClick={() => filterCategory(category.name, index)}
                     key={index}
                     px={"24"}
+                    bgColor={
+                      categoryIndex === index + 1 ? "whiteAlpha.300" : ""
+                    }
                     ref={contextIndex === index ? categoryTabRef : undefined}
-                    className={`${
-                      categoryIndex === index + 1
-                        ? "border-b-2 border-[#cecece]"
-                        : "border-none"
-                    } transition-all duration-300 active:scale-95`}
+                    className={` transition-all duration-150 active:scale-95`}
                   >
-                    <p className="text-sm lg:text-base">{category.name}</p>
+                    <p
+                      className={`text-sm lg:text-base ${
+                        categoryIndex === index + 1
+                          ? "text-white"
+                          : "text-[#cccccc]"
+                      } transition-all duration-150`}
+                    >
+                      {category.name}
+                    </p>
                   </Button>
                 ))}
           </div>
