@@ -20,12 +20,7 @@ const CategoryList = ({ category }: CategoryProps) => {
   const categoryName = Object.keys(category)[0];
   const podcastData = category[categoryName];
   const isBreakPoint = useMediaQuery(1023);
-  const { setPreviousPage, setCategoryType } = NavContext();
 
-  const handlePreviousPage = () => {
-    setCategoryType(null);
-    setPreviousPage("podcasts");
-  };
   const sliderRef = useRef<HTMLDivElement>(null);
   const slider = sliderRef.current;
 
@@ -73,7 +68,6 @@ const CategoryList = ({ category }: CategoryProps) => {
                       height={110}
                       loading="lazy"
                       className="rounded-xl mt-4 shadow-lg shadow-black max-w-[90px] sm:max-w-[110px]"
-                      onClick={handlePreviousPage}
                     />
 
                     <div className=" min-w-[90px] sm:min-w-[110px] flex flex-col items-start">
@@ -129,7 +123,6 @@ const CategoryList = ({ category }: CategoryProps) => {
                       height={190}
                       loading="lazy"
                       className="rounded-xl mt-4 shadow-lg shadow-black base:w-[90px] xs:w-[110px] sm:w-[170px] "
-                      onClick={handlePreviousPage}
                     />
 
                     <div className="group">

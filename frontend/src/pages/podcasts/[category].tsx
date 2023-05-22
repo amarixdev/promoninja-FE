@@ -20,8 +20,10 @@ import {
   convertToSlug,
   truncateString,
 } from "../../utils/functions";
-import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
+import { useMediaQuery, useScrollRestoration, useSetCurrentPage } from "../../utils/hooks";
 import { PodcastData } from "../../utils/types";
+import BackButton from "../../components/BackButton";
+import { useRouter } from "next/router";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -29,12 +31,13 @@ interface Props {
 }
 
 const category = ({ categoryPodcasts, category: categoryName }: Props) => {
+  const router = useRouter();
+  useScrollRestoration(router);
   const isBreakPoint = useMediaQuery(1023);
   if (categoryName) {
     console.log(categoryName.split("").length);
   }
 
-  const { setPreviousPage, setCategoryType, categoryType } = NavContext();
   useSetCurrentPage({
     home: false,
     podcasts: false,
@@ -42,13 +45,6 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
     offers: false,
   });
   let backdrop: StaticImageData = LogoText;
-
-  useEffect(() => {
-    if (categoryName) {
-      setCategoryType(categoryName);
-    }
-    setPreviousPage("podcasts");
-  }, [categoryName]);
 
   if (categoryName) {
     switch (categoryName) {
@@ -83,6 +79,8 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
       <Sidebar />
       {categoryPodcasts && (
         <div className="h-screen w-full ">
+          <BackButton />
+
           <Image
             src={backdrop}
             alt="comedy"

@@ -148,7 +148,7 @@ const Home = ({
           >
             {(displayEasterEgg && ninjaMode) || (
               <div
-                className={` "to-[#1c1c1c] from-[#545353c9] bg-gradient-to-b  absolute top-10   w-full h-[400px] z-0 `}
+                className={` from-[#313131] bg-gradient-to-b  absolute top-10   w-full h-[400px] z-0 `}
               ></div>
             )}
             <div className="flex items-center justify-between w-full relative ">

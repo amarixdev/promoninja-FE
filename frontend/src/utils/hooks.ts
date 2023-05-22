@@ -37,7 +37,7 @@ export const useMediaQuery = (width: number) => {
   return targetReached;
 };
 
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import { CurrentPage, NavContext } from "../context/navContext";
 
 export const useSetCurrentPage = (currentPage: CurrentPage) => {
@@ -190,4 +190,17 @@ export const useHoverCard = () => {
   };
 
   return { handleHoverCard, setActiveIndex, activeIndex };
+};
+
+export const useScrollRestoration = (router: NextRouter) => {
+  useEffect(() => {
+    const handleRouteChange = () => {
+      window.history.scrollRestoration = "manual";
+    };
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, []);
 };

@@ -22,9 +22,11 @@ import {
   scrollToTop,
   truncateString,
 } from "../utils/functions";
-import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
+import { useMediaQuery, useScrollRestoration, useSetCurrentPage } from "../utils/hooks";
 import { PodcastData, SponsorData } from "../utils/types";
 import PromoCodeButton from "../components/PromoCodeButton";
+import BackButton from "../components/BackButton";
+import { useRouter } from "next/router";
 
 interface Props {
   sponsorData: SponsorData;
@@ -32,6 +34,8 @@ interface Props {
 }
 
 const SponsorPage = ({ sponsorData }: Props) => {
+  const router = useRouter();
+  useScrollRestoration(router);
   const [selectedPodcast, setSelectedPodcast] = useState("");
   const [previousPodcast, setPreviousPodcast] = useState("");
   const isBreakPoint = useMediaQuery(1023);
@@ -145,6 +149,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
   return (
     <div className="flex ">
       <Sidebar />
+      <BackButton sponsorPage={true} />
       {
         <div className="bg-gradient-to-b from-[#454545] to-[#101010] flex flex-col items-center w-full">
           <DescriptionDrawer
@@ -154,6 +159,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
             currentPodcast={selectedPodcast}
             podcastOfferDrawer={true}
           />
+
           {
             <div className={`fixed w-full z-50 lg:ml-[240px]`}>
               {
@@ -201,6 +207,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
             </div>
           }
           {/* Mobile */}
+
           {isBreakPoint ? (
             <div id={"banner"}>
               <div className="flex-col w-full items-center justify-center py-2">
@@ -253,7 +260,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
           ) : (
             /* Desktop */
             <div
-              className="flex-col w-full items-center justify-center z-10 relative"
+              className="flex-col w-full items-center mt-14 justify-center z-10 relative"
               id={"banner"}
             >
               <div className="p-10 flex items-center w-full">

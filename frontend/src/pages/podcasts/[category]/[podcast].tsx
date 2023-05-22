@@ -13,7 +13,6 @@ import { BsPlayCircle, BsShareFill } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
 import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import Footer from "../../../components/Footer";
-import PreviousPage from "../../../components/PreviousPage";
 import PromoCodeButton from "../../../components/PromoCodeButton";
 import Sidebar from "../../../components/Sidebar";
 import { NavContext } from "../../../context/navContext";
@@ -25,8 +24,14 @@ import {
   scrollToTop,
   truncateString,
 } from "../../../utils/functions";
-import { useMediaQuery, useSetCurrentPage } from "../../../utils/hooks";
+import {
+  useMediaQuery,
+  useScrollRestoration,
+  useSetCurrentPage,
+} from "../../../utils/hooks";
 import { OfferData, PodcastData } from "../../../utils/types";
+import BackButton from "../../../components/BackButton";
+import { useRouter } from "next/router";
 
 interface Props {
   podcastData: PodcastData;
@@ -35,15 +40,13 @@ interface Props {
 }
 
 const podcast = ({ podcastData, category }: Props) => {
+  const router = useRouter();
+  useScrollRestoration(router);
   const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
   } = useDisclosure();
-
-  console.log(1, podcastData?.sponsors);
-
-  const { setPreviousPage, categoryType, setCategoryType } = NavContext();
   const [isOpen, setIsOpen] = useState(false);
   const imageSrc = podcastData?.imageUrl;
   const isBreakPoint = useMediaQuery(1023);
@@ -97,14 +100,6 @@ const podcast = ({ podcastData, category }: Props) => {
     search: false,
     offers: false,
   });
-  useEffect(() => {
-    setCategoryType(category);
-    if (categoryType !== null) {
-      setPreviousPage("category");
-    } else {
-      setPreviousPage("podcasts");
-    }
-  }, [category]);
 
   if (!podcastData?.sponsors) {
     existingSponsor = false;
@@ -196,7 +191,8 @@ const podcast = ({ podcastData, category }: Props) => {
     <div className={`${isBreakPoint ? "flex flex-col" : "flex "}`}>
       <Sidebar />
       <div className="flex-col w-full overflow-hidden ">
-        <PreviousPage />
+        <BackButton />
+
         {
           <div className="flex flex-col items-center relative h-[50vh] w-full">
             <DescriptionDrawer

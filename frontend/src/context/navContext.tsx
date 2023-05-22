@@ -1,8 +1,6 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
 interface ContextType {
-  previousPage: string;
-  setPreviousPage: React.Dispatch<React.SetStateAction<string>>;
   categoryType: string;
   setCategoryType: React.Dispatch<
     React.SetStateAction<string | undefined | any>
@@ -22,8 +20,6 @@ export interface CurrentPage {
 }
 
 const AppContext = createContext<ContextType>({
-  previousPage: {} as string,
-  setPreviousPage: () => {},
   categoryType: {} as string,
   setCategoryType: () => {},
   currentPage: {} as {
@@ -42,7 +38,6 @@ interface ContextProviderProps {
 }
 
 export function ContextProvider({ children }: ContextProviderProps) {
-  const [previousPage, setPreviousPage] = useState("category");
   const [categoryType, setCategoryType] = useState("");
   const [categoryIndex, setCategoryIndex] = useState(-1);
   const [currentPage, setCurrentPage] = useState<CurrentPage>({
@@ -54,8 +49,6 @@ export function ContextProvider({ children }: ContextProviderProps) {
   return (
     <AppContext.Provider
       value={{
-        previousPage,
-        setPreviousPage,
         categoryType,
         setCategoryType,
         categoryIndex,
