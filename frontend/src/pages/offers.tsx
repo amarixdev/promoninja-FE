@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-import { GiNinjaHead } from "react-icons/gi";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
 import DescriptionDrawer from "../components/DescriptionDrawer";
 import Footer from "../components/Footer";
@@ -11,10 +10,13 @@ import Sidebar from "../components/Sidebar";
 import { NavContext } from "../context/navContext";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
-import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
-import useSlider, { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
+import { convertToSlug, truncateString } from "../utils/functions";
+import useSlider, {
+  useBanner,
+  useMediaQuery,
+  useSetCurrentPage,
+} from "../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
-import { RxHamburgerMenu } from "react-icons/rx";
 import Header from "../components/Header";
 
 interface OffersProps {
@@ -33,11 +35,17 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
     search: false,
     offers: true,
   });
-  const { categoryIndex: contextIndex, ninjaMode, setNinjaMode } = NavContext();
+  const bannerBreakpointRef = useRef<HTMLDivElement>(null);
+  const { banner: displayCategory } = useBanner(bannerBreakpointRef, 160);
+  const { banner: hideTitle } = useBanner(bannerBreakpointRef, 165);
+  useEffect(() => {
+    if (displayCategory) {
+      setHideCategory(false);
+    }
+  }, [displayCategory]);
 
-  const handleNinja = () => {
-    console.log(ninjaMode);
-  };
+  const [hideCategory, setHideCategory] = useState(false);
+  const { categoryIndex: contextIndex, ninjaMode } = NavContext();
 
   const [sponsorPodcastArray, setSponsorPodcastArray] =
     useState<PodcastData[]>();
@@ -56,7 +64,7 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
   const [selectedPodcast, setSelectedPodcast] = useState("");
   const [sponsorDrawer, setSponsorDrawer] = useState(false);
   const [podcastOfferDrawer, setPodcastOfferDrawer] = useState(true);
-
+  const [pageTitle, setPageTitle] = useState("Offers");
   const [drawerData, setDrawerData] = useState({
     image: "",
     title: "",
@@ -70,7 +78,6 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
 
   const [categoryIndex, setCategoryIndex] = useState(0);
   const categoryTabRef = useRef<HTMLButtonElement>(null);
-  const categoryTab = categoryTabRef.current;
 
   useEffect(() => {
     if (contextIndex === -1) {
@@ -149,6 +156,8 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
   const [currentCategory, setCurrentCategory] = useState("");
 
   const filterCategory = (category: string, index: number) => {
+    setPageTitle("Offers");
+    setHideCategory(true);
     window.scrollTo({ top: 0 });
     setCategoryIndex(index + 1);
     setCurrentCategory(category);
@@ -160,7 +169,7 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const { slideTopPicks, showLeftArrow, showRightArrow } = useSlider(
     sliderRef.current,
-    850
+    600
   );
 
   return (
@@ -182,43 +191,21 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
             : "from-[#151515] via-[#151515] to-[#121212]"
         }`}
       >
-        {ninjaMode ? (
-          <div
-            className={` from-[#222222] bg-gradient-to-b absolute top-10 w-full h-[300px] z-0 `}
-          ></div>
-        ) : (
-          <div
-            className={` from-[#313131] bg-gradient-to-b absolute top-10 w-full h-[400px] z-0 `}
-          ></div>
-        )}
+        <div
+          className={`absolute top-10 w-full z-0 ${
+            ninjaMode
+              ? "from-[#222222] bg-gradient-to-b h-[400px]"
+              : "from-[#313131] bg-gradient-to-b h-[400px]"
+          }`}
+        ></div>
 
-        <Header page="Offers" />
-        {/* <div
-          className={
-            "fixed bg-[#121212] pb-8 pt-4 px-8 top-0 w-full z-[200] flex justify-between items-center"
-          }
-        >
-          {isBreakPoint && <RxHamburgerMenu size={20} />}
-          <h1
-            className={`text-3xl sm:text-5xl font-bold text-white `}
-            onClick={() => {
-              isBreakPoint ? scrollToTop() : null;
-            }}
-          >
-            {"Offers"}
-          </h1>
-          {
-            <button
-              className={`text-3xl sm:text-5xl lg:right-[300px] font-bold relative hover:cursor-pointer active:scale-95 text-white `}
-              onClick={() => {
-                setNinjaMode((prev) => !prev);
-                console.log("clicked");
-              }}
-            >
-              <GiNinjaHead />
-            </button>
-          }
-        </div> */}
+        <Header
+          page={pageTitle}
+          category={currentCategory}
+          displayCategory={displayCategory}
+          hideTitle={hideTitle}
+          hideCategory={hideCategory}
+        />
         <div
           className="fixed mt-4 lg:mt-0  scrollbar-hide lg:top-24 top-20 bg-[#151515] z-[100] overflow-x-scroll scroll-smooth w-full lg:w-[85%] flex pt-5 lg:pt-0 items-center"
           ref={sliderRef}
@@ -245,6 +232,8 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
               onClick={() => {
                 setCategoryIndex(0);
                 setCurrentCategory("All Offers");
+                setPageTitle("Offers");
+                setHideCategory(true);
                 setFilteredSponsors(sponsorsData);
                 window.scrollTo({ top: 0 });
               }}
@@ -331,8 +320,11 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
         <>
           {isBreakPoint && (
             <div className="mt-24">
-              <div className="pt-10 px-5 ">
-                <p className=" w-full text-3xl font-extrabold flex justify-center pb-14 relative z-10">
+              <div className="pt-10 px-5">
+                <p
+                  ref={bannerBreakpointRef}
+                  className="w-full text-3xl font-extrabold flex justify-center mb-14 relative z-10"
+                >
                   {currentCategory}
                 </p>
                 {(filteredSponsors.length
@@ -350,14 +342,14 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
                     <div className="flex w-full">
                       <div className="flex flex-col min-w-full ">
                         <div className="flex-col flex w-full ">
-                          <div className="flex flex-col items-center ">
+                          <div className="flex flex-col items-center  ">
                             <Image
                               src={sponsor.imageUrl}
-                              width={120}
-                              height={120}
+                              width={150}
+                              height={150}
                               alt={sponsor.name}
                               priority
-                              className={` max-h-[150px] max-w-[150px] rounded-lg shadow-xl shadow-black`}
+                              className={` h-[150px] max-w-[150px] rounded-lg shadow-xl shadow-black`}
                             />
                             <div className="flex ml-4 flex-col rounded-sm">
                               <div className="p-4">
@@ -518,7 +510,10 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
           {isBreakPoint || (
             <div className="mt-24">
               <div className="pt-14 px-10">
-                <p className=" w-full text-3xl font-extrabold flex justify-center pb-14 relative z-10">
+                <p
+                  ref={bannerBreakpointRef}
+                  className="w-full text-3xl font-extrabold flex justify-center mb-14 relative z-10"
+                >
                   {currentCategory}
                 </p>
                 {(filteredSponsors.length

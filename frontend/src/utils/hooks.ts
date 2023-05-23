@@ -1,4 +1,5 @@
 import {
+  RefObject,
   SetStateAction,
   useCallback,
   useEffect,
@@ -200,4 +201,29 @@ export const useScrollRestoration = (router: NextRouter) => {
       router.events.off("routeChangeStart", handleRouteChange);
     };
   }, []);
+};
+
+export const useBanner = (
+  bannerBreakpointRef: RefObject<HTMLDivElement>,
+  breakpoint: number
+) => {
+  const [banner, setBanner] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (bannerBreakpointRef.current) {
+        const elementRect = bannerBreakpointRef.current.getBoundingClientRect();
+        const isPastElement = elementRect.bottom <= breakpoint;
+        setBanner(isPastElement);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [banner]);
+
+  return { banner };
 };

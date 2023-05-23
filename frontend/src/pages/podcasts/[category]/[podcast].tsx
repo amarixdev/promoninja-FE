@@ -8,14 +8,15 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 import { BsPlayCircle, BsShareFill } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
+import BackButton from "../../../components/BackButton";
 import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import Footer from "../../../components/Footer";
 import PromoCodeButton from "../../../components/PromoCodeButton";
 import Sidebar from "../../../components/Sidebar";
-import { NavContext } from "../../../context/navContext";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
 import {
@@ -25,13 +26,12 @@ import {
   truncateString,
 } from "../../../utils/functions";
 import {
+  useBanner,
   useMediaQuery,
   useScrollRestoration,
   useSetCurrentPage,
 } from "../../../utils/hooks";
 import { OfferData, PodcastData } from "../../../utils/types";
-import BackButton from "../../../components/BackButton";
-import { useRouter } from "next/router";
 
 interface Props {
   podcastData: PodcastData;
@@ -63,34 +63,8 @@ const podcast = ({ podcastData, category }: Props) => {
     category: "",
   });
 
-  const [banner, setBanner] = useState(false);
-
-  const handleScroll = () => {
-    const currentScrollPosition = window.pageYOffset;
-    let navbarHeight = document.getElementById("banner")?.offsetHeight;
-
-    if (navbarHeight && !isBreakPoint) {
-      navbarHeight -= 230;
-    }
-
-    if (navbarHeight && isBreakPoint) {
-      navbarHeight -= 100;
-    }
-
-    if (currentScrollPosition > navbarHeight!) {
-      setBanner(true);
-    } else {
-      setBanner(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [banner]);
+  const bannerBreakpointRef = useRef<HTMLDivElement>(null);
+  const { banner } = useBanner(bannerBreakpointRef, 0);
 
   let existingSponsor: boolean = true;
   const [selectedSponsor, setSelectedSponsor] = useState("");
@@ -248,7 +222,6 @@ const podcast = ({ podcastData, category }: Props) => {
             <div
               className={`items-center w-full h-full flex justify-center`}
               style={gradientStyle}
-              // id="banner"
             >
               <div
                 className="flex flex-col justify-center items-center w-full relative top-[60px] lg:mt-12"
@@ -266,7 +239,10 @@ const podcast = ({ podcastData, category }: Props) => {
                   <h1 className=" base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold ml-6 px-2">
                     {podcastData?.title}
                   </h1>
-                  <h2 className="base:text-md font-medium xs:text-lg ml-6 mb-4 text-[#aaaaaa] p-2">
+                  <h2
+                    ref={bannerBreakpointRef}
+                    className="base:text-md font-medium xs:text-lg ml-6 mb-4 text-[#aaaaaa] p-2"
+                  >
                     {podcastData?.publisher}{" "}
                   </h2>
                   {isBreakPoint || (
@@ -382,7 +358,7 @@ const podcast = ({ podcastData, category }: Props) => {
                       height={40}
                       priority
                       alt={offer.sponsor}
-                      className="base:min-w-[40px] xs:min-w-[50px] xs:p-0 shadow-md shadow-black rounded-md"
+                      className="base:min-w-[40px] xs:min-w-[50px] base:min-h-[40px] xs:min-h-[50px] xs:p-0 shadow-md shadow-black rounded-md"
                     />
 
                     <div className="w-full justify-between flex items-center">
@@ -422,7 +398,7 @@ const podcast = ({ podcastData, category }: Props) => {
                                 height={80}
                                 priority
                                 alt={offer.sponsor}
-                                className="rounded-md shadow-md shadow-black"
+                                className="rounded-md w-[80px] h-[80px] shadow-md shadow-black"
                               />
                             </Link>
 

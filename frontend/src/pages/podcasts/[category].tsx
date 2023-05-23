@@ -1,6 +1,11 @@
 import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
+import BackButton from "../../components/BackButton";
 import Footer from "../../components/Footer";
+import Sidebar from "../../components/Sidebar";
+import { NavContext } from "../../context/navContext";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
 import Comedy from "../../public/assets/comedy2.avif";
@@ -11,23 +16,19 @@ import News from "../../public/assets/news.avif";
 import Society from "../../public/assets/society.avif";
 import Sports from "../../public/assets/sports.avif";
 import Technology from "../../public/assets/technology.avif";
-import style from "../../../styles/style.module.css";
-import Link from "next/link";
-import Sidebar from "../../components/Sidebar";
-import { NavContext } from "../../context/navContext";
 import {
   capitalizeString,
   convertToSlug,
+  scrollToTop,
   truncateString,
 } from "../../utils/functions";
 import {
+  useBanner,
   useMediaQuery,
   useScrollRestoration,
   useSetCurrentPage,
 } from "../../utils/hooks";
 import { PodcastData } from "../../utils/types";
-import BackButton from "../../components/BackButton";
-import { useRouter } from "next/router";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -51,7 +52,8 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   });
   let backdrop: StaticImageData = LogoText;
   const backdropRef = useRef<HTMLImageElement>(null);
-  const backgroundRef = useRef<HTMLDivElement>(null);
+  const bannerBreakpointRef = useRef<HTMLDivElement>(null);
+  const { banner } = useBanner(bannerBreakpointRef, 0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,18 +68,10 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
           const opacity = Math.max(1 - scrollPosition * 0.8, 0);
           backdropRef.current.style.opacity = opacity.toString();
         }
-
-        // Apply blur effect on scroll up
       }
     };
 
-    const handleWheel = () => {
-      if (backdropRef.current) {
-        console.log(0);
-      }
-    };
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("wheel", handleWheel);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -115,6 +109,28 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   return (
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0 bg-black h-full">
       <Sidebar />
+      <div className={`fixed w-full z-50 lg:ml-[240px]`}>
+        {
+          <div
+            className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 z-50 ${
+              banner && `bottom-0 `
+            } `}
+          >
+            <div
+              className="flex items-center p-4 sm:p-6 hover:cursor-pointer"
+              onClick={() => scrollToTop()}
+            >
+              <h1
+                className={`font-extrabold relative bottom-[500px] text-3xl sm:text-5xl transition-all duration-300 ${
+                  banner && "bottom-0"
+                } `}
+              >
+                {capitalizeString(categoryName)}
+              </h1>
+            </div>
+          </div>
+        }
+      </div>
       {categoryPodcasts && (
         <div className="h-screen w-full ">
           <BackButton />
@@ -130,7 +146,10 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
           />
           <div className="w-full h-screen bg-gradient-to-tr bg-black/10 from-black/40 fixed"></div>
           <div className="h-full flex flex-col mt-[140px] sm:mt-[200px] md:mt-[260px] lg:mt-[320px] gap-14">
-            <h1 className="relative z-50 base:text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-extrabold pl-4">
+            <h1
+              ref={bannerBreakpointRef}
+              className="relative z-50 base:text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-extrabold pl-4"
+            >
               {capitalizeString(categoryName)}
             </h1>
 

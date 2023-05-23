@@ -7,12 +7,16 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 import { BsShareFill } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
+import BackButton from "../components/BackButton";
 import DescriptionDrawer from "../components/DescriptionDrawer";
 import Footer from "../components/Footer";
+import PromoCodeButton from "../components/PromoCodeButton";
 import Sidebar from "../components/Sidebar";
+import { NavContext } from "../context/navContext";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import Ninja4 from "../public/assets/ninja4.png";
@@ -23,16 +27,12 @@ import {
   truncateString,
 } from "../utils/functions";
 import {
+  useBanner,
   useMediaQuery,
   useScrollRestoration,
   useSetCurrentPage,
 } from "../utils/hooks";
 import { PodcastData, SponsorData } from "../utils/types";
-import PromoCodeButton from "../components/PromoCodeButton";
-import BackButton from "../components/BackButton";
-import { useRouter } from "next/router";
-import { NavContext } from "../context/navContext";
-import { RxHamburgerMenu } from "react-icons/rx";
 
 interface Props {
   sponsorData: SponsorData;
@@ -61,35 +61,10 @@ const SponsorPage = ({ sponsorData }: Props) => {
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
   } = useDisclosure();
-  const [banner, setBanner] = useState(false);
   const { ninjaMode } = NavContext();
-  const handleScroll = () => {
-    const currentScrollPosition = window.pageYOffset;
-    let navbarHeight = document.getElementById("banner")?.offsetHeight;
+  const bannerBreakpointRef = useRef<HTMLDivElement>(null);
+  const { banner } = useBanner(bannerBreakpointRef, 0);
 
-    if (navbarHeight && !isBreakPoint) {
-      navbarHeight -= 300;
-    }
-
-    if (navbarHeight && isBreakPoint) {
-      navbarHeight -= 100;
-    }
-
-    if (currentScrollPosition > navbarHeight!) {
-      setBanner(true);
-      console.log("banner");
-    } else {
-      setBanner(false);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [banner]);
   const [isOpen, setIsOpen] = useState(false);
   const [drawerData, setDrawerData] = useState({
     image: "",
@@ -241,7 +216,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                     height={150}
                     priority
                     alt={sponsorData?.name}
-                    className="shadow-xl shadow-black z-10 relative base:w-[150px] xs:w-[180px] sm:w-[220px]"
+                    className="shadow-xl shadow-black z-10 relative base:w-[150px] xs:w-[180px] sm:w-[220px] base:h-[150px] xs:h-[180px] sm:h-[220px]"
                   />
                 </div>
                 <div className="flex w-full items-center justify-between">
@@ -280,7 +255,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                     <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
                     <p className="text-xl font-semibold"> Exclusive Offer:</p>
                   </div>
-                  <div className="px-4 py-2">
+                  <div ref={bannerBreakpointRef} className="px-4 py-2">
                     <p className={`font-thin text-lg`}>{sponsorData?.offer}</p>
                   </div>
                 </div>
@@ -299,7 +274,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                   height={230}
                   priority
                   alt={sponsorData?.name}
-                  className="shadow-xl shadow-black relative rounded-md "
+                  className="shadow-xl shadow-black relative rounded-md w-[230px] h-[230px]"
                 />
                 <div className="flex flex-col items-start mx-4 p-6 ">
                   <p className="font-bold text-sm relative top-4">Sponsor</p>
@@ -332,7 +307,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                           <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
                           <p className="text-xl font-bold"> Exclusive Offer:</p>
                         </div>
-                        <div className="px-4 py-2">
+                        <div ref={bannerBreakpointRef} className="px-4 py-2">
                           <p className={` font-normal text-xl text-[#aaaaaa]`}>
                             {sponsorData?.offer}
                           </p>

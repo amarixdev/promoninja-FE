@@ -232,7 +232,7 @@ const Search = () => {
                               width={100}
                               height={100}
                               alt={sponsor.name}
-                              className="shadow-black base:max-w-[70px]  shadow-2xl xs:min-w-[90px] sm:min-w-[100px] rounded-lg"
+                              className=" shadow-2xl shadow-black base:max-w-[70px] xs:min-w-[90px] sm:min-w-[100px] base:max-h-[70px] xs:min-h-[90px] sm:min-h-[100px] rounded-lg"
                             />
                           </div>
                           <div className="flex flex-col p-4 ">

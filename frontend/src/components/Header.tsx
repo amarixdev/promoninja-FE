@@ -87,7 +87,21 @@ export const OptionsDrawer = ({
   );
 };
 
-const Header = ({ page }: { page: string }) => {
+interface HeaderProps {
+  page: string;
+  category?: string;
+  displayCategory?: boolean;
+  hideTitle?: boolean;
+  hideCategory?: boolean;
+}
+
+const Header = ({
+  page,
+  category,
+  hideTitle,
+  displayCategory,
+  hideCategory,
+}: HeaderProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { setNinjaMode } = NavContext();
   const isBreakPoint = useMediaQuery(1023);
@@ -96,18 +110,25 @@ const Header = ({ page }: { page: string }) => {
       <OptionsDrawer isOpen={isOpen} onClose={onClose} />
       <div
         className={
-          "fixed bg-[#121212] p-8 w-full z-[20] flex justify-between items-center"
+          "fixed bg-[#121212] p-8 py-10 w-full z-[20] flex justify-between items-center"
         }
       >
         {isBreakPoint && <RxHamburgerMenu size={20} onClick={() => onOpen()} />}
         <h1
-          className={`text-3xl sm:text-5xl font-bold text-white `}
+          className={`${
+            hideTitle && !displayCategory ? "opacity-0" : "opacity-100"
+          } transition-all ease-in-out duration-[400ms] ${
+            (hideTitle && displayCategory) || (!hideTitle && displayCategory)
+              ? "text-xl sm:text-4xl"
+              : "text-2xl"
+          }  sm:text-5xl font-bold text-white `}
           onClick={() => {
             isBreakPoint ? scrollToTop() : null;
           }}
         >
-          {page}
+          {hideCategory || !displayCategory ? page : category}
         </h1>
+
         {
           <button
             className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer active:scale-95 text-white `}

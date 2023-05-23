@@ -1,9 +1,9 @@
-import { Button, useToast } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
-import { GiNinjaHead, GiRunningNinja } from "react-icons/gi";
+import { GiRunningNinja } from "react-icons/gi";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
 import client from "../graphql/apollo-client";
@@ -20,15 +20,13 @@ import {
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 
 import Link from "next/link";
-import { FaLock } from "react-icons/fa";
+import { BiChevronRight } from "react-icons/bi";
 import AnimatedLink from "../components/AnimatedLink";
 import Carousel from "../components/Carousel";
+import Header from "../components/Header";
 import SliderArrows from "../components/SliderArrows";
 import { NavContext } from "../context/navContext";
-import { convertToSlug, scrollToTop, truncateString } from "../utils/functions";
-import { BiChevronRight } from "react-icons/bi";
-import { RxHamburgerMenu } from "react-icons/rx";
-import Header from "../components/Header";
+import { convertToSlug, truncateString } from "../utils/functions";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -107,8 +105,6 @@ const Home = ({
       setNinjaRunningIndex(0);
     }
   };
-
-  console.log(ninjaMode);
 
   const NinjaRunning = Array(5).fill(
     <GiRunningNinja size={isBreakPoint ? 40 : 55} />
