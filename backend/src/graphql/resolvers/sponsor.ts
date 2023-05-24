@@ -254,6 +254,9 @@ export const productResolvers = {
           },
           sponsorCategory: true,
         },
+        orderBy: {
+          name: "asc",
+        },
       });
       console.log(sponsors[0].sponsorCategory[0].name);
       return sponsors;
@@ -278,6 +281,9 @@ export const productResolvers = {
           podcast: {
             include: {
               category: true,
+            },
+            orderBy: {
+              title: "asc",
             },
           },
         },

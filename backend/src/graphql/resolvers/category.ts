@@ -165,7 +165,13 @@ export const categoryResolvers = {
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      const categories = await prisma.category.findMany();
+      const categories = await prisma.category.findMany({
+        orderBy: {
+          podcast: {
+            _count: "desc",
+          },
+        },
+      });
       return categories;
     },
   },
