@@ -4,6 +4,8 @@ import style from "../../styles/style.module.css";
 import { SponsorCategory } from "../utils/types";
 import { convertToSlug } from "../utils/functions";
 import { HandleRotate } from "../utils/hooks";
+import { useLazyQuery } from "@apollo/client";
+import { Operations } from "../graphql/operations";
 
 interface Props {
   handleRotate: HandleRotate;

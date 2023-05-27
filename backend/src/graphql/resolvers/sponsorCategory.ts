@@ -66,8 +66,8 @@ export const sponsorCategory = {
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      const { category } = input;
-
+      const { category, pageSize, offset } = input;
+      console.log("offset", offset, "pageSize", pageSize);
       const getCategoryId = await prisma.sponsorCategory.findFirst({
         where: {
           name: {
@@ -83,8 +83,13 @@ export const sponsorCategory = {
             equals: getCategoryId?.id,
           },
         },
-      });
+        skip: offset,
+        take: pageSize,
 
+        orderBy: {
+          name: "asc",
+        },
+      });
       return result;
     },
   },

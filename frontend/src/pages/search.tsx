@@ -79,8 +79,13 @@ const Search = () => {
     }
 
     if (sponsorFilter) {
-      const { data: sponsorsData }: { data: SponsorQuery } =
-        await getSponsors();
+      const { data: sponsorsData }: { data: SponsorQuery } = await getSponsors({
+        variables: {
+          input: {
+            offerPage: false,
+          },
+        },
+      });
       const sponsorList = sponsorsData?.getSponsors;
       const fuse = new Fuse(sponsorList, {
         keys: ["name"],
@@ -117,8 +122,13 @@ const Search = () => {
       setSponsorFilter((prev) => !prev);
       setPodcastFilter(false);
 
-      const { data: sponsorsData }: { data: SponsorQuery } =
-        await getSponsors();
+      const { data: sponsorsData }: { data: SponsorQuery } = await getSponsors({
+        variables: {
+          input: {
+            offerPage: false,
+          },
+        },
+      });
       const sponsorList = sponsorsData?.getSponsors;
       const fuse = new Fuse(sponsorList, {
         keys: ["name"],

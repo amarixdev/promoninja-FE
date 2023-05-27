@@ -6,7 +6,7 @@ const typeDefs = gql`
     getPodcast(input: PodcastInput!): Podcast
     getPodcastCategory(input: PodcastInput!): Category
     getPodcastSponsors(input: PodcastInput!): [Sponsor]
-    getSponsors: [Sponsor]
+    getSponsors(input: Pagination): [Sponsor]
     getSponsor(input: SponsorInput!): Sponsor
     getSponsorCategories: [SponsorCategory]
     getSponsorCategory(input: SponsorCategoryInput!): SponsorCategory
@@ -20,6 +20,7 @@ const typeDefs = gql`
     fetchSponsors(input: PodcastInput!): [Sponsor]
     fetchSpotifyPodcast(input: SpotifyAPI!): [Items]
     fetchCategoryPodcasts(input: PodcastInput!): [Podcast]
+    getSponsorsCount(input: CountInput!): Int
   }
 
   type Mutation {
@@ -140,6 +141,8 @@ const typeDefs = gql`
   input SponsorCategoryInput {
     sponsor: String
     category: String
+    offset: Int
+    pageSize: Int
   }
 
   input UpdateCategoryInput {
@@ -147,6 +150,16 @@ const typeDefs = gql`
     newCategory: String!
     podcastTitle: String
     sponsorName: String
+  }
+
+  input Pagination {
+    offset: Int
+    pageSize: Int
+    offerPage: Boolean
+  }
+  input CountInput {
+    category: String
+    isCategory: Boolean
   }
 
   type SponsorCategory {

@@ -42,32 +42,21 @@ export const Operations = {
       }
     `,
     GetSponsors: gql`
-      query {
-        getSponsors {
+      query ($input: Pagination) {
+        getSponsors(input: $input) {
           sponsorCategory {
             name
           }
           name
           imageUrl
-          url
           summary
           offer
-          podcast {
-            offer {
-              sponsor
-              promoCode
-              url
-            }
-            category {
-              name
-            }
-            title
-            imageUrl
-            publisher
-            description
-            backgroundColor
-          }
         }
+      }
+    `,
+    GetSponsorsCount: gql`
+      query ($input: CountInput!) {
+        getSponsorsCount(input: $input)
       }
     `,
     GetSponsor: gql`
@@ -92,6 +81,25 @@ export const Operations = {
             publisher
             description
             backgroundColor
+          }
+        }
+      }
+    `,
+    GetSponsorPodcasts: gql`
+      query ($input: SponsorInput!) {
+        getSponsorPodcasts(input: $input) {
+          title
+          imageUrl
+          publisher
+          description
+          backgroundColor
+          offer {
+            sponsor
+            promoCode
+            url
+          }
+          category {
+            name
           }
         }
       }
@@ -176,7 +184,19 @@ export const Operations = {
         }
       }
     `,
+    GetCategorySponsors: gql`
+      query ($input: SponsorCategoryInput!) {
+        getCategorySponsors(input: $input) {
+          name
+          imageUrl
+          url
+          summary
+          offer
+        }
+      }
+    `,
   },
+
   Mutations: {
     CreatePodcast: gql`
       mutation ($input: PodcastInput!) {

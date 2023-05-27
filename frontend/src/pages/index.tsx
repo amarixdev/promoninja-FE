@@ -632,6 +632,13 @@ export const getStaticProps: GetStaticProps = async () => {
 
   let { data: sponsorsData } = await client.query({
     query: Operations.Queries.GetSponsors,
+    variables: {
+      input: {
+        offset: 0,
+        pageSize: 100,
+        offerPage: false,
+      },
+    },
   });
 
   let { data: categoryData } = await client.query({

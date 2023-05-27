@@ -1,6 +1,9 @@
+import { prisma } from "@prisma/client";
 import {
+  CountInput,
   DeleteInput,
   GraphQLContext,
+  Pagination,
   PodcastInput,
   SponsorInput,
   TrendingOffersInput,
@@ -217,7 +220,6 @@ export const productResolvers = {
     ) => {
       const { prisma } = context;
       const { podcast } = input;
-
       try {
         const selectedPodcast = await prisma.podcast.findFirst({
           where: {
@@ -238,28 +240,70 @@ export const productResolvers = {
             },
           });
         }
+
         return sponsors;
       } catch (error: any) {
         console.log(error);
       }
     },
-    getSponsors: async (parent: any, args: any, context: GraphQLContext) => {
+    getSponsors: async (
+      parent: any,
+      { input }: Pagination,
+      context: GraphQLContext
+    ) => {
       const { prisma } = context;
-      const sponsors = await prisma.sponsor.findMany({
-        include: {
-          podcast: {
-            include: {
-              category: true,
+      const { offset, pageSize, offerPage } = input;
+      console.log("running");
+      if (!offerPage) {
+        const sponsors = await prisma.sponsor.findMany({
+          select: {
+            name: true,
+            imageUrl: true,
+          },
+        });
+        return sponsors;
+      } else {
+        const sponsors = await prisma.sponsor.findMany({
+          include: {
+            sponsorCategory: true,
+          },
+          orderBy: {
+            name: "asc",
+          },
+          skip: offset,
+          take: pageSize,
+        });
+
+        return sponsors;
+      }
+    },
+    getSponsorsCount: async (
+      parent: any,
+      { input }: CountInput,
+      context: GraphQLContext
+    ) => {
+      const { prisma } = context;
+      const { isCategory, category } = input;
+
+      if (isCategory) {
+        const getCategory = await prisma.sponsorCategory.findFirst({
+          where: {
+            name: category,
+          },
+        });
+
+        const sponsors = await prisma.sponsor.findMany({
+          where: {
+            sponsorCategoryId: {
+              equals: getCategory?.id,
             },
           },
-          sponsorCategory: true,
-        },
-        orderBy: {
-          name: "asc",
-        },
-      });
-      console.log(sponsors[0].sponsorCategory[0].name);
-      return sponsors;
+        });
+
+        return sponsors.length;
+      } else {
+        return await prisma.sponsor.count();
+      }
     },
 
     getSponsor: async (

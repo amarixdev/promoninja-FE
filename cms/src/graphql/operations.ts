@@ -82,8 +82,8 @@ export const Operations = {
       }
     `,
     GetSponsors: gql`
-      query {
-        getSponsors {
+      query ($input: Pagination) {
+        getSponsors(input: $input) {
           name
           url
           imageUrl

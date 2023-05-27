@@ -70,6 +70,8 @@ export interface SponsorCategory {
 export interface SponsorCategoryInput {
   category: string;
   sponsor: string;
+  pageSize: number;
+  offset: number;
 }
 
 export interface UpdateCategoryInput {
@@ -90,5 +92,20 @@ export interface TopPicksInput {
 export interface TrendingOffersInput {
   input: {
     sponsors: string[];
+  };
+}
+
+export interface Pagination {
+  input: {
+    offset: number;
+    pageSize: number;
+    offerPage: boolean;
+  };
+}
+
+export interface CountInput {
+  input: {
+    isCategory: boolean;
+    category: string;
   };
 }

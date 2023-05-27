@@ -192,13 +192,17 @@ const DescriptionDrawer = ({
                     }
                   >
                     {" "}
-                    <Tooltip label="Click off to close" placement="top">
+                    <Tooltip
+                      openDelay={300}
+                      label="Click off to close"
+                      placement="top"
+                    >
                       <div
                         className=" rounded-full  hover:cursor-pointer "
                         onClick={onClose}
                       >
                         {" "}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 px-6 rounded-lg hover:bg-[#c3c3c358] transition duration-300 ease-in-out">
                           <p className="font-bold">Cancel</p>
                         </div>
                       </div>

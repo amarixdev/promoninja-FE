@@ -211,7 +211,6 @@ export const podcastResolvers = {
         if (!podcast) {
           return false;
         }
-        console.log(podcast);
         return podcast;
       } catch (error) {
         console.log(error);
@@ -295,9 +294,8 @@ export const podcastResolvers = {
           category: true,
         },
       });
-      if (isCategoryPage) {
-        return podcasts.sort(() => Math.random() - 0.5).slice(0, 5);
-      } else return podcasts.sort(() => Math.random() - 0.5);
+
+      return podcasts.sort(() => Math.random() - 0.5).slice(0, 3);
     },
     getTopPicks: async (
       parent: any,
@@ -324,7 +322,6 @@ export const podcastResolvers = {
           },
         },
       });
-      console.log("Top picks:", topPicks);
 
       return topPicks.sort(() => Math.random() - 0.5);
     },

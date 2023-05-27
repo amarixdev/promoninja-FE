@@ -57,7 +57,11 @@ const CreateSponsor = ({
     data: sponsorList,
     loading,
     refetch: refetchGetSponsors,
-  } = useQuery(Operations.Queries.GetSponsors);
+  } = useQuery(Operations.Queries.GetSponsors, {
+    variables: {
+      input: { homePage: true },
+    },
+  });
 
   const { onOpen, isOpen, onClose } = useDisclosure();
 
@@ -124,7 +128,6 @@ const CreateSponsor = ({
   }, [sponsorData, isExistingSponsor]);
 
   let fusePreview: string[] | undefined = undefined;
-
   if (sponsorList) {
     const fuse = new Fuse(sponsorList?.getSponsors, {
       keys: ["name"],
