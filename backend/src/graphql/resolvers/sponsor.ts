@@ -259,6 +259,7 @@ export const productResolvers = {
           select: {
             name: true,
             imageUrl: true,
+            url: true,
           },
         });
         return sponsors;

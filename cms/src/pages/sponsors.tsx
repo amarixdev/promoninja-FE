@@ -45,7 +45,13 @@ const Sponsors = () => {
     data,
     refetch: refetchSponsors,
     loading,
-  } = useQuery<SponsorsData>(Operations.Queries.GetSponsors);
+  } = useQuery<SponsorsData>(Operations.Queries.GetSponsors, {
+    variables: {
+      input: {
+        offerPage: false,
+      },
+    },
+  });
   const sponsorsData = data?.getSponsors;
   const [
     getSponsorCategory,
@@ -90,13 +96,12 @@ const Sponsors = () => {
     onOpenEdit();
   };
 
-  console.log(sponsorCategoryData)
+  console.log(sponsorCategoryData);
 
   if (loading) return <Spinner />;
 
   return (
     <div className="w-full h-[80vh] flex-col flex justify-center items-center">
-    
       <div className="w-3/12">
         <Input
           value={searchText}

@@ -59,7 +59,7 @@ const CreateSponsor = ({
     refetch: refetchGetSponsors,
   } = useQuery(Operations.Queries.GetSponsors, {
     variables: {
-      input: { homePage: true },
+      input: { offerPage: false },
     },
   });
 
