@@ -130,17 +130,22 @@ const Home = ({
             <Header page="Home" />
             <div className="w-full flex flex-col items-start justify-center z-10">
               <div className="w-full mt-20 mb-6 gap-2 flex flex-col items-center justify-center relative ">
-                <Image src={LogoText} alt="logo-text" width={225} />
+                <Image
+                  src={LogoText}
+                  alt="logo-text"
+                  width={225}
+                  className="w-[180px] xs:w-[200px] lg:w-[225px]"
+                />
                 <Image
                   src={Logo}
                   width={120}
                   alt="logo"
-                  className="mx-2 w-[100px] lg:w-[120px]"
+                  className="mx-2 w-[80px] xs:w-[100px] lg:w-[120px]"
                 />
               </div>
               <div className="w-full flex items-center justify-center">
                 <div className="flex w-full sm:w-[60%] md:w-[50%] items-center justify-center px-6 pb-10 lg:pb-14">
-                  <p className="text-center  font-light text-md sm:text-lg lg:text-xl text-[#909090] tracking-widest italic">
+                  <p className="text-center  font-light text-sm xs:text-base sm:text-lg lg:text-xl text-[#909090] tracking-widest italic">
                     "<span className="font-bold">Save money</span> and{" "}
                     <span className="font-semibold">give back</span> to your
                     favorite creators when you shop with PromoNinja verified
@@ -182,7 +187,7 @@ const Home = ({
                             activeIndex === index
                               ? " scale-125 transition-all duration-300 relative z-20"
                               : "scale-100 transition-all duration-300 "
-                          } relative flex flex-col items-center min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
+                          } relative flex flex-col items-center min-w-[160px] xs:min-w-[180px] sm:min-w-[200px] md:min-w-[220px] lg:min-w-[220px] h-[228px] xs:h-[255px] sm:h-[283px] lg:h-[300px] rounded-lg mx-3`}
                           key={podcast.title}
                           onMouseOver={() =>
                             handleHoverCard(index, "mouseenter")
@@ -205,7 +210,7 @@ const Home = ({
                           />
                           <div>
                             <h1
-                              className={`text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-[#dadada] group-hover:text-white whitespace-nowrap`}
+                              className={`text-xs xs:text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-[#dadada] group-hover:text-white whitespace-nowrap`}
                             >
                               {!isBreakPoint
                                 ? truncateString(podcast.title, 20)
@@ -349,12 +354,12 @@ const Home = ({
                                 </div>
                               </div>
                               <div
-                                className="mt-20 right-6 relative opacity-0 group-hover:opacity-100 h-fit hover:cursor-pointer"
+                                className="mt-20 right-6 relative opacity-0 transition-all duration-150  group-hover:opacity-100 h-fit hover:cursor-pointer"
                                 onClick={() => handleTrendingOfferIndex()}
                               >
                                 <BiChevronRight
                                   size={60}
-                                  className="hover:fill-white fill-[#aaaaaa]"
+                                  className="hover:fill-white fill-[#aaaaaa] transition-all duration-150 "
                                 />
                               </div>
                             </div>
@@ -401,12 +406,12 @@ const Home = ({
                                       <div className="p-6">
                                         <div className="flex flex-col items-center gap-2">
                                           <h1
-                                            className={`text-[#ebebeb] text-center text-2xl font-extrabold  `}
+                                            className={`text-[#ebebeb] text-center text-xl xs:text-2xl font-extrabold  `}
                                           >
                                             {offer.name}
                                           </h1>
                                           <h1
-                                            className={`text-[#bababa] text-md text-center `}
+                                            className={`text-[#bababa] text-sm xs:text-base text-center `}
                                           >
                                             {offer.offer}
                                           </h1>
@@ -424,7 +429,9 @@ const Home = ({
                                     className="w-full flex justify-center"
                                   >
                                     <Button className="mt-5">
-                                      View Details
+                                      <p className="text-xs xs:text-base">
+                                        View Details
+                                      </p>
                                     </Button>
                                   </Link>
                                 </div>
@@ -549,7 +556,7 @@ const Home = ({
                                   key={sponsor.name}
                                   className="flex flex-col"
                                 >
-                                  <div className="flex flex-col w-[100px] mx-5">
+                                  <div className="flex flex-col w-[100px] mx-5 ">
                                     <Link
                                       href={`/${convertToSlug(sponsor.name)}`}
                                     >
@@ -559,13 +566,13 @@ const Home = ({
                                         alt={sponsor.name}
                                         width={100}
                                         height={100}
-                                        className="rounded-lg min-w-[100px] x min-h-[100px]"
+                                        className="rounded-lg min-w-[100px]  min-h-[100px]"
                                         loading="lazy"
                                       />
                                     </Link>
 
-                                    <div>
-                                      <h1 className="text-white font-semibold absolute text-sm mt-2 text-center max-w-[100px]">
+                                    <div className="min-w-[100px] bg-red-500">
+                                      <h1 className="w-full text-white font-semibold absolute text-xs lg:text-sm mt-2 text-center max-w-[100px]">
                                         {sponsor.name}
                                       </h1>
                                     </div>

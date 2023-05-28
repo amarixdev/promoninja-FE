@@ -179,7 +179,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                   />
                   <div className="flex flex-col justify-center px-2">
                     <h1
-                      className={`font-bold lg:font-extrabold relative bottom-[500px] text-xl lg:text-3xl transition-all duration-300 ${
+                      className={`font-bold lg:font-extrabold relative bottom-[500px] text-base xs:text-xl lg:text-3xl transition-all duration-300 ${
                         banner && "bottom-0"
                       } `}
                     >
@@ -192,7 +192,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                         }`}
                       ></div>
                       <h3
-                        className={`font-semibold pb-1 text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
+                        className={`font-semibold pb-1 text-xs xs:text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
                           banner && "bottom-0"
                         } `}
                       >
@@ -453,9 +453,16 @@ const SponsorPage = ({ sponsorData }: Props) => {
                             </Link>
 
                             <div className="p-4">
-                              <h1 className="font-bold text-lg">
-                                {podcast.title}
-                              </h1>
+                              <Link
+                                href={`/podcasts/category/${convertToSlug(
+                                  podcast.title
+                                )}`}
+                              >
+                                <h1 className="font-bold text-lg hover:underline">
+                                  {podcast.title}
+                                </h1>
+                              </Link>
+
                               <p className="text-[#909090] text-md">
                                 {podcast.publisher}
                               </p>

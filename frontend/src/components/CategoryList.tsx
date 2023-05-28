@@ -57,9 +57,11 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
                   key={podcast.title}
                 >
                   <div
-                    className={
-                      " flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5 "
-                    }
+                    className={` ${
+                      ninjaMode
+                        ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828] "
+                        : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
+                    } mt-4 p-4 flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5`}
                     key={podcast.title}
                   >
                     <Image
@@ -68,7 +70,7 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
                       width={110}
                       height={110}
                       loading="lazy"
-                      className="rounded-xl mt-4 shadow-lg shadow-black max-w-[90px] sm:max-w-[110px]"
+                      className="rounded-xl  shadow-lg shadow-black max-w-[90px] sm:max-w-[110px]"
                     />
 
                     <div className=" min-w-[90px] sm:min-w-[110px] flex flex-col items-start">
@@ -114,15 +116,11 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
                   key={podcast.title}
                 >
                   <div
-                    className={
-                      !isBreakPoint
-                        ? `${
-                            ninjaMode
-                              ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828] "
-                              : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
-                          } hover:cursor-pointer flex flex-col items-center lg:min-w-[220px] h-[300px] rounded-lg mx-3 `
-                        : " hover:cursor-pointer flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5 "
-                    }
+                    className={`${
+                      ninjaMode
+                        ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828] "
+                        : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
+                    } hover:cursor-pointer flex flex-col items-center lg:min-w-[220px] h-[300px] rounded-lg mx-3 `}
                     key={podcast.title}
                   >
                     <Image

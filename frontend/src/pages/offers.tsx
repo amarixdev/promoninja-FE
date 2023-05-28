@@ -156,26 +156,38 @@ const Offers = ({
     }
   }, [sponsorCategoryData, contextIndex]);
 
-  const handleDrawer = (data: PodcastData, sponsorName: string) => {
+  const handleDrawer = (podcastData: PodcastData, sponsorName: string) => {
     const promotion = filteredSponsors?.filter(
       (sponsor) => sponsor.name === sponsorName
     )[0].offer;
 
+    const selectedPodcast = sponsorPodcastArray?.filter(
+      (pod) => pod.title === podcastData.title
+    );
+
+    const offer = selectedPodcast
+      ?.map((pod) => pod.offer)[0]
+      .filter((offer) => offer.sponsor === sponsorName);
+
+    if (offer) {
+      setSelectedPodcast(podcastData.title);
+      setSponsorDrawer(false);
+      setPodcastOfferDrawer(true);
+      setDrawerData((prev) => ({
+        ...prev,
+        image: podcastData.imageUrl,
+        title: podcastData.title,
+        description: promotion,
+        color: podcastData.backgroundColor,
+        subtitle: podcastData.publisher,
+        url: offer[0].url,
+        promoCode: offer[0].promoCode,
+        category: podcastData.category[0].name,
+      }));
+    }
+
     /* Podcast */
-    setSelectedPodcast(data.title);
-    setSponsorDrawer(false);
-    setPodcastOfferDrawer(true);
-    setDrawerData((prev) => ({
-      ...prev,
-      image: data.imageUrl,
-      title: data.title,
-      description: promotion,
-      color: data.backgroundColor,
-      subtitle: data.publisher,
-      url: data.offer[0].url,
-      promoCode: data.offer[0].promoCode,
-      category: data.category[0].name,
-    }));
+
     onOpenDrawer();
   };
 
@@ -348,7 +360,7 @@ const Offers = ({
             </button>
           )}
 
-          <div className=" flex gap-5 px-6 lg:px-24 lg:pr-44 xl:pr-32 pb-4 lg:py-4">
+          <div className=" flex gap-5 px-6 lg:px-24 lg:pr-44  xl:pr-32 pb-4 lg:py-4">
             <Button
               minWidth={150}
               onClick={() => {
@@ -386,7 +398,7 @@ const Offers = ({
                     className={`  active:scale-95`}
                   >
                     <p
-                      className={`text-sm lg:text-base ${
+                      className={`text-xs xs:text-sm lg:text-base ${
                         categoryIndex === index + 1
                           ? "text-white"
                           : "text-[#cccccc]"
@@ -428,7 +440,7 @@ const Offers = ({
               {
                 <BiChevronRight
                   size={35}
-                  className={`active:scale-95 ${
+                  className={`active:scale-95 mt-1 2xl:w-[100px] 4xl:w-[200px] ${
                     showRightArrow ? "opacity-100" : "opacity-0"
                   } duration-200 transition-all`}
                   onClick={() => slideTopPicks("right")}
@@ -445,7 +457,7 @@ const Offers = ({
               <div className="pt-10 px-5">
                 <p
                   ref={bannerBreakpointRef}
-                  className="w-full text-2xl font-extrabold flex justify-center mb-10 relative z-10 "
+                  className="w-full text-xl xs:text-2xl font-extrabold flex justify-center mb-10 relative z-10 "
                 >
                   {currentCategory}
                 </p>
@@ -475,12 +487,12 @@ const Offers = ({
                                 <div className="p-4">
                                   <div className="flex flex-col items-center gap-2 py-2">
                                     <h1
-                                      className={`text-[#ebebeb] text-center text-xl font-extrabold relative z-10 `}
+                                      className={`text-[#ebebeb] text-center text-lg xs:text-xl font-extrabold relative z-10 `}
                                     >
                                       {sponsor.name}
                                     </h1>
                                     <h1
-                                      className={`text-[#bababa] text-sm text-center relative z-10   `}
+                                      className={`text-[#bababa] text-xs xs:text-sm text-center relative z-10   `}
                                     >
                                       {sponsor.offer}
                                     </h1>
@@ -498,7 +510,9 @@ const Offers = ({
                               className="w-full flex justify-center"
                             >
                               <Button>
-                                <p className="text-sm">View Details</p>
+                                <p className="text-xs xs:text-sm">
+                                  View Details
+                                </p>
                               </Button>
                             </Link>
                             <Button
@@ -511,7 +525,7 @@ const Offers = ({
                               className="active:scale-95 flex items-center"
                             >
                               <div className="flex items-center p-5">
-                                <p className="mr-4 text-sm">
+                                <p className="mr-4 text-xs xs:text-sm">
                                   Shop with Creators
                                 </p>
                                 {isOpen &&
@@ -592,7 +606,7 @@ const Offers = ({
                                             placeholder && !isOpen
                                               ? "opacity-0"
                                               : "opacity-100"
-                                          } text-sm font-semibold whitespace-nowrap`}
+                                          } text-xs xs:text-sm font-semibold whitespace-nowrap`}
                                         >
                                           {truncateString(pod.title, 10)}
                                         </h1>
@@ -625,7 +639,9 @@ const Offers = ({
                                     className="min-w-[110px] h-[110px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
                                     href={`/${convertToSlug(sponsor.name)}`}
                                   >
-                                    <p className="font-semibold">View All</p>
+                                    <p className="font-semibold text-xs xs:text-sm">
+                                      View All
+                                    </p>
                                   </Link>
                                 }
                               </div>
@@ -854,7 +870,7 @@ const Offers = ({
               ) : (
                 <Button onClick={() => handlePagination()} minW={"full"} py={6}>
                   <div className="flex gap-4">
-                    <p className="font-bold text-[#d3d3d3] text-xl">
+                    <p className="font-bold text-[#d3d3d3] text-base xs:text-lg lg:text-xl">
                       Load More
                     </p>
                   </div>

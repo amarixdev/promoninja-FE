@@ -7,6 +7,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import LogoText from "../../../public/assets/logo-text.png";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -32,6 +33,7 @@ import {
   useSetCurrentPage,
 } from "../../../utils/hooks";
 import { OfferData, PodcastData } from "../../../utils/types";
+import { GiNinjaHeroicStance } from "react-icons/gi";
 
 interface Props {
   podcastData: PodcastData;
@@ -49,6 +51,7 @@ const podcast = ({ podcastData, category }: Props) => {
   } = useDisclosure();
   const [isOpen, setIsOpen] = useState(false);
   const imageSrc = podcastData?.imageUrl;
+  const hasNoSponsors = podcastData?.sponsors.length === 0;
   const isBreakPoint = useMediaQuery(1023);
   const [sponsorOfferDrawer, setSponsorOfferDrawer] = useState(true);
   const [podcastDrawer, setPodcastDrawer] = useState(false);
@@ -161,6 +164,7 @@ const podcast = ({ podcastData, category }: Props) => {
     )[0];
   };
 
+  console.log(hasNoSponsors);
   return (
     <div className={`${isBreakPoint ? "flex flex-col" : "flex "}`}>
       <Sidebar />
@@ -199,7 +203,7 @@ const podcast = ({ podcastData, category }: Props) => {
                     />
                     <div className="flex flex-col justify-center px-2">
                       <h1
-                        className={`font-bold lg:font-extrabold relative bottom-[500px] text-xl lg:text-3xl transition-all duration-300 ${
+                        className={`font-bold lg:font-extrabold relative bottom-[500px] text-base xs:text-lg lg:text-3xl transition-all duration-300 ${
                           banner && "bottom-0"
                         } `}
                       >
@@ -207,7 +211,7 @@ const podcast = ({ podcastData, category }: Props) => {
                       </h1>
                       <div className="flex gap-2">
                         <h3
-                          className={`font-semibold text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
+                          className={`font-semibold text-xs xs:text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
                             banner && "bottom-0"
                           } `}
                         >
@@ -236,12 +240,12 @@ const podcast = ({ podcastData, category }: Props) => {
                   className={`z-10 lg:top-6 mt-6 lg:mb-4 relative base:w-[150px] xs:w-[180px] sm:w-[220px] shadow-2xl shadow-black`}
                 />
                 <div className="w-full my-10">
-                  <h1 className=" base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold ml-6 px-2">
+                  <h1 className=" base:text-2xl xs:text-3xl sm:text-5xl font-bold lg:font-extrabold ml-6 pl-2 pr-4">
                     {podcastData?.title}
                   </h1>
                   <h2
                     ref={bannerBreakpointRef}
-                    className="base:text-md font-medium xs:text-lg ml-6 mb-4 text-[#aaaaaa] p-2"
+                    className="base:text-sm font-medium xs:text-base ml-6 mb-4 text-[#aaaaaa] pl-2 pr-4"
                   >
                     {podcastData?.publisher}{" "}
                   </h2>
@@ -333,163 +337,202 @@ const podcast = ({ podcastData, category }: Props) => {
             <div className="w-[95%] border-b-[1px] pb-8 pt-2 mt-2 mb-6"></div>
           </div>
           <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col h-[600px] overflow-y-scroll pb-24 lg:pb-16">
-            {podcastData.offer.map((offer: OfferData, index) => (
-              <div
-                key={offer.sponsor}
-                className={`flex flex-col lg:py-2 justify-between"`}
-              >
-                {/* Mobile */}
-                {isBreakPoint ? (
-                  <div className="flex justify-between items-center px-6 gap-2 max-h-[80px]">
-                    <p
-                      className={`"text-[#aaaaaa] ${
-                        index > 8 ? "pr-[6px]" : "pr-3"
-                      } text-xs font-semibold"`}
-                    >
-                      {index + 1}
-                    </p>
-                    <Image
-                      src={
-                        podcastData?.sponsors.filter(
-                          (sponsor) => sponsor.name === offer?.sponsor
-                        )[0].imageUrl
-                      }
-                      width={40}
-                      height={40}
-                      priority
-                      alt={offer.sponsor}
-                      className="base:min-w-[40px] xs:min-w-[50px] base:min-h-[40px] xs:min-h-[50px] xs:p-0 shadow-md shadow-black rounded-md"
-                    />
-
-                    <div className="w-full justify-between flex items-center">
-                      <div className="base: py-4 xs:p-4">
-                        <h1 className="font-bold text-white text-sm">
-                          {truncateString(offer.sponsor, 20)}
-                        </h1>
-                        <p className="text-[#909090] text-sm">
-                          {getSponsor(offer.sponsor).url}
-                        </p>
-                      </div>
-                    </div>
-                    <div className=" xs:p-4 flex ">
-                      <FaEllipsisV
-                        onClick={() => handleDrawer(offer.sponsor, true)}
+            {!hasNoSponsors ? (
+              podcastData.offer.map((offer: OfferData, index) => (
+                <div
+                  key={offer.sponsor}
+                  className={`flex flex-col lg:py-2 justify-between"`}
+                >
+                  {/* Mobile */}
+                  {isBreakPoint ? (
+                    <div className="flex justify-between items-center px-6 gap-2 max-h-[80px]">
+                      <p
+                        className={`"text-[#aaaaaa] ${
+                          index > 8 ? "pr-[6px]" : "pr-3"
+                        } text-xs font-semibold"`}
+                      >
+                        {index + 1}
+                      </p>
+                      <Image
+                        src={
+                          podcastData?.sponsors.filter(
+                            (sponsor) => sponsor.name === offer?.sponsor
+                          )[0].imageUrl
+                        }
+                        width={40}
+                        height={40}
+                        priority
+                        alt={offer.sponsor}
+                        className="base:min-w-[40px] xs:min-w-[50px] base:min-h-[40px] xs:min-h-[50px] xs:p-0 shadow-md shadow-black rounded-md"
                       />
-                    </div>
-                  </div>
-                ) : (
-                  /* Desktop */
-                  <>
-                    <div className="w-full ">
-                      <div className=" flex justify-between bg-[#2b2b2b53] py-2  ">
-                        <div className="w-full flex justify-between items-center ">
-                          <div className="flex px-8 items-center">
-                            <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
-                              {index + 1}
-                            </p>
-                            <Link
-                              href={`/${convertToSlug(
-                                getSponsor(offer.sponsor).name
-                              )}`}
-                            >
-                              <Image
-                                src={getSponsor(offer.sponsor).imageUrl}
-                                width={80}
-                                height={80}
-                                priority
-                                alt={offer.sponsor}
-                                className="rounded-md w-[80px] h-[80px] shadow-md shadow-black"
-                              />
-                            </Link>
 
-                            <div className="p-4">
-                              <h1 className="text-white font-bold text-lg">
-                                {offer.sponsor}
-                              </h1>
-                              <p className="text-[#909090] text-md">
-                                {offer.url}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="flex justify-end pl-6 pr-14">
-                            <Button
-                              onClick={() => handleCollapse(offer.sponsor)}
-                              className="active:scale-95"
-                            >
-                              View Offer
-                            </Button>
-                          </div>
+                      <div className="w-full justify-between flex items-center">
+                        <div className="base: py-4 xs:p-4">
+                          <h1 className="font-bold text-white text-sm">
+                            {truncateString(offer.sponsor, 20)}
+                          </h1>
+                          <p className="text-[#909090] text-sm">
+                            {getSponsor(offer.sponsor).url}
+                          </p>
                         </div>
                       </div>
+                      <div className=" xs:p-4 flex ">
+                        <FaEllipsisV
+                          onClick={() => handleDrawer(offer.sponsor, true)}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    /* Desktop */
+                    <>
+                      <div className="w-full ">
+                        <div className=" flex justify-between bg-[#2b2b2b53] py-2  ">
+                          <div className="w-full flex justify-between items-center ">
+                            <div className="flex px-8 items-center">
+                              <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
+                                {index + 1}
+                              </p>
+                              <Link
+                                href={`/${convertToSlug(
+                                  getSponsor(offer.sponsor).name
+                                )}`}
+                              >
+                                <Image
+                                  src={getSponsor(offer.sponsor).imageUrl}
+                                  width={80}
+                                  height={80}
+                                  priority
+                                  alt={offer.sponsor}
+                                  className="rounded-md w-[80px] h-[80px] shadow-md shadow-black"
+                                />
+                              </Link>
 
-                      <div className="flex-col ">
-                        <Collapse
-                          in={selectedSponsor === offer.sponsor && isOpen}
-                          animateOpacity
-                        >
-                          <Box
-                            p="10px"
-                            bg="transparent"
-                            rounded="md"
-                            shadow="md"
-                          >
-                            <div className="flex flex-col text-white w-full p-2">
-                              <div className="flex justify-start p-2">
-                                <Link
-                                  href={`${convertToFullURL(offer.url)}`}
-                                  target="_blank"
-                                  className="hover:underline underline-offset-4"
-                                >
-                                  <div className="flex">
-                                    <div
-                                      className={`rounded-full bg-[#0ec10e] min-w-[6px] top-6 relative h-[6px] `}
-                                    ></div>
-                                    <p className="mx-2 py-2 rounded-md font-light text-3xl">
-                                      {
-                                        podcastData?.sponsors.filter(
-                                          (sponsor) =>
-                                            sponsor.name === offer?.sponsor
-                                        )[0].offer
-                                      }
-                                    </p>
-                                  </div>
-                                </Link>
-                                {offer.promoCode && (
-                                  <div className="flex">
-                                    <div className="border-r border-[1px] border-white"></div>
-
-                                    <div className="ml-4 flex items-center gap-4 font-bold text-lg">
-                                      <p className="">Use Code</p>
-
-                                      <PromoCodeButton
-                                        promoCode={offer.promoCode}
-                                      />
-
-                                      <p>At Checkout</p>
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="w-full font-light p-2 mb-4 flex">
-                                <p className="text-white mx-2 text-sm lg:text-base py-2 px-4 rounded-xl">
-                                  {
-                                    podcastData?.sponsors.filter(
-                                      (sponsor) =>
-                                        sponsor.name === offer?.sponsor
-                                    )[0].summary
-                                  }
+                              <div className="p-4">
+                                <h1 className="text-white font-bold text-lg">
+                                  {offer.sponsor}
+                                </h1>
+                                <p className="text-[#909090] text-md">
+                                  {offer.url}
                                 </p>
                               </div>
                             </div>
-                          </Box>
-                        </Collapse>
+
+                            <div className="flex justify-end pl-6 pr-14">
+                              <Button
+                                onClick={() => handleCollapse(offer.sponsor)}
+                                className="active:scale-95"
+                              >
+                                View Offer
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex-col ">
+                          <Collapse
+                            in={selectedSponsor === offer.sponsor && isOpen}
+                            animateOpacity
+                          >
+                            <Box
+                              p="10px"
+                              bg="transparent"
+                              rounded="md"
+                              shadow="md"
+                            >
+                              <div className="flex flex-col text-white w-full p-2">
+                                <div className="flex justify-start p-2">
+                                  <Link
+                                    href={`${convertToFullURL(offer.url)}`}
+                                    target="_blank"
+                                    className="hover:underline underline-offset-4"
+                                  >
+                                    <div className="flex">
+                                      <div
+                                        className={`rounded-full bg-[#0ec10e] min-w-[6px] top-6 relative h-[6px] `}
+                                      ></div>
+                                      <p className="mx-2 py-2 rounded-md font-light text-3xl">
+                                        {
+                                          podcastData?.sponsors.filter(
+                                            (sponsor) =>
+                                              sponsor.name === offer?.sponsor
+                                          )[0].offer
+                                        }
+                                      </p>
+                                    </div>
+                                  </Link>
+                                  {offer.promoCode && (
+                                    <div className="flex">
+                                      <div className="border-r border-[1px] border-white"></div>
+
+                                      <div className="ml-4 flex items-center gap-4 font-bold text-lg">
+                                        <p className="">Use Code</p>
+
+                                        <PromoCodeButton
+                                          promoCode={offer.promoCode}
+                                        />
+
+                                        <p>At Checkout</p>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="w-full font-light p-2 mb-4 flex">
+                                  <p className="text-white mx-2 text-sm lg:text-base py-2 px-4 rounded-xl">
+                                    {
+                                      podcastData?.sponsors.filter(
+                                        (sponsor) =>
+                                          sponsor.name === offer?.sponsor
+                                      )[0].summary
+                                    }
+                                  </p>
+                                </div>
+                              </div>
+                            </Box>
+                          </Collapse>
+                        </div>
                       </div>
+                    </>
+                  )}
+                </div>
+              ))
+            ) : (
+              <>
+                {isBreakPoint ? (
+                  <div className=" h-full p-6 flex flex-col gap-8 w-full items-center">
+                    <Image src={LogoText} width={150} height={150} alt="logo" />
+                    <div className="flex items-center justify-center flex-col gap-10 font-thin text-xl px-2">
+                      <div className="flex flex-col">
+                        <p className="text-center">
+                          "Sorry, no sponsors at the moment.
+                        </p>
+                        <p className="text-center">
+                          Make sure to check again later."
+                        </p>
+                      </div>
+                      <GiNinjaHeroicStance size={100} />
                     </div>
-                  </>
+                  </div>
+                ) : (
+                  <div className=" h-full p-6 flex flex-col gap-8 w-full items-center">
+                    <Image src={LogoText} width={200} height={200} alt="logo" />
+                    <div className="flex items-center justify-center flex-col gap-10 font-thin text-2xl px-2">
+                      <div className="flex flex-col">
+                        <p className="text-center">
+                          "Sorry, no sponsors at the moment.
+                        </p>
+                        <p className="text-center">
+                          Make sure to check again later."
+                        </p>
+                      </div>
+                      <GiNinjaHeroicStance
+                        size={150}
+                        className=" animate-pulse"
+                      />
+                    </div>
+                  </div>
                 )}
-              </div>
-            ))}
+              </>
+            )}
           </div>
         </div>
       </div>

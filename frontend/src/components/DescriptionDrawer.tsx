@@ -100,7 +100,7 @@ const DescriptionDrawer = ({
                   </div>
 
                   <div className="base:px-3 xs:px-4">
-                    <h1 className="base:text-lg xs:text-xl font-extrabold hover:underline">
+                    <h1 className="base:text-lg xs:text-xl font-extrabold">
                       {drawer.title}
                     </h1>
                     <h3 className="base:text-xs xs:text-sm font-semibold text-[#c8c8c8]">
@@ -192,11 +192,7 @@ const DescriptionDrawer = ({
                     }
                   >
                     {" "}
-                    <Tooltip
-                      openDelay={300}
-                      label="Click off to close"
-                      placement="top"
-                    >
+                    <Tooltip label="Click off to close" placement="top">
                       <div
                         className=" rounded-full  hover:cursor-pointer "
                         onClick={onClose}
@@ -229,7 +225,7 @@ const DescriptionDrawer = ({
                         height={200}
                         alt=""
                         priority
-                        className={` min-w-[200px] ${
+                        className={` min-w-[200px] relative bottom-0 hover:bottom-3 transition-all duration-500 ease-in-out ${
                           podcastOfferDrawer && "shadow-2xl shadow-black"
                         } `}
                       />

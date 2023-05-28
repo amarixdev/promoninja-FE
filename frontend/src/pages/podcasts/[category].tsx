@@ -183,14 +183,14 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
                           ninjaMode
                             ? "bg-gradient-to-b from-[#212121] to-[#111111] active:from-[#202020] active:to-[#282828]"
                             : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]  active:from-[#202020] active:to-[#343434]"
-                        }  flex flex-col  items-center max-h-auto px-4 pb-10 rounded-lg`}
+                        }  flex mt-4 flex-col p-4 items-center max-h-auto  rounded-lg`}
                       >
                         <Image
                           src={podcast.imageUrl}
                           alt={podcast.imageUrl}
                           width={140}
                           height={140}
-                          className="rounded-xl mt-4 mx-4 shadow-lg shadow-black w-[115px] sm:w-[140px] relative z-10 "
+                          className="rounded-xl mx-4 shadow-lg shadow-black w-[115px] sm:w-[140px] relative z-10 "
                           loading="lazy"
                         />
                         <div className="flex flex-col min-w-[110px] sm:min-w-[130px] items-start justify-start ">
