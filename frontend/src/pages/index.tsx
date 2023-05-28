@@ -157,7 +157,11 @@ const Home = ({
                 />
 
                 <div className="relative flex w-full items-center group z-[1]">
-                  <SliderArrows sliderRef={sliderRef} scrollDistance={1200} />
+                  <SliderArrows
+                    sliderRef={sliderRef}
+                    scrollDistance={1200}
+                    podcastPage={false}
+                  />
                   <div
                     className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full py-10 lg:px-10`}
                     ref={sliderRef}

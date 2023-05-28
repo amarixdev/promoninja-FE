@@ -131,17 +131,29 @@ export const useRotate = (
   return [currDeg, handleRotate];
 };
 
-const useSlider = (slider: HTMLDivElement | null, scrollDistance: number) => {
+const useSlider = (
+  slider: HTMLDivElement | null,
+  scrollDistance: number,
+  podcastPage: boolean
+) => {
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
 
   const handleScroll = () => {
-    const cardWidth = 250;
     if (slider) {
       const { scrollWidth, scrollLeft, clientWidth } = slider;
       const scrollPosition = scrollLeft + clientWidth;
-      setShowLeftArrow(scrollLeft >= cardWidth);
-      setShowRightArrow(scrollPosition < scrollWidth - cardWidth);
+      if ((podcastPage && slider.scrollLeft <= 40) || slider.scrollLeft === 0) {
+        setShowLeftArrow(false);
+      } else {
+        setShowLeftArrow(true);
+      }
+
+      if (scrollPosition === scrollWidth) {
+        setShowRightArrow(false);
+      } else {
+        setShowRightArrow(true);
+      }
     }
   };
 

@@ -63,7 +63,8 @@ const Offers = ({
   const { banner: hideTitle } = useBanner(bannerBreakpointRef, 165);
   const { slideTopPicks, showLeftArrow, showRightArrow } = useSlider(
     sliderRef.current,
-    600
+    600,
+    false
   );
 
   /* State */

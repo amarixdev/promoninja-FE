@@ -97,7 +97,11 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
           </div>
 
           <div className="relative flex w-full items-center group z-[1]">
-            <SliderArrows sliderRef={sliderRef} scrollDistance={720} />
+            <SliderArrows
+              sliderRef={sliderRef}
+              scrollDistance={720}
+              podcastPage={true}
+            />
             <div
               className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full justify-start px-5 lg:px-10`}
               ref={sliderRef}

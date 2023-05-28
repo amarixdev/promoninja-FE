@@ -5,14 +5,17 @@ import { RefObject } from "react";
 const SliderArrows = ({
   sliderRef,
   scrollDistance,
+  podcastPage,
 }: {
   sliderRef: RefObject<HTMLDivElement>;
   scrollDistance: number;
+  podcastPage: boolean;
 }) => {
   const isBreakPoint = useMediaQuery(1023);
   const { showLeftArrow, showRightArrow, slideTopPicks } = useSlider(
     sliderRef.current,
-    scrollDistance
+    scrollDistance,
+    podcastPage
   );
   if (isBreakPoint) return <></>;
   else
@@ -24,13 +27,15 @@ const SliderArrows = ({
           } group-hover:bg-[#00000026] opacity-100 hover:opacity-100 w-20 h-[300px] flex items-center z-[15]`}
           onClick={() => slideTopPicks("left")}
         >
-          <MdChevronLeft
-            color={"white"}
-            className={` left-0 hidden rounded-full opacity-100 absolute cursor-pointer z-[15] ${
-              showLeftArrow ? "group-hover:block" : "hidden"
-            }`}
-            size={80}
-          />
+          {
+            <MdChevronLeft
+              color={"white"}
+              className={` left-0 hidden rounded-full opacity-100 absolute cursor-pointer z-[15] ${
+                showLeftArrow ? "group-hover:block" : "hidden"
+              }`}
+              size={80}
+            />
+          }
         </div>
         <div
           className={`absolute right-0 ${
