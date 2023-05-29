@@ -39,9 +39,6 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   const router = useRouter();
   useScrollRestoration(router);
   const isBreakPoint = useMediaQuery(1023);
-  if (categoryName) {
-    console.log(categoryName.split("").length);
-  }
 
   const { ninjaMode } = NavContext();
   useSetCurrentPage({
@@ -59,8 +56,6 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
     const handleScroll = () => {
       if (backdropRef.current) {
         const scrollPosition = window.scrollY;
-        console.log(scrollPosition);
-
         if (!isBreakPoint) {
           const opacity = Math.max(1 - scrollPosition * 0.005, 0);
           backdropRef.current.style.opacity = opacity.toString();
@@ -106,24 +101,23 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
     }
   }
 
+  console.log(banner);
   return (
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0 bg-black h-full">
       <Sidebar />
       <div className={`fixed w-full z-50 lg:ml-[240px]`}>
         {
           <div
-            className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 z-50 ${
-              banner && `bottom-0 `
+            className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative transition-all duration-300 z-50 ${
+              banner ? "bottom-0" : "bottom-[500px]"
             } `}
           >
             <div
-              className="flex items-center p-4 sm:p-6 hover:cursor-pointer"
+              className={`flex items-center p-4 sm:p-6 hover:cursor-pointer`}
               onClick={() => scrollToTop()}
             >
               <h1
-                className={`font-extrabold relative bottom-[500px] text-3xl sm:text-5xl transition-all duration-300 ${
-                  banner && "bottom-0"
-                } `}
+                className={`font-extrabold relative text-3xl sm:text-5xl transition-all duration-300  `}
               >
                 {capitalizeString(categoryName)}
               </h1>
@@ -274,7 +268,6 @@ export const getStaticProps = async ({ params }: any) => {
 
   const categoryPodcasts = data.fetchCategoryPodcasts;
 
-  console.log(categoryPodcasts);
   return {
     props: {
       categoryPodcasts,

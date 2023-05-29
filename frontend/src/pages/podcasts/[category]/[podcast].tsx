@@ -164,7 +164,6 @@ const podcast = ({ podcastData, category }: Props) => {
     )[0];
   };
 
-  console.log(hasNoSponsors);
   return (
     <div className={`${isBreakPoint ? "flex flex-col" : "flex "}`}>
       <Sidebar />
@@ -186,8 +185,8 @@ const podcast = ({ podcastData, category }: Props) => {
               <div className={`fixed w-full z-50 lg:ml-[240px]`}>
                 {
                   <div
-                    className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 z-50 ${
-                      banner && `bottom-0 `
+                    className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative transition-all duration-300 z-50 ${
+                      banner ? "bottom-0" : "bottom-[500px]"
                     } `}
                   >
                     <Image
@@ -196,24 +195,18 @@ const podcast = ({ podcastData, category }: Props) => {
                       width={70}
                       height={70}
                       priority
-                      className={`min-w-70 lg:min-w-[60px] rounded-md p-2 relative bottom-[500px] transition-all duration-300 ${
-                        banner && "lg:hover:cursor-pointer bottom-0"
-                      } `}
+                      className={`min-w-70 lg:min-w-[60px] rounded-md p-2 relative lg:hover:cursor-pointer`}
                       onClick={() => scrollToTop()}
                     />
                     <div className="flex flex-col justify-center px-2">
                       <h1
-                        className={`font-bold lg:font-extrabold relative bottom-[500px] text-base xs:text-lg lg:text-3xl transition-all duration-300 ${
-                          banner && "bottom-0"
-                        } `}
+                        className={`font-bold lg:font-extrabold relative text-base xs:text-lg lg:text-3xl `}
                       >
                         {truncateString(podcastData.title, 50)}
                       </h1>
                       <div className="flex gap-2">
                         <h3
-                          className={`font-semibold text-xs xs:text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
-                            banner && "bottom-0"
-                          } `}
+                          className={`font-semibold text-xs xs:text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px`}
                         >
                           {podcastData.publisher}
                         </h3>

@@ -162,8 +162,8 @@ const SponsorPage = ({ sponsorData }: Props) => {
             <div className={`fixed w-full z-50 lg:ml-[240px]`}>
               {
                 <div
-                  className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative bottom-[500px] transition-all duration-300 ${
-                    banner && `bottom-0 `
+                  className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative transition-all duration-300 ${
+                    banner ? "bottom-0" : "bottom-[500px]"
                   } `}
                 >
                   <Image
@@ -172,29 +172,21 @@ const SponsorPage = ({ sponsorData }: Props) => {
                     width={70}
                     height={70}
                     priority
-                    className={`min-w-[70px] min-h-[70px]  rounded-md p-2 relative bottom-[500px] transition-all duration-300 ${
-                      banner && "lg:hover:cursor-pointer bottom-0"
-                    } `}
+                    className={`min-w-[70px] min-h-[70px]  rounded-md p-2 relative`}
                     onClick={() => scrollToTop()}
                   />
                   <div className="flex flex-col justify-center px-2">
                     <h1
-                      className={`font-bold lg:font-extrabold relative bottom-[500px] text-base xs:text-xl lg:text-3xl transition-all duration-300 ${
-                        banner && "bottom-0"
-                      } `}
+                      className={`font-bold lg:font-extrabold relative text-base xs:text-xl lg:text-3xl `}
                     >
                       {truncateString(sponsorData.name, 50)}
                     </h1>
                     <div className="flex gap-2">
                       <div
-                        className={`rounded-full bg-[#0ec10e] transition duration-300 min-w-[6px] relative h-[6px] top-2 ${
-                          banner && ""
-                        }`}
+                        className={`rounded-full bg-[#0ec10e] min-w-[6px] relative h-[6px] top-2 `}
                       ></div>
                       <h3
-                        className={`font-semibold pb-1 text-xs xs:text-sm lg:text-md text-[#aaaaaa] relative bottom-[500px] transition-all duration-300 ${
-                          banner && "bottom-0"
-                        } `}
+                        className={`font-semibold pb-1 text-xs xs:text-sm lg:text-md text-[#aaaaaa] relative `}
                       >
                         {sponsorData.offer}
                       </h3>

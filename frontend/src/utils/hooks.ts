@@ -235,7 +235,7 @@ export const useBanner = (
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [banner]);
+  }, [banner, bannerBreakpointRef]);
 
   return { banner };
 };
