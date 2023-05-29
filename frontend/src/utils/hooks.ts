@@ -40,6 +40,7 @@ export const useMediaQuery = (width: number) => {
 
 import { NextRouter, useRouter } from "next/router";
 import { CurrentPage, NavContext } from "../context/navContext";
+import { useDisclosure } from "@chakra-ui/react";
 
 export const useSetCurrentPage = (currentPage: CurrentPage) => {
   const { setCurrentPage } = NavContext();
@@ -238,4 +239,30 @@ export const useBanner = (
   }, [banner, bannerBreakpointRef]);
 
   return { banner };
+};
+
+export const useReportIssue = (selected: string) => {
+  const [podcastState, setPodcastState] = useState<string[]>([]);
+  const [notified, setNotified] = useState(false);
+
+  const handleBrokenLink = (selected: string) => {
+    onOpenBrokenLink();
+    setNotified(false);
+    if (podcastState.includes(selected)) {
+      setNotified(true);
+    }
+  };
+  const {
+    isOpen: isOpenBrokenLink,
+    onOpen: onOpenBrokenLink,
+    onClose: onCloseBrokenLink,
+  } = useDisclosure();
+  return {
+    handleBrokenLink,
+    isOpenBrokenLink,
+    onCloseBrokenLink,
+    notified,
+    podcastState,
+    setPodcastState,
+  };
 };

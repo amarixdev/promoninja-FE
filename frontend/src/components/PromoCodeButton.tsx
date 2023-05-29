@@ -32,7 +32,7 @@ const PromoCodeButton = ({ promoCode }: Props) => {
     <div>
       <Button
         onClick={() => handleCopy(promoCode)}
-        className=" border-dashed border-[#e1e1e1] border-2 p-4 active:scale-95"
+        className="border-dashed border-[#e1e1e1] border-2 p-4 active:scale-95"
       >
         <p className="font-bold text-xl">{promoCode.toUpperCase()} </p>
       </Button>

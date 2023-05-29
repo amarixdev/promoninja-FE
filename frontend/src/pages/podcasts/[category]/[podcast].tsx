@@ -10,7 +10,7 @@ import Image from "next/image";
 import LogoText from "../../../public/assets/logo-text.png";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { BsPlayCircle, BsShareFill } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
 import BackButton from "../../../components/BackButton";
@@ -29,11 +29,13 @@ import {
 import {
   useBanner,
   useMediaQuery,
+  useReportIssue,
   useScrollRestoration,
   useSetCurrentPage,
 } from "../../../utils/hooks";
 import { OfferData, PodcastData } from "../../../utils/types";
 import { GiNinjaHeroicStance } from "react-icons/gi";
+import BrokenLinkModal from "../../../components/BrokenLinkModal";
 
 interface Props {
   podcastData: PodcastData;
@@ -49,6 +51,7 @@ const podcast = ({ podcastData, category }: Props) => {
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
   } = useDisclosure();
+
   const [isOpen, setIsOpen] = useState(false);
   const imageSrc = podcastData?.imageUrl;
   const hasNoSponsors = podcastData?.sponsors.length === 0;
@@ -77,6 +80,15 @@ const podcast = ({ podcastData, category }: Props) => {
     search: false,
     offers: false,
   });
+
+  const {
+    handleBrokenLink,
+    isOpenBrokenLink,
+    onCloseBrokenLink,
+    notified,
+    podcastState,
+    setPodcastState,
+  } = useReportIssue(selectedSponsor);
 
   if (!podcastData?.sponsors) {
     existingSponsor = false;
@@ -180,6 +192,14 @@ const podcast = ({ podcastData, category }: Props) => {
               podcastDrawer={podcastDrawer}
               podcastPage={true}
               externalUrl={podcastData?.externalUrl}
+            />
+            <BrokenLinkModal
+              isOpen={isOpenBrokenLink}
+              onClose={onCloseBrokenLink}
+              selected={selectedSponsor}
+              podcastState={podcastState}
+              setPodcastState={setPodcastState}
+              notified={notified}
             />
             {
               <div className={`fixed w-full z-50 lg:ml-[240px]`}>
@@ -477,6 +497,16 @@ const podcast = ({ podcastData, category }: Props) => {
                                           sponsor.name === offer?.sponsor
                                       )[0].summary
                                     }
+                                  </p>
+                                </div>
+                                <div className="w-full justify-end items-center flex pr-10">
+                                  <p
+                                    className="underline cursor-pointer text-xs font-bold active:scale-95"
+                                    onClick={() =>
+                                      handleBrokenLink(selectedSponsor)
+                                    }
+                                  >
+                                    Report Issue
                                   </p>
                                 </div>
                               </div>

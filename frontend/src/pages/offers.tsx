@@ -67,6 +67,8 @@ const Offers = ({
     false
   );
 
+  
+
   /* State */
   const [hideCategory, setHideCategory] = useState(false);
   const [isOpen, setIsOpen] = useState(false);

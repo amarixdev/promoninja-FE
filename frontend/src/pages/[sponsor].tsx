@@ -8,10 +8,11 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { BsShareFill } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
 import BackButton from "../components/BackButton";
+import BrokenLinkModal from "../components/BrokenLinkModal";
 import DescriptionDrawer from "../components/DescriptionDrawer";
 import Footer from "../components/Footer";
 import PromoCodeButton from "../components/PromoCodeButton";
@@ -29,6 +30,7 @@ import {
 import {
   useBanner,
   useMediaQuery,
+  useReportIssue,
   useScrollRestoration,
   useSetCurrentPage,
 } from "../utils/hooks";
@@ -61,6 +63,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
   } = useDisclosure();
+
   const { ninjaMode } = NavContext();
   const bannerBreakpointRef = useRef<HTMLDivElement>(null);
   const { banner } = useBanner(bannerBreakpointRef, 0);
@@ -96,6 +99,15 @@ const SponsorPage = ({ sponsorData }: Props) => {
     }));
     onOpenDrawer();
   };
+
+  const {
+    handleBrokenLink,
+    isOpenBrokenLink,
+    onCloseBrokenLink,
+    notified,
+    podcastState,
+    setPodcastState,
+  } = useReportIssue(selectedPodcast);
 
   const handleCollapse = async (podcast: PodcastData) => {
     if (selectedPodcast !== podcast.title) {
@@ -150,6 +162,14 @@ const SponsorPage = ({ sponsorData }: Props) => {
               : "bg-gradient-to-b from-[#454545] to-[#101010] "
           } flex flex-col items-center w-full`}
         >
+          <BrokenLinkModal
+            isOpen={isOpenBrokenLink}
+            onClose={onCloseBrokenLink}
+            selected={selectedPodcast}
+            podcastState={podcastState}
+            setPodcastState={setPodcastState}
+            notified={notified}
+          />
           <DescriptionDrawer
             isOpen={isOpenDrawer}
             onClose={onCloseDrawer}
@@ -544,6 +564,18 @@ const SponsorPage = ({ sponsorData }: Props) => {
                                   <p className="mx-2 text-sm py-2 px-4 rounded-xl">
                                     {" "}
                                     {podcast?.description}
+                                  </p>
+                                </div>
+
+                                <div className="w-full justify-end items-center flex ">
+                                  <p
+                                    className="underline cursor-pointer text-xs font-bold active:scale-95"
+                                    onClick={() =>
+                                      handleBrokenLink(podcast.title)
+                                    }
+                                  >
+                                    {" "}
+                                    Report Issue
                                   </p>
                                 </div>
                               </div>

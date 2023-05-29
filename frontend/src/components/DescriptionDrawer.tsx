@@ -10,8 +10,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { BsPlayCircle } from "react-icons/bs";
 import { convertToFullURL, convertToSlug } from "../utils/functions";
-import { useMediaQuery } from "../utils/hooks";
+import { useMediaQuery, useReportIssue } from "../utils/hooks";
 import PromoCodeButton from "./PromoCodeButton";
+import BrokenLinkModal from "./BrokenLinkModal";
 
 interface Props {
   isOpen: boolean;
@@ -52,9 +53,25 @@ const DescriptionDrawer = ({
     backgroundImage: `linear-gradient(to bottom, ${drawer.color}, #000000)`,
   };
   const isBreakPoint = useMediaQuery(1023);
+  const {
+    handleBrokenLink,
+    isOpenBrokenLink,
+    onCloseBrokenLink,
+    notified,
+    podcastState,
+    setPodcastState,
+  } = useReportIssue(drawer.title);
 
   return (
     <div className="">
+      <BrokenLinkModal
+        isOpen={isOpenBrokenLink}
+        onClose={onCloseBrokenLink}
+        selected={drawer.title}
+        podcastState={podcastState}
+        setPodcastState={setPodcastState}
+        notified={notified}
+      />
       <Drawer
         onClose={onClose}
         isOpen={isOpen}
@@ -103,7 +120,7 @@ const DescriptionDrawer = ({
                     <h1 className="base:text-lg xs:text-xl font-extrabold">
                       {drawer.title}
                     </h1>
-                    <h3 className="base:text-xs xs:text-sm font-semibold text-[#c8c8c8]">
+                    <h3 className="base:text-xs xs:text-sm font-semibold text-[#d5d5d5]">
                       {drawer.subtitle}
                     </h3>
                   </div>
@@ -127,49 +144,77 @@ const DescriptionDrawer = ({
                         <p className="text-white font-bold text-xl pb-2">
                           {podcastDrawer ? "About" : "Description"}
                         </p>
-                        {drawer.description}
+                        <p className="text-xs xs:text-sm">
+                          {" "}
+                          {drawer.description}
+                        </p>
                       </h1>
                     )}
                     {(sponsorOfferDrawer || podcastOfferDrawer) && (
-                      <div className="w-full flex items-center justify-center">
-                        <h1 className="p-y text-center font-semibold text-lg sm:text-2xl md:text-3xl text-[#d5d5d5] overflow-y-auto">
-                          {drawer.description}
-                        </h1>
-                      </div>
+                      <>
+                        <div className="w-full flex items-center justify-center">
+                          <h1 className="p-y text-center font-extralight text-lg sm:text-2xl md:text-3xl text-[#d5d5d5] overflow-y-auto">
+                            {drawer.description}
+                          </h1>
+                        </div>
+                      </>
                     )}
                     {(podcastOfferDrawer || sponsorOfferDrawer) && (
                       <div className="flex flex-col items-center">
-                        <h1
-                          style={{ color: "white" }}
-                          className="text-2xl sm:text-3xl md:text-4xl font-extrabold mt-6"
-                        >
-                          Visit{" "}
-                        </h1>
-                        <Link
-                          href={convertToFullURL(drawer.url)}
-                          target="_blank"
-                          className={`text-lg active:scale-95 underline underline-offset-2 p-4 rounded-md`}
-                        >
-                          <Button className="font-bold">
-                            <p className="text-sm sm:text-base md:text-lg">
-                              {drawer.url}
-                            </p>
-                          </Button>
-                        </Link>
+                        <>
+                          <h1
+                            style={{ color: "white" }}
+                            className="text-2xl sm:text-3xl md:text-4xl font-extrabold mt-6"
+                          >
+                            Visit{" "}
+                          </h1>
+                          <Link
+                            href={convertToFullURL(drawer.url)}
+                            target="_blank"
+                            className={`text-lg active:scale-95 underline underline-offset-2 p-4 rounded-md`}
+                          >
+                            <Button className="font-bold">
+                              <p className="text-sm sm:text-base md:text-lg">
+                                {drawer.url}
+                              </p>
+                            </Button>
+                          </Link>
+                          {!drawer.promoCode &&
+                            (podcastOfferDrawer || sponsorOfferDrawer) && (
+                              <div className="w-full justify-center items-center mt-10 flex">
+                                <p
+                                  className="underline cursor-pointer text-xs font-bold active:scale-95 text-[#bebebe]"
+                                  onClick={() => handleBrokenLink(drawer.title)}
+                                >
+                                  {" "}
+                                  Report Issue
+                                </p>
+                              </div>
+                            )}
+                        </>
                         {drawer.promoCode &&
                           (podcastOfferDrawer || sponsorOfferDrawer) && (
                             <>
                               <div className="border-t-[1px] w-full mb-3"></div>
                               <div className="flex flex-col justify-center items-center p-2 px-10 rounded-md bg-[#b7b7b71e]">
-                                <h2 className=" text-sm sm:text-base md:text-lg font-semibold my-2 tracking-wide">
+                                <h2 className=" text-sm sm:text-base md:text-lg font-light my-2 tracking-wide">
                                   Use Code
                                 </h2>
                                 <PromoCodeButton
                                   promoCode={drawer.promoCode || ""}
                                 />
-                                <h2 className="text-sm sm:text-base md:text-lg  font-semibold my-2 tracking-wide">
+                                <h2 className="text-sm sm:text-base md:text-lg font-light  my-2 tracking-wide">
                                   At Checkout
                                 </h2>
+                              </div>
+                              <div className="w-full justify-center items-center mt-4 flex">
+                                <p
+                                  className="underline cursor-pointer text-xs font-bold active:scale-95 text-[#aaaaaa]"
+                                  onClick={() => handleBrokenLink(drawer.title)}
+                                >
+                                  {" "}
+                                  Report Issue
+                                </p>
                               </div>
                             </>
                           )}
@@ -285,11 +330,22 @@ const DescriptionDrawer = ({
                 </div>
 
                 {podcastOfferDrawer && (
-                  <div className="w-full flex justify-center items-center gap-2">
-                    <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
-                    <h2 className="text-xl font-semibold">
-                      {drawer.description}{" "}
-                    </h2>
+                  <div>
+                    <div className="w-full flex justify-center items-center gap-2">
+                      <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
+                      <h2 className="text-xl font-semibold">
+                        {drawer.description}{" "}
+                      </h2>
+                    </div>
+                    <div className="w-full justify-end items-center flex pr-10  ">
+                      <p
+                        className="underline cursor-pointer text-xs font-bold active:scale-95"
+                        onClick={() => handleBrokenLink(drawer.title)}
+                      >
+                        {" "}
+                        Report Issue
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
