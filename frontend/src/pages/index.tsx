@@ -26,7 +26,7 @@ import Carousel from "../components/Carousel";
 import Header from "../components/Header";
 import SliderArrows from "../components/SliderArrows";
 import { NavContext } from "../context/navContext";
-import { convertToSlug, truncateString } from "../utils/functions";
+import { convertToSlug, currentYear, truncateString } from "../utils/functions";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -587,6 +587,9 @@ const Home = ({
                 </div>
               </div>
             </div>
+            <p className="flex font-bold text-[#aaaaaa] text-xs w-full items-center justify-center  pb-6 lg:px-4">
+              {`© PromoNinja ${currentYear}`}
+            </p>
           </div>
         }
       </div>

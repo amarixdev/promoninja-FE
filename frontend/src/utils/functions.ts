@@ -34,3 +34,4 @@ export const scrollToTop = () => {
     behavior: "smooth",
   });
 };
+ export const currentYear = new Date().getFullYear();

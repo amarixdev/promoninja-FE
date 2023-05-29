@@ -10,6 +10,7 @@ import LogoText from "../../public/assets/logo-text.png";
 import { NavContext } from "../../context/navContext";
 import Header from "../../components/Header";
 import Image from "next/image";
+import { currentYear } from "../../utils/functions";
 
 interface Props {
   categoryPreviews: CategoryPodcast[];
@@ -74,6 +75,9 @@ const podcasts = ({ categoryPreviews }: Props) => {
               ))}
             </div>
           )}
+          <p className="flex font-bold text-[#9f9f9f] text-xs w-full items-center justify-center  pb-6 lg:px-4">
+          {`© PromoNinja ${currentYear}`}
+          </p>
         </div>
       </div>
       <Footer />

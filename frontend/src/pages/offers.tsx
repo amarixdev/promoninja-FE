@@ -18,7 +18,7 @@ import Sidebar from "../components/Sidebar";
 import { NavContext } from "../context/navContext";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
-import { convertToSlug, truncateString } from "../utils/functions";
+import { convertToSlug, currentYear, truncateString } from "../utils/functions";
 import useSlider, {
   useBanner,
   useMediaQuery,
@@ -878,6 +878,9 @@ const Offers = ({
               )}
             </div>
           ) : null}
+          <p className="flex font-bold text-[#aaaaaa] text-xs w-full items-center justify-center  pt-4 pb-6 lg:px-4">
+            {`© PromoNinja ${currentYear}`}
+          </p>
         </>
       </div>
       <Footer />
