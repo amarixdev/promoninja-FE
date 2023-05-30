@@ -20,7 +20,7 @@ import {
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 
 import Link from "next/link";
-import { BiChevronRight } from "react-icons/bi";
+import { MdArrowLeft, MdArrowRight } from "react-icons/md";
 import AnimatedLink from "../components/AnimatedLink";
 import Carousel from "../components/Carousel";
 import Header from "../components/Header";
@@ -94,15 +94,13 @@ const Home = ({
     }
   }, [trendingOfferIndex]);
 
-  const handleTrendingOfferIndex = () => {
-    if (Number(trendingOfferIndex) !== maxIndex) {
+  const handleTrendingOfferIndex = (direction: string) => {
+    if (direction === "right") {
       setTrendingOfferIndex((prev) => (Number(prev) - 100).toString());
       setNinjaRunningIndex((prev) => prev + 1);
-    }
-
-    if (Number(trendingOfferIndex) === maxIndex) {
-      setTrendingOfferIndex("0");
-      setNinjaRunningIndex(0);
+    } else if (direction === "left") {
+      setTrendingOfferIndex((prev) => (Number(prev) + 100).toString());
+      setNinjaRunningIndex((prev) => prev - 1);
     }
   };
 
@@ -297,6 +295,17 @@ const Home = ({
                                 : "bg-gradient-to-r from-[#232323] to-[#181818]"
                             }  w-10/12 group flex h-fit p-8 rounded-md justify-start shadow-lg shadow-[black] `}
                           >
+                            <button
+                              className="mt-20 right-6 relative opacity-0 transition-all duration-150  group-hover:opacity-100 h-fit hover:cursor-pointer"
+                              onClick={() => handleTrendingOfferIndex("left")}
+                            >
+                              {ninjaRunningIndex > 0 && (
+                                <MdArrowLeft
+                                  size={70}
+                                  className="hover:fill-white active:scale-90 fill-[#aaaaaa] absolute right-4 transition-all duration-150 "
+                                />
+                              )}
+                            </button>
                             <div className="flex w-full">
                               <div className="flex flex-col min-w-full ">
                                 <div className="flex-col flex w-full ">
@@ -353,15 +362,19 @@ const Home = ({
                                   </Link>
                                 </div>
                               </div>
-                              <div
+                              <button
                                 className="mt-20 right-6 relative opacity-0 transition-all duration-150  group-hover:opacity-100 h-fit hover:cursor-pointer"
-                                onClick={() => handleTrendingOfferIndex()}
+                                onClick={() =>
+                                  handleTrendingOfferIndex("right")
+                                }
                               >
-                                <BiChevronRight
-                                  size={60}
-                                  className="hover:fill-white fill-[#aaaaaa] transition-all duration-150 "
-                                />
-                              </div>
+                                {ninjaRunningIndex < 4 && (
+                                  <MdArrowRight
+                                    size={70}
+                                    className="hover:fill-white absolute active:scale-90 left-16 fill-[#aaaaaa] transition-all duration-150 "
+                                  />
+                                )}
+                              </button>
                             </div>
                           </div>
                         </div>
