@@ -34,14 +34,15 @@ import {
   useScrollRestoration,
   useSetCurrentPage,
 } from "../utils/hooks";
-import { PodcastData, SponsorData } from "../utils/types";
+import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 
 interface Props {
   sponsorData: SponsorData;
+  sponsorCategoryData: SponsorCategory[];
   loading: boolean;
 }
 
-const SponsorPage = ({ sponsorData }: Props) => {
+const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
   const router = useRouter();
   useScrollRestoration(router);
   const [selectedPodcast, setSelectedPodcast] = useState("");
@@ -51,6 +52,10 @@ const SponsorPage = ({ sponsorData }: Props) => {
     selectedUrl: "",
     previousUrl: "",
   });
+
+  const categoryIndex = sponsorCategoryData?.findIndex(
+    (sponsor) => sponsor.name === sponsorData.sponsorCategory[0].name
+  );
 
   useSetCurrentPage({
     home: false,
@@ -64,7 +69,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
     onClose: onCloseDrawer,
   } = useDisclosure();
 
-  const { ninjaMode } = NavContext();
+  const { ninjaMode, setCategoryIndex } = NavContext();
   const bannerBreakpointRef = useRef<HTMLDivElement>(null);
   const { banner } = useBanner(bannerBreakpointRef, 0);
 
@@ -110,6 +115,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
   } = useReportIssue(selectedPodcast);
 
   const handleCollapse = async (podcast: PodcastData) => {
+    console.log(podcast);
     if (selectedPodcast !== podcast.title) {
       setIsOpen(true);
       const podcastOffer = podcast.offer.filter(
@@ -235,7 +241,7 @@ const SponsorPage = ({ sponsorData }: Props) => {
                   <h1 className="text-[#e6e6e6] relative z-10 base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold ml-6 px-2">
                     {sponsorData?.name}
                   </h1>
-                  <div className="pr-2 sm:p-6 base:hidden xs:block ">
+                  <div className="pr-4 sm:p-6 base:hidden xs:block ">
                     <Button>
                       <BsShareFill />
                       <p className="ml-3 text-center">Share</p>
@@ -253,6 +259,16 @@ const SponsorPage = ({ sponsorData }: Props) => {
                 <p className="font-thin text-lg px-8 py-6 relative bottom-4 text-start tracking-wider">
                   {sponsorData?.summary}
                 </p>
+                <Link href={"/offers"} className="pl-5">
+                  <Button
+                    className="active:scale-95 font-semibold text-[#979797]"
+                    onClick={() => setCategoryIndex(categoryIndex)}
+                  >
+                    <p className="text-xs xs:text-sm">
+                      {sponsorData.sponsorCategory[0].name}
+                    </p>
+                  </Button>
+                </Link>
                 <div className="w-[100%] pb-4 border-b-[1px] mb-10"></div>
               </div>
               <div
@@ -300,11 +316,16 @@ const SponsorPage = ({ sponsorData }: Props) => {
               </div>
               <div className="">
                 <div className="px-6 ">
-                  <div className="px-4">
+                  <div className="px-4 flex items-center gap-4">
                     <Button>
                       <BsShareFill />
                       <p className="ml-3">Share</p>
                     </Button>
+                    <Link href={"/offers"}>
+                      <Button onClick={() => setCategoryIndex(categoryIndex)}>
+                        <p>{sponsorData.sponsorCategory[0].name}</p>
+                      </Button>
+                    </Link>
                   </div>
                   <div className="flex m-4 mt-8">
                     <div
@@ -451,9 +472,9 @@ const SponsorPage = ({ sponsorData }: Props) => {
                               {index + 1}
                             </p>
                             <Link
-                              href={`/podcasts/category/${convertToSlug(
-                                podcast.title
-                              )}`}
+                              href={`/podcasts/${convertToSlug(
+                                podcast.category[0].name
+                              )}/${convertToSlug(podcast.title)}`}
                             >
                               <Image
                                 src={podcast.imageUrl}
@@ -466,9 +487,9 @@ const SponsorPage = ({ sponsorData }: Props) => {
 
                             <div className="p-4">
                               <Link
-                                href={`/podcasts/category/${convertToSlug(
-                                  podcast.title
-                                )}`}
+                                href={`/podcasts/${convertToSlug(
+                                  podcast.category[0].name
+                                )}/${convertToSlug(podcast.title)}`}
                               >
                                 <h1 className="font-bold text-lg hover:underline">
                                   {podcast.title}
@@ -619,11 +640,17 @@ export const getStaticProps = async ({ params }: any) => {
     },
   });
 
+  let { data: sponsorCategoryData } = await client.query({
+    query: Operations.Queries.GetSponsorCategories,
+  });
+
   sponsorData = sponsorData?.getSponsor;
+  sponsorCategoryData = sponsorCategoryData?.getSponsorCategories;
 
   return {
     props: {
       sponsorData,
+      sponsorCategoryData,
     },
   };
 };

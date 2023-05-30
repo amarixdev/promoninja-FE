@@ -25,6 +25,7 @@ import {
   convertToSlug,
   scrollToTop,
   truncateString,
+  capitalizeString,
 } from "../../../utils/functions";
 import {
   useBanner,
@@ -263,31 +264,52 @@ const podcast = ({ podcastData, category }: Props) => {
                     {podcastData?.publisher}{" "}
                   </h2>
                   {isBreakPoint || (
-                    <div className="w-full flex items-center pb-4">
-                      <div className="px-6">
-                        <Button>
-                          <BsShareFill size={18} />
-                          <p className="ml-3 text-md">Share</p>
-                        </Button>
+                    <div className="w-full flex items-center justify-between pb-4">
+                      <div className="flex items-center">
+                        <div className="px-6">
+                          <Button>
+                            <BsShareFill size={18} />
+                            <p className="ml-3 text-md">Share</p>
+                          </Button>
+                        </div>
+                        <Link
+                          href={podcastData?.externalUrl}
+                          target="_blank"
+                          className="flex w-fit justify-start items-center p-4"
+                        >
+                          <BsPlayCircle color="#1DB954" />
+                          <p className="text-xs font-semibold px-2">
+                            Listen on Spotify
+                          </p>
+                        </Link>
                       </div>
                       <Link
-                        href={podcastData?.externalUrl}
-                        target="_blank"
-                        className="flex w-fit justify-start items-center p-4"
+                        href={`/podcasts/${convertToSlug(category)}`}
+                        className="mr-14"
                       >
-                        <BsPlayCircle color="#1DB954" />
-                        <p className="text-xs font-semibold px-2">
-                          Listen on Spotify
-                        </p>
+                        <Button>
+                          {capitalizeString(
+                            category.split("-").join(" ").toLowerCase()
+                          )}
+                        </Button>
                       </Link>
                     </div>
                   )}
                   {isBreakPoint && (
-                    <div className="px-6">
+                    <div className="px-6 flex items-center gap-4">
                       <Button>
                         <BsShareFill size={15} />
                         <p className="ml-3 text-sm">Share</p>
                       </Button>
+                      <Link href={`/podcasts/${convertToSlug(category)}`}>
+                        <Button>
+                          <p className="text-sm">
+                            {capitalizeString(
+                              category.split("-").join(" ").toLowerCase()
+                            )}
+                          </p>
+                        </Button>
+                      </Link>
                     </div>
                   )}
                   {isBreakPoint && (
@@ -297,7 +319,7 @@ const podcast = ({ podcastData, category }: Props) => {
                   )}
                   {isBreakPoint || (
                     <div className="w-full h-[80px] overflow-y-scroll">
-                      <p className="p-2 ml-6 text-[#aaaaaa] mb-4">
+                      <p className="py-2 ml-6 text-[#aaaaaa] mb-4 px-4">
                         {truncated
                           ? truncateString(podcastData?.description, 280)
                           : podcastData?.description}

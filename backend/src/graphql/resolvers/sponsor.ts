@@ -331,6 +331,7 @@ export const productResolvers = {
               title: "asc",
             },
           },
+          sponsorCategory: true,
         },
       });
       return sponsor;

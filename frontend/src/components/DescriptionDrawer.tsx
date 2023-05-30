@@ -95,9 +95,9 @@ const DescriptionDrawer = ({
                       className="base:p-2 xs:p-4 flex w-full"
                       href={`/${
                         podcastDrawer || podcastOfferDrawer
-                          ? `podcasts/${drawer.category}/${convertToSlug(
-                              drawer.title
-                            )}`
+                          ? `podcasts/${convertToSlug(
+                              drawer.category
+                            )}/${convertToSlug(drawer.title)}`
                           : sponsorDrawer || sponsorOfferDrawer
                           ? `${convertToSlug(drawer.title)}`
                           : ""
@@ -153,7 +153,7 @@ const DescriptionDrawer = ({
                     {(sponsorOfferDrawer || podcastOfferDrawer) && (
                       <>
                         <div className="w-full flex items-center justify-center">
-                          <h1 className="p-y text-center font-extralight text-lg sm:text-2xl md:text-3xl text-[#d5d5d5] overflow-y-auto">
+                          <h1 className="p-y text-center font-extralight text-lg sm:text-2xl md:text-3xl text-[#efefef] overflow-y-auto">
                             {drawer.description}
                           </h1>
                         </div>
@@ -256,9 +256,9 @@ const DescriptionDrawer = ({
                       className="flex"
                       href={`/${
                         podcastDrawer || podcastOfferDrawer
-                          ? `podcasts/${drawer.category}/${convertToSlug(
-                              drawer.title
-                            )}`
+                          ? `podcasts/${convertToSlug(
+                              drawer.category
+                            )}/${convertToSlug(drawer.title)}`
                           : sponsorDrawer || sponsorOfferDrawer
                           ? `${drawer.title}`
                           : ""

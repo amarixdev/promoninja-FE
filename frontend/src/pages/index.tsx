@@ -171,9 +171,9 @@ const Home = ({
                   >
                     {topPicksData.map((podcast: PodcastData, index: number) => (
                       <Link
-                        href={`/podcasts/${
+                        href={`/podcasts/${convertToSlug(
                           podcast.category[0].name
-                        }/${convertToSlug(podcast.title)}`}
+                        )}/${convertToSlug(podcast.title)}`}
                         key={podcast.title}
                       >
                         <div

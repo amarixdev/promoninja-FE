@@ -67,6 +67,9 @@ export const Operations = {
           url
           summary
           offer
+          sponsorCategory {
+            name
+          }
           podcast {
             offer {
               sponsor

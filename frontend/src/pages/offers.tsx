@@ -67,8 +67,6 @@ const Offers = ({
     false
   );
 
-  
-
   /* State */
   const [hideCategory, setHideCategory] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -600,7 +598,7 @@ const Offers = ({
                                             placeholder && !isOpen
                                               ? "opacity-0"
                                               : "opacity-100"
-                                          } min-w-[80px] min-h-[80px] rounded-md mb-2`}
+                                          } min-w-[80px] min-h-[80px] rounded-md mb-2 relative z-10`}
                                         />
 
                                         <h1
@@ -688,7 +686,7 @@ const Offers = ({
                                 height={225}
                                 alt={sponsor.name}
                                 priority
-                                className={` max-h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black`}
+                                className={` max-h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black relative z-10`}
                               />
                               <div className="flex ml-4 flex-col rounded-sm">
                                 <div className="p-6 rounded-md">
