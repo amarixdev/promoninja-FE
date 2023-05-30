@@ -7,25 +7,27 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import LogoText from "../../../public/assets/logo-text.png";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { BsPlayCircle, BsShareFill } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
+import { GiNinjaHeroicStance } from "react-icons/gi";
 import BackButton from "../../../components/BackButton";
+import BrokenLinkModal from "../../../components/BrokenLinkModal";
 import DescriptionDrawer from "../../../components/DescriptionDrawer";
 import Footer from "../../../components/Footer";
 import PromoCodeButton from "../../../components/PromoCodeButton";
 import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
+import LogoText from "../../../public/assets/logo-text.png";
 import {
+  capitalizeString,
   convertToFullURL,
   convertToSlug,
   scrollToTop,
   truncateString,
-  capitalizeString,
 } from "../../../utils/functions";
 import {
   useBanner,
@@ -35,8 +37,6 @@ import {
   useSetCurrentPage,
 } from "../../../utils/hooks";
 import { OfferData, PodcastData } from "../../../utils/types";
-import { GiNinjaHeroicStance } from "react-icons/gi";
-import BrokenLinkModal from "../../../components/BrokenLinkModal";
 
 interface Props {
   podcastData: PodcastData;

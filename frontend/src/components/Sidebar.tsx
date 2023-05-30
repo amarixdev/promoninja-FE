@@ -1,7 +1,15 @@
+import {
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList
+} from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { BiChevronDown } from "react-icons/bi";
+import { FaUserNinja } from "react-icons/fa";
 import { MdOutlinePodcasts, MdPodcasts } from "react-icons/md";
 import {
   RiExternalLinkLine,
@@ -16,17 +24,6 @@ import * as Ninja4 from "../public/assets/logo.png";
 import { scrollToTop } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
 import { LinkWrapperProps } from "./Footer";
-import { FaUserNinja } from "react-icons/fa";
-import { IoEllipsisHorizontalSharp } from "react-icons/io5";
-import {
-  Button,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
-import { BiChevronDown } from "react-icons/bi";
 
 interface Props {}
 

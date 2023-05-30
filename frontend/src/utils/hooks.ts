@@ -4,8 +4,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
-  useRef,
-  useState,
+  useState
 } from "react";
 
 export const useMediaQuery = (width: number) => {
@@ -38,9 +37,9 @@ export const useMediaQuery = (width: number) => {
   return targetReached;
 };
 
+import { useDisclosure } from "@chakra-ui/react";
 import { NextRouter, useRouter } from "next/router";
 import { CurrentPage, NavContext } from "../context/navContext";
-import { useDisclosure } from "@chakra-ui/react";
 
 export const useSetCurrentPage = (currentPage: CurrentPage) => {
   const { setCurrentPage } = NavContext();

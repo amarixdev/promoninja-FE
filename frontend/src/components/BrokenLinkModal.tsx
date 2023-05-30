@@ -1,15 +1,15 @@
 import {
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Stack,
+    Button,
+    Checkbox,
+    CheckboxGroup,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Stack,
 } from "@chakra-ui/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import style from "../../styles/style.module.css";

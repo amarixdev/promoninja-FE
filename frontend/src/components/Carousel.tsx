@@ -1,11 +1,8 @@
 import Link from "next/link";
 import React from "react";
 import style from "../../styles/style.module.css";
-import { SponsorCategory } from "../utils/types";
-import { convertToSlug } from "../utils/functions";
 import { HandleRotate } from "../utils/hooks";
-import { useLazyQuery } from "@apollo/client";
-import { Operations } from "../graphql/operations";
+import { SponsorCategory } from "../utils/types";
 
 interface Props {
   handleRotate: HandleRotate;

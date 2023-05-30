@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { NavContext } from "../context/navContext";
 import {
   capitalizeString,
   convertToSlug,

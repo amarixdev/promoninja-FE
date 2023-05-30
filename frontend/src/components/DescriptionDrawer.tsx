@@ -11,8 +11,8 @@ import Link from "next/link";
 import { BsPlayCircle } from "react-icons/bs";
 import { convertToFullURL, convertToSlug } from "../utils/functions";
 import { useMediaQuery, useReportIssue } from "../utils/hooks";
-import PromoCodeButton from "./PromoCodeButton";
 import BrokenLinkModal from "./BrokenLinkModal";
+import PromoCodeButton from "./PromoCodeButton";
 
 interface Props {
   isOpen: boolean;

@@ -6,10 +6,10 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { IconType } from "react-icons/lib";
 import {
-  RiSearch2Fill,
-  RiSearch2Line,
   RiHome6Fill,
   RiHome6Line,
+  RiSearch2Fill,
+  RiSearch2Line,
 } from "react-icons/ri";
 import { NavContext } from "../context/navContext";
 import { scrollToTop } from "../utils/functions";

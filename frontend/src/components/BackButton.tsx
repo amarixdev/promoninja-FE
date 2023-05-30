@@ -1,9 +1,8 @@
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import React from "react";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
-import { useMediaQuery } from "../utils/hooks";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { useMediaQuery } from "../utils/hooks";
 import { OptionsDrawer } from "./Header";
 
 interface Props {
