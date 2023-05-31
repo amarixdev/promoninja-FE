@@ -370,8 +370,8 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                   <div className="flex">
                     <div className="w-[75%] flex items-center justify-center relative ">
                       <h1 className=" font-light text-xl text-start text-[#909090] p-6 lg:p-2 tracking-wider italic">
-                        "Empower your favorite podcaster by making your
-                        purchases through their sponsor link.
+                        &ldquo;Empower your favorite podcaster by making your
+                        purchases through their sponsor link.&rdquo;
                       </h1>
                     </div>
                   </div>
@@ -392,8 +392,8 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                 />
                 <div className="w-full flex items-center justify-center relative ">
                   <h1 className="font-light base:text-base sm:text-xl text-center text-[#909090] px-6 italic tracking-wider">
-                    "Empower your favorite podcaster by making your purchases
-                    through their sponsor link.
+                    &ldquo;Empower your favorite podcaster by making your
+                    purchases through their sponsor link.&rdquo;
                   </h1>
                 </div>
               </>

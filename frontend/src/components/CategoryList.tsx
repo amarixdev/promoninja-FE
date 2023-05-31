@@ -25,11 +25,10 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
   const slider = sliderRef.current;
 
   useEffect(() => {
-    console.log("effect ran");
     if (slider && !isBreakPoint) {
       slider.scrollLeft = 40;
     }
-  }, [slider]);
+  }, [slider, isBreakPoint]);
 
   return (
     <div>

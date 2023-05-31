@@ -77,14 +77,12 @@ const Home = ({
   });
 
   const { activeIndex, setActiveIndex, handleHoverCard } = useHoverCard();
-  const [maxIndex, setMaxIndex] = useState(
-    trendingOffersData.length * -100 + 100
-  );
   const trendingOffersSliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setMaxIndex(trendingOffersData.length * -100 + 100);
-  }, [trendingOffersData]);
+    setNinjaRunningIndex(0);
+    setTrendingOfferIndex("0");
+  }, [trendingOffersData, isBreakPoint]);
 
   useEffect(() => {
     const translateXValue = `${trendingOfferIndex}%`;
@@ -144,10 +142,10 @@ const Home = ({
               <div className="w-full flex items-center justify-center">
                 <div className="flex w-full sm:w-[60%] md:w-[50%] items-center justify-center px-6 pb-10 lg:pb-14">
                   <p className="text-center  font-light text-sm xs:text-base sm:text-lg lg:text-xl text-[#909090] tracking-widest italic">
-                    "<span className="font-bold">Save money</span> and{" "}
+                    &ldquo;<span className="font-bold">Save money</span> and{" "}
                     <span className="font-semibold">give back</span> to your
                     favorite creators when you shop with PromoNinja verified
-                    sponsors"
+                    sponsors&rdquo;
                   </p>
                 </div>
               </div>

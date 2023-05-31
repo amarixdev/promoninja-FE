@@ -154,7 +154,13 @@ const Offers = ({
 
       fetchData();
     }
-  }, [sponsorCategoryData, contextIndex]);
+  }, [
+    sponsorCategoryData,
+    getCategorySponsors,
+    getSponsorsCount,
+    sponsorsData,
+    contextIndex,
+  ]);
 
   const handleDrawer = (podcastData: PodcastData, sponsorName: string) => {
     const promotion = filteredSponsors?.filter(

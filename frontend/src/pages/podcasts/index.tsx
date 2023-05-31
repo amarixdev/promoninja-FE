@@ -16,7 +16,7 @@ interface Props {
   categoryPreviews: CategoryPodcast[];
 }
 
-const podcasts = ({ categoryPreviews }: Props) => {
+const Podcasts = ({ categoryPreviews }: Props) => {
   const isBreakPoint = useMediaQuery(1023);
   const { ninjaMode } = NavContext();
   useSetCurrentPage({
@@ -120,4 +120,4 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export default podcasts;
+export default Podcasts;

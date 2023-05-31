@@ -44,7 +44,7 @@ interface Props {
   category: string;
 }
 
-const podcast = ({ podcastData, category }: Props) => {
+const Podcast = ({ podcastData, category }: Props) => {
   const router = useRouter();
   useScrollRestoration(router);
   const {
@@ -548,10 +548,10 @@ const podcast = ({ podcastData, category }: Props) => {
                     <div className="flex items-center justify-center flex-col gap-10 font-thin text-xl px-2">
                       <div className="flex flex-col">
                         <p className="text-center">
-                          "Sorry, no sponsors at the moment.
+                          &ldquo;Sorry, no sponsors at the moment.
                         </p>
                         <p className="text-center">
-                          Make sure to check again later."
+                          Make sure to check again later.&rdquo;
                         </p>
                       </div>
                       <GiNinjaHeroicStance size={100} />
@@ -563,10 +563,10 @@ const podcast = ({ podcastData, category }: Props) => {
                     <div className="flex items-center justify-center flex-col gap-10 font-thin text-2xl px-2">
                       <div className="flex flex-col">
                         <p className="text-center">
-                          "Sorry, no sponsors at the moment.
+                        &ldquo;Sorry, no sponsors at the moment.
                         </p>
                         <p className="text-center">
-                          Make sure to check again later."
+                          Make sure to check again later.&rdquo;
                         </p>
                       </div>
                       <GiNinjaHeroicStance
@@ -586,7 +586,7 @@ const podcast = ({ podcastData, category }: Props) => {
   );
 };
 
-export default podcast;
+export default Podcast;
 
 export const getStaticPaths = async () => {
   const paths = [{ params: { category: "", podcast: "" } }];

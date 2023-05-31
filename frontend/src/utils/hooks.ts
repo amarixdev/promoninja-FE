@@ -4,7 +4,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
-  useState
+  useState,
 } from "react";
 
 export const useMediaQuery = (width: number) => {
@@ -17,13 +17,10 @@ export const useMediaQuery = (width: number) => {
     }
   }, []);
 
-  if (typeof window !== "undefined") {
-    useLayoutEffect(() => {
+  useLayoutEffect(() => {
+    if (typeof window !== "undefined") {
       const media = window.matchMedia(`(max-width: ${width}px)`);
       media.addEventListener("change", updateTarget);
-
-      // Check on mount (callback is not called until a change occurs)
-
       if (media.matches) {
         setTargetReached(true);
       } else {
@@ -31,8 +28,8 @@ export const useMediaQuery = (width: number) => {
       }
 
       return () => media.removeEventListener("change", updateTarget);
-    }, []);
-  }
+    }
+  }, [width, updateTarget]);
 
   return targetReached;
 };
@@ -52,7 +49,13 @@ export const useSetCurrentPage = (currentPage: CurrentPage) => {
       search: currentPage.search,
       offers: currentPage.offers,
     }));
-  }, [setCurrentPage]);
+  }, [
+    setCurrentPage,
+    currentPage.home,
+    currentPage.offers,
+    currentPage.podcasts,
+    currentPage.search,
+  ]);
 };
 
 export const useLoadingScreen = () => {
@@ -72,7 +75,7 @@ export const useLoadingScreen = () => {
       router.events.off("routeChangeComplete", handleComplete);
       router.events.off("routeChangeError", handleComplete);
     };
-  }, []);
+  }, [router.events]);
 
   return isLoading;
 };
@@ -91,7 +94,7 @@ export const useCarouselSpeed = (
         setNinjaMode(true);
       }
     }
-  }, [clickCount, startTime]);
+  }, [clickCount, startTime, setNinjaMode]);
 };
 
 type RotateDirection = "next" | "prev";
@@ -139,24 +142,6 @@ const useSlider = (
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
 
-  const handleScroll = () => {
-    if (slider) {
-      const { scrollWidth, scrollLeft, clientWidth } = slider;
-      const scrollPosition = scrollLeft + clientWidth;
-      if ((podcastPage && slider.scrollLeft <= 40) || slider.scrollLeft === 0) {
-        setShowLeftArrow(false);
-      } else {
-        setShowLeftArrow(true);
-      }
-
-      if (scrollPosition === scrollWidth) {
-        setShowRightArrow(false);
-      } else {
-        setShowRightArrow(true);
-      }
-    }
-  };
-
   const slideTopPicks = (direction: string) => {
     if (slider) {
       if (direction === "left") {
@@ -168,11 +153,32 @@ const useSlider = (
   };
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (slider) {
+        const { scrollWidth, scrollLeft, clientWidth } = slider;
+        const scrollPosition = scrollLeft + clientWidth;
+        if (
+          (podcastPage && slider.scrollLeft <= 40) ||
+          slider.scrollLeft === 0
+        ) {
+          setShowLeftArrow(false);
+        } else {
+          setShowLeftArrow(true);
+        }
+
+        if (scrollPosition === scrollWidth) {
+          setShowRightArrow(false);
+        } else {
+          setShowRightArrow(true);
+        }
+      }
+    };
+
     if (slider) {
       slider.addEventListener("scroll", () => handleScroll());
       return () => slider.removeEventListener("scroll", () => handleScroll());
     }
-  }, [slider]);
+  }, [slider, podcastPage]);
 
   return { showLeftArrow, showRightArrow, slideTopPicks };
 };
@@ -212,7 +218,7 @@ export const useScrollRestoration = (router: NextRouter) => {
     return () => {
       router.events.off("routeChangeStart", handleRouteChange);
     };
-  }, []);
+  }, [router.events]);
 };
 
 export const useBanner = (
@@ -235,7 +241,7 @@ export const useBanner = (
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [banner, bannerBreakpointRef]);
+  }, [banner, bannerBreakpointRef, breakpoint]);
 
   return { banner };
 };

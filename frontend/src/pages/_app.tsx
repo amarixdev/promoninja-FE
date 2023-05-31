@@ -7,11 +7,11 @@ import style from "../../styles/style.module.css";
 import { ContextProvider } from "../context/navContext";
 import client from "../graphql/apollo-client";
 import { useLoadingScreen } from "../utils/hooks";
+import React from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const isLoading = useLoadingScreen();
-
-
+  if (typeof window === "undefined") React.useLayoutEffect = () => {};
 
   return (
     <ApolloProvider client={client}>

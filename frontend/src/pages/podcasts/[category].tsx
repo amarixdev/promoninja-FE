@@ -35,7 +35,7 @@ interface Props {
   category: string;
 }
 
-const category = ({ categoryPodcasts, category: categoryName }: Props) => {
+const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
   const router = useRouter();
   useScrollRestoration(router);
   const isBreakPoint = useMediaQuery(1023);
@@ -60,7 +60,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
           const opacity = Math.max(1 - scrollPosition * 0.005, 0);
           backdropRef.current.style.opacity = opacity.toString();
         } else {
-          const opacity = Math.max(1 - scrollPosition * 0.8, 0);
+          const opacity = Math.max(1 - scrollPosition * 0.01, 0);
           backdropRef.current.style.opacity = opacity.toString();
         }
       }
@@ -71,7 +71,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [backdropRef]);
+  }, [backdropRef, isBreakPoint]);
 
   if (categoryName) {
     switch (categoryName) {
@@ -243,7 +243,7 @@ const category = ({ categoryPodcasts, category: categoryName }: Props) => {
   );
 };
 
-export default category;
+export default Category;
 
 export const getStaticPaths = async () => {
   const paths = [{ params: { category: "" } }];
