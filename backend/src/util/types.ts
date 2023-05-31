@@ -100,6 +100,7 @@ export interface Pagination {
     offset: number;
     pageSize: number;
     offerPage: boolean;
+    path: boolean;
   };
 }
 

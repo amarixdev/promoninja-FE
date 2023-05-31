@@ -156,6 +156,7 @@ const typeDefs = gql`
     offset: Int
     pageSize: Int
     offerPage: Boolean
+    path: Boolean
   }
   input CountInput {
     category: String

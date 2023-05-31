@@ -563,7 +563,7 @@ const Podcast = ({ podcastData, category }: Props) => {
                     <div className="flex items-center justify-center flex-col gap-10 font-thin text-2xl px-2">
                       <div className="flex flex-col">
                         <p className="text-center">
-                        &ldquo;Sorry, no sponsors at the moment.
+                          &ldquo;Sorry, no sponsors at the moment.
                         </p>
                         <p className="text-center">
                           Make sure to check again later.&rdquo;
@@ -589,7 +589,24 @@ const Podcast = ({ podcastData, category }: Props) => {
 export default Podcast;
 
 export const getStaticPaths = async () => {
-  const paths = [{ params: { category: "", podcast: "" } }];
+  let { data: podcastsData } = await client.query({
+    query: Operations.Queries.GetPodcasts,
+    variables: {
+      input: {
+        path: true,
+      },
+    },
+  });
+
+  podcastsData = podcastsData.getPodcasts;
+
+  const paths = podcastsData.map((podcast: PodcastData) => ({
+    params: {
+      category: convertToSlug(podcast.category[0].name),
+      podcast: convertToSlug(podcast.title),
+    },
+  }));
+
   return {
     paths,
     fallback: true,

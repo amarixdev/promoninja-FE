@@ -620,7 +620,19 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
 export default SponsorPage;
 
 export const getStaticPaths = async () => {
-  const paths = [{ params: { sponsor: "" } }];
+  let { data: sponsorsData } = await client.query({
+    query: Operations.Queries.GetSponsors,
+    variables: {
+      input: {
+        offerPage: false,
+        path: true,
+      },
+    },
+  });
+  sponsorsData = sponsorsData.getSponsors;
+  const paths = sponsorsData.map((sponsor: SponsorData) => ({
+    params: { sponsor: convertToSlug(sponsor.name) },
+  }));
   return {
     paths,
     fallback: true,
@@ -629,6 +641,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }: any) => {
   const { sponsor } = params;
+  console.log(sponsor);
   const slugToSponsor = sponsor.split("-").join(" ").toLowerCase();
 
   let { data: sponsorData } = await client.query({

@@ -251,8 +251,17 @@ export const productResolvers = {
       context: GraphQLContext
     ) => {
       const { prisma } = context;
-      const { offset, pageSize, offerPage } = input;
+      const { offset, pageSize, offerPage, path } = input;
       console.log("running");
+
+      if (path) {
+        const sponsors = await prisma.sponsor.findMany({
+          select: {
+            name: true,
+          },
+        });
+        return sponsors;
+      }
       if (!offerPage) {
         const sponsors = await prisma.sponsor.findMany({
           select: {
@@ -262,7 +271,7 @@ export const productResolvers = {
           },
         });
         return sponsors;
-      } else {
+      } else if (offerPage) {
         const sponsors = await prisma.sponsor.findMany({
           include: {
             sponsorCategory: true,

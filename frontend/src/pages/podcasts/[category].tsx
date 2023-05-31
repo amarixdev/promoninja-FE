@@ -28,7 +28,7 @@ import {
   useScrollRestoration,
   useSetCurrentPage,
 } from "../../utils/hooks";
-import { PodcastData } from "../../utils/types";
+import { Category, PodcastData } from "../../utils/types";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -246,7 +246,16 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
 export default Category;
 
 export const getStaticPaths = async () => {
-  const paths = [{ params: { category: "" } }];
+  let { data: categoryData } = await client.query({
+    query: Operations.Queries.GetPodcastCategories,
+  });
+
+  categoryData = categoryData.getPodcastCategories;
+
+  const paths = categoryData.map((category: Category) => ({
+    params: { category: convertToSlug(category.name) },
+  }));
+
   return {
     paths,
     fallback: true,
