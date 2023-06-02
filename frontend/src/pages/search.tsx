@@ -11,6 +11,7 @@ import { Operations } from "../graphql/operations";
 import { convertToSlug, truncateString } from "../utils/functions";
 import { useSetCurrentPage } from "../utils/hooks";
 import { Category, PodcastData, SponsorData } from "../utils/types";
+import fallbackImage from "../public/assets/fallback.png";
 
 interface PodcastQuery {
   getPodcasts: PodcastData[];
@@ -168,7 +169,7 @@ const Search = () => {
                   <button
                     key={category}
                     onClick={() => handleFilter(category)}
-                    className={`active:scale-95 rounded-full outline outline-[#5b5a5a] outline-1 px-8 py-1 items-center flex justify-center ${
+                    className={`active:scale-95 rounded-full px-8 py-1 items-center flex justify-center ${
                       podcastFilter &&
                       category === "Podcasts" &&
                       "bg-[#3f3f3f] "
@@ -200,9 +201,11 @@ const Search = () => {
                       <div className="flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f] lg:min-w-[550px] min-w-[200px] xs:min-w-[300px] sm:min-w-[350px] md:min-w-[420px]">
                         <div className="p-4">
                           <Image
-                            src={podcast.imageUrl}
+                            src={podcast.imageUrl || fallbackImage}
                             width={100}
                             height={100}
+                            loading="eager"
+                            priority
                             alt={podcast.title}
                             className="shadow-black base:max-w-[70px] shadow-2xl xs:min-w-[90px] sm:min-w-[100px] rounded-lg"
                           />
@@ -238,9 +241,11 @@ const Search = () => {
                         <div className="flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f] lg:min-w-[550px] min-w-[200px] xs:min-w-[300px] sm:min-w-[350px] md:min-w-[420px]">
                           <div className="p-4">
                             <Image
-                              src={sponsor.imageUrl}
+                              src={sponsor.imageUrl || fallbackImage}
                               width={100}
                               height={100}
+                              loading="eager"
+                              priority
                               alt={sponsor.name}
                               className=" shadow-2xl shadow-black base:max-w-[70px] xs:min-w-[90px] sm:min-w-[100px] base:max-h-[70px] xs:min-h-[90px] sm:min-h-[100px] rounded-lg"
                             />

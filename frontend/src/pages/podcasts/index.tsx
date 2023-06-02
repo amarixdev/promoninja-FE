@@ -12,6 +12,7 @@ import { currentYear } from "../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { CategoryPodcast } from "../../utils/types";
 
+
 interface Props {
   categoryPreviews: CategoryPodcast[];
 }

@@ -21,6 +21,7 @@ import { NavContext } from "../context/navContext";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import Ninja4 from "../public/assets/ninja4.png";
+import fallbackImage from "../public/assets/fallback.png";
 import {
   convertToFullURL,
   convertToSlug,
@@ -56,6 +57,8 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
   const categoryIndex = sponsorCategoryData?.findIndex(
     (sponsor) => sponsor.name === sponsorData.sponsorCategory[0].name
   );
+
+  const [preventHover, setPreventHover] = useState(false);
 
   useSetCurrentPage({
     home: false,
@@ -176,24 +179,26 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
             setPodcastState={setPodcastState}
             notified={notified}
           />
-          <DescriptionDrawer
-            isOpen={isOpenDrawer}
-            onClose={onCloseDrawer}
-            drawer={drawerData}
-            currentPodcast={selectedPodcast}
-            podcastOfferDrawer={true}
-          />
 
           {
             <div className={`fixed w-full z-50 lg:ml-[240px]`}>
+              <DescriptionDrawer
+                isOpen={isOpenDrawer}
+                onClose={onCloseDrawer}
+                drawer={drawerData}
+                currentPodcast={selectedPodcast}
+                podcastOfferDrawer={true}
+              />
               {
                 <div
-                  className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative transition-all duration-300 ${
-                    banner ? "bottom-0" : "bottom-[500px]"
-                  } `}
+                  className={`flex w-full 
+                   bg-[#00000073]
+                   backdrop-blur-md p-3 items-center relative transition-all duration-300 ${
+                     banner ? "bottom-0" : "bottom-[500px]"
+                   } `}
                 >
                   <Image
-                    src={sponsorData.imageUrl}
+                    src={sponsorData.imageUrl || fallbackImage}
                     alt={sponsorData.name}
                     width={70}
                     height={70}
@@ -203,14 +208,11 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                   />
                   <div className="flex flex-col justify-center px-2">
                     <h1
-                      className={`font-bold lg:font-extrabold relative text-base xs:text-xl lg:text-3xl `}
+                      className={`font-bold text-white lg:font-extrabold relative text-base xs:text-lg lg:text-3xl `}
                     >
-                      {truncateString(sponsorData.name, 50)}
+                      {truncateString(sponsorData.name, 20)}
                     </h1>
                     <div className="flex gap-2">
-                      <div
-                        className={`rounded-full bg-[#0ec10e] min-w-[6px] relative h-[6px] top-2 `}
-                      ></div>
                       <h3
                         className={`font-semibold pb-1 text-xs xs:text-sm lg:text-md text-[#aaaaaa] relative `}
                       >
@@ -229,46 +231,49 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
               <div className="flex-col w-full items-center justify-center py-2">
                 <div className="p-10  flex items-center justify-center relative ">
                   <Image
-                    src={sponsorData?.imageUrl}
+                    src={sponsorData?.imageUrl || fallbackImage}
                     width={150}
                     height={150}
                     priority
                     alt={sponsorData?.name}
-                    className="shadow-xl shadow-black z-10 relative base:w-[150px] xs:w-[180px] sm:w-[220px] base:h-[150px] xs:h-[180px] sm:h-[220px]"
+                    className="shadow-xl rounded-lg shadow-black z-10 relative base:w-[150px] xs:w-[180px] sm:w-[220px] base:h-[150px] xs:h-[180px] sm:h-[220px]"
                   />
                 </div>
-                <div className="flex w-full items-center justify-between">
-                  <h1 className="text-[#e6e6e6] relative z-10 base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold ml-6 px-2">
+                <div className="flex w-full items-center justify-center flex-col">
+                  <h1 className="text-[#e6e6e6] text-center relative z-10 base:text-3xl xs:text-4xl sm:text-5xl font-bold lg:font-extrabold px-2">
                     {sponsorData?.name}
                   </h1>
-                  <div className="pr-4 sm:p-6 base:hidden xs:block ">
-                    <Button>
-                      <BsShareFill />
-                      <p className="ml-3 text-center">Share</p>
-                    </Button>
-                  </div>
-                  <div className="base:block xs:hidden pr-6">
-                    <BsShareFill />
-                  </div>
+                  <h2 className="base:text-md font-medium xs:text-lg mb-4 text-[#aaaaaa] p-2">
+                    {sponsorData?.url}
+                  </h2>
                 </div>
-
-                <h2 className="base:text-md font-medium xs:text-lg ml-6 mb-4 text-[#aaaaaa] p-2">
-                  {sponsorData?.url}
-                </h2>
 
                 <p className="font-thin text-lg px-8 py-6 relative bottom-4 text-start tracking-wider">
                   {sponsorData?.summary}
                 </p>
-                <Link href={"/offers"} className="pl-5">
+                <div className="w-full flex items-center justify-start gap-2 px-4">
+                  <Link href={"/offers"} className="">
+                    <Button
+                      className="active:scale-95 font-semibold "
+                      onClick={() => setCategoryIndex(categoryIndex)}
+                    >
+                      <p className="text-xs xs:text-sm">
+                        {sponsorData.sponsorCategory[0].name}
+                      </p>
+                    </Button>
+                  </Link>
                   <Button
-                    className="active:scale-95 font-semibold text-[#979797]"
+                    className="active:scale-95 font-semibold "
                     onClick={() => setCategoryIndex(categoryIndex)}
+                    minW={"fit-content"}
                   >
-                    <p className="text-xs xs:text-sm">
-                      {sponsorData.sponsorCategory[0].name}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <BsShareFill size={12} />
+                      <p className="text-xs xs:text-sm">Share</p>
+                    </div>
                   </Button>
-                </Link>
+                </div>
+
                 <div className="w-[100%] pb-4 border-b-[1px] mb-10"></div>
               </div>
               <div
@@ -297,7 +302,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
             >
               <div className="p-10 flex items-center w-full">
                 <Image
-                  src={sponsorData?.imageUrl}
+                  src={sponsorData?.imageUrl || fallbackImage}
                   width={230}
                   height={230}
                   priority
@@ -317,15 +322,15 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
               <div className="">
                 <div className="px-6 ">
                   <div className="px-4 flex items-center gap-4">
-                    <Button>
-                      <BsShareFill />
-                      <p className="ml-3">Share</p>
-                    </Button>
                     <Link href={"/offers"}>
                       <Button onClick={() => setCategoryIndex(categoryIndex)}>
                         <p>{sponsorData.sponsorCategory[0].name}</p>
                       </Button>
                     </Link>
+                    <Button>
+                      <BsShareFill />
+                      <p className="ml-3">Share</p>
+                    </Button>
                   </div>
                   <div className="flex m-4 mt-8">
                     <div
@@ -420,7 +425,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
               <div className="w-[95%] border-b-[1px] "></div>
             </div>
 
-            <div className="w-full flex flex-col lg:h-[500px] pt-6 overflow-y-scroll base:h-[400px] xs:h-[450px] base:pb-24 lg:pb-16">
+            <div className="w-full flex flex-col lg:h-[500px] pt-1 lg:pt-6 lg:overflow-y-scroll base:pb-24 lg:pb-16">
               {sponsorData?.podcast.map((podcast, index) => (
                 <div
                   key={podcast.title}
@@ -429,7 +434,10 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                   {/* Mobile */}
 
                   {isBreakPoint ? (
-                    <div className="flex justify-between items-center px-6 max-h-[80px] gap-2">
+                    <div
+                      className="border-b-[0.5px] flex justify-between items-center px-6 max-h-[80px] gap-2"
+                      onClick={() => handleDrawer(podcast)}
+                    >
                       <p
                         className={`"text-[#aaaaaa] text-xs ${
                           index > 8 ? "pr-[6px]" : "pr-3"
@@ -438,7 +446,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                         {index + 1}
                       </p>
                       <Image
-                        src={podcast.imageUrl}
+                        src={podcast.imageUrl || fallbackImage}
                         width={50}
                         height={50}
                         priority
@@ -448,24 +456,27 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
 
                       <div className="w-full justify-between flex items-center">
                         <div className="base: py-4 xs:p-4">
-                          <h1 className="font-bold text-white text-sm">
+                          <h1 className="font-medium text-white text-xs xs:text-sm">
                             {truncateString(podcast.title, 20)}
                           </h1>
-                          <p className="text-[#909090] text-sm">
+                          <p className="text-[#909090] text-xs xs:text-sm">
                             {truncateString(podcast.publisher, 40)}
                           </p>
                         </div>
                       </div>
-                      <div className=" xs:p-4 flex ">
-                        <FaEllipsisV onClick={() => handleDrawer(podcast)} />
+                      <div className="xs:p-4 flex ">
+                        <FaEllipsisV color="#555" />
                       </div>
                     </div>
                   ) : (
                     /* Desktop */
-                    <div className="w-full ">
+                    <div className="w-full select-none ">
                       <div className=" flex justify-between">
                         <div
-                          className={`w-full flex justify-between items-center bg-[#3c3c3c53] py-2 `}
+                          className={`w-full flex justify-between items-center bg-[#3c3c3c53] py-2 ${
+                            preventHover || "group"
+                          } cursor-pointer `}
+                          onClick={() => handleCollapse(podcast)}
                         >
                           <div className="flex px-8 items-center">
                             <p className="text-[#aaaaaa] base:text-xs xs:text-sm font-semibold p-4">
@@ -475,26 +486,30 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                               href={`/podcasts/${convertToSlug(
                                 podcast.category[0].name
                               )}/${convertToSlug(podcast.title)}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                              }}
+                              onMouseEnter={() => {
+                                setPreventHover(true);
+                              }}
+                              onMouseLeave={() => {
+                                setPreventHover(false);
+                              }}
                             >
                               <Image
-                                src={podcast.imageUrl}
+                                src={podcast.imageUrl || fallbackImage}
                                 width={80}
                                 height={80}
                                 alt={podcast.title}
-                                className="ml-4 rounded-md shadow-md shadow-black"
+                                className="ml-4 rounded-md shadow-md shadow-black relative hover:scale-105 transition-all duration-300"
+                                onMouseEnter={(e) => e.stopPropagation()}
                               />
                             </Link>
 
-                            <div className="p-4">
-                              <Link
-                                href={`/podcasts/${convertToSlug(
-                                  podcast.category[0].name
-                                )}/${convertToSlug(podcast.title)}`}
-                              >
-                                <h1 className="font-bold text-lg hover:underline">
-                                  {podcast.title}
-                                </h1>
-                              </Link>
+                            <div className="p-4 ">
+                              <h1 className={`font-bold text-lg w-fit`}>
+                                {podcast.title}
+                              </h1>
 
                               <p className="text-[#909090] text-md">
                                 {podcast.publisher}
@@ -513,10 +528,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                               {`"Thanks for supporting the show!"`}
                             </p>
 
-                            <Button
-                              onClick={() => handleCollapse(podcast)}
-                              className="active:scale-95"
-                            >
+                            <Button className="group-active:scale-95 group-hover:bg-[#555] active:scale-95">
                               View Link
                             </Button>
                           </div>
@@ -547,7 +559,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                                   </div>
                                 ) : (
                                   <div className="flex justify-start items-center p-2">
-                                    <h2 className="font-bold text-3xl">
+                                    <h2 className="font-bold text-3xl select-none">
                                       Visit:
                                     </h2>
                                     <Link
@@ -635,7 +647,7 @@ export const getStaticPaths = async () => {
   }));
   return {
     paths,
-    fallback: true,
+    fallback: "blocking",
   };
 };
 

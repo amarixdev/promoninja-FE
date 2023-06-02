@@ -7,7 +7,7 @@ import {
 } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
 import { CategoryPodcast, PodcastData } from "../utils/types";
-
+import fallbackImage from "../public/assets/fallback.png";
 import { useEffect, useRef } from "react";
 import AnimatedLink from "./AnimatedLink";
 import SliderArrows from "./SliderArrows";
@@ -63,11 +63,11 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
                     key={podcast.title}
                   >
                     <Image
-                      src={podcast.imageUrl}
+                      src={podcast.imageUrl || fallbackImage}
                       alt={podcast.title}
                       width={110}
                       height={110}
-                      loading="lazy"
+                      loading={"eager"}
                       className="rounded-xl  shadow-lg shadow-black max-w-[90px] sm:max-w-[110px]"
                     />
 
@@ -122,11 +122,11 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
                     key={podcast.title}
                   >
                     <Image
-                      src={podcast.imageUrl}
+                      src={podcast.imageUrl || fallbackImage}
                       alt={podcast.title}
                       width={190}
                       height={190}
-                      loading="lazy"
+                      loading={"eager"}
                       className="rounded-xl mt-4 shadow-lg shadow-black base:w-[90px] xs:w-[110px] sm:w-[170px] "
                     />
 

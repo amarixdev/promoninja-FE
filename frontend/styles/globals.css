@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@media (max-width: 640px) {
-  .small-screen {
-    /* Add your styles here for small screens */
-  }
+
+.__next img {
+  outline: none;
 }

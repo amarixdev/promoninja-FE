@@ -18,9 +18,14 @@ const BackButton = ({ sponsorPage }: Props) => {
   };
   if (isBreakPoint) {
     return (
-      <div className="z-[999] absolute p-4 flex justify-between w-full items-center">
-        <MdOutlineKeyboardBackspace size={24} onClick={handleBack} />
-        {<RxHamburgerMenu size={24} onClick={() => onOpen()} />}
+      <div className="z-[999] absolute flex justify-between w-full items-center ">
+        <div className="p-3" onClick={handleBack}>
+          <MdOutlineKeyboardBackspace size={24} />
+        </div>
+        <div className="p-3" onClick={() => onOpen()}>
+          {<RxHamburgerMenu size={24} />}
+        </div>
+
         <OptionsDrawer isOpen={isOpen} onClose={onClose} />
       </div>
     );

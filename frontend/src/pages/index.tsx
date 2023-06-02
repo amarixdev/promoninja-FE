@@ -10,6 +10,8 @@ import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import LogoText from "../public/assets/logo-text.png";
 import Logo from "../public/assets/ninja4.png";
+import fallbackImage from "../public/assets/fallback.png";
+
 import {
   useCarouselSpeed,
   useHoverCard,
@@ -130,12 +132,15 @@ const Home = ({
                   src={LogoText}
                   alt="logo-text"
                   width={225}
+                  loading="eager"
                   className="w-[180px] xs:w-[200px] lg:w-[225px]"
+                  placeholder="empty"
                 />
                 <Image
                   src={Logo}
                   width={120}
                   alt="logo"
+                  loading="eager"
                   className="mx-2 w-[80px] xs:w-[100px] lg:w-[120px]"
                 />
               </div>
@@ -177,8 +182,14 @@ const Home = ({
                         <div
                           className={`${
                             ninjaMode
-                              ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828]"
-                              : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
+                              ? `bg-gradient-to-b from-[#212121] to-[#111111] ${
+                                  isBreakPoint ||
+                                  "hover:from-[#202020] hover:to-[#282828]"
+                                } `
+                              : `bg-gradient-to-b from-[#2a2a2a] to-[#181818] ${
+                                  isBreakPoint ||
+                                  "hover:from-[#202020] hover:to-[#343434]"
+                                } `
                           } hover:cursor-pointer ${
                             activeIndex === index
                               ? " scale-125 transition-all duration-300 relative z-20"
@@ -197,11 +208,11 @@ const Home = ({
                           }}
                         >
                           <Image
-                            src={podcast.imageUrl}
+                            src={podcast.imageUrl || fallbackImage}
                             alt={podcast.title}
                             width={190}
                             height={190}
-                            loading="lazy"
+                            loading="eager"
                             className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px] "
                           />
                           <div>
@@ -232,7 +243,7 @@ const Home = ({
                             >
                               {podcast.sponsors?.map((sponsor) => (
                                 <Image
-                                  src={sponsor?.imageUrl || Logo}
+                                  src={sponsor?.imageUrl || fallbackImage}
                                   alt={sponsor?.imageUrl}
                                   width={30}
                                   height={30}
@@ -309,7 +320,7 @@ const Home = ({
                                 <div className="flex-col flex w-full ">
                                   <div className="flex justify-start ">
                                     <Image
-                                      src={offer.imageUrl}
+                                      src={offer.imageUrl || fallbackImage}
                                       width={225}
                                       height={225}
                                       alt={offer.name}
@@ -406,7 +417,7 @@ const Home = ({
                                 <div className="flex-col flex w-full ">
                                   <div className="flex flex-col items-center ">
                                     <Image
-                                      src={offer.imageUrl}
+                                      src={offer.imageUrl || fallbackImage}
                                       width={120}
                                       height={120}
                                       alt={offer.name}
@@ -573,12 +584,12 @@ const Home = ({
                                     >
                                       <div className="hover:bg-[#ffffff0e]  active:scale-95 h-[100px] w-[100px] rounded-lg absolute transition ease-in-out duration-300"></div>
                                       <Image
-                                        src={sponsor.imageUrl}
+                                        src={sponsor.imageUrl || fallbackImage}
                                         alt={sponsor.name}
                                         width={100}
                                         height={100}
                                         className="rounded-lg min-w-[100px]  min-h-[100px]"
-                                        loading="lazy"
+                                        loading="eager"
                                       />
                                     </Link>
 

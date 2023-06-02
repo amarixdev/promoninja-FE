@@ -37,7 +37,7 @@ const Footer = () => {
     if (href == pathname) {
       return (
         <button
-          className={`flex flex-col items-center`}
+          className={`flex flex-col items-center px-4`}
           onClick={() => scrollToTop()}
         >
           {currentPage[current || "home"] ? (
@@ -64,33 +64,34 @@ const Footer = () => {
           </p>
         </button>
       );
+    } else {
+      return (
+        <Link href={href} className={`flex flex-col items-center px-4`}>
+          {currentPage[current || "home"] ? (
+            <ActiveIcon
+              color={"#d6d6d6"}
+              size={24}
+              className={`text-[#d6d6d6] active:scale-95 relative base:w-[22px] xs:w-[24px] `}
+            />
+          ) : (
+            <Icon
+              color={"#e3e3e3ae"}
+              size={24}
+              className={`relative  active:scale-95 base:w-[22px] xs:w-[24px] `}
+            />
+          )}
+          <p
+            className={`base:text-[10px] xs:text-xs font-medium ${
+              currentPage[current || "home"]
+                ? "text-[#d6d6d6]"
+                : "text-[#e3e3e3ae]"
+            }`}
+          >
+            {pageTitle}
+          </p>
+        </Link>
+      );
     }
-    return (
-      <Link href={href} className={`flex flex-col items-center`}>
-        {currentPage[current || "home"] ? (
-          <ActiveIcon
-            color={"#d6d6d6"}
-            size={24}
-            className={`text-[#d6d6d6] active:scale-95 relative base:w-[22px] xs:w-[24px] `}
-          />
-        ) : (
-          <Icon
-            color={"#e3e3e3ae"}
-            size={24}
-            className={`relative  active:scale-95 base:w-[22px] xs:w-[24px] `}
-          />
-        )}
-        <p
-          className={`base:text-[10px] xs:text-xs font-medium ${
-            currentPage[current || "home"]
-              ? "text-[#d6d6d6]"
-              : "text-[#e3e3e3ae]"
-          }`}
-        >
-          {pageTitle}
-        </p>
-      </Link>
-    );
   };
 
   return (

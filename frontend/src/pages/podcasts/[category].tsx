@@ -11,7 +11,7 @@ import { Operations } from "../../graphql/operations";
 import Comedy from "../../public/assets/comedy2.avif";
 import Crime from "../../public/assets/crime.avif";
 import Education from "../../public/assets/education.avif";
-import LogoText from "../../public/assets/logo-text.png";
+import Blank from "../../public/assets/blank.png";
 import News from "../../public/assets/news.avif";
 import Society from "../../public/assets/society.avif";
 import Sports from "../../public/assets/sports.avif";
@@ -47,7 +47,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
     search: false,
     offers: false,
   });
-  let backdrop: StaticImageData = LogoText;
+  let backdrop: StaticImageData = Blank;
   const backdropRef = useRef<HTMLImageElement>(null);
   const bannerBreakpointRef = useRef<HTMLDivElement>(null);
   const { banner } = useBanner(bannerBreakpointRef, 0);
@@ -97,7 +97,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
         backdrop = Crime;
         break;
       default:
-        LogoText;
+        Blank;
     }
   }
 
@@ -136,6 +136,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
               isBreakPoint && "scale-125"
             } z-0 w-full lg:top-[-100px] xl:top-[-150px] shadow-2xl shadow-black`}
             priority
+            loading={"eager"}
             ref={backdropRef}
           />
           <div className="w-full h-screen bg-gradient-to-tr bg-black/10 from-black/40 fixed"></div>
@@ -185,7 +186,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                           width={140}
                           height={140}
                           className="rounded-xl mx-4 shadow-lg shadow-black w-[115px] sm:w-[140px] relative z-10 "
-                          loading="lazy"
+                          loading={"eager"}
                         />
                         <div className="flex flex-col min-w-[110px] sm:min-w-[130px] items-start justify-start ">
                           <h1 className=" whitespace-nowrap text-xs font-semibold sm:text-sm text-start mt-4 text-[#e6e6e6] group-hover:text-white whitespace-wrap">
@@ -218,7 +219,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                           width={160}
                           height={160}
                           className="rounded-xl mt-4 shadow-lg shadow-black w-[160px] "
-                          loading="lazy"
+                          loading={"eager"}
                         />
                         <div className="flex flex-col px-5">
                           <h1 className="whitespace-nowrap text-sm xl:text-md text-start mt-3 font-semibold text-[#dadada] group-hover:text-white">
@@ -258,7 +259,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true,
+    fallback: "blocking",
   };
 };
 

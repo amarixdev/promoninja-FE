@@ -3,7 +3,7 @@ import {
   MenuButton,
   MenuDivider,
   MenuItem,
-  MenuList
+  MenuList,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,11 +24,14 @@ import * as Ninja4 from "../public/assets/logo.png";
 import { scrollToTop } from "../utils/functions";
 import { useMediaQuery } from "../utils/hooks";
 import { LinkWrapperProps } from "./Footer";
+import { useEffect } from "react";
 
 interface Props {}
 
 const Sidebar = (props: Props) => {
   let isBreakpoint = useMediaQuery(1023);
+
+
   const { currentPage, ninjaMode, setNinjaMode } = NavContext();
   const { pathname } = useRouter();
   const handleOptions = () => {};
@@ -98,11 +101,9 @@ const Sidebar = (props: Props) => {
       </Link>
     );
   };
-
+  console.log(isBreakpoint);
   return (
-    <div
-      className={!isBreakpoint ? "min-w-[240px] bg-black z-[100] " : "hidden"}
-    >
+    <div className={isBreakpoint ? "hidden" : "min-w-[240px] bg-black z-[100]"}>
       <div className="fixed">
         {pathname !== "/" ? (
           <Link

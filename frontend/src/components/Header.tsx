@@ -117,7 +117,7 @@ const Header = ({
         <h1
           className={`${
             hideTitle && !displayCategory ? "opacity-0" : "opacity-100"
-          } transition-all ease-in-out duration-[400ms] ${
+          } transition-all duration-[200ms] ${
             (hideTitle && displayCategory) || (!hideTitle && displayCategory)
               ? "text-xl sm:text-4xl"
               : "text-2xl"

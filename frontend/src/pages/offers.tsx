@@ -1,4 +1,5 @@
 import { useLazyQuery } from "@apollo/client";
+import style from "../../styles/style.module.css";
 import {
   Box,
   Button,
@@ -25,6 +26,8 @@ import useSlider, {
   useSetCurrentPage,
 } from "../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
+import fallbackImage from "../public/assets/fallback.png";
+import { FaEllipsisH } from "react-icons/fa";
 
 interface OffersProps {
   sponsorsData: SponsorData[];
@@ -103,7 +106,7 @@ const Offers = ({
   const [getSponsorPodcasts, { loading: podcastsLoading, data: podcastData }] =
     useLazyQuery(Operations.Queries.GetSponsorPodcasts);
 
-  const [getCategorySponsors] = useLazyQuery(
+  const [getCategorySponsors, { loading: categoryLoading }] = useLazyQuery(
     Operations.Queries.GetCategorySponsors
   );
   const [loadMoreSponsors, { loading: sponsorsLoading }] = useLazyQuery(
@@ -266,7 +269,7 @@ const Offers = ({
     countData = countData?.getSponsorsCount;
 
     if (categoryData && countData) {
-      const renderDelay = 150;
+      const renderDelay = 0;
       setTimeout(() => {
         setFilteredSponsors(categoryData);
         setCurrentCategory(category);
@@ -314,6 +317,11 @@ const Offers = ({
 
   return (
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
+      {categoryLoading && (
+        <div className="h-screen fixed w-full flex top-0 z-[9999]">
+          <div className={`${style.loader}`} />
+        </div>
+      )}
       <Sidebar />
       <DescriptionDrawer
         isOpen={isOpenDrawer}
@@ -335,7 +343,7 @@ const Offers = ({
           className={`absolute top-10 w-full z-0  ${
             ninjaMode
               ? "from-[#222222] bg-gradient-to-b h-[400px]"
-              : "from-[#313131] bg-gradient-to-b h-[400px]"
+              : "from-[#484848] bg-gradient-to-b h-[500px]"
           }`}
         ></div>
 
@@ -482,11 +490,12 @@ const Offers = ({
                           <div className="flex-col flex w-full ">
                             <div className="flex flex-col items-center  ">
                               <Image
-                                src={sponsor.imageUrl}
+                                src={sponsor.imageUrl || fallbackImage}
                                 width={150}
                                 height={150}
                                 alt={sponsor.name}
                                 priority
+                                loading="eager"
                                 className={` h-[150px] max-w-[150px] relative rounded-lg shadow-xl shadow-black`}
                               />
                               <div className="flex ml-4 flex-col rounded-sm">
@@ -515,13 +524,14 @@ const Offers = ({
                               href={`/${convertToSlug(sponsor.name)}`}
                               className="w-full flex justify-center"
                             >
-                              <Button>
-                                <p className="text-xs xs:text-sm">
+                              <Button padding={8}>
+                                <p className="text-sm xs:text-base">
                                   View Details
                                 </p>
                               </Button>
                             </Link>
                             <Button
+                              padding={8}
                               onClick={() =>
                                 handleCollapse(
                                   sponsor.name,
@@ -531,7 +541,7 @@ const Offers = ({
                               className="active:scale-95 flex items-center"
                             >
                               <div className="flex items-center p-5">
-                                <p className="mr-4 text-xs xs:text-sm">
+                                <p className="mr-4 text-sm xs:text-base">
                                   Shop with Creators
                                 </p>
                                 {isOpen &&
@@ -592,19 +602,23 @@ const Offers = ({
                                   (pod: PodcastData) => (
                                     <div
                                       key={pod.title}
-                                      className="px-3 flex flex-col justify-between "
+                                      className="px-4 flex flex-col justify-between group "
+                                      onClick={() =>
+                                        handleDrawer(pod, sponsor.name)
+                                      }
                                     >
                                       <div>
                                         <Image
-                                          src={pod?.imageUrl}
-                                          width={80}
-                                          height={80}
+                                          src={pod?.imageUrl || fallbackImage}
+                                          width={90}
+                                          height={90}
                                           alt={pod.title}
+                                          loading="eager"
                                           className={`${
                                             placeholder && !isOpen
                                               ? "opacity-0"
                                               : "opacity-100"
-                                          } min-w-[80px] min-h-[80px] rounded-md mb-2 relative z-10`}
+                                          } min-w-[90px] min-h-[90px] rounded-md mb-2 relative z-10`}
                                         />
 
                                         <h1
@@ -614,7 +628,7 @@ const Offers = ({
                                               : "opacity-100"
                                           } text-xs xs:text-sm font-semibold whitespace-nowrap`}
                                         >
-                                          {truncateString(pod.title, 10)}
+                                          {truncateString(pod.title, 12)}
                                         </h1>
                                         <h3
                                           className={`${
@@ -623,7 +637,7 @@ const Offers = ({
                                               : "opacity-100"
                                           } text-xs text-[#6f6f6f] pb-2 whitespace-nowrap`}
                                         >
-                                          {truncateString(pod.publisher, 12)}
+                                          {truncateString(pod.publisher, 14)}
                                         </h3>
                                       </div>
 
@@ -631,26 +645,32 @@ const Offers = ({
                                         width={"25"}
                                         h={"5"}
                                         fontSize={"x-small"}
-                                        onClick={() =>
-                                          handleDrawer(pod, sponsor.name)
-                                        }
+                                        className="group-hover:bg-[#555] p-3 group-active:scale-95"
                                       >
-                                        Support
+                                        <p className="font-semibold">
+                                          Support{" "}
+                                        </p>
                                       </Button>
                                     </div>
                                   )
                                 )}
                                 {
                                   <Link
-                                    className="min-w-[110px] h-[110px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
+                                    className="min-w-[110px] h-[110px] flex items-center justify-center hover:cursor-pointer active:scale-95"
                                     href={`/${convertToSlug(sponsor.name)}`}
                                   >
-                                    <p className="font-semibold text-xs xs:text-sm">
+                                    <button className="font-semibold text-xs xs:text-sm">
                                       View All
-                                    </p>
+                                    </button>
                                   </Link>
                                 }
                               </div>
+                            </div>
+                            <div className="w-full justify-center text-sm font-light text-[#aaaaaa] relative top-2 italic tracking-wide">
+                              <p className="text-center">
+                                Choose a podcast to{" "}
+                                <span className="font-bold">support</span>
+                              </p>
                             </div>
                           </Box>
                         )}
@@ -687,11 +707,12 @@ const Offers = ({
                           <div className="flex-col flex w-full ">
                             <div className="flex justify-start ">
                               <Image
-                                src={sponsor.imageUrl}
+                                src={sponsor.imageUrl || fallbackImage}
                                 width={225}
                                 height={225}
                                 alt={sponsor.name}
                                 priority
+                                loading="eager"
                                 className={` max-h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black relative z-10`}
                               />
                               <div className="flex ml-4 flex-col rounded-sm">
@@ -798,14 +819,18 @@ const Offers = ({
                                   (pod: PodcastData) => (
                                     <div
                                       key={pod.title}
-                                      className="px-4 flex flex-col justify-between "
+                                      className="px-4 flex flex-col justify-between group cursor-pointer"
+                                      onClick={() =>
+                                        handleDrawer(pod, sponsor.name)
+                                      }
                                     >
                                       <div>
                                         <Image
-                                          src={pod?.imageUrl}
+                                          src={pod?.imageUrl || fallbackImage}
                                           width={110}
                                           height={110}
                                           alt={pod.title}
+                                          loading="eager"
                                           className={`${
                                             placeholder && !isOpen
                                               ? "opacity-0"
@@ -837,9 +862,7 @@ const Offers = ({
                                         width={"25"}
                                         h={"5"}
                                         fontSize={"x-small"}
-                                        onClick={() =>
-                                          handleDrawer(pod, sponsor.name)
-                                        }
+                                        className="group-active:scale-95 group-hover:bg-[#555]"
                                       >
                                         Support
                                       </Button>
@@ -853,6 +876,13 @@ const Offers = ({
                                   <p className="font-semibold">View All</p>
                                 </Link>
                               </div>
+                            </div>
+                            <div className="w-full text-[#aaaaaa] tracking-wide font-light text-sm italic relative top-2">
+                              <p className=" text-left">
+                                Choose a podcast to{" "}
+                                <span className="font-bold">support</span>.
+                                Click to reveal their link.
+                              </p>
                             </div>
                           </Box>
                         )}
