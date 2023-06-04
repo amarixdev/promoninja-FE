@@ -12,7 +12,6 @@ import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { BsPlayCircle, BsShareFill } from "react-icons/bs";
 import { FaEllipsisV } from "react-icons/fa";
-import { HiEllipsisVertical } from "react-icons/hi2";
 
 import { GiNinjaHeroicStance } from "react-icons/gi";
 import BackButton from "../../../components/BackButton";
@@ -33,6 +32,7 @@ import {
 } from "../../../utils/functions";
 import {
   useBanner,
+  useCopyToClipboard,
   useMediaQuery,
   useReportIssue,
   useScrollRestoration,
@@ -48,13 +48,18 @@ interface Props {
 
 const Podcast = ({ podcastData, category }: Props) => {
   const router = useRouter();
+  const { handleCopy } = useCopyToClipboard();
+
+  const copyToClipboard = () => {
+    handleCopy(window.location.href);
+  };
+
   useScrollRestoration(router);
   const {
     isOpen: isOpenDrawer,
     onOpen: onOpenDrawer,
     onClose: onCloseDrawer,
   } = useDisclosure();
-
   const [isOpen, setIsOpen] = useState(false);
   const imageSrc = podcastData?.imageUrl;
   const spotifyGreen = "1DB954";
@@ -75,7 +80,6 @@ const Podcast = ({ podcastData, category }: Props) => {
   const [preventHover, setPreventHover] = useState(false);
   const bannerBreakpointRef = useRef<HTMLDivElement>(null);
   const { banner } = useBanner(bannerBreakpointRef, 0);
-
   let existingSponsor: boolean = true;
   const [selectedSponsor, setSelectedSponsor] = useState("");
   useSetCurrentPage({
@@ -279,7 +283,7 @@ const Podcast = ({ podcastData, category }: Props) => {
                             </p>
                           </Button>
                         </Link>
-                        <Button>
+                        <Button onClick={() => copyToClipboard()}>
                           <BsShareFill size={14} />
                           <p className="ml-3 text-sm">Share</p>
                         </Button>
@@ -308,13 +312,16 @@ const Podcast = ({ podcastData, category }: Props) => {
                             </p>
                           </Button>
                         </Link>
-                        <Button minW={"fit-content"}>
+                        <Button
+                          minW={"fit-content"}
+                          onClick={() => copyToClipboard()}
+                        >
                           <BsShareFill size={15} />
                           <p className="ml-3 text-xs xs:text-sm">Share</p>
                         </Button>
                       </div>
                       <div
-                        className="flex w-4/12 items-center justify-end py-6 relative z-[20] gap-2"
+                        className="flex w-fit items-center justify-end py-6 relative z-[20] gap-2"
                         onClick={() => handleDrawer("", false)}
                       >
                         <button className="flex items-center justify-center bg-[#151515] rounded-full p-3">

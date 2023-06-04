@@ -30,6 +30,7 @@ import {
 } from "../utils/functions";
 import {
   useBanner,
+  useCopyToClipboard,
   useMediaQuery,
   useReportIssue,
   useScrollRestoration,
@@ -53,6 +54,11 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
     selectedUrl: "",
     previousUrl: "",
   });
+
+  const { handleCopy } = useCopyToClipboard();
+  const copyToClipboard = () => {
+    handleCopy(window.location.href);
+  };
 
   const categoryIndex = sponsorCategoryData?.findIndex(
     (sponsor) => sponsor.name === sponsorData.sponsorCategory[0].name
@@ -264,7 +270,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                   </Link>
                   <Button
                     className="active:scale-95 font-semibold "
-                    onClick={() => setCategoryIndex(categoryIndex)}
+                    onClick={() => copyToClipboard()}
                     minW={"fit-content"}
                   >
                     <div className="flex items-center gap-2">
@@ -327,7 +333,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                         <p>{sponsorData.sponsorCategory[0].name}</p>
                       </Button>
                     </Link>
-                    <Button>
+                    <Button onClick={() => copyToClipboard()}>
                       <BsShareFill />
                       <p className="ml-3">Share</p>
                     </Button>

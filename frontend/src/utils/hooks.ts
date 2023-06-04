@@ -34,7 +34,7 @@ export const useMediaQuery = (width: number) => {
   return targetReached;
 };
 
-import { useDisclosure } from "@chakra-ui/react";
+import { useDisclosure, useToast } from "@chakra-ui/react";
 import { NextRouter, useRouter } from "next/router";
 import { CurrentPage, NavContext } from "../context/navContext";
 
@@ -273,4 +273,43 @@ export const useReportIssue = (selected: string) => {
     podcastState,
     setPodcastState,
   };
+};
+
+export const useCopyToClipboard = (promoCode?: string) => {
+  console.log("test");
+
+  const isBreakPoint = useMediaQuery(1023);
+  const toastPosition = isBreakPoint ? "top" : "bottom";
+  const toast = useToast();
+  const handleCopy = async (link?: string) => {
+    try {
+      if (promoCode) {
+        await navigator.clipboard.writeText(promoCode);
+        CopyToast();
+      } else if (link) {
+        await navigator.clipboard.writeText(link);
+        CopyToast();
+      }
+    } catch (error) {
+      console.error("Failed to copy");
+    }
+  };
+
+  const CopyToast = () => {
+    return toast({
+      title: `${
+        promoCode ? "Copied To Clipboard" : "Link Copied To Clipboard"
+      } `,
+      description: `${
+        promoCode ? `Promocode: ${promoCode?.toUpperCase()}` : ""
+      }`,
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+      colorScheme: `gray`,
+      position: toastPosition,
+    });
+  };
+
+  return { handleCopy };
 };

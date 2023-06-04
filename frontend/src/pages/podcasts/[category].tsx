@@ -1,7 +1,7 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import BackButton from "../../components/BackButton";
 import Footer from "../../components/Footer";
 import Sidebar from "../../components/Sidebar";
@@ -39,6 +39,21 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
   const router = useRouter();
   useScrollRestoration(router);
   const isBreakPoint = useMediaQuery(1023);
+  const [backdrop, setBackdrop] = useState<StaticImageData | null>(null);
+
+  useLayoutEffect(() => {
+    setBackdrop(
+      {
+        "news & politics": News,
+        comedy: Comedy,
+        "society & culture": Society,
+        sports: Sports,
+        educational: Education,
+        technology: Technology,
+        "true crime": Crime,
+      }[categoryName] || null
+    );
+  }, [categoryName, backdrop]);
 
   const { ninjaMode } = NavContext();
   useSetCurrentPage({
@@ -47,7 +62,6 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
     search: false,
     offers: false,
   });
-  let backdrop: StaticImageData = Blank;
   const backdropRef = useRef<HTMLImageElement>(null);
   const bannerBreakpointRef = useRef<HTMLDivElement>(null);
   const { banner } = useBanner(bannerBreakpointRef, 0);
@@ -73,35 +87,12 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
     };
   }, [backdropRef, isBreakPoint]);
 
-  if (categoryName) {
-    switch (categoryName) {
-      case "news & politics":
-        backdrop = News;
-        break;
-      case "comedy":
-        backdrop = Comedy;
-        break;
-      case "society & culture":
-        backdrop = Society;
-        break;
-      case "sports":
-        backdrop = Sports;
-        break;
-      case "educational":
-        backdrop = Education;
-        break;
-      case "technology":
-        backdrop = Technology;
-        break;
-      case "true crime":
-        backdrop = Crime;
-        break;
-      default:
-        Blank;
-    }
+  if (!backdrop) {
+    return null;
   }
 
-  console.log(banner);
+  console.log(backdrop);
+
   return (
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0 bg-black h-full">
       <Sidebar />

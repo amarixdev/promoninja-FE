@@ -12,7 +12,6 @@ import { currentYear } from "../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { CategoryPodcast } from "../../utils/types";
 
-
 interface Props {
   categoryPreviews: CategoryPodcast[];
 }
@@ -51,7 +50,14 @@ const Podcasts = ({ categoryPreviews }: Props) => {
           {
             <div className=" w-full top-16 lg:top-20 py-6 relative justify-center flex">
               <div className="flex w-full justify-center items-center max-w-[120px] lg:min-w-[200px]">
-                <Image src={LogoText} alt="logo" width={200} height={200} />
+                <Image
+                  loading="eager"
+                  priority
+                  src={LogoText}
+                  alt="logo"
+                  width={200}
+                  height={200}
+                />
               </div>
             </div>
           }
@@ -77,7 +83,7 @@ const Podcasts = ({ categoryPreviews }: Props) => {
             </div>
           )}
           <p className="flex font-bold text-[#9f9f9f] text-xs w-full items-center justify-center  pb-6 lg:px-4">
-          {`© PromoNinja ${currentYear}`}
+            {`© PromoNinja ${currentYear}`}
           </p>
         </div>
       </div>

@@ -37,6 +37,8 @@ const BrokenLinkModal = ({
     }
     setPodcastState((prev: string[]) => [...prev, selected]);
     setSubmitted(true);
+    setBrokenLink(false);
+    setExpired(false);
     setTimeout(() => {
       onClose();
     }, 1000);

@@ -112,7 +112,6 @@ const Home = ({
     <GiRunningNinja size={isBreakPoint ? 40 : 55} />
   );
 
-
   return (
     <>
       <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
@@ -597,7 +596,9 @@ const Home = ({
                                     <Link
                                       href={`/${convertToSlug(sponsor.name)}`}
                                     >
-                                      <div className="hover:bg-[#ffffff0e]  active:scale-95 h-[100px] w-[100px] rounded-lg absolute transition ease-in-out duration-300"></div>
+                                      {isBreakPoint || (
+                                        <div className="hover:bg-[#ffffff0e]  active:scale-95 h-[100px] w-[100px] rounded-lg absolute transition ease-in-out duration-300"></div>
+                                      )}
                                       <Image
                                         src={sponsor.imageUrl || fallbackImage}
                                         alt={sponsor.name}

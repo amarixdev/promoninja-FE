@@ -31,7 +31,6 @@ interface Props {}
 const Sidebar = (props: Props) => {
   let isBreakpoint = useMediaQuery(1023);
 
-
   const { currentPage, ninjaMode, setNinjaMode } = NavContext();
   const { pathname } = useRouter();
   const handleOptions = () => {};
@@ -101,9 +100,14 @@ const Sidebar = (props: Props) => {
       </Link>
     );
   };
-  console.log(isBreakpoint);
   return (
-    <div className={isBreakpoint ? "hidden" : "min-w-[240px] bg-black z-[100]"}>
+    <div
+      className={
+        isBreakpoint
+          ? "hidden"
+          : "min-w-[240px] bg-black z-[100] transition-all duration-500 ease-in-out"
+      }
+    >
       <div className="fixed">
         {pathname !== "/" ? (
           <Link
@@ -166,12 +170,13 @@ const Sidebar = (props: Props) => {
         <div className="mt-10 px-2">
           <Menu closeOnSelect={false}>
             <MenuButton className="p-6 group">
-              <div className="flex gap-2 items-center relative right-2 ">
-                <p className="font-semibold text-sm text-[#e3e3e3ae] group-hover:text-white">
+              <div className="flex gap-2 items-center relative right-2  ">
+                <p className="font-semibold text-base text-[#e3e3e3ae]  group-hover:text-white">
                   More
                 </p>
                 <BiChevronDown
                   onClick={handleOptions}
+                  size={20}
                   className="fill-[#e3e3e3ae] group-hover:fill-white hover:cursor-pointer"
                 />
               </div>
@@ -182,7 +187,7 @@ const Sidebar = (props: Props) => {
                 _hover={{ bgColor: "#222222" }}
                 onClick={() => setNinjaMode((prev) => !prev)}
               >
-                <p className="text-xs font-semibold text-[#e3e3e3ae]">
+                <p className="text-sm font-semibold text-[#e3e3e3ae]">
                   {" "}
                   Ninja Mode:{" "}
                 </p>
@@ -191,38 +196,46 @@ const Sidebar = (props: Props) => {
                 </span>
               </MenuItem>
               <MenuDivider />
-              <MenuItem
-                bgColor={"transparent"}
-                _hover={{ bgColor: "#222222" }}
-                className="group"
+
+              <Link
+                href={"/about"}
+                className="flex items-center gap-4 w-full h-full py-2 group "
               >
-                <div className="flex items-center gap-4 ">
+                <MenuItem
+                  bgColor={"transparent"}
+                  _hover={{ bgColor: "#222222" }}
+                  className=""
+                >
                   <RiExternalLinkLine
                     color="#e3e3e3ae"
-                    className="group-hover:fill-white transition-all duration-300"
+                    className="group-hover:fill-white transition-all duration-300 mr-3"
                   />
-                  <p className="text-xs font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
+                  <p className="text-sm font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
                     {" "}
                     About
                   </p>
-                </div>
-              </MenuItem>
-              <MenuItem
-                bgColor={"transparent"}
-                _hover={{ bgColor: "#222222" }}
-                className="group"
+                </MenuItem>
+              </Link>
+
+              <Link
+                href={"/support"}
+                className="flex items-center gap-4 w-full h-full py-2"
               >
-                <div className="flex items-center gap-4 ">
+                <MenuItem
+                  bgColor={"transparent"}
+                  _hover={{ bgColor: "#222222" }}
+                  className="group"
+                >
                   <RiExternalLinkLine
                     color="#e3e3e3ae"
-                    className="group-hover:fill-white transition-all duration-300"
+                    className="group-hover:fill-white transition-all duration-300 mr-3"
                   />
-                  <p className="text-xs font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
+                  <p className="text-sm font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
                     {" "}
                     Support
                   </p>
-                </div>
-              </MenuItem>
+                </MenuItem>
+              </Link>
             </MenuList>
           </Menu>
         </div>

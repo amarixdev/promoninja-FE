@@ -28,7 +28,6 @@ const AnimatedLink = ({ title, location, separateLink }: AnimatedLinkProps) => {
   const isBreakPoint = useMediaQuery(1023);
   const [hover, setHover] = useState(false);
   const { setCategoryIndex } = NavContext();
-  console.log("location", location);
   if (isBreakPoint) {
     /* Mobile */
     return (

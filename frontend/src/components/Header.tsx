@@ -14,6 +14,8 @@ import { useMediaQuery } from "../utils/hooks";
 
 import { AiOutlineClose } from "react-icons/ai";
 import { RiExternalLinkLine } from "react-icons/ri";
+import Link from "next/link";
+
 export const OptionsDrawer = ({
   onClose,
   isOpen,
@@ -66,18 +68,18 @@ export const OptionsDrawer = ({
                 </Button>
               </div>
               <div className="mt-10 flex flex-col gap-4">
-                <div className="flex gap-4 items-center">
+                <Link href={"/about"} className="flex gap-4 items-center">
                   <RiExternalLinkLine size={25} color="#e3e3e3e9" />
                   <p className="font-semibold text-[#e3e3e3e9] text-2xl ">
                     About
                   </p>
-                </div>
-                <div className="flex gap-4 items-center">
+                </Link>
+                <Link href={"/support"} className="flex gap-4 items-center">
                   <RiExternalLinkLine size={25} color="#e3e3e3e9" />
                   <p className="font-semibold text-[#e3e3e3e9] text-2xl">
                     Support
                   </p>
-                </div>
+                </Link>
               </div>
             </div>
           </DrawerBody>

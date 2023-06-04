@@ -193,9 +193,9 @@ const Search = () => {
                 >
                   {podcast.imageUrl ? (
                     <Link
-                      href={`/podcasts/${
+                      href={`/podcasts/${convertToSlug(
                         podcast.category[0].name
-                      }/${convertToSlug(podcast.title)}`}
+                      )}/${convertToSlug(podcast.title)}`}
                       className="w-full"
                     >
                       <div className="flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f] lg:min-w-[550px] min-w-[200px] xs:min-w-[300px] sm:min-w-[350px] md:min-w-[420px]">
