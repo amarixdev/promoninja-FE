@@ -85,16 +85,19 @@ export const useCarouselSpeed = (
   startTime: number,
   setNinjaMode: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
+  const [easterEgg, setEaserEgg] = useState(false);
   useEffect(() => {
     if (clickCount > 1) {
       const elapsedTime = Date.now() - startTime;
       const clickSpeed = clickCount / (elapsedTime / 1000);
-
-      if (clickSpeed >= 3 && clickCount > 6) {
+      if (clickSpeed >= 3 && clickCount > 8) {
         setNinjaMode(true);
+        setEaserEgg(true);
       }
     }
-  }, [clickCount, startTime, setNinjaMode]);
+  }, [clickCount, startTime, setNinjaMode, easterEgg]);
+
+  return { easterEgg, setEaserEgg };
 };
 
 type RotateDirection = "next" | "prev";

@@ -63,7 +63,11 @@ const Home = ({
   const [trendingOfferIndex, setTrendingOfferIndex] = useState("0");
   const [ninjaRunningIndex, setNinjaRunningIndex] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
-  useCarouselSpeed(clickCount, startTime, setNinjaMode);
+  const { easterEgg, setEaserEgg } = useCarouselSpeed(
+    clickCount,
+    startTime,
+    setNinjaMode
+  );
   const [currDeg, handleRotate] = useRotate(
     clickCount,
     setClickCount,
@@ -107,6 +111,7 @@ const Home = ({
   const NinjaRunning = Array(5).fill(
     <GiRunningNinja size={isBreakPoint ? 40 : 55} />
   );
+
 
   return (
     <>
@@ -500,6 +505,14 @@ const Home = ({
                     </h1>
                   </div>
                   <div className="flex flex-col items-center relative bottom-14 py-6 rounded-lg">
+                    <div
+                      className={` absolute ${isBreakPoint && "right-10"} ${
+                        easterEgg ? "opacity-100 " : "opacity-0"
+                      } transition duration-300 ease-in-out font-bold text-s lg:text-sm text-[#aaaaaa] italic`}
+                    >
+                      Nice Speed!
+                    </div>
+
                     <Carousel
                       handleRotate={handleRotate}
                       currDeg={currDeg}
@@ -515,6 +528,7 @@ const Home = ({
                         className={`active:scale-95 `}
                         onMouseLeave={() => {
                           setClickCount(0);
+                          setEaserEgg(false);
                         }}
                       >
                         <AiFillCaretLeft />
@@ -525,6 +539,7 @@ const Home = ({
                         className="active:scale-95"
                         onMouseLeave={() => {
                           setClickCount(0);
+                          setEaserEgg(false);
                         }}
                       >
                         <AiFillCaretRight />
