@@ -12,6 +12,7 @@ import { currentYear } from "../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { CategoryPodcast } from "../../utils/types";
 
+
 interface Props {
   categoryPreviews: CategoryPodcast[];
 }
@@ -82,6 +83,7 @@ const Podcasts = ({ categoryPreviews }: Props) => {
               ))}
             </div>
           )}
+
           <p className="flex font-bold text-[#9f9f9f] text-xs w-full items-center justify-center  pb-6 lg:px-4">
             {`© PromoNinja ${currentYear}`}
           </p>
@@ -119,11 +121,12 @@ export const getStaticProps: GetStaticProps = async () => {
     const value = category[key].fetchCategoryPodcasts;
     return { [key]: value };
   });
-
+  const oneWeek = 604800;
   return {
     props: {
       categoryPreviews,
     },
+    revalidate: oneWeek,
   };
 };
 

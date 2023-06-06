@@ -1,13 +1,12 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import { NavContext } from "../context/navContext";
-import LogoAlt from "../public/assets/logo-alt2.png";
+import LogoAlt from "../public/assets/alt-ninja.png";
 import Footer from "../components/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import BackButton from "../components/BackButton";
-import style from "../../styles/style.module.css";
 
 type Props = {};
 

@@ -25,6 +25,7 @@ import fallbackImage from "../public/assets/fallback.png";
 import {
   convertToFullURL,
   convertToSlug,
+  currentYear,
   scrollToTop,
   truncateString,
 } from "../utils/functions";
@@ -37,6 +38,7 @@ import {
   useSetCurrentPage,
 } from "../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
+import ChatBubble from "../components/ChatBubble";
 
 interface Props {
   sponsorData: SponsorData;
@@ -54,6 +56,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
     selectedUrl: "",
     previousUrl: "",
   });
+
 
   const { handleCopy } = useCopyToClipboard();
   const copyToClipboard = () => {
@@ -431,7 +434,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
               <div className="w-[95%] border-b-[1px] "></div>
             </div>
 
-            <div className="w-full flex flex-col lg:h-[500px] pt-1 lg:pt-6 lg:overflow-y-scroll base:pb-24 lg:pb-16">
+            <div className="w-full flex flex-col lg:h-[500px] pt-1 lg:pt-6 lg:overflow-y-scroll pb-52">
               {sponsorData?.podcast.map((podcast, index) => (
                 <div
                   key={podcast.title}
@@ -626,6 +629,15 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                   )}
                 </div>
               ))}
+              <div className="relative top-16">
+                <ChatBubble
+                  message="Did you know podcasts typically earn 5% to 20% commission when listeners use affiliate links?"
+                  page="sponsor"
+                />
+                <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
+                  {`© PromoNinja ${currentYear}`}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -653,7 +665,7 @@ export const getStaticPaths = async () => {
   }));
   return {
     paths,
-    fallback: "blocking",
+    fallback: true,
   };
 };
 
@@ -677,11 +689,13 @@ export const getStaticProps = async ({ params }: any) => {
 
   sponsorData = sponsorData?.getSponsor;
   sponsorCategoryData = sponsorCategoryData?.getSponsorCategories;
+  const oneWeek = 604800;
 
   return {
     props: {
       sponsorData,
       sponsorCategoryData,
+      revalidate: oneWeek,
     },
   };
 };

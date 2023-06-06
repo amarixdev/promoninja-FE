@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 import { NavContext } from "../context/navContext";
-import Logo3 from "../public/assets/logo-alt.png";
+import Logo3 from "../public/assets/alt-ninja2.png";
 import Footer from "../components/Footer";
 import Image from "next/image";
 import Link from "next/link";

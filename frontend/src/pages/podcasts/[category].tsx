@@ -11,7 +11,6 @@ import { Operations } from "../../graphql/operations";
 import Comedy from "../../public/assets/comedy2.avif";
 import Crime from "../../public/assets/crime.avif";
 import Education from "../../public/assets/education.avif";
-import Blank from "../../public/assets/blank.png";
 import News from "../../public/assets/news.avif";
 import Society from "../../public/assets/society.avif";
 import Sports from "../../public/assets/sports.avif";
@@ -19,6 +18,7 @@ import Technology from "../../public/assets/technology.avif";
 import {
   capitalizeString,
   convertToSlug,
+  currentYear,
   scrollToTop,
   truncateString,
 } from "../../utils/functions";
@@ -29,6 +29,7 @@ import {
   useSetCurrentPage,
 } from "../../utils/hooks";
 import { Category, PodcastData } from "../../utils/types";
+import ChatBubble from "../../components/ChatBubble";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -39,21 +40,19 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
   const router = useRouter();
   useScrollRestoration(router);
   const isBreakPoint = useMediaQuery(1023);
-  const [backdrop, setBackdrop] = useState<StaticImageData | null>(null);
 
-  useLayoutEffect(() => {
-    setBackdrop(
-      {
-        "news & politics": News,
-        comedy: Comedy,
-        "society & culture": Society,
-        sports: Sports,
-        educational: Education,
-        technology: Technology,
-        "true crime": Crime,
-      }[categoryName] || null
-    );
-  }, [categoryName, backdrop]);
+  const currentPodcasts = categoryPodcasts?.map((pod) => pod.title);
+
+  let backdrop =
+    {
+      "news & politics": News,
+      comedy: Comedy,
+      "society & culture": Society,
+      sports: Sports,
+      educational: Education,
+      technology: Technology,
+      "true crime": Crime,
+    }[categoryName] || null;
 
   const { ninjaMode } = NavContext();
   useSetCurrentPage({
@@ -117,7 +116,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
         }
       </div>
       {categoryPodcasts && (
-        <div className="h-screen w-full ">
+        <div className="h-screen w-full">
           <BackButton />
 
           <Image
@@ -140,11 +139,11 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
             </h1>
 
             <div
-              className={` ${
+              className={`${
                 ninjaMode
                   ? "bg-gradient-to-b from-[#0a0a0a] to-[#020202]   "
                   : "bg-gradient-to-b from-[#1b1b1b] to-[#121212]"
-              } relative grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid gap-y-8 gap-x-4 lg:gap-x-8 lg:gap-y-10 p-6 lg:p-10 pb-24`}
+              } relative grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid gap-y-8 gap-x-4 lg:gap-x-8 lg:gap-y-10 p-6 lg:p-10 pb-96 lg:pb-52`}
             >
               {ninjaMode ? (
                 <div
@@ -155,6 +154,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                   className={` from-[#4545453f] bg-gradient-to-b  absolute w-full h-[200px] z-0 `}
                 ></div>
               )}
+
               {categoryPodcasts?.map((podcast) => (
                 <div key={podcast.title}>
                   {isBreakPoint ? (
@@ -226,6 +226,16 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                 </div>
               ))}
             </div>
+            <div className="relative bottom-[380px] lg:bottom-[200px]">
+              <ChatBubble
+                message="Don't see your favorite show?"
+                page="category"
+                currentPodcasts={currentPodcasts}
+              />
+              <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
+                {`© PromoNinja ${currentYear}`}
+              </p>
+            </div>
           </div>
 
           <Footer />
@@ -250,7 +260,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: "blocking",
+    fallback: true,
   };
 };
 
@@ -268,11 +278,12 @@ export const getStaticProps = async ({ params }: any) => {
   });
 
   const categoryPodcasts = data.fetchCategoryPodcasts;
-
+  const oneWeek = 604800;
   return {
     props: {
       categoryPodcasts,
       category: slugToCategory,
     },
+    revalidate: 604800,
   };
 };

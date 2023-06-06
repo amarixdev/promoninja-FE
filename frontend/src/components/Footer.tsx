@@ -98,7 +98,7 @@ const Footer = () => {
     <div
       className={
         isBreakPoint
-          ? `w-[100vw] fixed bottom-[0] z-[90] bg-black/60 backdrop-blur-md`
+          ? `w-[100vw] fixed bottom-[0] z-[999] bg-black/60 backdrop-blur-md`
           : "hidden"
       }
     >

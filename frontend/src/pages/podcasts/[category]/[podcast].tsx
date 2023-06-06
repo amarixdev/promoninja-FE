@@ -1,4 +1,3 @@
-// import ColorExtractor from "../../../components/ColorExtractor";
 import {
   Box,
   Button,
@@ -23,10 +22,12 @@ import Sidebar from "../../../components/Sidebar";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
 import LogoText from "../../../public/assets/logo-text.png";
+
 import {
   capitalizeString,
   convertToFullURL,
   convertToSlug,
+  currentYear,
   scrollToTop,
   truncateString,
 } from "../../../utils/functions";
@@ -39,6 +40,9 @@ import {
   useSetCurrentPage,
 } from "../../../utils/hooks";
 import { OfferData, PodcastData } from "../../../utils/types";
+import ToggleButton from "../../../components/ChatBubble";
+import ChatBubble from "../../../components/ChatBubble";
+import CommunityModal from "../../../components/CommunityModal";
 
 interface Props {
   podcastData: PodcastData;
@@ -49,7 +53,7 @@ interface Props {
 const Podcast = ({ podcastData, category }: Props) => {
   const router = useRouter();
   const { handleCopy } = useCopyToClipboard();
-
+  const currentSponsors = podcastData?.sponsors.map((sponsor) => sponsor.name);
   const copyToClipboard = () => {
     handleCopy(window.location.href);
   };
@@ -382,7 +386,7 @@ const Podcast = ({ podcastData, category }: Props) => {
             </div>
             <div className="w-[95%] border-b-[1px] pb-8 pt-2 mt-2 mb-1"></div>
           </div>
-          <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col lg:h-[600px] lg:overflow-y-scroll pb-24 lg:pb-16">
+          <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col lg:h-[600px] lg:overflow-y-scroll pb-56 lg:pb-40">
             {!hasNoSponsors ? (
               podcastData.offer.map((offer: OfferData, index) => (
                 <div
@@ -606,6 +610,19 @@ const Podcast = ({ podcastData, category }: Props) => {
                 )}
               </>
             )}
+            <div className="relative top-16">
+              {!hasNoSponsors && (
+                <ChatBubble
+                  message="Did we miss any sponsors?"
+                  page="podcast"
+                  currentSponsors={currentSponsors}
+                />
+              )}
+
+              <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
+                {`© PromoNinja ${currentYear}`}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -637,7 +654,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths,
-    fallback: "blocking",
+    fallback: true,
   };
 };
 
@@ -655,12 +672,14 @@ export const getStaticProps = async ({ params }: any) => {
     });
 
     podcastData = podcastData.getPodcast;
+    const oneWeek = 604800;
     return {
       props: {
         podcastData,
         loading,
         category,
       },
+      revalidate: oneWeek,
     };
   } catch (error) {
     console.log(error);

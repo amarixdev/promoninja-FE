@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/react";
+import { Button, useDisclosure } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -29,6 +29,7 @@ import Header from "../components/Header";
 import SliderArrows from "../components/SliderArrows";
 import { NavContext } from "../context/navContext";
 import { convertToSlug, currentYear, truncateString } from "../utils/functions";
+import CommunityModal from "../components/CommunityModal";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -701,7 +702,7 @@ export const getStaticProps: GetStaticProps = async () => {
   categoryData = categoryData?.getSponsorCategories;
   topPicksData = topPicksData?.getTopPicks;
   trendingOffersData = trendingOffersData?.getTrendingOffers;
-
+  const oneWeek = 604800;
   return {
     props: {
       sponsorsData,
@@ -709,5 +710,6 @@ export const getStaticProps: GetStaticProps = async () => {
       topPicksData,
       trendingOffersData,
     },
+    revalidate: oneWeek,
   };
 };

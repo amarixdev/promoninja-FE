@@ -28,6 +28,7 @@ import useSlider, {
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 import fallbackImage from "../public/assets/fallback.png";
 import { FaEllipsisH } from "react-icons/fa";
+import ChatBubble from "../components/ChatBubble";
 
 interface OffersProps {
   sponsorsData: SponsorData[];
@@ -112,6 +113,10 @@ const Offers = ({
   const [loadMoreSponsors, { loading: sponsorsLoading }] = useLazyQuery(
     Operations.Queries.GetSponsors
   );
+
+  const funFacts = [
+    "Podcast sponsorships help advertisers reach niche audiences.",
+  ];
 
   useEffect(() => {
     if (displayCategory) {
@@ -814,7 +819,7 @@ const Offers = ({
                             shadow="md"
                           >
                             <div className="flex flex-col w-full ">
-                              <div className="flex overflow-x-scroll pb-4 w-full ">
+                              <div className="flex overflow-x-scroll pb-4 w-full scrollbar-hide ">
                                 {sponsorPodcastArray?.map(
                                   (pod: PodcastData) => (
                                     <div
@@ -954,8 +959,10 @@ export const getStaticProps = async () => {
   sponsorCategoryData = sponsorCategoryData?.getSponsorCategories;
   sponsorsData = sponsorsData.getSponsors;
   sponsorsCount = sponsorsCount?.getSponsorsCount;
+  const oneWeek = 604800;
 
   return {
     props: { sponsorsData, sponsorCategoryData, sponsorsCount },
+    revalidate: oneWeek,
   };
 };
