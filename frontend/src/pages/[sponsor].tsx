@@ -57,7 +57,6 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
     previousUrl: "",
   });
 
-
   const { handleCopy } = useCopyToClipboard();
   const copyToClipboard = () => {
     handleCopy(window.location.href);
@@ -631,7 +630,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
               ))}
               <div className="relative top-16">
                 <ChatBubble
-                  message="Did you know podcasts typically earn 5% to 20% commission when listeners use affiliate links?"
+                  message="podcasts typically earn 5% to 20% commission when listeners use affiliate links?"
                   page="sponsor"
                 />
                 <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">

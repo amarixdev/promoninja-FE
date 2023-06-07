@@ -7,9 +7,12 @@ import {
   ModalContent,
   ModalOverlay,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "../../styles/style.module.css";
 import { capitalizeString } from "../utils/functions";
+import { useMediaQuery } from "../utils/hooks";
+import emailjs from "@emailjs/browser";
+import { ENV } from "../../environment";
 
 const CommunityModal = ({
   isOpen,
@@ -35,6 +38,7 @@ const CommunityModal = ({
   };
 
   const messageRef = useRef<HTMLParagraphElement>(null);
+  const formRef = useRef<any>(null);
   const specialCharacterFilter = /^[a-zA-Z0-9\s]*$/;
   const onlyNumbers = /^[0-9]+$/;
   const inputType = currentSponsors ? "Sponsor" : "Podcast";
@@ -47,51 +51,97 @@ const CommunityModal = ({
   const [formHeader, setFormHeader] = useState<string | undefined>("");
   const [error, setError] = useState(false);
   const [text, setText] = useState("");
+  const isBreakPoint = useMediaQuery(1023);
+  const modalSize = isBreakPoint ? "xs" : "md";
+  const inputFormFontSize = isBreakPoint ? "md" : "xl";
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
 
-  const handleSubmit = (e: any) => {
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+  }, []);
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    if (!isOnline) {
+      setText("");
+      setError(true);
+      setSubmitted(false);
+      setFormHeader("Message Failed To Send: Internet Connection");
+      return;
+    }
 
     if (text === "") {
+      setSubmitted(false);
+      setFormHeader("");
+
       return;
     }
 
     if (caseDesensitize(userInputList)?.includes(text.toLowerCase())) {
       setError(true);
+      setSubmitted(false);
       setFormHeader("Oops, Developer Was Already Notified!");
       setText("");
     } else if (
       caseDesensitize(inputArray)?.includes(text.toLowerCase().trimEnd())
     ) {
       setError(true);
+      setSubmitted(false);
       setFormHeader(`${inputType} Already Exists`);
       setText("");
     } else if (!specialCharacterFilter.test(text)) {
       setError(true);
+      setSubmitted(false);
       setFormHeader("Sorry, No Special Characters");
       setText("");
     } else if (onlyNumbers.test(text)) {
       setError(true);
+      setSubmitted(false);
       setFormHeader("Please enter a valid character A-Z");
       setText("");
     } else if (text.length > 30) {
       setError(true);
+      setSubmitted(false);
       setFormHeader(
         ` This ${inputType.toLowerCase()} seems too long, try abbreviating.`
       );
       setText("");
     } else {
       setUserInputList((prev) => [...prev, text]);
-      setError(false);
-      setSubmitted(true);
-      if (text) {
+      try {
+        await emailjs
+          .sendForm(
+            ENV.SERVICE_ID,
+            ENV.TEMPLATE_ID,
+            formRef.current,
+            ENV.PUBLIC_KEY
+          )
+          .then(
+            (result) => {
+              console.log(result.text);
+            },
+            (error) => {
+              console.log(error.text);
+            }
+          )
+          .finally(() => {
+            setError(false);
+            setSubmitted(true);
+            setFormHeader(capitalizeString(text));
+            setText("");
+            messageRef.current?.classList.add(`${style.flashText}`);
+            setTimeout(() => {
+              messageRef.current?.classList.remove(`${style.flashText}`);
+            }, 1000);
+          });
+      } catch (error) {
+        setText("");
+        setError(true);
+        setFormHeader("Message Failed To Send: Server Error");
       }
-      setFormHeader(capitalizeString(text));
-      setText("");
-
-      messageRef.current?.classList.add(`${style.flashText}`);
-      setTimeout(() => {
-        messageRef.current?.classList.remove(`${style.flashText}`);
-      }, 1000);
     }
   };
 
@@ -102,6 +152,7 @@ const CommunityModal = ({
         isOpen={isOpen}
         onClose={onClose}
         colorScheme="black"
+        size={modalSize}
       >
         <ModalOverlay color={"black"} />
         <ModalContent>
@@ -110,23 +161,30 @@ const CommunityModal = ({
             <div className=" w-full flex justify-center items-center">
               <div className="gap-2 flex flex-col justify-center items-center py-4">
                 <p className="font-extrabold text-2xl ">Community Input</p>
-                <p
-                  className={`${
-                    formHeader && !error && "text-orange-300"
-                  } font-bold`}
-                >
-                  {formHeader ? formHeader : `Add ${inputType}`}
+                <p className={`font-bold`}>
+                  {formHeader && submitted ? (
+                    <span className="text-white">
+                      {`${inputType}:`}{" "}
+                      <span className="text-orange-300"> {formHeader}</span>
+                    </span>
+                  ) : formHeader && !submitted ? (
+                    `${formHeader}`
+                  ) : inputType === "Sponsor" ? (
+                    `Which sponsor did we leave out?`
+                  ) : (
+                    "Podcast Recommendation: "
+                  )}
                 </p>
               </div>
             </div>
-            <form onSubmit={(e) => handleSubmit(e)}>
+            <form onSubmit={(e) => handleSubmit(e)} ref={formRef}>
               <Input
+                name="message"
                 autoFocus={true}
                 focusBorderColor="#e09249"
-                fontSize={"2xl"}
+                fontSize={inputFormFontSize}
                 variant={"filled"}
                 value={text}
-                placeholder={`${inputType}`}
                 onChange={(e) => {
                   setText(e.target.value);
                 }}
@@ -147,7 +205,10 @@ const CommunityModal = ({
             </form>
             <div className=" mt-6 pb-10 w-full flex justify-center items-center">
               {submitted && (
-                <p ref={messageRef} className={`font-semibold `}>
+                <p
+                  ref={messageRef}
+                  className={`font-semibold text-sm lg:text-base `}
+                >
                   {" "}
                   Thanks, the developer will be notified!
                 </p>

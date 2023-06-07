@@ -254,7 +254,7 @@ const Home = ({
                                   height={30}
                                   className={
                                     sponsor?.imageUrl
-                                      ? "rounded-md"
+                                      ? "rounded-md min-w-[30px] min-h-[30px]"
                                       : "opacity-0"
                                   }
                                   key={sponsor?.imageUrl || index}

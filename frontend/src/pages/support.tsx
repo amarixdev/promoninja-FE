@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import BackButton from "../components/BackButton";
+import { currentYear } from "../utils/functions";
 
 type Props = {};
 
@@ -53,15 +54,15 @@ const About = (props: Props) => {
                     Buy Me A Coffee
                   </h2>
                 ) : (
-                  <h2 className="underline underline-offset-2 hover:text-[#e09249] transition-all duration-150 ease-in font-normal">
+                  <h2 className="underline underline-offset-2 text-[#e09249] font-bold">
                     Buy Me A Coffee
                   </h2>
                 )}
               </Link>
               <p className="pt-2 text-[#cbcbcb] text-base lg:text-lg">
-                PromoNinja is developed, designed, and maintained independently.
-                If you would like to help out, feel free to click the link
-                above. Otherwise, enjoy the platform!
+                PromoNinja is developed, designed, and maintained
+                independently. If you would like to help out feel free to click
+                the link above. Otherwise, enjoy the platform!
               </p>
             </div>
           </div>
@@ -74,6 +75,9 @@ const About = (props: Props) => {
               <Image src={LogoAlt} alt="alt-logo" width={300} height={300} />
             </div>
           )}
+          <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
+            {`© PromoNinja ${currentYear}`}
+          </p>
         </div>
         <Footer />
       </div>

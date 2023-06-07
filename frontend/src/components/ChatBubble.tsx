@@ -86,7 +86,7 @@ const ChatBubble = ({
         <div
           className={`  ${
             ninjaMode && page !== "podcast" ? style.speechDark : style.speech
-          } ${style.bottom} pl-4 pr-8 pt-2 pb-6 w-[90%] ${
+          } ${style.bottom} px-4 pt-2 pb-6 w-[90%] ${
             inView ? "bottom-10 opacity-100" : "bottom-[-300px] opacity-50"
           } transition-all duration-[500ms] right-4 z-[100]`}
         >
@@ -100,11 +100,11 @@ const ChatBubble = ({
             <div className="flex flex-col gap-4">
               <div className="flex gap-3 justify-center items-center">
                 {page === "sponsor" ? (
-                  <h1 className="font-semibold text-[#f1f1f1] text-sm xs:text-base sm:text-base text-center">
-                    {message}
+                  <h1 className="font-light text-[#f1f1f1] text-sm xs:text-base sm:text-base text-center">
+                    <span className="font-bold">Did you know</span> {message}
                   </h1>
                 ) : (
-                  <h1 className="font-bold text-[#f1f1f1] text-sm xs:text-base sm:text-lg">
+                  <h1 className="font-semibold text-[#f1f1f1] text-sm xs:text-base sm:text-lg">
                     {message}
                   </h1>
                 )}
@@ -134,7 +134,7 @@ const ChatBubble = ({
         <div
           className={`${
             ninjaMode && page !== "podcast" ? style.speechDark : style.speech
-          } ${style.bottom} max-w-[360px] pl-5 pr-8 pt-6 pb-10 ${
+          } ${style.bottom} max-w-[360px] pl-5 pr-10 pt-6 pb-10 ${
             inView ? "bottom-0 opacity-100" : "bottom-[-300px] opacity-50"
           } transition-all duration-[500ms] right-10 z-[999]`}
         >
@@ -154,9 +154,13 @@ const ChatBubble = ({
                 </button>
               </Tooltip>
               {page === "sponsor" ? (
-                <h1 className="font-bold text-sm">{message}</h1>
+                <h1 className=" font-light text-sm">
+                  {" "}
+                  <span className="font-bold">Did you know </span>
+                  {message}
+                </h1>
               ) : (
-                <h1 className="font-bold text-base">{message}</h1>
+                <h1 className="font-semibold text-base">{message}</h1>
               )}
               {page === "sponsor" || (
                 <Button onClick={() => onOpenCommunity()}>Click Here</Button>

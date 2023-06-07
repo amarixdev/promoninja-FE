@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import BackButton from "../components/BackButton";
 import { useSetCurrentPage } from "../utils/hooks";
+import { currentYear } from "../utils/functions";
 
 type Props = {};
 
@@ -44,11 +45,10 @@ const About = (props: Props) => {
               </h2>
               <p className="pt-2 text-[#cbcbcb] text-base lg:text-lg">
                 Sponsorships are the most common way podcasts generate income. I
-                noticed several podcasts had common sponsors, so I came up
-                with the idea to support multiple shows simultaneously. As a
-                software developer and avid podcast listener, I felt happy to
-                repay the podcasting community for the countless hours of
-                entertainment.
+                noticed several podcasts had common sponsors, so I came up with
+                the idea to support multiple shows simultaneously. As a software
+                developer and avid podcast listener, I felt happy to repay the
+                podcasting community for the countless hours of entertainment.
               </p>
             </div>
 
@@ -103,6 +103,9 @@ const About = (props: Props) => {
           <div className="pt-10">
             <Image src={Logo3} alt="alt-logo" width={300} height={300} />
           </div>
+          <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
+            {`© PromoNinja ${currentYear}`}
+          </p>
         </div>
         <Footer />
       </div>

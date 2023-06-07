@@ -613,7 +613,7 @@ const Podcast = ({ podcastData, category }: Props) => {
             <div className="relative top-16">
               {!hasNoSponsors && (
                 <ChatBubble
-                  message="Did we miss any sponsors?"
+                  message="Did we forget any sponsors?"
                   page="podcast"
                   currentSponsors={currentSponsors}
                 />

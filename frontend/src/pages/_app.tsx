@@ -1,7 +1,7 @@
 import { ApolloProvider } from "@apollo/client";
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ForceDarkMode, theme } from "../../styles/chakra/theme";
 import "../../styles/globals.css";
 import style from "../../styles/style.module.css";
@@ -10,9 +10,17 @@ import client from "../graphql/apollo-client";
 import { useLoadingScreen } from "../utils/hooks";
 import Head from "next/head";
 import favicon from "../public/favicon.ico";
+import SplashScreen from "./splash";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const isLoading = useLoadingScreen();
+  const [splashScreen, setSplashScreen] = useState(true);
+  useEffect(() => {
+    setSplashScreen(true);
+    setTimeout(() => {
+      setSplashScreen(false);
+    }, 750);
+  }, []);
 
   if (typeof window === "undefined") React.useLayoutEffect = () => {};
 
@@ -32,7 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             )}
 
             <ForceDarkMode>
-              <Component {...pageProps} />
+              {splashScreen ? <SplashScreen /> : <Component {...pageProps} />}
             </ForceDarkMode>
           </ContextProvider>
         </ChakraProvider>
