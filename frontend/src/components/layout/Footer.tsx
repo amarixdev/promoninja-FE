@@ -1,6 +1,6 @@
 import { BiPodcast } from "react-icons/bi";
 import { FaUserNinja } from "react-icons/fa";
-import { useMediaQuery } from "../utils/hooks";
+import { useMediaQuery } from "../../utils/hooks";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -11,8 +11,8 @@ import {
   RiSearch2Fill,
   RiSearch2Line,
 } from "react-icons/ri";
-import { NavContext } from "../context/navContext";
-import { scrollToTop } from "../utils/functions";
+import { NavContext } from "../../context/navContext";
+import { scrollToTop } from "../../utils/functions";
 
 export interface LinkWrapperProps {
   href: string;

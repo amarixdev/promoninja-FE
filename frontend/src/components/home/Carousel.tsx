@@ -1,15 +1,15 @@
 import Link from "next/link";
 import React from "react";
-import style from "../../styles/style.module.css";
-import { HandleRotate } from "../utils/hooks";
-import { SponsorCategory } from "../utils/types";
+import style from "../../../styles/style.module.css";
+import { HandleRotate } from "../../utils/hooks";
+import { SponsorCategory } from "../../utils/types";
 
 interface Props {
   handleRotate: HandleRotate;
   currDeg: number;
   categoryData: SponsorCategory[];
   categoryIndex: number;
-  setCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  setCategoryIndex: (value: number) => void;
 }
 
 const Carousel = ({

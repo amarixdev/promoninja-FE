@@ -4,6 +4,7 @@ const config: ThemeConfig = {
   initialColorMode: "dark",
   useSystemColorMode: true,
 };
+
 export const theme = extendTheme({
   config,
   styles: {
@@ -13,6 +14,7 @@ export const theme = extendTheme({
       },
     }),
   },
+
   colors: {
     transparent: "transparent",
     black: "#000",

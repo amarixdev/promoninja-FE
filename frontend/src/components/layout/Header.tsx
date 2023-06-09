@@ -8,9 +8,9 @@ import {
 } from "@chakra-ui/react";
 import { GiNinjaHead } from "react-icons/gi";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { NavContext } from "../context/navContext";
-import { scrollToTop } from "../utils/functions";
-import { useMediaQuery } from "../utils/hooks";
+import { NavContext } from "../../context/navContext";
+import { scrollToTop } from "../../utils/functions";
+import { useMediaQuery } from "../../utils/hooks";
 
 import { AiOutlineClose } from "react-icons/ai";
 import { RiExternalLinkLine } from "react-icons/ri";
@@ -91,19 +91,9 @@ export const OptionsDrawer = ({
 
 interface HeaderProps {
   page: string;
-  category?: string;
-  displayCategory?: boolean;
-  hideTitle?: boolean;
-  hideCategory?: boolean;
 }
 
-const Header = ({
-  page,
-  category,
-  hideTitle,
-  displayCategory,
-  hideCategory,
-}: HeaderProps) => {
+const Header = ({ page }: HeaderProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { setNinjaMode } = NavContext();
   const isBreakPoint = useMediaQuery(1023);
@@ -112,24 +102,11 @@ const Header = ({
       <OptionsDrawer isOpen={isOpen} onClose={onClose} />
       <div
         className={
-          "fixed bg-[#121212] p-8 py-10 w-full z-[20] flex justify-between items-center"
+          "fixed bg-[#121212] p-8 py-10 w-full z-[200] flex justify-between items-center"
         }
       >
         {isBreakPoint && <RxHamburgerMenu size={20} onClick={() => onOpen()} />}
-        <h1
-          className={`${
-            hideTitle && !displayCategory ? "opacity-0" : "opacity-100"
-          } transition-all duration-[200ms] ${
-            (hideTitle && displayCategory) || (!hideTitle && displayCategory)
-              ? "text-xl sm:text-4xl"
-              : "text-2xl"
-          }  sm:text-5xl font-bold text-white `}
-          onClick={() => {
-            isBreakPoint ? scrollToTop() : null;
-          }}
-        >
-          {hideCategory || !displayCategory ? page : category}
-        </h1>
+        <h1 className={` text-3xl sm:text-5xl font-bold text-white`}>{page}</h1>
 
         {
           <button

@@ -18,13 +18,12 @@ import {
   RiSearch2Fill,
   RiSearch2Line,
 } from "react-icons/ri";
-import { NavContext } from "../context/navContext";
-import * as LogoText from "../public/assets/logo-text.png";
-import * as Ninja4 from "../public/assets/logo.png";
-import { scrollToTop } from "../utils/functions";
-import { useMediaQuery } from "../utils/hooks";
+import { NavContext } from "../../context/navContext";
+import * as LogoText from "../../public/assets/logo-text.png";
+import * as Ninja4 from "../../public/assets/logo.png";
+import { scrollToTop } from "../../utils/functions";
+import { useMediaQuery } from "../../utils/hooks";
 import { LinkWrapperProps } from "./Footer";
-import { useEffect } from "react";
 
 interface Props {}
 

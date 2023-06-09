@@ -12,8 +12,8 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import style from "../../styles/style.module.css";
-import { useMediaQuery } from "../utils/hooks";
+import style from "../../../styles/style.module.css";
+import { useMediaQuery } from "../../utils/hooks";
 
 const BrokenLinkModal = ({
   isOpen,
@@ -57,10 +57,6 @@ const BrokenLinkModal = ({
     }
   };
 
-  if (notified && podcastState.includes(selected)) {
-    console.log("NOTIFIED");
-  }
-
   const isBreakPoint = useMediaQuery(1023);
   const [modalSize, setModalSize] = useState("");
 
@@ -71,8 +67,6 @@ const BrokenLinkModal = ({
       setModalSize("md");
     }
   }, [isBreakPoint]);
-
-  console.log(modalSize);
 
   return (
     <>

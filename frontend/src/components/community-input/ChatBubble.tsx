@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import style from "../../styles/style.module.css";
-import Logo from "../public/assets/logo.png";
+import style from "../../../styles/style.module.css";
+import Logo from "../../public/assets/logo.png";
 import Image from "next/image";
 import { Button, Tooltip, useDisclosure } from "@chakra-ui/react";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { useMediaQuery } from "../utils/hooks";
+import { useMediaQuery } from "../../utils/hooks";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import { NavContext } from "../context/navContext";
+import { NavContext } from "../../context/navContext";
 import CommunityModal from "./CommunityModal";
 
 const ChatBubble = ({

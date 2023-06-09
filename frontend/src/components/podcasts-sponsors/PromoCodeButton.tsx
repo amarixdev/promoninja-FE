@@ -1,5 +1,5 @@
 import { Button, useToast } from "@chakra-ui/react";
-import { useCopyToClipboard, useMediaQuery } from "../utils/hooks";
+import { useCopyToClipboard, useMediaQuery } from "../../utils/hooks";
 
 interface Props {
   promoCode: string;

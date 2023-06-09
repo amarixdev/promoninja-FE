@@ -2,8 +2,8 @@ import { Button, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { useMediaQuery } from "../utils/hooks";
-import { OptionsDrawer } from "./Header";
+import { useMediaQuery } from "../../utils/hooks";
+import { OptionsDrawer } from "../layout/Header";
 
 interface Props {
   sponsorPage?: boolean;

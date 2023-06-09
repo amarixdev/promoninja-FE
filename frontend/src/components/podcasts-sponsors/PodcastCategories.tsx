@@ -4,13 +4,13 @@ import {
   capitalizeString,
   convertToSlug,
   truncateString,
-} from "../utils/functions";
-import { useMediaQuery } from "../utils/hooks";
-import { CategoryPodcast, PodcastData } from "../utils/types";
-import fallbackImage from "../public/assets/fallback.png";
+} from "../../utils/functions";
+import { useMediaQuery } from "../../utils/hooks";
+import { CategoryPodcast, PodcastData } from "../../utils/types";
+import fallbackImage from "../../public/assets/fallback.png";
 import { useEffect, useRef } from "react";
-import AnimatedLink from "./AnimatedLink";
-import SliderArrows from "./SliderArrows";
+import AnimatedLink from "../misc/AnimatedLink";
+import SliderArrows from "../misc/SliderArrows";
 interface CategoryProps {
   category: CategoryPodcast;
   ninjaMode: boolean;
@@ -57,9 +57,9 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
                   <div
                     className={` ${
                       ninjaMode
-                        ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828] "
-                        : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
-                    } mt-4 p-4 flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5`}
+                        ? "bg-gradient-to-b from-[#212121] to-[#111111]  "
+                        : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
+                    } active:scale-95 transition-all duration-300 ease-in-out  mt-4 p-4 flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5`}
                     key={podcast.title}
                   >
                     <Image

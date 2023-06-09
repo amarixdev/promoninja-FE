@@ -1,9 +1,9 @@
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import CategoryList from "../../components/CategoryList";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
-import Sidebar from "../../components/Sidebar";
+import CategoryList from "../../components/podcasts-sponsors/PodcastCategories";
+import Footer from "../../components/layout/Footer";
+import Header from "../../components/layout/Header";
+import Sidebar from "../../components/layout/Sidebar";
 import { NavContext } from "../../context/navContext";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
@@ -11,7 +11,6 @@ import LogoText from "../../public/assets/logo-text.png";
 import { currentYear } from "../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { CategoryPodcast } from "../../utils/types";
-
 
 interface Props {
   categoryPreviews: CategoryPodcast[];

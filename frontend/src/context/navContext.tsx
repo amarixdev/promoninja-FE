@@ -7,6 +7,8 @@ interface ContextType {
   setCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
   currentPage: CurrentPage;
   setCurrentPage: React.Dispatch<React.SetStateAction<CurrentPage>>;
+  currentCategory: string;
+  setCurrentCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export interface CurrentPage {
@@ -28,6 +30,8 @@ const AppContext = createContext<ContextType>({
   setCategoryIndex: () => {},
   ninjaMode: {} as boolean,
   setNinjaMode: () => {},
+  currentCategory: {} as string,
+  setCurrentCategory: () => {},
 });
 
 interface ContextProviderProps {
@@ -35,6 +39,7 @@ interface ContextProviderProps {
 }
 
 export function ContextProvider({ children }: ContextProviderProps) {
+  const [currentCategory, setCurrentCategory] = useState("");
   const [ninjaMode, setNinjaMode] = useState(false);
   const [categoryIndex, setCategoryIndex] = useState(-1);
   const [currentPage, setCurrentPage] = useState<CurrentPage>({
@@ -52,6 +57,8 @@ export function ContextProvider({ children }: ContextProviderProps) {
         setCurrentPage,
         ninjaMode,
         setNinjaMode,
+        currentCategory,
+        setCurrentCategory,
       }}
     >
       {children}

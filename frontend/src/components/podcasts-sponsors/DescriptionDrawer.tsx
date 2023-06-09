@@ -9,11 +9,15 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { BsPlayCircle } from "react-icons/bs";
-import { convertToFullURL, convertToSlug } from "../utils/functions";
-import { addOpacityToRGB, useMediaQuery, useReportIssue } from "../utils/hooks";
-import BrokenLinkModal from "./BrokenLinkModal";
+import { convertToFullURL, convertToSlug } from "../../utils/functions";
+import {
+  addOpacityToRGB,
+  useMediaQuery,
+  useReportIssue,
+} from "../../utils/hooks";
+import BrokenLinkModal from "../community-input/BrokenLinkModal";
 import PromoCodeButton from "./PromoCodeButton";
-import fallbackImage from "../public/assets/fallback.png";
+import fallbackImage from "../../public/assets/fallback.png";
 import { GoReport } from "react-icons/go";
 
 interface Props {

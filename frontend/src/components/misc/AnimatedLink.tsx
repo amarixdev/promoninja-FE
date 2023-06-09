@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ReactNode, useState } from "react";
 import { MdChevronRight } from "react-icons/md";
-import { NavContext } from "../context/navContext";
-import { useMediaQuery } from "../utils/hooks";
+import { NavContext } from "../../context/navContext";
+import { useMediaQuery } from "../../utils/hooks";
 
 interface AnimatedLinkProps {
   title: string | undefined;

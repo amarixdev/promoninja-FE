@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -143,7 +144,9 @@ const useSlider = (
   podcastPage: boolean
 ) => {
   const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const showLeftArrowRef = useRef(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
+  const showRightArrowRef = useRef(true);
 
   const slideTopPicks = (direction: string) => {
     if (slider) {
@@ -178,8 +181,8 @@ const useSlider = (
     };
 
     if (slider) {
-      slider.addEventListener("scroll", () => handleScroll());
-      return () => slider.removeEventListener("scroll", () => handleScroll());
+      slider.addEventListener("scroll", handleScroll);
+      return () => slider.removeEventListener("scroll", handleScroll);
     }
   }, [slider, podcastPage]);
 
@@ -230,7 +233,6 @@ export const useBanner = (
   page?: string
 ) => {
   const [banner, setBanner] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => {
       if (bannerBreakpointRef.current) {
@@ -330,4 +332,13 @@ export const addOpacityToRGB = (
     return rgba;
   }
   return null;
+};
+
+export const useCounter = () => {
+  const [count, setCount] = useState(0);
+  setTimeout(() => {
+    setCount((c) => c + 1);
+  }, 3000);
+
+  return { count };
 };

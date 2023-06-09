@@ -5,8 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import Footer from "../components/Footer";
-import Sidebar from "../components/Sidebar";
+import Footer from "../components/layout/Footer";
+import Sidebar from "../components/layout/Sidebar";
 import { Operations } from "../graphql/operations";
 import { convertToSlug, truncateString } from "../utils/functions";
 import { useSetCurrentPage } from "../utils/hooks";
@@ -269,7 +269,6 @@ const Search = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     </div>
   );

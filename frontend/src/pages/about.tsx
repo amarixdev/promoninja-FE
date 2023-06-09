@@ -1,11 +1,11 @@
 import React from "react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/layout/Sidebar";
 import { NavContext } from "../context/navContext";
 import Logo3 from "../public/assets/alt-ninja2.png";
-import Footer from "../components/Footer";
+import Footer from "../components/layout/Footer";
 import Image from "next/image";
 import Link from "next/link";
-import BackButton from "../components/BackButton";
+import BackButton from "../components/misc/BackButton";
 import { useSetCurrentPage } from "../utils/hooks";
 import { currentYear } from "../utils/functions";
 
@@ -108,7 +108,6 @@ const About = (props: Props) => {
             {`© PromoNinja ${currentYear}`}
           </p>
         </div>
-        <Footer />
       </div>
     </>
   );

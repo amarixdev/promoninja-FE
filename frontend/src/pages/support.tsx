@@ -1,12 +1,12 @@
 import React from "react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/layout/Sidebar";
 import { NavContext } from "../context/navContext";
 import LogoAlt from "../public/assets/alt-ninja.png";
-import Footer from "../components/Footer";
+import Footer from "../components/layout/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
-import BackButton from "../components/BackButton";
+import BackButton from "../components/misc/BackButton";
 import { currentYear } from "../utils/functions";
 
 type Props = {};
@@ -61,9 +61,9 @@ const About = (props: Props) => {
               <p className="pt-2 text-[#cbcbcb] text-base lg:text-lg">
                 PromoNinja is a passion project that was designed, developed,
                 and is maintained independently. If you find value in the site
-                and want to support my mission in growing platform, you can help
-                out by <DonationLink />. Otherwise, thank you for reading and
-                enjoy the complimentary service!
+                and want to support my mission in growing the platform, you can
+                help out by <DonationLink />. Otherwise, thank you for reading
+                and enjoy the complimentary service!
               </p>
             </div>
           </div>
@@ -80,7 +80,6 @@ const About = (props: Props) => {
             {`© PromoNinja ${currentYear}`}
           </p>
         </div>
-        <Footer />
       </div>
     </>
   );

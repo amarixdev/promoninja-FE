@@ -11,6 +11,7 @@ import { useLoadingScreen } from "../utils/hooks";
 import Head from "next/head";
 import favicon from "../public/favicon.ico";
 import SplashScreen from "./splash";
+import Footer from "../components/layout/Footer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const isLoading = useLoadingScreen();
@@ -40,7 +41,14 @@ function MyApp({ Component, pageProps }: AppProps) {
             )}
 
             <ForceDarkMode>
-              {splashScreen ? <SplashScreen /> : <Component {...pageProps} />}
+              {splashScreen ? (
+                <SplashScreen />
+              ) : (
+                <>
+                  <Component {...pageProps} />
+                  <Footer />
+                </>
+              )}
             </ForceDarkMode>
           </ContextProvider>
         </ChakraProvider>

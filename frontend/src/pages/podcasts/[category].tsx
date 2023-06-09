@@ -1,10 +1,10 @@
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import BackButton from "../../components/BackButton";
-import Footer from "../../components/Footer";
-import Sidebar from "../../components/Sidebar";
+import { useEffect, useRef } from "react";
+import ChatBubble from "../../components/community-input/ChatBubble";
+import Sidebar from "../../components/layout/Sidebar";
+import BackButton from "../../components/misc/BackButton";
 import { NavContext } from "../../context/navContext";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
@@ -29,7 +29,6 @@ import {
   useSetCurrentPage,
 } from "../../utils/hooks";
 import { Category, PodcastData } from "../../utils/types";
-import ChatBubble from "../../components/ChatBubble";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -90,8 +89,6 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
     return null;
   }
 
-  console.log(backdrop);
-
   return (
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0 bg-black h-full">
       <Sidebar />
@@ -118,7 +115,6 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
       {categoryPodcasts && (
         <div className="h-screen w-full">
           <BackButton />
-
           <Image
             src={backdrop}
             alt="comedy"
@@ -167,9 +163,9 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                       <div
                         className={` group bg-gradient-to-b w-full relative z-10 ${
                           ninjaMode
-                            ? "bg-gradient-to-b from-[#212121] to-[#111111] active:from-[#202020] active:to-[#282828]"
-                            : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]  active:from-[#202020] active:to-[#343434]"
-                        }  flex mt-4 flex-col p-4 items-center max-h-auto  rounded-lg`}
+                            ? "bg-gradient-to-b from-[#212121] to-[#111111]"
+                            : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
+                        } active:scale-95 transition-all duration-300 ease-in-out flex mt-4 flex-col p-4 items-center max-h-auto  rounded-lg`}
                       >
                         <Image
                           src={podcast.imageUrl}
@@ -202,7 +198,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                           ninjaMode
                             ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828] "
                             : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
-                        } hover:cursor-pointer flex flex-col items-center max-h-auto px-4 pb-10 rounded-lg min-w-[135px] max-w-[220px]`}
+                        }  hover:cursor-pointer flex flex-col items-center max-h-auto px-4 pb-10 rounded-lg min-w-[135px] max-w-[220px]`}
                       >
                         <Image
                           src={podcast.imageUrl}
@@ -237,8 +233,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
               </p>
             </div>
           </div>
-
-          <Footer />
+          \
         </div>
       )}
     </div>

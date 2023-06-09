@@ -1,6 +1,6 @@
 import { RefObject } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import useSlider, { useMediaQuery } from "../utils/hooks";
+import useSlider, { useMediaQuery } from "../../utils/hooks";
 
 const SliderArrows = ({
   sliderRef,

@@ -9,11 +9,11 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import style from "../../styles/style.module.css";
-import { capitalizeString } from "../utils/functions";
-import { useMediaQuery } from "../utils/hooks";
+import style from "../../../styles/style.module.css";
+import { capitalizeString } from "../../utils/functions";
+import { useMediaQuery } from "../../utils/hooks";
 import emailjs from "@emailjs/browser";
-import { ENV } from "../../environment";
+import { ENV } from "../../../environment";
 
 const CommunityModal = ({
   isOpen,
