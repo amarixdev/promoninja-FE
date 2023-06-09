@@ -6,6 +6,7 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
+  Spinner,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import style from "../../styles/style.module.css";
@@ -49,8 +50,8 @@ const CommunityModal = ({
   const [submitted, setSubmitted] = useState(false);
   const [userInputList, setUserInputList] = useState<string[]>([]);
   const [formHeader, setFormHeader] = useState<string | undefined>("");
-  const [error, setError] = useState(false);
   const [text, setText] = useState("");
+  const [loading, setLoading] = useState(false);
   const isBreakPoint = useMediaQuery(1023);
   const modalSize = isBreakPoint ? "xs" : "md";
   const inputFormFontSize = isBreakPoint ? "md" : "xl";
@@ -67,7 +68,6 @@ const CommunityModal = ({
     e.preventDefault();
     if (!isOnline) {
       setText("");
-      setError(true);
       setSubmitted(false);
       setFormHeader("Message Failed To Send: Internet Connection");
       return;
@@ -81,35 +81,31 @@ const CommunityModal = ({
     }
 
     if (caseDesensitize(userInputList)?.includes(text.toLowerCase())) {
-      setError(true);
       setSubmitted(false);
       setFormHeader("Oops, Developer Was Already Notified!");
       setText("");
     } else if (
       caseDesensitize(inputArray)?.includes(text.toLowerCase().trimEnd())
     ) {
-      setError(true);
       setSubmitted(false);
       setFormHeader(`${inputType} Already Exists`);
       setText("");
     } else if (!specialCharacterFilter.test(text)) {
-      setError(true);
       setSubmitted(false);
       setFormHeader("Sorry, No Special Characters");
       setText("");
     } else if (onlyNumbers.test(text)) {
-      setError(true);
       setSubmitted(false);
       setFormHeader("Please enter a valid character A-Z");
       setText("");
     } else if (text.length > 30) {
-      setError(true);
       setSubmitted(false);
       setFormHeader(
         ` This ${inputType.toLowerCase()} seems too long, try abbreviating.`
       );
       setText("");
-    } else {
+    } else if (!loading) {
+      setLoading(true);
       setUserInputList((prev) => [...prev, text]);
       try {
         await emailjs
@@ -128,8 +124,8 @@ const CommunityModal = ({
             }
           )
           .finally(() => {
-            setError(false);
             setSubmitted(true);
+            setLoading(false);
             setFormHeader(capitalizeString(text));
             setText("");
             messageRef.current?.classList.add(`${style.flashText}`);
@@ -139,7 +135,7 @@ const CommunityModal = ({
           });
       } catch (error) {
         setText("");
-        setError(true);
+
         setFormHeader("Message Failed To Send: Server Error");
       }
     }
@@ -162,7 +158,9 @@ const CommunityModal = ({
               <div className="gap-2 flex flex-col justify-center items-center py-4">
                 <p className="font-extrabold text-2xl ">Community Input</p>
                 <p className={`font-bold`}>
-                  {formHeader && submitted ? (
+                  {loading ? (
+                    <Spinner />
+                  ) : formHeader && submitted ? (
                     <span className="text-white">
                       {`${inputType}:`}{" "}
                       <span className="text-orange-300"> {formHeader}</span>

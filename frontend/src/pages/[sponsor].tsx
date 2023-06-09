@@ -82,7 +82,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
 
   const { ninjaMode, setCategoryIndex } = NavContext();
   const bannerBreakpointRef = useRef<HTMLDivElement>(null);
-  const { banner } = useBanner(bannerBreakpointRef, 0);
+  const { banner } = useBanner(bannerBreakpointRef, 0, "sponsor");
 
   const [isOpen, setIsOpen] = useState(false);
   const [drawerData, setDrawerData] = useState({
@@ -347,13 +347,14 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                           ? "from-[#31313172]  to-[#20202091]"
                           : "from-[#2020201d]  to-[#20202091]"
                       } p-10`}
+                      ref={bannerBreakpointRef}
                     >
                       <div className="relative">
                         <div className="flex items-center gap-2">
                           <div className="rounded-full bg-[#0ec10e] w-2 h-2"></div>
                           <p className="text-xl font-bold"> Exclusive Offer:</p>
                         </div>
-                        <div ref={bannerBreakpointRef} className="px-4 py-2">
+                        <div className="px-4 py-2">
                           <p className={` font-normal text-xl text-[#aaaaaa]`}>
                             {sponsorData?.offer}
                           </p>

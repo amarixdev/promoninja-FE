@@ -268,7 +268,7 @@ const Offers = ({
     countData = countData?.getSponsorsCount;
 
     if (categoryData && countData) {
-      const renderDelay = 0;
+      const renderDelay = displayCategory ? 150 : 0;
       setTimeout(() => {
         setFilteredSponsors(categoryData);
         setCurrentCategory(category);
@@ -313,6 +313,8 @@ const Offers = ({
       }
     }
   };
+
+  console.log(displayCategory);
 
   return (
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">

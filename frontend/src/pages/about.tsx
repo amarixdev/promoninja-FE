@@ -35,7 +35,7 @@ const About = (props: Props) => {
             <BackButton />
           </div>
 
-          <div className="flex flex-col items-center lg:text-left justify-center border-[1px] rounded-lg mt-10 border-[#e09249] py-8 px-4 max-w-[95%] lg:max-w-[70%] ">
+          <div className="flex flex-col items-center lg:text-left justify-center border-[1px] rounded-lg mt-10 border-[#e09249] py-8 px-4 max-w-[95%] lg:max-w-[70%] shadow-[#e09249] shadow-md ">
             <div className="w-full px-8 text-center lg:text-left">
               <p className="font-extrabold text-6xl lg:text-7xl ">About</p>
             </div>
@@ -45,10 +45,11 @@ const About = (props: Props) => {
               </h2>
               <p className="pt-2 text-[#cbcbcb] text-base lg:text-lg">
                 Sponsorships are the most common way podcasts generate income. I
-                noticed several podcasts had common sponsors, so I came up with
-                the idea to support multiple shows simultaneously. As a software
-                developer and avid podcast listener, I felt happy to repay the
-                podcasting community for the countless hours of entertainment.
+                noticed several podcasts had sponsors in common, so I came up
+                with the idea to support multiple shows simultaneously. As a
+                software developer and avid podcast listener, I felt happy to
+                repay the podcasting community for the countless hours of
+                entertainment.
               </p>
             </div>
 

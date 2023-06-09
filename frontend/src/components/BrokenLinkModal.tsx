@@ -85,7 +85,7 @@ const BrokenLinkModal = ({
         size={modalSize}
       >
         <ModalOverlay />
-        <ModalContent bgGradient="linear(to-b, #222222, #151515)" className="">
+        <ModalContent bgGradient="linear(to-b, #242424, #111111)" className="">
           <ModalHeader>{`${
             !notified && submitted && podcastState.includes(selected)
               ? "Thanks, Developer Notified!"

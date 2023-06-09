@@ -127,7 +127,7 @@ const Home = ({
           >
             {ninjaMode || (
               <div
-                className={` from-[#313131] bg-gradient-to-b  absolute top-10   w-full h-[400px] z-0 `}
+                className={` from-[#313131] bg-gradient-to-b  absolute top-10   w-full h-[500px] z-0 `}
               ></div>
             )}
             <Header page="Home" />
@@ -273,14 +273,6 @@ const Home = ({
                   </div>
                 </div>
               </div>
-              {/* <div className="w-full flex justify-center items-center h-[200px]">
-                <div className="lg:max-w-[40%] max-w-[60%] sm:max-w-[50%] max-h-[100px] py-2">
-                  <p className="font-light text-md sm:text-lg text-[#909090]  tracking-widest italic">
-                    "As a podcast listener, you have access to exclusive deals
-                    to help you save money.
-                  </p>
-                </div>
-              </div> */}
 
               {/* Trending Offers */}
               <div className="relative w-full mt-14">

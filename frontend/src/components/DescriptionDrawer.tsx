@@ -10,7 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BsPlayCircle } from "react-icons/bs";
 import { convertToFullURL, convertToSlug } from "../utils/functions";
-import { useMediaQuery, useReportIssue } from "../utils/hooks";
+import { addOpacityToRGB, useMediaQuery, useReportIssue } from "../utils/hooks";
 import BrokenLinkModal from "./BrokenLinkModal";
 import PromoCodeButton from "./PromoCodeButton";
 import fallbackImage from "../public/assets/fallback.png";
@@ -51,11 +51,17 @@ const DescriptionDrawer = ({
   externalUrl,
 }: Props) => {
   const gradientStyle = {
-    backgroundImage: `linear-gradient(to bottom, ${drawer.color}, #000000)`,
+    backgroundImage: `linear-gradient(to bottom, ${addOpacityToRGB(
+      drawer?.color,
+      0.9
+    )}, ${addOpacityToRGB(drawer?.color, 0.35)}, #22222200)`,
   };
 
   const defaultStyle = {
     backgroundImage: `linear-gradient(to bottom, ${"#5555556f"}, #000000)`,
+  };
+  const podcastStyle = {
+    backgroundImage: `linear-gradient(to bottom, #11111100, #0000006f, #0000009f)`,
   };
   const isBreakPoint = useMediaQuery(1023);
   const {
@@ -94,12 +100,18 @@ const DescriptionDrawer = ({
                 className="w-full flex flex-col items-center justify-center"
                 style={
                   podcastOfferDrawer
-                    ? gradientStyle
+                    ? podcastStyle
                     : sponsorOfferDrawer
                     ? defaultStyle
                     : {}
                 }
               >
+                {
+                  <div
+                    className="absolute min-h-[360px] top-0 w-[88%]"
+                    style={gradientStyle}
+                  ></div>
+                }
                 {(podcastOfferDrawer || sponsorOfferDrawer) && (
                   <div className="w-full relative z-50 flex justify-end items-center">
                     <p

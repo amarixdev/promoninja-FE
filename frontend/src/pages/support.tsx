@@ -20,6 +20,15 @@ const About = (props: Props) => {
     search: false,
     offers: false,
   });
+  const DonationLink = () => {
+    return (
+      <Link href={"https://www.buymeacoffee.com/promoninja"} target="_blank">
+        <span className="text-[#e09249] underline underline-offset-2">
+          buying me a coffee
+        </span>
+      </Link>
+    );
+  };
   return (
     <>
       <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
@@ -35,7 +44,7 @@ const About = (props: Props) => {
             <BackButton />
           </div>
 
-          <div className="flex flex-col items-center lg:text-left justify-center border-[1px] mt-10 rounded-lg border-[#e09249] py-8 px-4 max-w-[95%] lg:max-w-[70%] ">
+          <div className="flex flex-col items-center lg:text-left justify-center border-[1px] mt-10 rounded-lg border-[#e09249] shadow-[#e09249] shadow-md py-8 px-4 max-w-[95%] lg:max-w-[70%] ">
             <div
               className={`w-full px-8 text-center lg:text-left flex ${
                 isBreakPoint ? "justify-center" : "justify-start"
@@ -48,21 +57,13 @@ const About = (props: Props) => {
                 href={"http://www.buymeacoffee.com/promoninja"}
                 className=" text-xl lg:text-2xl font-semibold"
                 target="_blank"
-              >
-                {isBreakPoint ? (
-                  <h2 className="underline underline-offset-2 font-bold text-[#e09249]">
-                    Buy Me A Coffee
-                  </h2>
-                ) : (
-                  <h2 className="underline underline-offset-2 text-[#e09249] font-bold">
-                    Buy Me A Coffee
-                  </h2>
-                )}
-              </Link>
+              ></Link>
               <p className="pt-2 text-[#cbcbcb] text-base lg:text-lg">
-                PromoNinja is developed, designed, and maintained
-                independently. If you would like to help out feel free to click
-                the link above. Otherwise, enjoy the platform!
+                PromoNinja is a passion project that was designed, developed,
+                and is maintained independently. If you find value in the site
+                and want to support my mission in growing platform, you can help
+                out by <DonationLink />. Otherwise, thank you for reading and
+                enjoy the complimentary service!
               </p>
             </div>
           </div>

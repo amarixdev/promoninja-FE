@@ -200,7 +200,7 @@ export const useHoverCard = () => {
       if (event == "mouseenter" && !activeIndex) {
         timerId = setTimeout(() => {
           setActiveIndex(index);
-        }, 600);
+        }, 500);
       }
       if (event === "mouseleave") {
         clearTimeout(timerId);
@@ -226,7 +226,8 @@ export const useScrollRestoration = (router: NextRouter) => {
 
 export const useBanner = (
   bannerBreakpointRef: RefObject<HTMLDivElement>,
-  breakpoint: number
+  breakpoint: number,
+  page?: string
 ) => {
   const [banner, setBanner] = useState(false);
 
@@ -234,7 +235,11 @@ export const useBanner = (
     const handleScroll = () => {
       if (bannerBreakpointRef.current) {
         const elementRect = bannerBreakpointRef.current.getBoundingClientRect();
-        const isPastElement = elementRect.bottom <= breakpoint;
+        const isPastElement =
+          page === "sponsor" && !breakpoint
+            ? elementRect.top <= breakpoint
+            : elementRect.bottom <= breakpoint;
+
         setBanner(isPastElement);
       }
     };
@@ -244,7 +249,7 @@ export const useBanner = (
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [banner, bannerBreakpointRef, breakpoint]);
+  }, [banner, bannerBreakpointRef, breakpoint, page]);
 
   return { banner };
 };
@@ -312,4 +317,17 @@ export const useCopyToClipboard = (promoCode?: string) => {
   };
 
   return { handleCopy };
+};
+
+export const addOpacityToRGB = (
+  rgb: string | undefined,
+  opacity: number
+): string | null => {
+  const colorValues = rgb?.match(/\d+/g);
+  if (colorValues && colorValues.length === 3) {
+    const [red, green, blue] = colorValues;
+    const rgba = `rgba(${red}, ${green}, ${blue}, ${opacity})`;
+    return rgba;
+  }
+  return null;
 };
