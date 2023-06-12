@@ -7,6 +7,7 @@ interface SliderProps {
   sponsorsData: SponsorData[];
   sponsorCategoryData: SponsorCategory[];
   getCategorySponsors: any;
+  getSponsorsCount: any;
   setRendering: (value: boolean) => void;
   isScrolledToTop: boolean;
   setFilteredSponsors: (value: SponsorData[]) => void;
@@ -14,6 +15,8 @@ interface SliderProps {
   setCurrentCategory: (category: string) => void;
   setCategoryIndex: (value: number) => void;
   setBannerCategory: (category: string) => void;
+  setCategoryCount: (value: number) => void;
+
   categoryIndex: number;
   contextIndex: number;
 }
@@ -31,6 +34,8 @@ const Slider = ({
   setBannerCategory,
   categoryIndex,
   contextIndex,
+  getSponsorsCount,
+  setCategoryCount,
 }: SliderProps) => {
   const categoryTabRef = useRef<HTMLButtonElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -51,9 +56,21 @@ const Slider = ({
         variables: {
           input: {
             category,
+            pageSize: 15,
+            offset: 0,
           },
         },
       });
+      let { data: countData } = await getSponsorsCount({
+        variables: {
+          input: {
+            category,
+            isCategory: true,
+          },
+        },
+      });
+      countData = countData?.getSponsorsCount;
+
       const renderDelay = !isScrolledToTop ? 250 : 0;
       await new Promise((resolve) => setTimeout(resolve, renderDelay));
 
@@ -67,6 +84,7 @@ const Slider = ({
 
       await new Promise((resolve) => setTimeout(resolve, 250));
       setBannerCategory(category);
+      setCategoryCount(countData);
     } catch (error) {
       console.log(error);
     }

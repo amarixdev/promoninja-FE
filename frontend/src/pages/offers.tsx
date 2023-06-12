@@ -12,13 +12,19 @@ import { SponsorCategory, SponsorData } from "../utils/types";
 import Slider from "../components/offers-page/Slider";
 import Main from "../components/offers-page/Main";
 import Banner from "../components/offers-page/Banner";
+import LoadMore from "../components/offers-page/LoadMore";
 
 interface OffersProps {
   sponsorsData: SponsorData[];
   sponsorCategoryData: SponsorCategory[];
+  sponsorsCount: number;
 }
 
-const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
+const Offers = ({
+  sponsorsData,
+  sponsorCategoryData,
+  sponsorsCount,
+}: OffersProps) => {
   const { categoryIndex: contextIndex, ninjaMode } = NavContext();
   const bannerBreakpointRef = useRef<HTMLDivElement>(null);
 
@@ -28,6 +34,7 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
     search: false,
     offers: true,
   });
+  const [categoryCount, setCategoryCount] = useState(0);
   const [rendering, setRendering] = useState(false);
   const [isScrolledToTop, setIsScrolledToTop] = useState(true);
   const [pageTitle, setPageTitle] = useState("Offers");
@@ -38,6 +45,7 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
   let [getCategorySponsors, { loading: categoryLoading }] = useLazyQuery(
     Operations.Queries.GetCategorySponsors
   );
+  const [getSponsorsCount] = useLazyQuery(Operations.Queries.GetSponsorsCount);
 
   useEffect(() => {
     if (contextIndex === -1) {
@@ -49,7 +57,19 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
       const filteredIndexes = sponsorCategoryData.filter((_, index) => {
         return index === contextIndex;
       });
+
       const fetchData = async () => {
+        const { data: countData } = await getSponsorsCount({
+          variables: {
+            input: {
+              isCategory: true,
+              category: filteredIndexes[0].name,
+              pageSize: 15,
+              offset: 0,
+            },
+          },
+        });
+
         const { data: categoryData } = await getCategorySponsors({
           variables: {
             input: {
@@ -63,13 +83,21 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
           setBannerCategory(filteredIndexes[0].name);
           setCategoryIndex(contextIndex + 1);
           setFilteredSponsors(categoryData.getCategorySponsors);
+          setCategoryCount(countData?.getSponsorsCount);
         }
       };
 
       fetchData();
     }
-  }, [contextIndex, getCategorySponsors, sponsorCategoryData, sponsorsData]);
+  }, [
+    contextIndex,
+    getCategorySponsors,
+    sponsorCategoryData,
+    sponsorsData,
+    getSponsorsCount,
+  ]);
 
+  console.log(categoryCount);
   return (
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
       {categoryLoading && (
@@ -115,6 +143,8 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
           setRendering={setRendering}
           sponsorCategoryData={sponsorCategoryData}
           sponsorsData={sponsorsData}
+          getSponsorsCount={getSponsorsCount}
+          setCategoryCount={setCategoryCount}
         />
         <Main
           ninjaMode={ninjaMode}
@@ -122,6 +152,14 @@ const Offers = ({ sponsorsData, sponsorCategoryData }: OffersProps) => {
           currentCategory={currentCategory}
           filteredSponsors={filteredSponsors}
           rendering={rendering}
+        />
+        <LoadMore
+          categoryCount={categoryCount}
+          currentCategory={currentCategory}
+          filteredSponsors={filteredSponsors}
+          getCategorySponsors={getCategorySponsors}
+          setFilteredSponsors={setFilteredSponsors}
+          sponsorsCount={sponsorsCount}
         />
         {!rendering && (
           <p className="flex font-bold text-[#aaaaaa] text-xs w-full items-center justify-center  pt-4 pb-6 lg:px-4">
@@ -140,6 +178,8 @@ export const getStaticProps = async () => {
     query: Operations.Queries.GetSponsors,
     variables: {
       input: {
+        offset: 0,
+        pageSize: 15,
         offerPage: true,
       },
     },
@@ -149,12 +189,22 @@ export const getStaticProps = async () => {
     query: Operations.Queries.GetSponsorCategories,
   });
 
+  let { data: sponsorsCount } = await client.query({
+    query: Operations.Queries.GetSponsorsCount,
+    variables: {
+      input: {
+        isCategory: false,
+      },
+    },
+  });
+
   sponsorCategoryData = sponsorCategoryData?.getSponsorCategories;
   sponsorsData = sponsorsData.getSponsors;
+  sponsorsCount = sponsorsCount?.getSponsorsCount;
   const oneWeek = 604800;
 
   return {
-    props: { sponsorsData, sponsorCategoryData },
+    props: { sponsorsData, sponsorCategoryData, sponsorsCount },
     revalidate: oneWeek,
   };
 };
