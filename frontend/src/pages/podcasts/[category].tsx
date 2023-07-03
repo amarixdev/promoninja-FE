@@ -1,20 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatBubble from "../../components/community-input/ChatBubble";
 import Sidebar from "../../components/layout/Sidebar";
 import BackButton from "../../components/misc/BackButton";
 import { NavContext } from "../../context/navContext";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
-import Comedy from "../../public/assets/comedy2.avif";
-import Crime from "../../public/assets/crime.avif";
-import Education from "../../public/assets/education.avif";
-import News from "../../public/assets/news.avif";
-import Society from "../../public/assets/society.avif";
-import Sports from "../../public/assets/sports.avif";
-import Technology from "../../public/assets/technology.avif";
+import Comedy from "../../public/assets/comedy.jpg";
+import Crime from "../../public/assets/crime.jpg";
+import Education from "../../public/assets/education.jpg";
+import News from "../../public/assets/news.jpg";
+import Society from "../../public/assets/society.jpg";
+import Sports from "../../public/assets/sports.jpg";
+import Technology from "../../public/assets/technology.jpg";
 import {
   capitalizeString,
   convertToSlug,
@@ -29,6 +29,8 @@ import {
   useSetCurrentPage,
 } from "../../utils/hooks";
 import { Category, PodcastData } from "../../utils/types";
+import { Spinner } from "@chakra-ui/react";
+import SplashScreen from "../splash";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -86,7 +88,11 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
   }, [backdropRef, isBreakPoint]);
 
   if (!backdrop) {
-    return null;
+    return (
+      <div className="h-screen bg-gradient-to-b from-[#222222] to-[#151515] flex items-center justify-center">
+        <SplashScreen />
+      </div>
+    );
   }
 
   return (
@@ -122,118 +128,123 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
               isBreakPoint && "scale-125"
             } z-0 w-full lg:top-[-100px] xl:top-[-150px] shadow-2xl shadow-black`}
             priority
-            loading={"eager"}
             ref={backdropRef}
           />
           <div className="w-full h-screen bg-gradient-to-tr bg-black/10 from-black/40 fixed"></div>
-          <div className="h-full flex flex-col mt-[140px] sm:mt-[200px] md:mt-[260px] lg:mt-[320px] gap-14">
-            <h1
-              ref={bannerBreakpointRef}
-              className="relative z-50 base:text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-extrabold pl-4"
-            >
-              {capitalizeString(categoryName)}
-            </h1>
 
-            <div
-              className={`${
-                ninjaMode
-                  ? "bg-gradient-to-b from-[#0a0a0a] to-[#020202]   "
-                  : "bg-gradient-to-b from-[#1b1b1b] to-[#121212]"
-              } relative grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid gap-y-8 gap-x-4 lg:gap-x-8 lg:gap-y-10 p-6 lg:p-10 pb-96 lg:pb-52`}
-            >
-              {ninjaMode ? (
-                <div
-                  className={` from-[#171717] bg-gradient-to-b  absolute w-full h-[200px] z-0 `}
-                ></div>
-              ) : (
-                <div
-                  className={` from-[#4545453f] bg-gradient-to-b  absolute w-full h-[200px] z-0 `}
-                ></div>
-              )}
+          {
+            <div className="h-full flex flex-col mt-[140px] sm:mt-[200px] md:mt-[260px] lg:mt-[320px] gap-14">
+              {
+                <h1
+                  ref={bannerBreakpointRef}
+                  className="relative z-50 base:text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-extrabold pl-4"
+                >
+                  {capitalizeString(categoryName)}
+                </h1>
+              }
 
-              {categoryPodcasts?.map((podcast) => (
-                <div key={podcast.title}>
-                  {isBreakPoint ? (
-                    /* Mobile */
-                    <Link
-                      href={`/podcasts/${convertToSlug(
-                        categoryName
-                      )}/${convertToSlug(podcast.title)}`}
-                    >
-                      <div
-                        className={` group bg-gradient-to-b w-full relative z-10 ${
-                          ninjaMode
-                            ? "bg-gradient-to-b from-[#212121] to-[#111111]"
-                            : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
-                        } active:scale-95 transition-all duration-300 ease-in-out flex mt-4 flex-col p-4 items-center max-h-auto  rounded-lg`}
+              <div
+                className={`${
+                  ninjaMode
+                    ? "bg-gradient-to-b from-[#0a0a0a] to-[#020202]   "
+                    : "bg-gradient-to-b from-[#1b1b1b] to-[#121212]"
+                }  relative grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid gap-y-8 gap-x-4 lg:gap-x-8 lg:gap-y-10 p-6 lg:p-10 pb-96 lg:pb-52`}
+              >
+                {ninjaMode ? (
+                  <div
+                    className={` from-[#171717] bg-gradient-to-b  absolute w-full h-[200px] z-0 `}
+                  ></div>
+                ) : (
+                  <div
+                    className={` from-[#4545453f] bg-gradient-to-b  absolute w-full h-[200px] z-0 `}
+                  ></div>
+                )}
+
+                {categoryPodcasts?.map((podcast) => (
+                  <div key={podcast.title}>
+                    {isBreakPoint ? (
+                      /* Mobile */
+                      <Link
+                        href={`/podcasts/${convertToSlug(
+                          categoryName
+                        )}/${convertToSlug(podcast.title)}`}
                       >
-                        <Image
-                          src={podcast.imageUrl}
-                          alt={podcast.imageUrl}
-                          width={140}
-                          height={140}
-                          className="rounded-xl mx-4 shadow-lg shadow-black w-[115px] sm:w-[140px] relative z-10 "
-                          loading={"eager"}
-                        />
-                        <div className="flex flex-col min-w-[110px] sm:min-w-[130px] items-start justify-start ">
-                          <h1 className=" whitespace-nowrap text-xs font-semibold sm:text-sm text-start mt-4 text-[#e6e6e6] group-hover:text-white whitespace-wrap">
-                            {truncateString(podcast.title, 15)}
-                          </h1>
-                          <p className="whitespace-nowrap text-xs  sm:text-sm text-start font-medium text-[#909090]">
-                            {truncateString(podcast.publisher, 15)}
-                          </p>
+                        <div
+                          className={` group bg-gradient-to-b w-full relative z-10 ${
+                            ninjaMode
+                              ? "bg-gradient-to-b from-[#212121] to-[#111111]"
+                              : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
+                          } active:scale-95 transition-all duration-300 ease-in-out flex mt-4 flex-col p-4 items-center max-h-auto  rounded-lg`}
+                        >
+                          <Image
+                            src={podcast.imageUrl}
+                            alt={podcast.imageUrl}
+                            width={140}
+                            height={140}
+                            className="rounded-xl mx-4 shadow-lg shadow-black w-[115px] sm:w-[140px] relative z-10 "
+                            loading={"eager"}
+                          />
+                          <div className="flex flex-col min-w-[110px] sm:min-w-[130px] items-start justify-start ">
+                            <h1 className=" whitespace-nowrap text-xs font-semibold sm:text-sm text-start mt-4 text-[#e6e6e6] group-hover:text-white whitespace-wrap">
+                              {truncateString(podcast.title, 15)}
+                            </h1>
+                            <p className="whitespace-nowrap text-xs  sm:text-sm text-start font-medium text-[#909090]">
+                              {truncateString(podcast.publisher, 15)}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  ) : (
-                    /* Desktop */
-                    <Link
-                      href={`/podcasts/${convertToSlug(
-                        categoryName
-                      )}/${convertToSlug(podcast.title)}`}
-                      key={podcast.title}
-                    >
-                      <div
-                        className={` group bg-gradient-to-b w-full relative z-10 ${
-                          ninjaMode
-                            ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828] "
-                            : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
-                        }  hover:cursor-pointer flex flex-col items-center max-h-auto px-4 pb-10 rounded-lg min-w-[135px] max-w-[220px]`}
+                      </Link>
+                    ) : (
+                      /* Desktop */
+                      <Link
+                        href={`/podcasts/${convertToSlug(
+                          categoryName
+                        )}/${convertToSlug(podcast.title)}`}
+                        key={podcast.title}
                       >
-                        <Image
-                          src={podcast.imageUrl}
-                          alt={podcast.imageUrl}
-                          width={160}
-                          height={160}
-                          className="rounded-xl mt-4 shadow-lg shadow-black w-[160px] "
-                          loading={"eager"}
-                        />
-                        <div className="flex flex-col px-5">
-                          <h1 className="whitespace-nowrap text-sm xl:text-md text-start mt-3 font-semibold text-[#dadada] group-hover:text-white">
-                            {truncateString(podcast.title, 14)}
-                          </h1>
-                          <p className="whitespace-nowrap text-sm xl:text-md text-start font-medium text-[#909090]">
-                            {truncateString(podcast.publisher, 14)}
-                          </p>
+                        <div
+                          className={` group bg-gradient-to-b w-full relative z-10 ${
+                            ninjaMode
+                              ? "bg-gradient-to-b from-[#212121] to-[#111111] hover:from-[#202020] hover:to-[#282828] "
+                              : "bg-gradient-to-b from-[#2a2a2a] to-[#181818] hover:from-[#202020] hover:to-[#343434]"
+                          }  hover:cursor-pointer flex flex-col items-center max-h-auto px-4 pb-10 rounded-lg min-w-[135px] max-w-[220px]`}
+                        >
+                          <Image
+                            src={podcast.imageUrl}
+                            alt={podcast.imageUrl}
+                            width={160}
+                            height={160}
+                            className="rounded-xl mt-4 shadow-lg shadow-black w-[160px] "
+                            loading={"eager"}
+                          />
+                          <div className="flex flex-col px-5">
+                            <h1 className="whitespace-nowrap text-sm xl:text-md text-start mt-3 font-semibold text-[#dadada] group-hover:text-white">
+                              {truncateString(podcast.title, 14)}
+                            </h1>
+                            <p className="whitespace-nowrap text-sm xl:text-md text-start font-medium text-[#909090]">
+                              {truncateString(podcast.publisher, 14)}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  )}
+                      </Link>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {
+                <div className="relative bottom-[380px] lg:bottom-[200px]">
+                  <ChatBubble
+                    message="Don't see your favorite show?"
+                    page="category"
+                    currentPodcasts={currentPodcasts}
+                  />
+                  <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
+                    {`© PromoNinja ${currentYear}`}
+                  </p>
                 </div>
-              ))}
+              }
             </div>
-            <div className="relative bottom-[380px] lg:bottom-[200px]">
-              <ChatBubble
-                message="Don't see your favorite show?"
-                page="category"
-                currentPodcasts={currentPodcasts}
-              />
-              <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
-                {`© PromoNinja ${currentYear}`}
-              </p>
-            </div>
-          </div>
-          \
+          }
         </div>
       )}
     </div>

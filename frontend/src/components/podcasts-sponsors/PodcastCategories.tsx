@@ -20,7 +20,6 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
   const categoryName = Object.keys(category)[0];
   const podcastData = category[categoryName];
   const isBreakPoint = useMediaQuery(1023);
-
   const sliderRef = useRef<HTMLDivElement>(null);
   const slider = sliderRef.current;
 

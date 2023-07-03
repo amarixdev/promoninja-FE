@@ -113,12 +113,19 @@ const Sidebar = (props: Props) => {
             href={"/"}
             className="w-[230px] flex justify-center items-center pl-12 p-6"
           >
-            <Image src={Ninja4} alt="" className="h-fit mx-3" width={60} />
+            <Image
+              src={Ninja4}
+              alt=""
+              className="h-fit mx-3"
+              width={60}
+              priority
+            />
             <Image
               alt="/"
               src={LogoText}
               width={160}
               className="px-4 py-2 right-6  relative h-fit"
+              priority
             />
           </Link>
         ) : (
@@ -126,12 +133,19 @@ const Sidebar = (props: Props) => {
             className="w-[230px] flex justify-center items-center pl-12 p-6"
             onClick={() => scrollToTop()}
           >
-            <Image src={Ninja4} alt="" className="h-fit mx-3" width={60} />
+            <Image
+              src={Ninja4}
+              alt=""
+              className="h-fit mx-3"
+              width={60}
+              priority
+            />
             <Image
               alt="/"
               src={LogoText}
               width={160}
               className="px-4 py-2 right-6  relative h-fit"
+              priority
             />
           </button>
         )}
