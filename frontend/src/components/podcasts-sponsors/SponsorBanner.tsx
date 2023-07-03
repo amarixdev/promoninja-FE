@@ -2,7 +2,7 @@ import Image from "next/image";
 import React, { RefObject } from "react";
 import { scrollToTop, truncateString } from "../../utils/functions";
 import { SponsorData } from "../../utils/types";
-import { useBanner } from "../../utils/hooks";
+import { useBanner, useMediaQuery } from "../../utils/hooks";
 import fallbackImage from "../../public/assets/fallback.png";
 
 interface SponsorBannerProps {
@@ -15,7 +15,7 @@ const SponsorBanner = ({
   bannerBreakpointRef,
 }: SponsorBannerProps) => {
   const { banner } = useBanner(bannerBreakpointRef, 0, "sponsor");
-
+  const isBreakPoint = useMediaQuery(1023);
   return (
     <div
       onClick={() => scrollToTop()}
@@ -37,7 +37,9 @@ const SponsorBanner = ({
         <h1
           className={`font-bold text-white lg:font-extrabold relative text-base xs:text-lg lg:text-3xl `}
         >
-          {truncateString(sponsorData.name, 20)}
+          {isBreakPoint
+            ? truncateString(sponsorData.name, 20)
+            : sponsorData.name}
         </h1>
         <div className="flex gap-2">
           <h3

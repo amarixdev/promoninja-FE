@@ -41,7 +41,6 @@ const ChatBubble = ({
         !toggleButtonRef.current.contains(event.target) &&
         !navigateButtonRef.current?.contains(event.target)
       ) {
-        // Perform your action here when a click occurs outside the specific div
         setInView(false);
       }
     }

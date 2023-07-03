@@ -59,7 +59,7 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
                       ninjaMode
                         ? "bg-gradient-to-b from-[#212121] to-[#111111]  "
                         : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
-                    } active:scale-95 transition-all duration-300 ease-in-out  mt-4 p-4 flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5`}
+                    } active:scale-95 transition-all duration-300 ease-in-out mx-2 mt-4 p-4 flex flex-col items-center min-w-[120px] md:min-w-[140px] h-fit ml-2 rounded-lg overflow-y-visible sm:mx-5`}
                     key={podcast.title}
                   >
                     <Image

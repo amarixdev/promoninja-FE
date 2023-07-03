@@ -2,7 +2,6 @@ import React from "react";
 import Sidebar from "../components/layout/Sidebar";
 import { NavContext } from "../context/navContext";
 import Logo3 from "../public/assets/alt-ninja2.png";
-import Footer from "../components/layout/Footer";
 import Image from "next/image";
 import Link from "next/link";
 import BackButton from "../components/misc/BackButton";
@@ -35,7 +34,13 @@ const About = (props: Props) => {
             <BackButton />
           </div>
 
-          <div className="flex flex-col items-center lg:text-left justify-center border-[1px] rounded-lg mt-10 border-[#e09249] py-8 px-4 max-w-[95%] lg:max-w-[70%] shadow-[#e09249] shadow-md ">
+          <div
+            className={` ${
+              ninjaMode
+                ? "bg-gradient-to-b from-[#212121] to-[#111111]  "
+                : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
+            } flex flex-col items-center lg:text-left justify-center rounded-lg mt-10 py-8 px-4 max-w-[95%] lg:max-w-[70%] `}
+          >
             <div className="w-full px-8 text-center lg:text-left">
               <p className="font-extrabold text-6xl lg:text-7xl ">About</p>
             </div>
@@ -61,13 +66,13 @@ const About = (props: Props) => {
                 <p className="pt-2 ">
                   PromoNinja is a{" "}
                   <span className="font-bold">win-win-win.</span> As a podcast{" "}
-                  <span className="font-bold">creator</span>, you have the
-                  luxury of having all your running sponsors in one centralized
+                  <span className="font-bold">creator</span>, you get the luxury
+                  of having all your running sponsors in one centralized
                   location. As a podcast{" "}
-                  <span className="font-bold">enjoyer</span>, you have access to
+                  <span className="font-bold">enjoyer</span>, you get access to
                   exclusive promotions and the opportunity to discover new
                   shows. As a podcast{" "}
-                  <span className="font-bold"> sponsor</span>, you have an even
+                  <span className="font-bold"> sponsor</span>, you get an even
                   greater reach from not only the podcasts you&apos;ve
                   sponsored, but anyone looking for a deal.
                 </p>

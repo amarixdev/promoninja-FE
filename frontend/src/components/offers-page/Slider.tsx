@@ -92,7 +92,7 @@ const Slider = ({
 
   return (
     <div
-      className="fixed  mt-4 lg:mt-0  scrollbar-hide lg:top-24 top-20 bg-[#151515] z-[100] overflow-x-scroll scroll-smooth w-full lg:w-[85%] flex pt-5 lg:pt-0 items-center"
+      className="fixed  mt-4 lg:mt-0 scrollbar-hide lg:top-24 top-20 bg-[#151515] z-[100] overflow-x-scroll scroll-smooth w-full lg:w-[85%] flex pt-5 lg:pt-0 items-center"
       ref={isBreakPoint ? null : sliderRef}
     >
       {isBreakPoint || (

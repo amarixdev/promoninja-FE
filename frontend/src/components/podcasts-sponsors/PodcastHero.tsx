@@ -72,7 +72,7 @@ const PodcastHero = ({
             <div className="w-full flex items-center justify-between pb-4">
               <div className="flex items-center px-6 gap-3">
                 <Link href={`/podcasts/${convertToSlug(category)}`}>
-                  <Button>
+                  <Button className="active:scale-95 transition-all duration-300 ease-in-out">
                     <p className="text-sm">
                       {capitalizeString(
                         category.split("-").join(" ").toLowerCase()
@@ -80,7 +80,10 @@ const PodcastHero = ({
                     </p>
                   </Button>
                 </Link>
-                <Button onClick={() => copyToClipboard()}>
+                <Button
+                  onClick={() => copyToClipboard()}
+                  className="active:scale-95 transition-all duration-300 ease-in-out"
+                >
                   <BsShareFill size={14} />
                   <p className="ml-3 text-sm">Share</p>
                 </Button>
@@ -101,7 +104,7 @@ const PodcastHero = ({
             <div className="px-6 flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <Link href={`/podcasts/${convertToSlug(category)}`}>
-                  <Button>
+                  <Button className="active:scale-95 transition-all duration-300 ease-in-out">
                     <p className="text-xs xs:text-sm">
                       {capitalizeString(
                         category.split("-").join(" ").toLowerCase()
@@ -109,7 +112,11 @@ const PodcastHero = ({
                     </p>
                   </Button>
                 </Link>
-                <Button minW={"fit-content"} onClick={() => copyToClipboard()}>
+                <Button
+                  minW={"fit-content"}
+                  onClick={() => copyToClipboard()}
+                  className="active:scale-95 transition-all duration-300 ease-in-out"
+                >
                   <BsShareFill size={15} />
                   <p className="ml-3 text-xs xs:text-sm">Share</p>
                 </Button>

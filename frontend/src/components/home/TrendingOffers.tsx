@@ -23,7 +23,9 @@ const TrendingOffers = ({
   const [trendingOfferIndex, setTrendingOfferIndex] = useState("0");
   const [ninjaRunningIndex, setNinjaRunningIndex] = useState(0);
   const isBreakPoint = useMediaQuery(1023);
-  const [hover, setHover] = useState(false);
+  const [hoverRight, setHoverRight] = useState(false);
+  const [hoverLeft, setHoverLeft] = useState(false);
+
   const NinjaRunning = Array(5).fill(
     <GiRunningNinja size={isBreakPoint ? 40 : 55} />
   );
@@ -81,8 +83,8 @@ const TrendingOffers = ({
                       <div>
                         <div
                           className="absolute right-[0px] z-10 min-w-[100px]"
-                          onMouseOver={() => setHover(true)}
-                          onMouseLeave={() => setHover(false)}
+                          onMouseOver={() => setHoverLeft(true)}
+                          onMouseLeave={() => setHoverLeft(false)}
                         >
                           <MdArrowLeft
                             size={70}
@@ -92,7 +94,7 @@ const TrendingOffers = ({
 
                         <div
                           className={`bg-[#aaaaaa34] z-0 rounded-full absolute right-[22px] top-1 min-h-[65px] min-w-[65px] ${
-                            hover ? "opacity-60" : "opacity-0"
+                            hoverLeft ? "opacity-60" : "opacity-0"
                           } transition-all duration-300 ease-in-out`}
                         ></div>
                       </div>
@@ -157,8 +159,8 @@ const TrendingOffers = ({
                         <div>
                           <div
                             className="absolute left-14 z-10 min-w-[100px]"
-                            onMouseOver={() => setHover(true)}
-                            onMouseLeave={() => setHover(false)}
+                            onMouseOver={() => setHoverRight(true)}
+                            onMouseLeave={() => setHoverRight(false)}
                           >
                             <MdArrowRight
                               size={70}
@@ -168,8 +170,8 @@ const TrendingOffers = ({
 
                           <div
                             className={`bg-[#aaaaaa34] z-0 rounded-full absolute left-[66px] top-1 min-h-[65px] min-w-[65px] ${
-                              hover ? "opacity-60" : "opacity-0"
-                            } transition-all duration-300 ease-in-out`}
+                              hoverRight ? "opacity-60" : "opacity-0"
+                            } ac  transition-all duration-300 ease-in-out`}
                           ></div>
                         </div>
                       )}
@@ -254,7 +256,7 @@ const TrendingOffers = ({
         )}
       </>
       <div className="w-full mt-4 lg:mt-8 flex items-center justify-center">
-        <div className=" rounded-lg flex gap-6 px-6 bg-[#121212] shadow-black shadow-lg active:shadow-none transition-all duration-300 ease-in-out active:scale-[0.98]">
+        <div className=" rounded-lg flex gap-6 px-6 bg-[#121212] shadow-black shadow-lg transition-all duration-300 ease-in-out">
           {NinjaRunning.map((ninja, index) => (
             <div
               key={index}

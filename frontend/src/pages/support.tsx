@@ -44,7 +44,13 @@ const About = (props: Props) => {
             <BackButton />
           </div>
 
-          <div className="flex flex-col items-center lg:text-left justify-center border-[1px] mt-10 rounded-lg border-[#e09249] shadow-[#e09249] shadow-md py-8 px-4 max-w-[95%] lg:max-w-[70%] ">
+          <div
+            className={` ${
+              ninjaMode
+                ? "bg-gradient-to-b from-[#212121] to-[#111111]  "
+                : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
+            } flex flex-col items-center lg:text-left justify-center mt-10 rounded-lg  py-8 px-4 max-w-[95%] lg:max-w-[70%]`}
+          >
             <div
               className={`w-full px-8 text-center lg:text-left flex ${
                 isBreakPoint ? "justify-center" : "justify-start"
@@ -62,8 +68,8 @@ const About = (props: Props) => {
                 PromoNinja is a passion project that was designed, developed,
                 and is maintained independently. If you find value in the site
                 and want to support my mission in growing the platform, you can
-                help out by <DonationLink />. Otherwise, thank you for reading
-                and enjoy the complimentary service!
+                help out by <DonationLink />. Thank you for reading and enjoy
+                the service!
               </p>
             </div>
           </div>
