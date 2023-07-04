@@ -21,8 +21,10 @@ const SponsorBanner = ({
       onClick={() => scrollToTop()}
       className={`flex w-full 
      bg-[#00000073]
-     backdrop-blur-md p-3 items-center relative transition-all duration-300 cursor-pointer ${
-       banner ? "bottom-0" : "bottom-[500px]"
+     backdrop-blur-md p-3 items-center fixed transition-all duration-300  ${
+       banner
+         ? "opacity-100 z-50 cursor-pointer"
+         : "opacity-0 z-0 cursor-default"
      } `}
     >
       <Image

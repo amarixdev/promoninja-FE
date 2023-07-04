@@ -36,10 +36,10 @@ const Banner = ({
     >
       {
         <div
-          className={`flex w-full bg-[#000000] justify-center lg:justify-start h-[105px] lg:h-fit select-none backdrop-blur-md items-center relative transition-all duration-[200ms] ease-out z-50 ${
+          className={`top-0 flex w-full bg-[#000000] justify-center lg:justify-start h-[85px] lg:h-fit select-none backdrop-blur-md items-center fixed transition-all duration-[200ms] ease-out  ${
             displayCategory && !isScrolledToTop
-              ? "bottom-0 opacity-100 "
-              : "bottom-[500px] opacity-0"
+              ? "opacity-100 z-50 cursor-pointer"
+              : "opacity-0 z-0 cursor-default"
           }`}
         >
           <div className={`flex items-center  p-4 sm:p-6 hover:cursor-pointer`}>

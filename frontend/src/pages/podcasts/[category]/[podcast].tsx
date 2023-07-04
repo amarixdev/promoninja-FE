@@ -122,7 +122,7 @@ const Podcast = ({ podcastData, category }: Props) => {
   return (
     <div className={`${isBreakPoint ? "flex flex-col" : "flex "}`}>
       <Sidebar />
-      <div className="flex-col w-full overflow-hidden ">
+      <div className="flex-col w-full overflow-hidden lg:ml-[240px] ">
         <BackButton />
         <div className="flex flex-col items-center relative h-[50vh] w-full">
           <div className={`fixed w-full z-50 lg:ml-[240px]`}>

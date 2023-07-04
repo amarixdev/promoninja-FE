@@ -1,6 +1,4 @@
-import {
-  Spinner
-} from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import Sidebar from "../components/layout/Sidebar";
@@ -11,13 +9,8 @@ import PodcastList from "../components/podcasts-sponsors/SponsorPodcastList";
 import { NavContext } from "../context/navContext";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
-import {
-  convertToSlug
-} from "../utils/functions";
-import {
-  useScrollRestoration,
-  useSetCurrentPage
-} from "../utils/hooks";
+import { convertToSlug } from "../utils/functions";
+import { useScrollRestoration, useSetCurrentPage } from "../utils/hooks";
 import { SponsorCategory, SponsorData } from "../utils/types";
 
 interface Props {
@@ -45,45 +38,46 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
   if (!sponsorData) return <Spinner />;
 
   return (
-    <div className="flex ">
+    <div className="flex">
       <Sidebar />
+      <div className="lg:ml-[240px] w-full">
+        {ninjaMode ? (
+          <div
+            className={` from-[#151515] bg-gradient-to-b  absolute w-fit h-[400px] z-0 `}
+          ></div>
+        ) : (
+          <div
+            className={` from-[#606060] bg-gradient-to-b  absolute w-fit h-[400px] z-0 `}
+          ></div>
+        )}
+        {
+          <div
+            className={`${
+              ninjaMode
+                ? "bg-gradient-to-b from-[#0c0c0c] to-[#000000] "
+                : "bg-gradient-to-b from-[#454545] to-[#101010] "
+            } flex flex-col items-center w-full`}
+          >
+            {
+              <div className={`fixed w-full z-50 lg:ml-[240px]`}>
+                <SponsorBanner
+                  bannerBreakpointRef={bannerBreakpointRef}
+                  sponsorData={sponsorData}
+                />
+              </div>
+            }
+            <SponsorHero
+              bannerBreakpointRef={bannerBreakpointRef}
+              categoryIndex={categoryIndex}
+              ninjaMode={ninjaMode}
+              setCategoryIndex={setCategoryIndex}
+              sponsorData={sponsorData}
+            />
+            <PodcastList sponsorData={sponsorData} />
+          </div>
+        }
+      </div>
       <BackButton sponsorPage={true} />
-
-      {ninjaMode ? (
-        <div
-          className={` from-[#151515] bg-gradient-to-b  absolute w-full h-[400px] z-0 `}
-        ></div>
-      ) : (
-        <div
-          className={` from-[#606060] bg-gradient-to-b  absolute w-full h-[400px] z-0 `}
-        ></div>
-      )}
-      {
-        <div
-          className={`${
-            ninjaMode
-              ? "bg-gradient-to-b from-[#0c0c0c] to-[#000000] "
-              : "bg-gradient-to-b from-[#454545] to-[#101010] "
-          } flex flex-col items-center w-full`}
-        >
-          {
-            <div className={`fixed w-full z-50 lg:ml-[240px]`}>
-              <SponsorBanner
-                bannerBreakpointRef={bannerBreakpointRef}
-                sponsorData={sponsorData}
-              />
-            </div>
-          }
-          <SponsorHero
-            bannerBreakpointRef={bannerBreakpointRef}
-            categoryIndex={categoryIndex}
-            ninjaMode={ninjaMode}
-            setCategoryIndex={setCategoryIndex}
-            sponsorData={sponsorData}
-          />
-          <PodcastList sponsorData={sponsorData} />
-        </div>
-      }
     </div>
   );
 };

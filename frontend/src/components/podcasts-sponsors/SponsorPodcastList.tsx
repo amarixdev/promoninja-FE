@@ -167,7 +167,7 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
         <div className="w-[95%] border-b-[1px] "></div>
       </div>
 
-      <div className="w-full flex flex-col lg:h-[500px] pt-1 lg:pt-6 lg:overflow-y-scroll pb-52">
+      <div className="w-full flex flex-col lg:h-[500px] pt-1 lg:pt-6 lg:overflow-y-auto pb-52">
         {sponsorData?.podcast.map((podcast, index) => (
           <div
             key={podcast.title}

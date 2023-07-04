@@ -33,58 +33,60 @@ const About = (props: Props) => {
     <>
       <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
         <Sidebar />
-        <div
-          className={`w-full  flex flex-col py-10 bg-gradient-to-b justify-center items-center ${
-            ninjaMode
-              ? "from-[#131313] via-[#0e0e0e] to-[black]"
-              : "from-[#252525] via-[#1a1a1a] to-[#121212] "
-          } relative overflow-x-hidden z-1`}
-        >
-          <div className="w-full absolute top-0">
-            <BackButton />
-          </div>
-
+        <div className="lg:ml-[240px]">
           <div
-            className={` ${
+            className={`w-full  flex flex-col py-10 bg-gradient-to-b justify-center items-center ${
               ninjaMode
-                ? "bg-gradient-to-b from-[#212121] to-[#111111]  "
-                : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
-            } flex flex-col items-center lg:text-left justify-center mt-10 rounded-lg  py-8 px-4 max-w-[95%] lg:max-w-[70%]`}
+                ? "from-[#131313] via-[#0e0e0e] to-[black]"
+                : "from-[#252525] via-[#1a1a1a] to-[#121212] "
+            } relative overflow-x-hidden z-1`}
           >
+            <div className="w-full absolute top-0">
+              <BackButton />
+            </div>
+
             <div
-              className={`w-full px-8 text-center lg:text-left flex ${
-                isBreakPoint ? "justify-center" : "justify-start"
-              } items-center`}
+              className={` ${
+                ninjaMode
+                  ? "bg-gradient-to-b from-[#212121] to-[#111111]  "
+                  : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
+              } flex flex-col items-center lg:text-left justify-center mt-10 rounded-lg  py-8 px-4 max-w-[95%] lg:max-w-[70%]`}
             >
-              <p className="font-extrabold text-3xl lg:text-5xl ">Support</p>
+              <div
+                className={`w-full px-8 text-center lg:text-left flex ${
+                  isBreakPoint ? "justify-center" : "justify-start"
+                } items-center`}
+              >
+                <p className="font-extrabold text-3xl lg:text-5xl ">Support</p>
+              </div>
+              <div className="w-full px-8 pt-8 text-center lg:text-left">
+                <Link
+                  href={"http://www.buymeacoffee.com/promoninja"}
+                  className=" text-xl lg:text-2xl font-semibold"
+                  target="_blank"
+                ></Link>
+                <p className="pt-2 text-[#cbcbcb] text-base lg:text-lg">
+                  PromoNinja is a passion project that was designed, developed,
+                  and is maintained independently. If you find value in the site
+                  and want to support my mission in growing the platform, you
+                  can help out by <DonationLink />. Thank you for reading and
+                  enjoy the service!
+                </p>
+              </div>
             </div>
-            <div className="w-full px-8 pt-8 text-center lg:text-left">
-              <Link
-                href={"http://www.buymeacoffee.com/promoninja"}
-                className=" text-xl lg:text-2xl font-semibold"
-                target="_blank"
-              ></Link>
-              <p className="pt-2 text-[#cbcbcb] text-base lg:text-lg">
-                PromoNinja is a passion project that was designed, developed,
-                and is maintained independently. If you find value in the site
-                and want to support my mission in growing the platform, you can
-                help out by <DonationLink />. Thank you for reading and enjoy
-                the service!
-              </p>
-            </div>
+            {isBreakPoint ? (
+              <div className="pt-10 pb-20">
+                <Image src={LogoAlt} alt="alt-logo" width={240} height={240} />
+              </div>
+            ) : (
+              <div className="pt-10">
+                <Image src={LogoAlt} alt="alt-logo" width={300} height={300} />
+              </div>
+            )}
+            <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
+              {`© PromoNinja ${currentYear}`}
+            </p>
           </div>
-          {isBreakPoint ? (
-            <div className="pt-10 pb-20">
-              <Image src={LogoAlt} alt="alt-logo" width={240} height={240} />
-            </div>
-          ) : (
-            <div className="pt-10">
-              <Image src={LogoAlt} alt="alt-logo" width={300} height={300} />
-            </div>
-          )}
-          <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
-            {`© PromoNinja ${currentYear}`}
-          </p>
         </div>
       </div>
     </>

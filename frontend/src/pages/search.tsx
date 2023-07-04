@@ -145,118 +145,80 @@ const Search = () => {
   };
 
   return (
-    <div className="flex base:mb-[40px] xs:mb-[50px] lg:mb-0">
+    <div className="base:mb-[40px] xs:mb-[50px] lg:mb-0">
       <Sidebar />
-      <div className="h-screen w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727]">
-        <div className="w-full p-6 flex flex-col justify-center items-center ">
-          <div className="flex items-center justify-center text-[#5b5a5a] w-full">
-            <div className="bg-[#292929] h-10 rounded-l-md flex items-center justify-center p-2">
-              <BiSearch size={20} />
-            </div>
-
-            <input
-              className=" text-white outline-none focus:outline-none rounded-r-md w-10/12 sm:w-8/12 md:w-6/12 lg:w-4/12 p-2 bg-[#202020]"
-              type="text"
-              placeholder="Search"
-              value={searchText}
-              onChange={(e) => handleSearch(e)}
-            />
-          </div>
-          {display.filter && (
-            <div className="flex items-center justify-center ">
-              <div className="w-full p-6 text-xs xs:text-sm  flex gap-4 justify-evenly items-center ">
-                {searchCategories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => handleFilter(category)}
-                    className={`active:scale-95 rounded-full px-8 py-1 items-center flex justify-center ${
-                      podcastFilter &&
-                      category === "Podcasts" &&
-                      "bg-[#3f3f3f] "
-                    } ${
-                      sponsorFilter && category === "Sponsors" && "bg-[#3f3f3f]"
-                    }`}
-                  >
-                    <p className=" font-medium">{category}</p>
-                  </button>
-                ))}
+      <div className="lg:ml-[240px]">
+        <div className="h-screen w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727]">
+          <div className="w-full p-6 flex flex-col justify-center items-center ">
+            <div className="flex items-center justify-center text-[#5b5a5a] w-full">
+              <div className="bg-[#292929] h-10 rounded-l-md flex items-center justify-center p-2">
+                <BiSearch size={20} />
               </div>
+
+              <input
+                className=" text-white outline-none focus:outline-none rounded-r-md w-10/12 sm:w-8/12 md:w-6/12 lg:w-4/12 p-2 bg-[#202020]"
+                type="text"
+                placeholder="Search"
+                value={searchText}
+                onChange={(e) => handleSearch(e)}
+              />
             </div>
-          )}
-          <div className="">
-            {podcastFilter &&
-              searchText &&
-              podcastSearch.map((podcast) => (
-                <div
-                  key={podcast.title}
-                  className="p-2 flex items-center justify-center "
-                >
-                  {podcast.imageUrl ? (
-                    <Link
-                      href={`/podcasts/${convertToSlug(
-                        podcast.category[0].name
-                      )}/${convertToSlug(podcast.title)}`}
-                      className="w-full"
+            {display.filter && (
+              <div className="flex items-center justify-center ">
+                <div className="w-full p-6 text-xs xs:text-sm  flex gap-4 justify-evenly items-center ">
+                  {searchCategories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => handleFilter(category)}
+                      className={`active:scale-95 rounded-full px-8 py-1 items-center flex justify-center ${
+                        podcastFilter &&
+                        category === "Podcasts" &&
+                        "bg-[#3f3f3f] "
+                      } ${
+                        sponsorFilter &&
+                        category === "Sponsors" &&
+                        "bg-[#3f3f3f]"
+                      }`}
                     >
-                      <div className="flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f] lg:min-w-[550px] min-w-[200px] xs:min-w-[300px] sm:min-w-[350px] md:min-w-[420px]">
-                        <div className="p-4">
-                          <Image
-                            src={podcast.imageUrl || fallbackImage}
-                            width={100}
-                            height={100}
-                            loading="eager"
-                            priority
-                            alt={podcast.title}
-                            className="shadow-black base:max-w-[70px] shadow-2xl xs:min-w-[90px] sm:min-w-[100px] rounded-lg"
-                          />
-                        </div>
-                        <div className="flex flex-col p-4 ">
-                          <h1 className="font-bold text-xs xs:font-extrabold xs:text-sm">
-                            {truncateString(podcast.title, 30)}
-                          </h1>
-                          <p className="text-[#aaaaaa] text-xs lg:text-sm">
-                            {truncateString(podcast.publisher, 35)}
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  ) : (
-                    <Spinner />
-                  )}
+                      <p className=" font-medium">{category}</p>
+                    </button>
+                  ))}
                 </div>
-              ))}
-            <div>
-              {sponsorFilter &&
+              </div>
+            )}
+            <div className="">
+              {podcastFilter &&
                 searchText &&
-                sponsorSearch.map((sponsor) => (
+                podcastSearch.map((podcast) => (
                   <div
-                    key={sponsor?.name}
-                    className="p-2 flex items-center justify-center w-full"
+                    key={podcast.title}
+                    className="p-2 flex items-center justify-center "
                   >
-                    {sponsor.imageUrl ? (
+                    {podcast.imageUrl ? (
                       <Link
-                        href={`/${convertToSlug(sponsor.name)}`}
+                        href={`/podcasts/${convertToSlug(
+                          podcast.category[0].name
+                        )}/${convertToSlug(podcast.title)}`}
                         className="w-full"
                       >
                         <div className="flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f] lg:min-w-[550px] min-w-[200px] xs:min-w-[300px] sm:min-w-[350px] md:min-w-[420px]">
                           <div className="p-4">
                             <Image
-                              src={sponsor.imageUrl || fallbackImage}
+                              src={podcast.imageUrl || fallbackImage}
                               width={100}
                               height={100}
                               loading="eager"
                               priority
-                              alt={sponsor.name}
-                              className=" shadow-2xl shadow-black base:max-w-[70px] xs:min-w-[90px] sm:min-w-[100px] base:max-h-[70px] xs:min-h-[90px] sm:min-h-[100px] rounded-lg"
+                              alt={podcast.title}
+                              className="shadow-black base:max-w-[70px] shadow-2xl xs:min-w-[90px] sm:min-w-[100px] rounded-lg"
                             />
                           </div>
                           <div className="flex flex-col p-4 ">
                             <h1 className="font-bold text-xs xs:font-extrabold xs:text-sm">
-                              {" "}
-                              {truncateString(sponsor.name, 30)}
+                              {truncateString(podcast.title, 30)}
                             </h1>
-                            <p className="text-[#aaaaaa] text-xs xs:text-sm">
-                              {truncateString(sponsor.url, 35)}
+                            <p className="text-[#aaaaaa] text-xs lg:text-sm">
+                              {truncateString(podcast.publisher, 35)}
                             </p>
                           </div>
                         </div>
@@ -266,6 +228,48 @@ const Search = () => {
                     )}
                   </div>
                 ))}
+              <div>
+                {sponsorFilter &&
+                  searchText &&
+                  sponsorSearch.map((sponsor) => (
+                    <div
+                      key={sponsor?.name}
+                      className="p-2 flex items-center justify-center w-full"
+                    >
+                      {sponsor.imageUrl ? (
+                        <Link
+                          href={`/${convertToSlug(sponsor.name)}`}
+                          className="w-full"
+                        >
+                          <div className="flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f] lg:min-w-[550px] min-w-[200px] xs:min-w-[300px] sm:min-w-[350px] md:min-w-[420px]">
+                            <div className="p-4">
+                              <Image
+                                src={sponsor.imageUrl || fallbackImage}
+                                width={100}
+                                height={100}
+                                loading="eager"
+                                priority
+                                alt={sponsor.name}
+                                className=" shadow-2xl shadow-black base:max-w-[70px] xs:min-w-[90px] sm:min-w-[100px] base:max-h-[70px] xs:min-h-[90px] sm:min-h-[100px] rounded-lg"
+                              />
+                            </div>
+                            <div className="flex flex-col p-4 ">
+                              <h1 className="font-bold text-xs xs:font-extrabold xs:text-sm">
+                                {" "}
+                                {truncateString(sponsor.name, 30)}
+                              </h1>
+                              <p className="text-[#aaaaaa] text-xs xs:text-sm">
+                                {truncateString(sponsor.url, 35)}
+                              </p>
+                            </div>
+                          </div>
+                        </Link>
+                      ) : (
+                        <Spinner />
+                      )}
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>

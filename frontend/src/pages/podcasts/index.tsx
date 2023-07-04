@@ -30,7 +30,7 @@ const Podcasts = ({ categoryPreviews }: Props) => {
       <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
         <Sidebar />
         <div
-          className={`w-full bg-gradient-to-b ${
+          className={`w-full bg-gradient-to-b lg:ml-[240px] ${
             ninjaMode
               ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
               : "from-[#1e1e1e] via-[#1a1a1a] to-[#151515]"

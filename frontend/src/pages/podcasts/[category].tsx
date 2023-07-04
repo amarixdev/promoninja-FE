@@ -98,6 +98,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
   return (
     <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0 bg-black h-full">
       <Sidebar />
+      <div></div>
       <div className={`fixed w-full z-50 lg:ml-[240px]`}>
         {
           <div
@@ -119,7 +120,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
         }
       </div>
       {categoryPodcasts && (
-        <div className="h-screen w-full">
+        <div className="h-screen w-full lg:ml-[240px]">
           <BackButton />
           <Image
             src={backdrop}

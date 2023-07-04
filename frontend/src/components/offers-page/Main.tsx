@@ -9,7 +9,6 @@ import {
   Button,
   Collapse,
   Spinner,
-  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useMediaQuery } from "../../utils/hooks";
@@ -373,225 +372,222 @@ const Main = ({
       {/* Desktop */}
 
       {!rendering && !isBreakPoint && (
-        <div className="mt-24 ">
-          <div className="pt-14 px-10">
-            <p className="w-full text-3xl font-extrabold flex justify-center mb-14 relative z-10">
-              {currentCategory}
-            </p>
-            {filteredSponsors.length ? (
-              filteredSponsors.map((sponsor: SponsorData, index: number) => (
-                <div
-                  key={`${sponsor.name}`}
-                  className={`w-full rounded-md p-8 bg-gradient-to-r ${
-                    ninjaMode
-                      ? "from-[#171717] to-[#121212]"
-                      : "from-[#232323] to-[#181818]"
-                  } shadow-lg shadow-[black] mb-6`}
-                  ref={index === 0 ? bannerBreakpointRef : undefined}
-                >
-                  <div className="flex w-full">
-                    <div className="flex flex-col min-w-full ">
-                      <div className="flex-col flex w-full ">
-                        <div className="flex justify-start ">
-                          <Link
-                            href={`/${convertToSlug(sponsor.name)}`}
-                            onMouseEnter={() => {
-                              handleHover(sponsor.name, true);
-                            }}
-                            onMouseLeave={() => {
-                              handleHover(sponsor.name, false);
-                            }}
-                          >
-                            <Image
-                              src={sponsor.imageUrl || fallbackImage}
-                              width={225}
-                              height={225}
-                              alt={sponsor.name}
-                              priority
-                              loading="eager"
-                              className={`group transition-all duration-300 hover:scale-105 h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black relative z-10`}
-                            />
-                          </Link>
+        <div className="pt-[150px] px-10">
+          <p className="w-full text-3xl font-extrabold flex justify-center mb-14 relative z-10">
+            {currentCategory}
+          </p>
+          {filteredSponsors.length ? (
+            filteredSponsors.map((sponsor: SponsorData, index: number) => (
+              <div
+                key={`${sponsor.name}`}
+                className={`w-full rounded-md p-8 bg-gradient-to-r ${
+                  ninjaMode
+                    ? "from-[#171717] to-[#121212]"
+                    : "from-[#232323] to-[#181818]"
+                } shadow-lg shadow-[black] mb-6`}
+                ref={index === 0 ? bannerBreakpointRef : undefined}
+              >
+                <div className="flex w-full">
+                  <div className="flex flex-col min-w-full ">
+                    <div className="flex-col flex w-full ">
+                      <div className="flex justify-start ">
+                        <Link
+                          href={`/${convertToSlug(sponsor.name)}`}
+                          onMouseEnter={() => {
+                            handleHover(sponsor.name, true);
+                          }}
+                          onMouseLeave={() => {
+                            handleHover(sponsor.name, false);
+                          }}
+                        >
+                          <Image
+                            src={sponsor.imageUrl || fallbackImage}
+                            width={225}
+                            height={225}
+                            alt={sponsor.name}
+                            priority
+                            loading="eager"
+                            className={`group transition-all duration-300 hover:scale-105 h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black relative z-10`}
+                          />
+                        </Link>
 
-                          <div className="flex ml-4 flex-col rounded-sm">
-                            <div className="p-6 rounded-md">
-                              <div className="flex flex-col gap-2 px-4">
-                                <h1
-                                  className={`text-[#ebebeb] text-5xl font-extrabold relative z-10`}
-                                >
-                                  {sponsor.name}
-                                </h1>
-                                <h1
-                                  className={`text-[#bababa] text-xl relative z-10 `}
-                                >
-                                  {sponsor.offer}
-                                </h1>
-                              </div>
+                        <div className="flex ml-4 flex-col rounded-sm">
+                          <div className="p-6 rounded-md">
+                            <div className="flex flex-col gap-2 px-4">
+                              <h1
+                                className={`text-[#ebebeb] text-5xl font-extrabold relative z-10`}
+                              >
+                                {sponsor.name}
+                              </h1>
+                              <h1
+                                className={`text-[#bababa] text-xl relative z-10 `}
+                              >
+                                {sponsor.offer}
+                              </h1>
                             </div>
                           </div>
                         </div>
                       </div>
+                    </div>
 
-                      <div
-                        className={`relative pt-8 ml-2 flex w-full justify-between `}
-                      >
-                        <div className={`flex flex-col gap-1 w-9/12 `}>
-                          <h1
-                            className={`text-2xl font-semibold text-[#ebebeb] `}
-                          >
-                            About
-                          </h1>
-                          <p className="font-light py-4">{sponsor.summary}</p>
-                        </div>
-                        <Link href={`/${convertToSlug(sponsor.name)}`}>
-                          <Button
-                            className={`mt-10 group active:scale-95 ${
-                              imageHover && hoveredOffer === sponsor.name
-                                ? "scale-[1.05]"
-                                : ""
-                            } `}
-                          >
-                            <p
-                              className={`${
-                                imageHover && hoveredOffer === sponsor.name
-                                  ? "text-white"
-                                  : "text-[#aaaaaa]"
-                              }  group-hover:text-white transition-all duration-300 ease-out`}
-                            >
-                              View Details
-                            </p>
-                          </Button>
-                        </Link>
+                    <div
+                      className={`relative pt-8 ml-2 flex w-full justify-between `}
+                    >
+                      <div className={`flex flex-col gap-1 w-9/12 `}>
+                        <h1
+                          className={`text-2xl font-semibold text-[#ebebeb] `}
+                        >
+                          About
+                        </h1>
+                        <p className="font-light py-4">{sponsor.summary}</p>
                       </div>
+                      <Link href={`/${convertToSlug(sponsor.name)}`}>
+                        <Button
+                          className={`mt-10 group active:scale-95 ${
+                            imageHover && hoveredOffer === sponsor.name
+                              ? "scale-[1.05]"
+                              : ""
+                          } `}
+                        >
+                          <p
+                            className={`${
+                              imageHover && hoveredOffer === sponsor.name
+                                ? "text-white"
+                                : "text-[#aaaaaa]"
+                            }  group-hover:text-white transition-all duration-300 ease-out`}
+                          >
+                            View Details
+                          </p>
+                        </Button>
+                      </Link>
                     </div>
                   </div>
-                  <Button
-                    onClick={() =>
-                      handleCollapse(sponsor.name, isOpen ? "collapse" : "open")
-                    }
-                    className="active:scale-95 flex items-center"
-                  >
-                    <div className="flex items-center p-5">
-                      <p className="mr-4">Shop with Creators</p>{" "}
-                      {isOpen &&
-                      sponsorState.selectedSponsor === sponsor.name ? (
-                        <GoChevronUp />
-                      ) : podcastsLoading && current === sponsor.name ? (
-                        <Spinner />
-                      ) : (
-                        <GoChevronDown />
-                      )}
-                    </div>
-                  </Button>
-
-                  <Collapse
-                    in={isOpen && sponsorState.selectedSponsor === sponsor.name}
-                    animateOpacity
-                  >
-                    {sponsorState.previousSponsor === sponsor.name ? (
-                      <Box
-                        p="10px"
-                        mt="4"
-                        bg="transparent"
-                        rounded="md"
-                        shadow="md"
-                      >
-                        <div className="flex flex-col w-full">
-                          <div className="flex overflow-x-scroll pb-4 w-full ">
-                            {sponsorPodcastArray?.map((pod: PodcastData) => (
-                              <div
-                                key={pod.title}
-                                className="px-4 flex flex-col justify-between bg-[#15151500] h-[50px]"
-                              >
-                                <div></div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </Box>
-                    ) : (
-                      <Box
-                        p="10px"
-                        mt="4"
-                        bg="transparent"
-                        rounded="md"
-                        shadow="md"
-                      >
-                        <div className="flex flex-col w-full ">
-                          <div className="flex overflow-x-scroll pb-4 w-full scrollbar-hide ">
-                            {sponsorPodcastArray?.map((pod: PodcastData) => (
-                              <div
-                                key={pod.title}
-                                className="px-4 flex flex-col justify-between group cursor-pointer"
-                                onClick={() => handleDrawer(pod, sponsor.name)}
-                              >
-                                <div>
-                                  <Image
-                                    src={pod?.imageUrl || fallbackImage}
-                                    width={110}
-                                    height={110}
-                                    alt={pod.title}
-                                    loading="eager"
-                                    className={`${
-                                      placeholder && !isOpen
-                                        ? "opacity-0"
-                                        : "opacity-100"
-                                    } min-w-[110px] min-h-[110px] rounded-md mb-2`}
-                                  />
-
-                                  <h1
-                                    className={`${
-                                      placeholder && !isOpen
-                                        ? "opacity-0"
-                                        : "opacity-100"
-                                    } text-sm font-semibold`}
-                                  >
-                                    {truncateString(pod.title, 13)}
-                                  </h1>
-                                  <h3
-                                    className={`${
-                                      placeholder && !isOpen
-                                        ? "opacity-0"
-                                        : "opacity-100"
-                                    } text-xs text-[#6f6f6f] pb-2`}
-                                  >
-                                    {truncateString(pod.publisher, 16)}
-                                  </h3>
-                                </div>
-                                <Button
-                                  width={"25"}
-                                  h={"5"}
-                                  fontSize={"x-small"}
-                                  className="group-active:scale-95 group-hover:bg-[#555]"
-                                >
-                                  Support
-                                </Button>
-                              </div>
-                            ))}
-                            <Link
-                              className="w-[110px] h-[110px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
-                              href={`/${convertToSlug(sponsor.name)}`}
-                            >
-                              <p className="font-semibold">View All</p>
-                            </Link>
-                          </div>
-                        </div>
-                        <div className="w-full text-[#aaaaaa] tracking-wide font-light text-sm italic relative top-2">
-                          <p className=" text-left">
-                            Choose a podcast to{" "}
-                            <span className="font-bold">support</span>. Click to
-                            reveal their link.
-                          </p>
-                        </div>
-                      </Box>
-                    )}
-                  </Collapse>
                 </div>
-              ))
-            ) : (
-              <div className="h-screen"></div>
-            )}
-          </div>
+                <Button
+                  onClick={() =>
+                    handleCollapse(sponsor.name, isOpen ? "collapse" : "open")
+                  }
+                  className="active:scale-95 flex items-center"
+                >
+                  <div className="flex items-center p-5">
+                    <p className="mr-4">Shop with Creators</p>{" "}
+                    {isOpen && sponsorState.selectedSponsor === sponsor.name ? (
+                      <GoChevronUp />
+                    ) : podcastsLoading && current === sponsor.name ? (
+                      <Spinner />
+                    ) : (
+                      <GoChevronDown />
+                    )}
+                  </div>
+                </Button>
+
+                <Collapse
+                  in={isOpen && sponsorState.selectedSponsor === sponsor.name}
+                  animateOpacity
+                >
+                  {sponsorState.previousSponsor === sponsor.name ? (
+                    <Box
+                      p="10px"
+                      mt="4"
+                      bg="transparent"
+                      rounded="md"
+                      shadow="md"
+                    >
+                      <div className="flex flex-col w-full">
+                        <div className="flex overflow-x-scroll pb-4 w-full ">
+                          {sponsorPodcastArray?.map((pod: PodcastData) => (
+                            <div
+                              key={pod.title}
+                              className="px-4 flex flex-col justify-between bg-[#15151500] h-[50px]"
+                            >
+                              <div></div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </Box>
+                  ) : (
+                    <Box
+                      p="10px"
+                      mt="4"
+                      bg="transparent"
+                      rounded="md"
+                      shadow="md"
+                    >
+                      <div className="flex flex-col w-full ">
+                        <div className="flex overflow-x-scroll pb-4 w-full scrollbar-hide ">
+                          {sponsorPodcastArray?.map((pod: PodcastData) => (
+                            <div
+                              key={pod.title}
+                              className="px-4 flex flex-col justify-between group cursor-pointer"
+                              onClick={() => handleDrawer(pod, sponsor.name)}
+                            >
+                              <div>
+                                <Image
+                                  src={pod?.imageUrl || fallbackImage}
+                                  width={110}
+                                  height={110}
+                                  alt={pod.title}
+                                  loading="eager"
+                                  className={`${
+                                    placeholder && !isOpen
+                                      ? "opacity-0"
+                                      : "opacity-100"
+                                  } min-w-[110px] min-h-[110px] rounded-md mb-2`}
+                                />
+
+                                <h1
+                                  className={`${
+                                    placeholder && !isOpen
+                                      ? "opacity-0"
+                                      : "opacity-100"
+                                  } text-sm font-semibold`}
+                                >
+                                  {truncateString(pod.title, 13)}
+                                </h1>
+                                <h3
+                                  className={`${
+                                    placeholder && !isOpen
+                                      ? "opacity-0"
+                                      : "opacity-100"
+                                  } text-xs text-[#6f6f6f] pb-2`}
+                                >
+                                  {truncateString(pod.publisher, 16)}
+                                </h3>
+                              </div>
+                              <Button
+                                width={"25"}
+                                h={"5"}
+                                fontSize={"x-small"}
+                                className="group-active:scale-95 group-hover:bg-[#555]"
+                              >
+                                Support
+                              </Button>
+                            </div>
+                          ))}
+                          <Link
+                            className="w-[110px] h-[110px] flex items-center justify-center hover:cursor-pointer active:scale-95 hover:bg-[#272727]"
+                            href={`/${convertToSlug(sponsor.name)}`}
+                          >
+                            <p className="font-semibold">View All</p>
+                          </Link>
+                        </div>
+                      </div>
+                      <div className="w-full text-[#aaaaaa] tracking-wide font-light text-sm italic relative top-2">
+                        <p className=" text-left">
+                          Choose a podcast to{" "}
+                          <span className="font-bold">support</span>. Click to
+                          reveal their link.
+                        </p>
+                      </div>
+                    </Box>
+                  )}
+                </Collapse>
+              </div>
+            ))
+          ) : (
+            <div className="h-screen"></div>
+          )}
         </div>
       )}
     </>

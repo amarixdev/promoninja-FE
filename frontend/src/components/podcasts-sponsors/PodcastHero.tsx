@@ -58,7 +58,7 @@ const PodcastHero = ({
           loading="eager"
           className={`z-10 rounded-lg lg:top-6 mt-8 lg:mb-4 relative base:w-[180px] xs:w-[220px] sm:w-[250px] shadow-2xl shadow-black`}
         />
-        <div className="w-full my-10">
+        <div className="w-full my-10 bg-gradient-to-b from-[#00000000] via-black to-black">
           <h1
             ref={bannerBreakpointRef}
             className=" text-center base:text-lg xs:text-xl sm:text-3xl font-bold lg:font-extrabold px-4 "
@@ -69,8 +69,8 @@ const PodcastHero = ({
             {podcastData?.publisher}{" "}
           </h2>
           {isBreakPoint || (
-            <div className="w-full flex items-center justify-between pb-4">
-              <div className="flex items-center px-6 gap-3">
+            <div className="w-full flex items-center justify-between pb-4 bg-black">
+              <div className="flex items-center px-6 gap-3 ">
                 <Link href={`/podcasts/${convertToSlug(category)}`}>
                   <Button className="active:scale-95 transition-all duration-300 ease-in-out">
                     <p className="text-sm">
@@ -101,7 +101,7 @@ const PodcastHero = ({
             </div>
           )}
           {isBreakPoint && (
-            <div className="px-6 flex items-center justify-between gap-4">
+            <div className="px-6 flex items-center justify-between gap-4 bg-black">
               <div className="flex items-center gap-2">
                 <Link href={`/podcasts/${convertToSlug(category)}`}>
                   <Button className="active:scale-95 transition-all duration-300 ease-in-out">
@@ -132,7 +132,7 @@ const PodcastHero = ({
             </div>
           )}
           {isBreakPoint || (
-            <div className="w-full h-[80px] overflow-y-scroll">
+            <div className="w-full h-[80px] overflow-y-auto">
               <p className="py-2 ml-6 text-[#aaaaaa] mb-4 px-4">
                 {truncated
                   ? truncateString(podcastData?.description, 280)

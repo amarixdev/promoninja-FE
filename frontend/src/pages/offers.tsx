@@ -99,13 +99,7 @@ const Offers = ({
 
   console.log(categoryCount);
   return (
-    <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
-      {categoryLoading && (
-        <div className="h-screen fixed w-full flex top-0 z-[9999]">
-          <div className={`${style.loader}`} />
-        </div>
-      )}
-
+    <div className="base:mb-[60px] xs:mb-[70px] lg:mb-0">
       <Sidebar />
       <Banner
         bannerBreakpointRef={bannerBreakpointRef}
@@ -113,59 +107,65 @@ const Offers = ({
         isScrolledToTop={isScrolledToTop}
         setIsScrolledToTop={setIsScrolledToTop}
       />
-
-      <div
-        className={`w-full relative z-0 mt-12 bg-gradient-to-b   ${
-          ninjaMode
-            ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
-            : "from-[#151515] via-[#151515] to-[#121212]"
-        }`}
-      >
+      {categoryLoading && (
+        <div className="h-screen fixed w-full flex top-0 z-[9999]">
+          <div className={`${style.loader}`} />
+        </div>
+      )}
+      <div className="lg:ml-[240px] h-screen">
         <div
-          className={`absolute top-10 w-full z-0  ${
+          className={`w-full relative z-0 mt-12 bg-gradient-to-b   ${
             ninjaMode
-              ? "from-[#222222] bg-gradient-to-b h-[400px]"
-              : "from-[#484848] bg-gradient-to-b h-[500px]"
+              ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
+              : "from-[#151515] via-[#151515] to-[#121212]"
           }`}
-        ></div>
+        >
+          <div
+            className={`absolute top-10 w-full z-0  ${
+              ninjaMode
+                ? "from-[#222222] bg-gradient-to-b h-[400px]"
+                : "from-[#484848] bg-gradient-to-b h-[500px]"
+            }`}
+          ></div>
 
-        <Header page={pageTitle} />
-        <Slider
-          getCategorySponsors={getCategorySponsors}
-          categoryIndex={categoryIndex}
-          contextIndex={contextIndex}
-          isScrolledToTop={isScrolledToTop}
-          setBannerCategory={setBannerCategory}
-          setCategoryIndex={setCategoryIndex}
-          setCurrentCategory={setCurrentCategory}
-          setFilteredSponsors={setFilteredSponsors}
-          setPageTitle={setPageTitle}
-          setRendering={setRendering}
-          sponsorCategoryData={sponsorCategoryData}
-          sponsorsData={sponsorsData}
-          getSponsorsCount={getSponsorsCount}
-          setCategoryCount={setCategoryCount}
-        />
-        <Main
-          ninjaMode={ninjaMode}
-          bannerBreakpointRef={bannerBreakpointRef}
-          currentCategory={currentCategory}
-          filteredSponsors={filteredSponsors}
-          rendering={rendering}
-        />
-        <LoadMore
-          categoryCount={categoryCount}
-          currentCategory={currentCategory}
-          filteredSponsors={filteredSponsors}
-          getCategorySponsors={getCategorySponsors}
-          setFilteredSponsors={setFilteredSponsors}
-          sponsorsCount={sponsorsCount}
-        />
-        {!rendering && (
-          <p className="flex font-bold text-[#aaaaaa] text-xs w-full items-center justify-center  pt-4 pb-6 lg:px-4">
-            {`© PromoNinja ${currentYear}`}
-          </p>
-        )}
+          <Header page={pageTitle} />
+          <Slider
+            getCategorySponsors={getCategorySponsors}
+            categoryIndex={categoryIndex}
+            contextIndex={contextIndex}
+            isScrolledToTop={isScrolledToTop}
+            setBannerCategory={setBannerCategory}
+            setCategoryIndex={setCategoryIndex}
+            setCurrentCategory={setCurrentCategory}
+            setFilteredSponsors={setFilteredSponsors}
+            setPageTitle={setPageTitle}
+            setRendering={setRendering}
+            sponsorCategoryData={sponsorCategoryData}
+            sponsorsData={sponsorsData}
+            getSponsorsCount={getSponsorsCount}
+            setCategoryCount={setCategoryCount}
+          />
+          <Main
+            ninjaMode={ninjaMode}
+            bannerBreakpointRef={bannerBreakpointRef}
+            currentCategory={currentCategory}
+            filteredSponsors={filteredSponsors}
+            rendering={rendering}
+          />
+          <LoadMore
+            categoryCount={categoryCount}
+            currentCategory={currentCategory}
+            filteredSponsors={filteredSponsors}
+            getCategorySponsors={getCategorySponsors}
+            setFilteredSponsors={setFilteredSponsors}
+            sponsorsCount={sponsorsCount}
+          />
+          {!rendering && (
+            <p className="flex font-bold text-[#aaaaaa] text-xs w-full items-center justify-center  pt-4 pb-6 lg:px-4">
+              {`© PromoNinja ${currentYear}`}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

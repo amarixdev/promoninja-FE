@@ -4,6 +4,7 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerOverlay,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import { GiNinjaHead } from "react-icons/gi";
@@ -95,26 +96,48 @@ interface HeaderProps {
 
 const Header = ({ page }: HeaderProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { setNinjaMode } = NavContext();
+  const { setNinjaMode, ninjaMode } = NavContext();
   const isBreakPoint = useMediaQuery(1023);
   return (
     <div className="flex items-center justify-between w-full relative ">
       <OptionsDrawer isOpen={isOpen} onClose={onClose} />
       <div
         className={
-          "fixed bg-[#121212] p-8 py-10 w-full z-[200] flex justify-between items-center"
+          "fixed bg-[#121212] top-0 p-8 py-6 w-full z-[200] flex justify-between items-center "
         }
       >
         {isBreakPoint && <RxHamburgerMenu size={20} onClick={() => onOpen()} />}
-        <h1 className={` text-3xl sm:text-5xl font-bold text-white`}>{page}</h1>
+        <h1
+          onClick={() => scrollToTop()}
+          className={` text-3xl sm:text-5xl font-bold text-white`}
+        >
+          {page}
+        </h1>
 
         {
-          <button
-            className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer active:scale-95 text-white `}
-            onClick={() => setNinjaMode((prev) => !prev)}
-          >
-            <GiNinjaHead />
-          </button>
+          <>
+            {isBreakPoint ? (
+              <button
+                className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer active:scale-95 text-white `}
+                onClick={() => setNinjaMode((prev) => !prev)}
+              >
+                <GiNinjaHead />
+              </button>
+            ) : (
+              <Tooltip
+                label="Toggle Ninja Mode"
+                placement="bottom"
+                openDelay={750}
+              >
+                <button
+                  className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer active:scale-95 text-white `}
+                  onClick={() => setNinjaMode((prev) => !prev)}
+                >
+                  <GiNinjaHead />
+                </button>
+              </Tooltip>
+            )}
+          </>
         }
       </div>
     </div>

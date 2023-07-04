@@ -1,34 +1,21 @@
-import { Button } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
-import { GiRunningNinja } from "react-icons/gi";
 import Sidebar from "../components/layout/Sidebar";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import LogoText from "../public/assets/logo-text.png";
 import Logo from "../public/assets/ninja4.png";
 
-import {
-  useCarouselSpeed,
-  useMediaQuery,
-  useRotate,
-  useSetCurrentPage,
-} from "../utils/hooks";
+import { useSetCurrentPage } from "../utils/hooks";
 import { PodcastData, SponsorCategory, SponsorData } from "../utils/types";
 
-import Link from "next/link";
-import { MdArrowLeft, MdArrowRight } from "react-icons/md";
-import Carousel from "../components/home/Carousel";
-import Header from "../components/layout/Header";
-import AnimatedLink from "../components/misc/AnimatedLink";
-import { NavContext } from "../context/navContext";
-import { convertToSlug, currentYear } from "../utils/functions";
 import PopularPodcasts from "../components/home/PopularPodcasts";
-import TrendingOffers from "../components/home/TrendingOffers";
 import ShopCategories from "../components/home/ShopCategories";
 import SponsorsAZ from "../components/home/SponsorsAZ";
+import TrendingOffers from "../components/home/TrendingOffers";
+import Header from "../components/layout/Header";
+import { NavContext } from "../context/navContext";
+import { currentYear } from "../utils/functions";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -54,15 +41,15 @@ const Home = ({
     NavContext();
 
   return (
-    <>
-      <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
-        <Sidebar />
-        {
+    <div className="base:mb-[60px] xs:mb-[70px] lg:mb-0">
+      <Sidebar />
+      {
+        <div className="lg:ml-[240px]">
           <div
             className={`w-full flex flex-col bg-gradient-to-b  ${
               ninjaMode
                 ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
-                : "from-[#151515] via-[#151515] to-[#121212] "
+                : "from-[#121212] via-[#151515] to-[#121212] "
             } relative overflow-x-hidden z-1 mt-10`}
           >
             {ninjaMode || (
@@ -119,9 +106,9 @@ const Home = ({
               {`© PromoNinja ${currentYear}`}
             </p>
           </div>
-        }
-      </div>
-    </>
+        </div>
+      }
+    </div>
   );
 };
 
