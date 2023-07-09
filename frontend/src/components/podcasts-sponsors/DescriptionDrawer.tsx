@@ -173,7 +173,7 @@ const DescriptionDrawer = ({
                     <Link
                       href={externalUrl || "/"}
                       target="_blank"
-                      className="flex w-full justify-start items-center p-4"
+                      className="flex w-full justify-start items-center p-4 relative z-50 max-w-fit"
                     >
                       <BsPlayCircle color="#1DB954" />
                       <p className="text-xs font-semibold px-2 hover:cursor-pointer">
