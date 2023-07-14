@@ -166,8 +166,8 @@ const Main = ({
         currentPodcast={selectedPodcast}
       />
       {isBreakPoint && !rendering && (
-        <div className="mt-24 ">
-          <div className="pt-16 px-5">
+        <div className="pt-36 overflow-x-hidden">
+          <div className="px-5">
             <p className="w-full text-xl xs:text-2xl font-extrabold flex justify-center mb-10 relative z-10 ">
               {currentCategory}
             </p>

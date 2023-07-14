@@ -102,8 +102,8 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
       <div className={`fixed w-full z-50 lg:ml-[240px]`}>
         {
           <div
-            className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative transition-all duration-300 z-50 ${
-              banner ? "bottom-0" : "bottom-[500px]"
+            className={`flex w-full bg-[#00000073] backdrop-blur-md items-center relative transition-all ease-in-out duration-300 ${
+              banner ? "opacity-100 z-50" : "opacity-0 z-0"
             } `}
           >
             <div
