@@ -102,7 +102,7 @@ const PopularPodcasts = ({ topPicksData, ninjaMode }: PopularPodcastsProps) => {
                     {podcast.sponsors?.map((sponsor) => (
                       <Image
                         src={sponsor?.imageUrl || fallbackImage}
-                        alt={sponsor?.imageUrl}
+                        alt={sponsor?.name}
                         width={30}
                         height={30}
                         className={

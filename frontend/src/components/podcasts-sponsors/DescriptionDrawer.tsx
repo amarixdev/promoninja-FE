@@ -151,7 +151,7 @@ const DescriptionDrawer = ({
                         src={drawer.image || fallbackImage}
                         width={100}
                         height={100}
-                        alt=""
+                        alt={drawer.title}
                         priority
                         loading={"eager"}
                         className={`min-h-[100px] rounded-lg  min-w-[100px] ${"shadow-2xl shadow-black"} `}
@@ -302,7 +302,7 @@ const DescriptionDrawer = ({
                         src={drawer.image || fallbackImage}
                         width={200}
                         height={200}
-                        alt=""
+                        alt={drawer.title}
                         loading={"eager"}
                         priority
                         className={` min-w-[200px] relative bottom-0 hover:bottom-3 transition-all duration-500 ease-in-out ${

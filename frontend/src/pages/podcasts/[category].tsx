@@ -124,7 +124,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
           <BackButton />
           <Image
             src={backdrop}
-            alt="comedy"
+            alt={`${categoryName} backdrop`}
             className={`fixed ${
               isBreakPoint && "scale-125"
             } z-0 w-full lg:top-[-100px] xl:top-[-150px] shadow-2xl shadow-black`}
@@ -179,7 +179,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                         >
                           <Image
                             src={podcast.imageUrl}
-                            alt={podcast.imageUrl}
+                            alt={podcast.title}
                             width={140}
                             height={140}
                             className="rounded-xl mx-4 shadow-lg shadow-black w-[115px] sm:w-[140px] relative z-10 "
@@ -212,7 +212,7 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                         >
                           <Image
                             src={podcast.imageUrl}
-                            alt={podcast.imageUrl}
+                            alt={podcast.title}
                             width={160}
                             height={160}
                             className="rounded-xl mt-4 shadow-lg shadow-black w-[160px] "

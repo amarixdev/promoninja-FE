@@ -115,13 +115,13 @@ const Sidebar = (props: Props) => {
           >
             <Image
               src={Ninja4}
-              alt=""
+              alt="logo"
               className="h-fit mx-3"
               width={60}
               priority
             />
             <Image
-              alt="/"
+              alt="logo-text"
               src={LogoText}
               width={160}
               className="px-4 py-2 right-6  relative h-fit"
@@ -135,13 +135,13 @@ const Sidebar = (props: Props) => {
           >
             <Image
               src={Ninja4}
-              alt=""
+              alt="logo"
               className="h-fit mx-3"
               width={60}
               priority
             />
             <Image
-              alt="/"
+              alt="logo-text"
               src={LogoText}
               width={160}
               className="px-4 py-2 right-6  relative h-fit"
