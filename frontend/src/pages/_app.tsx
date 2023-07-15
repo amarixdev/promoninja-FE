@@ -1,7 +1,7 @@
 import { ApolloProvider } from "@apollo/client";
 import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ForceDarkMode, theme } from "../../styles/chakra/theme";
 import "../../styles/globals.css";
 import style from "../../styles/style.module.css";
@@ -12,8 +12,21 @@ import Head from "next/head";
 import favicon from "../public/favicon.ico";
 import SplashScreen from "./splash";
 import Footer from "../components/layout/Footer";
+import TagManager, { TagManagerArgs } from "react-gtm-module";
+import { GTM_ID } from "../../environment";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const gtmId = GTM_ID;
+  const tagManagerArgs: TagManagerArgs = useMemo(
+    () => ({
+      gtmId,
+    }),
+    [gtmId]
+  );
+  useEffect(() => {
+    TagManager.initialize(tagManagerArgs);
+  }, [tagManagerArgs]);
+
   const isLoading = useLoadingScreen();
   const [splashScreen, setSplashScreen] = useState(true);
   useEffect(() => {
@@ -29,7 +42,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <link rel="icon" type="image/x-icon" href={favicon.src} />
-        <meta httpEquiv="Content-Language" content="en"/>
+        <meta httpEquiv="Content-Language" content="en" />
         <title>PromoNinja</title>
       </Head>
       <ApolloProvider client={client}>
