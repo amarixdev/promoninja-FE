@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import BackButton from "../components/misc/BackButton";
 import { currentYear } from "../utils/functions";
+import { BsSpotify } from "react-icons/bs";
 
 type Props = {};
 
@@ -83,9 +84,7 @@ const About = (props: Props) => {
                 <Image src={LogoAlt} alt="alt-logo" width={300} height={300} />
               </div>
             )}
-            <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
-              {`© PromoNinja ${currentYear}`}
-            </p>
+            <Footer />
           </div>
         </div>
       </div>

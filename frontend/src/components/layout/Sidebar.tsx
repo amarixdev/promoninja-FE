@@ -23,7 +23,7 @@ import * as LogoText from "../../public/assets/logo-text.png";
 import * as Ninja4 from "../../public/assets/logo.png";
 import { scrollToTop } from "../../utils/functions";
 import { useMediaQuery } from "../../utils/hooks";
-import { LinkWrapperProps } from "./Footer";
+import { LinkWrapperProps } from "./FooterBar";
 
 interface Props {}
 

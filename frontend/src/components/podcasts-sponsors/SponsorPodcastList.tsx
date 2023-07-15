@@ -17,6 +17,8 @@ import { PodcastData, SponsorData } from "../../utils/types";
 import fallbackImage from "../../public/assets/fallback.png";
 import DescriptionDrawer from "./DescriptionDrawer";
 import BrokenLinkModal from "../community-input/BrokenLinkModal";
+import { BsSpotify } from "react-icons/bs";
+import Footer from "../layout/Footer";
 
 interface PodcastListProps {
   sponsorData: SponsorData;
@@ -77,8 +79,6 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
     podcastState,
     setPodcastState,
   } = useReportIssue(selectedPodcast);
-
-
 
   const handleCollapse = async (podcast: PodcastData) => {
     console.log(podcast);
@@ -358,9 +358,7 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
             message="podcasts typically earn 5% to 20% commission when listeners use affiliate links?"
             page="sponsor"
           />
-          <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
-            {`© PromoNinja ${currentYear}`}
-          </p>
+          <Footer />
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ import { useLoadingScreen } from "../utils/hooks";
 import Head from "next/head";
 import favicon from "../public/favicon.ico";
 import SplashScreen from "./splash";
-import Footer from "../components/layout/Footer";
+import FooterBar from "../components/layout/FooterBar";
 import TagManager, { TagManagerArgs } from "react-gtm-module";
 import { GTM_ID } from "../../environment";
 
@@ -60,7 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               ) : (
                 <>
                   <Component {...pageProps} />
-                  <Footer />
+                  <FooterBar />
                 </>
               )}
             </ForceDarkMode>

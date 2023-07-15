@@ -7,12 +7,13 @@ import { NavContext } from "../context/navContext";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import { currentYear } from "../utils/functions";
-import { useSetCurrentPage } from "../utils/hooks";
+import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import { SponsorCategory, SponsorData } from "../utils/types";
 import Slider from "../components/offers-page/Slider";
 import Main from "../components/offers-page/Main";
 import Banner from "../components/offers-page/Banner";
 import LoadMore from "../components/offers-page/LoadMore";
+import Footer from "../components/layout/Footer";
 
 interface OffersProps {
   sponsorsData: SponsorData[];
@@ -34,6 +35,7 @@ const Offers = ({
     search: false,
     offers: true,
   });
+  const isBreakpoint = useMediaQuery(1023);
   const [categoryCount, setCategoryCount] = useState(0);
   const [rendering, setRendering] = useState(false);
   const [isScrolledToTop, setIsScrolledToTop] = useState(true);
@@ -161,9 +163,9 @@ const Offers = ({
             sponsorsCount={sponsorsCount}
           />
           {!rendering && (
-            <p className="flex font-bold text-[#aaaaaa] text-xs w-full items-center justify-center  pt-4 pb-6 lg:px-4">
-              {`© PromoNinja ${currentYear}`}
-            </p>
+            <div className={`${isBreakpoint && "pb-28"}`}>
+              <Footer />
+            </div>
           )}
         </div>
       </div>

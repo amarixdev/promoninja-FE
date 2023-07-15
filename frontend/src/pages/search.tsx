@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import Footer from "../components/layout/Footer";
+import Footer from "../components/layout/FooterBar";
 import Sidebar from "../components/layout/Sidebar";
 import { Operations } from "../graphql/operations";
 import { convertToSlug, truncateString } from "../utils/functions";

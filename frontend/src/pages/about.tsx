@@ -7,6 +7,8 @@ import Link from "next/link";
 import BackButton from "../components/misc/BackButton";
 import { useSetCurrentPage } from "../utils/hooks";
 import { currentYear } from "../utils/functions";
+import { BsSpotify } from "react-icons/bs";
+import Footer from "../components/layout/Footer";
 
 type Props = {};
 
@@ -109,9 +111,7 @@ const About = (props: Props) => {
             <div className="pt-10">
               <Image src={Logo3} alt="alt-logo" width={300} height={300} />
             </div>
-            <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
-              {`© PromoNinja ${currentYear}`}
-            </p>
+            <Footer />
           </div>
         </div>
       </div>

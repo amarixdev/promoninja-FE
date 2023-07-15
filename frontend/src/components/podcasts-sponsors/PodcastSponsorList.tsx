@@ -16,6 +16,8 @@ import { OfferData, PodcastData } from "../../utils/types";
 import { useState } from "react";
 import BrokenLinkModal from "../community-input/BrokenLinkModal";
 import LogoText from "../../public/assets/logo-text.png";
+import { BsSpotify } from "react-icons/bs";
+import Footer from "../layout/Footer";
 
 interface SponsorListProps {
   podcastData: PodcastData;
@@ -308,10 +310,7 @@ const SponsorList = ({ podcastData, handleDrawer }: SponsorListProps) => {
               currentSponsors={currentSponsors}
             />
           )}
-
-          <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
-            {`© PromoNinja ${currentYear}`}
-          </p>
+          <Footer />
         </div>
       </div>
     </div>

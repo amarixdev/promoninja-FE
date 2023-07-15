@@ -31,6 +31,8 @@ import {
 import { Category, PodcastData } from "../../utils/types";
 import { Spinner } from "@chakra-ui/react";
 import SplashScreen from "../splash";
+import { BsSpotify } from "react-icons/bs";
+import Footer from "../../components/layout/Footer";
 
 interface Props {
   categoryPodcasts: PodcastData[];
@@ -232,18 +234,16 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                   </div>
                 ))}
               </div>
-              {
-                <div className="relative bottom-[380px] lg:bottom-[200px]">
-                  <ChatBubble
-                    message="Don't see your favorite show?"
-                    page="category"
-                    currentPodcasts={currentPodcasts}
-                  />
-                  <p className="flex mt-10 font-bold text-[#9f9f9f] text-xs w-full items-center justify-center lg:px-4">
-                    {`© PromoNinja ${currentYear}`}
-                  </p>
+              <div className="relative bottom-[380px] lg:bottom-[200px]">
+                <ChatBubble
+                  message="Don't see your favorite show?"
+                  page="category"
+                  currentPodcasts={currentPodcasts}
+                />
+                <div className={isBreakPoint ? "" : "relative bottom-3"}>
+                  <Footer />
                 </div>
-              }
+              </div>
             </div>
           }
         </div>

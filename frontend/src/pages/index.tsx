@@ -16,6 +16,8 @@ import TrendingOffers from "../components/home/TrendingOffers";
 import Header from "../components/layout/Header";
 import { NavContext } from "../context/navContext";
 import { currentYear } from "../utils/functions";
+import { BsSpotify } from "react-icons/bs";
+import Footer from "../components/layout/Footer";
 
 interface Props {
   topPicksData: PodcastData[];
@@ -102,9 +104,7 @@ const Home = ({
               />
               <SponsorsAZ sponsorsData={sponsorsData} />
             </div>
-            <p className="flex font-bold text-[#aaaaaa] text-xs w-full items-center justify-center  pb-6 lg:px-4">
-              {`© PromoNinja ${currentYear}`}
-            </p>
+            <Footer />
           </div>
         </div>
       }
