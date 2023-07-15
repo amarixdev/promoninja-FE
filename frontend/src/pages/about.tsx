@@ -5,15 +5,15 @@ import Logo3 from "../public/assets/alt-ninja2.png";
 import Image from "next/image";
 import Link from "next/link";
 import BackButton from "../components/misc/BackButton";
-import { useSetCurrentPage } from "../utils/hooks";
-import { currentYear } from "../utils/functions";
-import { BsSpotify } from "react-icons/bs";
+import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
+import { GiNinjaHead } from "react-icons/gi";
 import Footer from "../components/layout/Footer";
 
 type Props = {};
 
 const About = (props: Props) => {
-  const { ninjaMode } = NavContext();
+  const { ninjaMode, setNinjaMode } = NavContext();
+  const isBreakpoint = useMediaQuery(1023);
   useSetCurrentPage({
     home: false,
     podcasts: false,
@@ -51,12 +51,12 @@ const About = (props: Props) => {
                   Why did I build this?
                 </h2>
                 <p className="pt-2 text-[#cbcbcb] text-base lg:text-lg">
-                  Sponsorships are the most common way podcasts generate income.
-                  I noticed several podcasts had sponsors in common, so I came
-                  up with the idea to support multiple shows simultaneously. As
-                  a software developer and avid podcast listener, I felt happy
-                  to repay the podcasting community for the countless hours of
-                  entertainment.
+                  Sponsor affiliate links are the most common way podcasts
+                  generate income. I noticed several podcasts had sponsors in
+                  common, so I came up with the idea to support multiple shows
+                  simultaneously. As a software developer and avid podcast
+                  listener, I felt happy to repay the podcasting community for
+                  the countless hours of entertainment.
                 </p>
               </div>
 
@@ -106,9 +106,29 @@ const About = (props: Props) => {
                     </Link>
                   </p>
                 </div>
+                <div className="mt-12">
+                  <h2 className="font-semibold text-xl lg:text-2xl ">
+                    Accessibility
+                  </h2>
+                  <div
+                    className={`${
+                      isBreakpoint ? "flex-col" : "flex-row"
+                    } w-full flex justify-start items-center gap-4`}
+                  >
+                    <p className="pt-2">
+                      To enhance color contrast for improved accessibility,
+                      consider utilizing Ninja Mode{" "}
+                    </p>
+                    <GiNinjaHead
+                      size={25}
+                      onClick={() => setNinjaMode((prev) => !prev)}
+                      className="cursor-pointer animate-pulse hover:animate-none active:scale-95"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="pt-10">
+            <div className="pt-10 select-none">
               <Image src={Logo3} alt="alt-logo" width={300} height={300} />
             </div>
             <Footer />
