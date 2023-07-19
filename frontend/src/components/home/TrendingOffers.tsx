@@ -9,6 +9,7 @@ import fallbackImage from "../../public/assets/fallback.png";
 import { useEffect, useRef, useState } from "react";
 import { SponsorData } from "../../utils/types";
 import { GiRunningNinja } from "react-icons/gi";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 interface TrendingOffersProps {
   trendingOffersData: SponsorData[];
@@ -23,8 +24,6 @@ const TrendingOffers = ({
   const [trendingOfferIndex, setTrendingOfferIndex] = useState("0");
   const [ninjaRunningIndex, setNinjaRunningIndex] = useState(0);
   const isBreakPoint = useMediaQuery(1023);
-  const [hoverRight, setHoverRight] = useState(false);
-  const [hoverLeft, setHoverLeft] = useState(false);
 
   const NinjaRunning = Array(5).fill(
     <GiRunningNinja size={isBreakPoint ? 40 : 55} />
@@ -62,124 +61,109 @@ const TrendingOffers = ({
       {/* Desktop */}
       <>
         {isBreakPoint || (
-          <div ref={trendingOffersSliderRef} className={`flex w-full pt-6`}>
-            {trendingOffersData.map((offer) => (
-              <div
-                className="min-w-full flex items-center justify-center"
-                key={offer.name}
+          <div className="relative overflow-x-clip min-w-full group">
+            {ninjaRunningIndex > 0 && (
+              <Button
+                zIndex={50}
+                position={"absolute"}
+                left={15}
+                top={"50%"}
+                className={`group-hover:opacity-100 opacity-0`}
+                onClick={() => handleTrendingOfferIndex("left")}
               >
+                <MdArrowLeft
+                  size={40}
+                  className="fill-[#aaaaaa] hover:fill-white transition-all duration-150 ease-in-out"
+                />
+              </Button>
+            )}
+            <div ref={trendingOffersSliderRef} className={`flex w-full pt-6`}>
+              {trendingOffersData.map((offer) => (
                 <div
-                  className={`${
-                    ninjaMode
-                      ? "bg-[#1b1b1b] "
-                      : "bg-gradient-to-r from-[#232323] to-[#181818]"
-                  }  w-10/12 group flex h-fit p-8 rounded-md justify-start shadow-lg shadow-[black] `}
+                  className="min-w-full flex items-center justify-center"
+                  key={offer.name}
                 >
-                  <button
-                    className="mt-20 right-6 relative opacity-0 transition-all duration-150  group-hover:opacity-100 h-fit hover:cursor-pointer"
-                    onClick={() => handleTrendingOfferIndex("left")}
+                  <div
+                    className={`${
+                      ninjaMode
+                        ? "bg-[#1b1b1b] "
+                        : "bg-gradient-to-r from-[#232323] to-[#181818]"
+                    }  w-10/12 group flex h-fit p-8 rounded-md justify-start shadow-lg shadow-[black] `}
                   >
-                    {ninjaRunningIndex > 0 && (
-                      <div>
-                        <div
-                          className="absolute right-[0px] z-10 min-w-[100px]"
-                          onMouseOver={() => setHoverLeft(true)}
-                          onMouseLeave={() => setHoverLeft(false)}
-                        >
-                          <MdArrowLeft
-                            size={70}
-                            className="hover:fill-white  relative left-2 active:scale-90 fill-[#aaaaaa] transition-all duration-150"
-                          />
-                        </div>
+                    <div className="flex w-full">
+                      <div className="flex flex-col min-w-full ">
+                        <div className="flex-col flex w-full ">
+                          <div className="flex justify-start ">
+                            <Link href={`/${convertToSlug(offer.name)}`}>
+                              <Image
+                                src={offer.imageUrl || fallbackImage}
+                                width={225}
+                                height={225}
+                                alt={offer.name}
+                                priority
+                                className={`hover:scale-105 transition-all duration-500 max-h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black`}
+                              />
+                            </Link>
 
-                        <div
-                          className={`bg-[#aaaaaa34] z-0 rounded-full absolute right-[22px] top-1 min-h-[65px] min-w-[65px] ${
-                            hoverLeft ? "opacity-60" : "opacity-0"
-                          } transition-all duration-300 ease-in-out`}
-                        ></div>
-                      </div>
-                    )}
-                  </button>
-                  <div className="flex w-full">
-                    <div className="flex flex-col min-w-full ">
-                      <div className="flex-col flex w-full ">
-                        <div className="flex justify-start ">
-                          <Link href={`/${convertToSlug(offer.name)}`}>
-                            <Image
-                              src={offer.imageUrl || fallbackImage}
-                              width={225}
-                              height={225}
-                              alt={offer.name}
-                              priority
-                              className={`hover:scale-105 transition-all duration-500 max-h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black`}
-                            />
-                          </Link>
-
-                          <div className="flex ml-4 flex-col rounded-sm">
-                            <div className="p-6 rounded-md">
-                              <div className="flex flex-col gap-2 px-4">
-                                <h1
-                                  className={`text-[#ebebeb] text-5xl font-extrabold`}
-                                >
-                                  {offer.name}
-                                </h1>
-                                <h1 className={`text-[#bababa] text-xl`}>
-                                  {offer.offer}
-                                </h1>
+                            <div className="flex ml-4 flex-col rounded-sm">
+                              <div className="p-6 rounded-md">
+                                <div className="flex flex-col gap-2 px-4">
+                                  <h1
+                                    className={`text-[#ebebeb] text-5xl font-extrabold`}
+                                  >
+                                    {offer.name}
+                                  </h1>
+                                  <h1 className={`text-[#bababa] text-xl`}>
+                                    {offer.offer}
+                                  </h1>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div
-                        className={`relative pt-8 ml-2 flex w-full justify-between `}
-                      >
-                        <div className={`flex flex-col gap-1 w-9/12 `}>
-                          <h1
-                            className={`text-2xl font-semibold text-[#ebebeb] `}
-                          >
-                            About
-                          </h1>
-                          <p className="font-light">{offer.summary}</p>
-                        </div>
-                        <Link
-                          href={`/${convertToSlug(offer.name)}`}
-                          className="pl-6"
+                        <div
+                          className={`relative pt-8 ml-2 flex w-full justify-between `}
                         >
-                          <Button className="mt-10">View Details</Button>
-                        </Link>
-                      </div>
-                    </div>
-                    <button
-                      className="mt-20 right-6 relative opacity-0 transition-all duration-150  group-hover:opacity-100 h-fit hover:cursor-pointer"
-                      onClick={() => handleTrendingOfferIndex("right")}
-                    >
-                      {ninjaRunningIndex < 4 && (
-                        <div>
-                          <div
-                            className="absolute left-14 z-10 min-w-[100px]"
-                            onMouseOver={() => setHoverRight(true)}
-                            onMouseLeave={() => setHoverRight(false)}
-                          >
-                            <MdArrowRight
-                              size={70}
-                              className="hover:fill-white  relative left-2 active:scale-90 fill-[#aaaaaa] transition-all duration-150"
-                            />
+                          <div className={`flex flex-col gap-1 w-9/12 `}>
+                            <h1
+                              className={`text-2xl font-semibold text-[#ebebeb] `}
+                            >
+                              About
+                            </h1>
+                            <p className="font-light">{offer.summary}</p>
                           </div>
-
-                          <div
-                            className={`bg-[#aaaaaa34] z-0 rounded-full absolute left-[66px] top-1 min-h-[65px] min-w-[65px] ${
-                              hoverRight ? "opacity-60" : "opacity-0"
-                            } ac  transition-all duration-300 ease-in-out`}
-                          ></div>
+                          <Link
+                            href={`/${convertToSlug(offer.name)}`}
+                            className="pl-6"
+                          >
+                            <Button className="mt-10">View Details</Button>
+                          </Link>
                         </div>
-                      )}
-                    </button>
+                      </div>
+                      <button
+                        className="mt-20 right-6 relative opacity-0 transition-all duration-150  group-hover:opacity-100 h-fit hover:cursor-pointer"
+                        onClick={() => handleTrendingOfferIndex("right")}
+                      ></button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            {ninjaRunningIndex < trendingOffersData.length - 1 && (
+              <Button
+                position={"absolute"}
+                right={15}
+                top={"50%"}
+                className="group-hover:opacity-100 opacity-0"
+                onClick={() => handleTrendingOfferIndex("right")}
+              >
+                <MdArrowRight
+                  size={40}
+                  className="fill-[#aaaaaa] hover:fill-white transition-all duration-150 ease-in-out"
+                />
+              </Button>
+            )}
           </div>
         )}
       </>
