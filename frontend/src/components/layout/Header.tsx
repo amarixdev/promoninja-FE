@@ -16,6 +16,7 @@ import { useMediaQuery } from "../../utils/hooks";
 import { AiOutlineClose } from "react-icons/ai";
 import { RiExternalLinkLine } from "react-icons/ri";
 import Link from "next/link";
+import { useState } from "react";
 
 export const OptionsDrawer = ({
   onClose,
@@ -98,30 +99,65 @@ const Header = ({ page }: HeaderProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { setNinjaMode, ninjaMode } = NavContext();
   const isBreakPoint = useMediaQuery(1023);
+
+  const [tapEffect, setTapEffect] = useState(false);
+
+  const handleTap = () => {
+    setTapEffect(true);
+    setTimeout(() => {
+      setTapEffect(false);
+    }, 200);
+  };
+
   return (
     <div className="flex items-center justify-between w-full relative ">
       <OptionsDrawer isOpen={isOpen} onClose={onClose} />
       <div
         className={
-          "fixed bg-[#121212] top-0 p-8 py-6 w-full z-[200] flex justify-between items-center "
+          "fixed max-h-[80px] bg-[#121212] overflow-hidden top-0 p-8 py-6 w-full z-[200] flex justify-between items-center "
         }
       >
-        {isBreakPoint && <RxHamburgerMenu size={20} onClick={() => onOpen()} />}
+        {isBreakPoint && (
+          <div>
+            <div
+              className="p-6 absolute top-2 sm:top-4 left-2"
+              onClick={() => onOpen()}
+            >
+              {" "}
+              <RxHamburgerMenu size={20} />
+            </div>
+          </div>
+        )}
         <h1
           onClick={() => scrollToTop()}
-          className={` text-3xl sm:text-5xl font-bold text-white`}
+          className={` text-3xl sm:text-5xl font-bold text-white `}
         >
           {page}
         </h1>
 
         {
-          <>
+          <div className="">
             {isBreakPoint ? (
               <button
-                className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer active:scale-95 text-white `}
-                onClick={() => setNinjaMode((prev) => !prev)}
+                onClick={() => {
+                  handleTap();
+                  setNinjaMode((prev) => !prev);
+                }}
+                className="min-w-[120px] absolute top-0 right-0 min-h-[80px] flex items-center justify-center"
               >
-                <GiNinjaHead />
+                <div
+                  className={` ${
+                    tapEffect
+                      ? "bg-[#84848487] scale-90"
+                      : "bg-[#8484848700] scale-100"
+                  } text-3xl rounded-full relative p-3 sm:p-4 sm:text-5xl font-bold hover:cursor-pointer transition-all duration-200 ease-in-out  text-white `}
+                >
+                  <GiNinjaHead
+                    className={`${
+                      tapEffect ? "scale-95" : "scale-100"
+                    } transition-transform duration-200 ease-in-out`}
+                  />
+                </div>
               </button>
             ) : (
               <Tooltip
@@ -130,14 +166,14 @@ const Header = ({ page }: HeaderProps) => {
                 openDelay={750}
               >
                 <button
-                  className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer active:scale-95 text-white `}
+                  className={`text-3xl sm:text-5xl font-bold lg:right-[300px] relative hover:cursor-pointer transition-all duration-150 ease-in-out active:scale-95 text-white `}
                   onClick={() => setNinjaMode((prev) => !prev)}
                 >
                   <GiNinjaHead />
                 </button>
               </Tooltip>
             )}
-          </>
+          </div>
         }
       </div>
     </div>
