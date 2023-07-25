@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ReactNode, useState } from "react";
+import { ReactNode, RefObject, useEffect, useState } from "react";
 import { MdChevronRight } from "react-icons/md";
 import { NavContext } from "../../context/navContext";
 import { useMediaQuery } from "../../utils/hooks";
@@ -8,6 +8,9 @@ interface AnimatedLinkProps {
   title: string | undefined;
   location: string;
   separateLink?: boolean;
+  top?: boolean;
+  sliderID?: HTMLElement | null;
+  sliderRef?: RefObject<HTMLDivElement>;
 }
 
 const ConditionalLink = ({
@@ -24,10 +27,35 @@ const ConditionalLink = ({
   } else return <Link href={`${location}`}>{children}</Link>;
 };
 
-const AnimatedLink = ({ title, location, separateLink }: AnimatedLinkProps) => {
+const AnimatedLink = ({
+  title,
+  location,
+  separateLink,
+  top,
+  sliderID,
+  sliderRef,
+}: AnimatedLinkProps) => {
   const isBreakPoint = useMediaQuery(1023);
+  const xsBreakPoint = useMediaQuery(389);
+  const chevronSize = xsBreakPoint ? 25 : 30;
   const [hover, setHover] = useState(false);
   const { setCategoryIndex } = NavContext();
+  const [animation, setAnimation] = useState(false);
+
+  useEffect(() => {
+    let hasScrolled = false;
+    const slider = sliderRef?.current;
+    const handleScroll = () => {
+      if (slider) {
+        slider.scrollLeft > 50 ? setAnimation(true) : setAnimation(false);
+      }
+    };
+    if (slider) {
+      slider.addEventListener("scroll", handleScroll);
+      return () => slider.removeEventListener("scroll", handleScroll);
+    }
+  }, [sliderID, sliderRef, title, animation]);
+
   if (isBreakPoint) {
     /* Mobile */
     return (
@@ -38,18 +66,33 @@ const AnimatedLink = ({ title, location, separateLink }: AnimatedLinkProps) => {
         } w-full items-center`}
       >
         <ConditionalLink location={location} separateLink={separateLink}>
-          <div className="flex items-center z-10 hover:cursor-pointer">
+          <div className="flex items-center z-10 hover:cursor-pointer relative">
             <h1
-              className={` text-base font-bold px-3 text-[#cdcdcd] relative bottom-[2px] group-hover:text-white whitespace-nowrap`}
+              className={` text-lg xs:text-xl font-bold px-3 text-white relative bottom-[2px] whitespace-nowrap`}
             >
               {title}
             </h1>
             {separateLink || (
-              <MdChevronRight
-                color={"#9c9c9c"}
-                size={23}
-                className="right-3 bottom-[1px] relative"
-              />
+              <>
+                <MdChevronRight
+                  color={"#9c9c9c"}
+                  size={chevronSize}
+                  className={`${
+                    animation
+                      ? "right-[-70px] opacity-100"
+                      : "scale-100 right-[10px]"
+                  }  bottom-[1px] relative transition-all duration-300 ease-in-out`}
+                />
+                <p
+                  className={`${
+                    animation
+                      ? "opacity-100 right-[-40px]"
+                      : "right-[-35px] opacity-0"
+                  } text-[#aaaaaa] transition-all duration-300 ease-in-out text-xs xs:text-sm font-semibold absolute  `}
+                >
+                  Explore All
+                </p>
+              </>
             )}
           </div>
         </ConditionalLink>

@@ -48,6 +48,7 @@ export function ContextProvider({ children }: ContextProviderProps) {
     search: false,
     offers: false,
   });
+
   return (
     <AppContext.Provider
       value={{

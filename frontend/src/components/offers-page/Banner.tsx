@@ -29,7 +29,7 @@ const Banner = ({
   }, [setIsScrolledToTop]);
   return (
     <div
-      className={`fixed w-full lg:ml-[240px] cursor-pointer ${
+      className={`top-[-5px] fixed w-full lg:ml-[240px] cursor-pointer ${
         isScrolledToTop ? "z-0" : "z-50"
       }`}
       onClick={() => scrollToTop()}

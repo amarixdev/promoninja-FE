@@ -42,6 +42,8 @@ const Home = ({
   const { ninjaMode, setNinjaMode, categoryIndex, setCategoryIndex } =
     NavContext();
 
+  console.log(setNinjaMode);
+
   return (
     <div className="base:mb-[60px] xs:mb-[70px] lg:mb-0">
       <Sidebar />

@@ -20,7 +20,7 @@ const PodcastBanner = ({
   return (
     <div
       onClick={() => scrollToTop()}
-      className={`flex w-full bg-[#00000073] p-3 backdrop-blur-md items-center fixed transition-all duration-300 ${
+      className={`flex w-full bg-[#00000073] p-3 top-[-5px] lg:top-0 backdrop-blur-md items-center fixed transition-all duration-300 ${
         banner
           ? "opacity-100 z-50 cursor-pointer"
           : "opacity-0 z-0 cursor-default"

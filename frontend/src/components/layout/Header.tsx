@@ -114,13 +114,13 @@ const Header = ({ page }: HeaderProps) => {
       <OptionsDrawer isOpen={isOpen} onClose={onClose} />
       <div
         className={
-          "fixed max-h-[80px] bg-[#121212] overflow-hidden top-0 p-8 py-6 w-full z-[200] flex justify-between items-center "
+          "fixed min-h-[95px] bg-[#121212] overflow-hidden top-[-10px] lg:top-0 p-8 py-6 w-full z-[200] flex justify-between items-center "
         }
       >
         {isBreakPoint && (
           <div>
             <div
-              className="p-6 absolute top-2 sm:top-4 left-2"
+              className="p-6 absolute top-5 sm:top-4 left-2"
               onClick={() => onOpen()}
             >
               {" "}
@@ -130,7 +130,7 @@ const Header = ({ page }: HeaderProps) => {
         )}
         <h1
           onClick={() => scrollToTop()}
-          className={` text-3xl sm:text-5xl font-bold text-white `}
+          className={` relative top-1 text-3xl sm:text-5xl font-bold text-white `}
         >
           {page}
         </h1>
@@ -143,7 +143,7 @@ const Header = ({ page }: HeaderProps) => {
                   handleTap();
                   setNinjaMode((prev) => !prev);
                 }}
-                className="min-w-[120px] absolute top-0 right-0 min-h-[80px] flex items-center justify-center"
+                className="min-w-[120px] absolute top-3 right-0 min-h-[80px] flex items-center justify-center"
               >
                 <div
                   className={` ${

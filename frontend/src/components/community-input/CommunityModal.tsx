@@ -56,6 +56,7 @@ const CommunityModal = ({
   const modalSize = isBreakPoint ? "xs" : "md";
   const inputFormFontSize = isBreakPoint ? "md" : "xl";
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -76,7 +77,6 @@ const CommunityModal = ({
     if (text === "") {
       setSubmitted(false);
       setFormHeader("");
-
       return;
     }
 
@@ -108,34 +108,22 @@ const CommunityModal = ({
       setLoading(true);
       setUserInputList((prev) => [...prev, text]);
       try {
-        await emailjs
-          .sendForm(
-            ENV.SERVICE_ID,
-            ENV.TEMPLATE_ID,
-            formRef.current,
-            ENV.PUBLIC_KEY
-          )
-          .then(
-            (result) => {
-              console.log(result.text);
-            },
-            (error) => {
-              console.log(error.text);
-            }
-          )
-          .finally(() => {
-            setSubmitted(true);
-            setLoading(false);
-            setFormHeader(capitalizeString(text));
-            setText("");
-            messageRef.current?.classList.add(`${style.flashText}`);
-            setTimeout(() => {
-              messageRef.current?.classList.remove(`${style.flashText}`);
-            }, 1000);
-          });
+        await emailjs.sendForm(
+          ENV.SERVICE_ID,
+          ENV.TEMPLATE_ID,
+          formRef.current,
+          ENV.PUBLIC_KEY
+        );
+        setSubmitted(true);
+        setLoading(false);
+        setFormHeader(capitalizeString(text));
+        setText("");
+        messageRef.current?.classList.add(`${style.flashText}`);
+        setTimeout(() => {
+          messageRef.current?.classList.remove(`${style.flashText}`);
+        }, 1000);
       } catch (error) {
         setText("");
-
         setFormHeader("Message Failed To Send: Server Error");
       }
     }
