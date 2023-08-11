@@ -95,7 +95,8 @@ const FooterBar = () => {
   };
 
   return (
-    <div
+    <nav
+      aria-label="footer-bar navigation"
       className={
         isBreakPoint
           ? `w-[100vw] fixed bottom-[0] z-[999] bg-black/60 backdrop-blur-md`
@@ -134,7 +135,7 @@ const FooterBar = () => {
           current="offers"
         />
       </div>
-    </div>
+    </nav>
   );
 };
 

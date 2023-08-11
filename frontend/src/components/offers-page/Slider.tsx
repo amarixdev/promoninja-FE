@@ -91,7 +91,8 @@ const Slider = ({
   };
 
   return (
-    <div
+    <nav
+      aria-label="category slider navigation"
       className="fixed  lg:mt-0 scrollbar-hide lg:top-24 top-20 bg-[#151515] z-[100] overflow-x-scroll scroll-smooth w-full lg:w-[85%] flex pt-5 lg:pt-0 items-center"
       ref={isBreakPoint ? null : sliderRef}
     >
@@ -135,13 +136,13 @@ const Slider = ({
             categoryIndex === 0 ? "bg-[#cccccc] " : "bg-[#323131]"
           } ease-in-out min-w-[150px] py-2 px-4 rounded-lg transition-all duration-150 active:scale-95 `}
         >
-          <p
+          <h2
             className={`text-base ${
               categoryIndex === 0 ? "text-black" : "text-[#cccccc]"
             } font-semibold transition-all duration-150`}
           >
             All{" "}
-          </p>
+          </h2>
         </button>
 
         {isBreakPoint
@@ -152,18 +153,12 @@ const Slider = ({
                 key={index}
                 ref={contextIndex === index ? categoryTabRef : undefined}
                 className={`${
-                  categoryIndex === index + 1 ? "bg-[#cccccc] " : "bg-[#323131]"
-                }  min-w-[180px] px-4 whitespace-nowrap font-medium rounded-lg transition-all duration-150 active:scale-95`}
+                  categoryIndex === index + 1
+                    ? "bg-[#cccccc] text-black "
+                    : " text-[#cccccc] bg-[#323131]"
+                }  min-w-[180px] px-4 whitespace-nowrap text-base font-semibold rounded-lg transition-all duration-150 active:scale-95`}
               >
-                <p
-                  className={`text-base font-semibold  ${
-                    categoryIndex === index + 1
-                      ? "text-black"
-                      : "text-[#cccccc]"
-                  } transition-all duration-150`}
-                >
-                  {category.name}
-                </p>
+                {category.name}
               </button>
             ))
           : /* Desktop */
@@ -173,18 +168,12 @@ const Slider = ({
                 key={index}
                 ref={contextIndex === index ? categoryTabRef : undefined}
                 className={`${
-                  categoryIndex === index + 1 ? "bg-[#cccccc] " : "bg-[#323131]"
-                }  min-w-[250px]  px-4 whitespace-nowrap font-medium rounded-lg transition-all duration-150 active:scale-95`}
+                  categoryIndex === index + 1
+                    ? "bg-[#cccccc] text-black"
+                    : "bg-[#323131] text-[#cccccc]"
+                }  min-w-[250px]  px-4 whitespace-nowrap text-base font-semibold  rounded-lg transition-all duration-150 active:scale-95`}
               >
-                <p
-                  className={`text-base font-semibold ${
-                    categoryIndex === index + 1
-                      ? "text-black"
-                      : "text-[#cccccc]"
-                  } transition-all duration-150`}
-                >
-                  {category.name}
-                </p>
+                {category.name}
               </button>
             ))}
       </div>
@@ -203,7 +192,7 @@ const Slider = ({
           }
         </button>
       )}
-    </div>
+    </nav>
   );
 };
 

@@ -27,67 +27,65 @@ export const OptionsDrawer = ({
 }) => {
   const { ninjaMode, setNinjaMode } = NavContext();
   return (
-    <>
-      <Drawer placement={"left"} onClose={onClose} isOpen={isOpen}>
-        <DrawerOverlay />
-        <DrawerContent className={"backdrop-blur-md z-[90]"}>
-          <DrawerBody
-            backgroundColor={"#151515"}
-            bgGradient={
-              ninjaMode
-                ? "linear(to-b, #151515, black)"
-                : "linear(to-b, #222222, #121212)"
-            }
-            shadow={"dark-lg"}
-          >
-            <div className="flex flex-col">
-              <div className="flex justify-between items-center border-b-[1px] pb-2">
-                <h1 className="font-bold text-xl pt-4 pb-2 text-[#e3e3e3e9]">
-                  Menu
-                </h1>
-                <AiOutlineClose
-                  size={25}
-                  color="#e3e3e3"
-                  onClick={() => onClose()}
-                  className="mt-2"
-                />
-              </div>
-
-              <div className="flex items-center mt-10 gap-4">
-                <div className="flex gap-4 items-center">
-                  <GiNinjaHead size={25} color="#e3e3e3e9" />
-                  <p className="text-2xl font-semibold text-[#e3e3e3e9]">
-                    {" "}
-                    Ninja Mode:{" "}
-                  </p>
-                </div>
-
-                <Button
-                  className=" text-white text-xl font-bold"
-                  onClick={() => setNinjaMode((prev) => !prev)}
-                >
-                  {ninjaMode ? "ON" : "OFF"}
-                </Button>
-              </div>
-              <div className="mt-10 flex flex-col gap-4">
-                <Link href={"/about"} className="flex gap-4 items-center">
-                  <RiExternalLinkLine size={25} color="#e3e3e3e9" />
-                  <p className="font-semibold text-[#e3e3e3e9] text-2xl ">
-                    About
-                  </p>
-                </Link>
-                <Link href={"/support"} className="flex gap-4 items-center">
-                  <RiExternalLinkLine size={25} color="#e3e3e3e9" />
-                  <p className="font-semibold text-[#e3e3e3e9] text-2xl">
-                    Support
-                  </p>
-                </Link>
-              </div>
+    <Drawer placement={"left"} onClose={onClose} isOpen={isOpen}>
+      <DrawerOverlay />
+      <DrawerContent className={"backdrop-blur-md z-[90]"}>
+        <DrawerBody
+          backgroundColor={"#151515"}
+          bgGradient={
+            ninjaMode
+              ? "linear(to-b, #151515, black)"
+              : "linear(to-b, #222222, #121212)"
+          }
+          shadow={"dark-lg"}
+        >
+          <div className="flex flex-col">
+            <div className="flex justify-between items-center border-b-[1px] pb-2">
+              <h1 className="font-bold text-xl pt-4 pb-2 text-[#e3e3e3e9]">
+                Menu
+              </h1>
+              <AiOutlineClose
+                size={25}
+                color="#e3e3e3"
+                onClick={() => onClose()}
+                className="mt-2"
+              />
             </div>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
-    </>
+
+            <div className="flex items-center mt-10 gap-4">
+              <div className="flex gap-4 items-center">
+                <GiNinjaHead size={25} color="#e3e3e3e9" />
+                <h2 className="text-2xl font-semibold text-[#e3e3e3e9]">
+                  {" "}
+                  Ninja Mode:{" "}
+                </h2>
+              </div>
+
+              <Button
+                className=" text-white text-xl font-bold"
+                onClick={() => setNinjaMode((prev) => !prev)}
+              >
+                {ninjaMode ? "ON" : "OFF"}
+              </Button>
+            </div>
+            <div className="mt-10 flex flex-col gap-4">
+              <Link href={"/about"} className="flex gap-4 items-center">
+                <RiExternalLinkLine size={25} color="#e3e3e3e9" />
+                <h2 className="font-semibold text-[#e3e3e3e9] text-2xl ">
+                  About
+                </h2>
+              </Link>
+              <Link href={"/support"} className="flex gap-4 items-center">
+                <RiExternalLinkLine size={25} color="#e3e3e3e9" />
+                <h2 className="font-semibold text-[#e3e3e3e9] text-2xl">
+                  Support
+                </h2>
+              </Link>
+            </div>
+          </div>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
@@ -110,7 +108,7 @@ const Header = ({ page }: HeaderProps) => {
   };
 
   return (
-    <div className="flex items-center justify-between w-full relative ">
+    <header className="flex items-center justify-between w-full relative ">
       <OptionsDrawer isOpen={isOpen} onClose={onClose} />
       <div
         className={
@@ -176,7 +174,7 @@ const Header = ({ page }: HeaderProps) => {
           </div>
         }
       </div>
-    </div>
+    </header>
   );
 };
 

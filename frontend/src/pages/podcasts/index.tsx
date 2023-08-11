@@ -1,18 +1,15 @@
 import { GetStaticProps } from "next";
 import Image from "next/image";
-import CategoryList from "../../components/podcasts-sponsors/PodcastCategories";
+import Footer from "../../components/layout/Footer";
 import Header from "../../components/layout/Header";
 import Sidebar from "../../components/layout/Sidebar";
+import CategoryList from "../../components/podcasts-sponsors/PodcastCategories";
 import { NavContext } from "../../context/navContext";
 import client from "../../graphql/apollo-client";
 import { Operations } from "../../graphql/operations";
 import LogoText from "../../public/assets/logo-text.png";
-import { currentYear } from "../../utils/functions";
 import { useMediaQuery, useSetCurrentPage } from "../../utils/hooks";
 import { CategoryPodcast } from "../../utils/types";
-import { BsSpotify } from "react-icons/bs";
-import FooterBar from "../../components/layout/FooterBar";
-import Footer from "../../components/layout/Footer";
 
 interface Props {
   categoryPreviews: CategoryPodcast[];
@@ -28,66 +25,65 @@ const Podcasts = ({ categoryPreviews }: Props) => {
     offers: false,
   });
   return (
-    <>
-      <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
-        <Sidebar />
-        <div
-          className={`w-full bg-gradient-to-b lg:ml-[240px] ${
-            ninjaMode
-              ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
-              : "from-[#1e1e1e] via-[#1a1a1a] to-[#151515]"
-          }  relative overflow-x-hidden z-1 mt-10`}
-        >
-          {ninjaMode ? (
-            <div
-              className={` from-[#1b1b1b] bg-gradient-to-b  absolute w-full h-[200px] z-0 `}
-            ></div>
-          ) : (
-            <div
-              className={` from-[#373737] bg-gradient-to-b  absolute w-full h-[200px] z-0 `}
-            ></div>
-          )}
-          <Header page="Podcasts" />
-          {/* Mobile */}
-          {
-            <div className=" w-full top-16 lg:top-20 py-6 relative justify-center flex">
-              <div className="flex w-full justify-center items-center max-w-[120px] lg:min-w-[200px]">
-                <Image
-                  loading="eager"
-                  priority
-                  src={LogoText}
-                  alt="logo"
-                  width={200}
-                  height={200}
-                />
-              </div>
-            </div>
-          }
-          {isBreakPoint ? (
-            <div className={`w-full relative mt-14 flex flex-col pb-20`}>
-              {categoryPreviews.map((category: CategoryPodcast) => (
-                <CategoryList
-                  key={Object.keys(category)[0]}
-                  category={category}
-                  ninjaMode={ninjaMode}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className={`w-full relative mt-14 flex flex-col pb-20`}>
-              {categoryPreviews.map((category: CategoryPodcast) => (
-                <CategoryList
-                  key={Object.keys(category)[0]}
-                  category={category}
-                  ninjaMode={ninjaMode}
-                />
-              ))}
-            </div>
-          )}
+    <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0">
+      <Sidebar />
+      <div
+        className={`w-full bg-gradient-to-b lg:ml-[240px] ${
+          ninjaMode
+            ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
+            : "from-[#1e1e1e] via-[#1a1a1a] to-[#151515]"
+        }  relative overflow-x-hidden z-1 mt-10`}
+      >
+        {ninjaMode ? (
+          <div
+            className={` from-[#1b1b1b] bg-gradient-to-b  absolute w-full h-[200px] z-0 `}
+          ></div>
+        ) : (
+          <div
+            className={` from-[#373737] bg-gradient-to-b  absolute w-full h-[200px] z-0 `}
+          ></div>
+        )}
+        <Header page="Podcasts" />
+        {/* Mobile */}
+
+        <header className=" w-full top-16 lg:top-20 py-6 relative justify-center flex">
+          <div className="flex w-full justify-center items-center max-w-[120px] lg:min-w-[200px]">
+            <Image
+              priority
+              src={LogoText}
+              alt="logo"
+              width={200}
+              height={200}
+            />
+          </div>
+        </header>
+
+        {isBreakPoint ? (
+          <main className={`w-full relative mt-14 flex flex-col pb-20`}>
+            {categoryPreviews.map((category: CategoryPodcast) => (
+              <CategoryList
+                key={Object.keys(category)[0]}
+                category={category}
+                ninjaMode={ninjaMode}
+              />
+            ))}
+          </main>
+        ) : (
+          <main className={`w-full relative mt-14 flex flex-col pb-20`}>
+            {categoryPreviews.map((category: CategoryPodcast) => (
+              <CategoryList
+                key={Object.keys(category)[0]}
+                category={category}
+                ninjaMode={ninjaMode}
+              />
+            ))}
+          </main>
+        )}
+        <footer>
           <Footer />
-        </div>
+        </footer>
       </div>
-    </>
+    </div>
   );
 };
 

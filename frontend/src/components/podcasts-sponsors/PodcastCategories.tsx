@@ -32,11 +32,11 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
   }, [slider, isBreakPoint]);
 
   return (
-    <div>
+    <section>
       {/* Mobile */}
       {isBreakPoint ? (
         <div className=" py-8">
-          <div className={`flex justify-between items-center pl-4 `}>
+          <header className={`flex justify-between items-center pl-4 `}>
             <AnimatedLink
               title={capitalizeString(categoryName)}
               location={`/podcasts/${convertToSlug(categoryName)}`}
@@ -45,9 +45,12 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
               sliderID={sliderID}
               sliderRef={sliderRef}
             />
-          </div>
+          </header>
 
-          <div className="relative flex w-full items-center group z-[1] ">
+          <nav
+            aria-label={`${categoryName} navigation`}
+            className="relative flex w-full items-center group z-[1] "
+          >
             <div
               id={`${categoryName}`}
               ref={sliderRef}
@@ -81,18 +84,18 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
                       />
                     </div>
                     <div className="pl-3 sm:pl-5 min-w-[90px] sm:min-w-[110px] flex flex-col absolute bottom-0">
-                      <h1 className=" whitespace-nowrap text-[10px] xs:text-xs lg:text-sm xl:text-lg text-start mt-3 font-medium  text-[#dadada] group-hover:text-white whitespace-wrap">
+                      <h2 className=" whitespace-nowrap text-[10px] xs:text-xs lg:text-sm xl:text-lg text-start mt-3 font-medium  text-[#dadada] group-hover:text-white whitespace-wrap">
                         {truncateString(podcast.title, 14)}
-                      </h1>
-                      <p className="whitespace-nowrap text-[10px] xs:text-xs lg:text-md text-start font-normal text-[#909090]">
+                      </h2>
+                      <h3 className="whitespace-nowrap text-[10px] xs:text-xs lg:text-md text-start font-normal text-[#909090]">
                         {truncateString(podcast.publisher, 14)}
-                      </p>
+                      </h3>
                     </div>
                   </Link>
                 </div>
               ))}
             </div>
-          </div>
+          </nav>
         </div>
       ) : (
         <>
@@ -105,7 +108,10 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
             />
           </div>
 
-          <div className="relative flex w-full items-center group z-[1]">
+          <nav
+            aria-label={`${categoryName} previews`}
+            className="relative flex w-full items-center group z-[1]"
+          >
             <SliderArrows
               sliderRef={sliderRef}
               scrollDistance={720}
@@ -140,25 +146,25 @@ const CategoryList = ({ category, ninjaMode }: CategoryProps) => {
                     />
 
                     <div className="group">
-                      <h1 className=" whitespace-nowrap text-[10px] sm:text-sm lg:text-sm xl:text-lg text-start mt-3 font-normal lg:font-semibold text-[#dadada] group-hover:text-white whitespace-wrap">
+                      <h2 className=" whitespace-nowrap text-[10px] sm:text-sm lg:text-sm xl:text-lg text-start mt-3 font-normal lg:font-semibold text-[#dadada] group-hover:text-white whitespace-wrap">
                         {!isBreakPoint
                           ? truncateString(podcast.title, 14)
                           : truncateString(podcast.title, 14)}
-                      </h1>
-                      <p className="whitespace-nowrap base:text-[8px] xs:text-xs sm:text-sm lg:text-md text-start font-medium text-[#909090]">
+                      </h2>
+                      <h3 className="whitespace-nowrap base:text-[8px] xs:text-xs sm:text-sm lg:text-md text-start font-medium text-[#909090]">
                         {!isBreakPoint
                           ? truncateString(podcast.publisher, 14)
                           : truncateString(podcast.publisher, 14)}
-                      </p>
+                      </h3>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
-          </div>
+          </nav>
         </>
       )}
-    </div>
+    </section>
   );
 };
 

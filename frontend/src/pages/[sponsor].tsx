@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useRef } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import BackButton from "../components/misc/BackButton";
-import SponsorBanner from "../components/podcasts-sponsors/SponsorBanner";
+import SponsorBanner from "../components/banners/SponsorBanner";
 import SponsorHero from "../components/podcasts-sponsors/SponsorHero";
 import PodcastList from "../components/podcasts-sponsors/SponsorPodcastList";
 import { NavContext } from "../context/navContext";
@@ -12,6 +12,7 @@ import { Operations } from "../graphql/operations";
 import { convertToSlug } from "../utils/functions";
 import { useScrollRestoration, useSetCurrentPage } from "../utils/hooks";
 import { SponsorCategory, SponsorData } from "../utils/types";
+import Footer from "../components/layout/Footer";
 
 interface Props {
   sponsorData: SponsorData;
@@ -58,14 +59,12 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
                 : "bg-gradient-to-b from-[#454545] to-[#101010] "
             } flex flex-col items-center w-full`}
           >
-            {
-              <div className={`fixed w-full z-50 lg:ml-[240px]`}>
-                <SponsorBanner
-                  bannerBreakpointRef={bannerBreakpointRef}
-                  sponsorData={sponsorData}
-                />
-              </div>
-            }
+            <section className={`fixed w-full z-50 lg:ml-[240px]`}>
+              <SponsorBanner
+                bannerBreakpointRef={bannerBreakpointRef}
+                sponsorData={sponsorData}
+              />
+            </section>
             <SponsorHero
               bannerBreakpointRef={bannerBreakpointRef}
               categoryIndex={categoryIndex}

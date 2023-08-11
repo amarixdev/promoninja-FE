@@ -6,7 +6,7 @@ import BackButton from "../../../components/misc/BackButton";
 import DescriptionDrawer from "../../../components/podcasts-sponsors/DescriptionDrawer";
 import client from "../../../graphql/apollo-client";
 import { Operations } from "../../../graphql/operations";
-import PodcastBanner from "../../../components/podcasts-sponsors/PodcastBanner";
+import PodcastBanner from "../../../components/banners/PodcastBanner";
 import PodcastHero from "../../../components/podcasts-sponsors/PodcastHero";
 import SponsorList from "../../../components/podcasts-sponsors/PodcastSponsorList";
 import { convertToSlug } from "../../../utils/functions";
@@ -124,7 +124,7 @@ const Podcast = ({ podcastData, category }: Props) => {
       <Sidebar />
       <div className="flex-col w-full overflow-hidden lg:ml-[240px] ">
         <BackButton />
-        <div className="flex flex-col items-center relative h-[50vh] w-full">
+        <header className="flex flex-col items-center relative h-[50vh] w-full">
           <div className={`fixed w-full z-50 lg:ml-[240px]`}>
             <DescriptionDrawer
               isOpen={isOpenDrawer}
@@ -148,7 +148,7 @@ const Podcast = ({ podcastData, category }: Props) => {
             imageSrc={imageSrc}
             podcastData={podcastData}
           />
-        </div>
+        </header>
         <SponsorList handleDrawer={handleDrawer} podcastData={podcastData} />
       </div>
     </div>

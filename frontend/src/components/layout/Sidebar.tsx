@@ -60,7 +60,7 @@ const Sidebar = (props: Props) => {
               className={`active:scale-95 transition-all ease-in-out duration-150 `}
             />
           )}
-          <p
+          <h2
             className={`font-semibold text-sm transition-all ease-in-out  ${
               currentPage[current || "home"]
                 ? "text-[white]"
@@ -68,7 +68,7 @@ const Sidebar = (props: Props) => {
             }`}
           >
             {pageTitle}
-          </p>
+          </h2>
         </button>
       );
     }
@@ -90,24 +90,24 @@ const Sidebar = (props: Props) => {
               />
             </span>
           )}
-          <p
+          <h2
             className={`font-semibold text-sm group-hover:text-white transition-all duration-150`}
           >
             {pageTitle}
-          </p>
+          </h2>
         </div>{" "}
       </Link>
     );
   };
   return (
-    <div
+    <aside
       className={
         isBreakpoint
           ? "hidden"
           : "min-w-[240px] fixed bg-black top-0 bottom-0 left-0 z-[999] transition-all duration-500 ease-in-out"
       }
     >
-      <div className="fixed">
+      <nav aria-label="sidebar navigation" className="fixed">
         {pathname !== "/" ? (
           <Link
             href={"/"}
@@ -200,10 +200,10 @@ const Sidebar = (props: Props) => {
                 _hover={{ bgColor: "#222222" }}
                 onClick={() => setNinjaMode((prev) => !prev)}
               >
-                <p className="text-sm font-semibold text-[#e3e3e3ae]">
+                <h2 className="text-sm font-semibold text-[#e3e3e3ae]">
                   {" "}
                   Ninja Mode:{" "}
-                </p>
+                </h2>
                 <span className="text-white text-xs font-bold px-2">
                   {ninjaMode ? "ON" : "OFF"}
                 </span>
@@ -223,10 +223,10 @@ const Sidebar = (props: Props) => {
                     color="#e3e3e3ae"
                     className="group-hover:fill-white transition-all duration-300 mr-3"
                   />
-                  <p className="text-sm font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
+                  <h2 className="text-sm font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
                     {" "}
                     About
-                  </p>
+                  </h2>
                 </MenuItem>
               </Link>
 
@@ -243,17 +243,17 @@ const Sidebar = (props: Props) => {
                     color="#e3e3e3ae"
                     className="group-hover:fill-white transition-all duration-300 mr-3"
                   />
-                  <p className="text-sm font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
+                  <h2 className="text-sm font-semibold text-[#e3e3e3ae] group-hover:text-white transition-all duration-300">
                     {" "}
                     Support
-                  </p>
+                  </h2>
                 </MenuItem>
               </Link>
             </MenuList>
           </Menu>
         </div>
-      </div>
-    </div>
+      </nav>
+    </aside>
   );
 };
 

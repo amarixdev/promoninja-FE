@@ -168,9 +168,9 @@ const Main = ({
       {isBreakPoint && !rendering && (
         <div className="pt-36 overflow-x-hidden">
           <div className="px-5">
-            <p className="w-full text-xl xs:text-2xl font-extrabold flex justify-center mb-10 relative z-10 ">
+            <h2 className="w-full text-xl xs:text-2xl font-extrabold flex justify-center mb-10 relative z-10 ">
               {currentCategory}
-            </p>
+            </h2>
 
             {filteredSponsors?.length ? (
               filteredSponsors.map((sponsor: SponsorData, index: number) => (
@@ -193,23 +193,22 @@ const Main = ({
                             height={150}
                             alt={sponsor.name}
                             priority
-                            loading="eager"
                             className={` h-[150px] max-w-[150px] relative rounded-lg shadow-xl shadow-black`}
                           />
 
                           <div className="flex ml-4 flex-col rounded-sm">
                             <div className="p-4">
                               <div className="flex flex-col items-center gap-2 py-2">
-                                <h1
+                                <h2
                                   className={`text-[#ebebeb] text-center text-lg xs:text-xl font-extrabold relative z-10 `}
                                 >
                                   {sponsor.name}
-                                </h1>
-                                <h1
+                                </h2>
+                                <h3
                                   className={`text-[#bababa] text-xs xs:text-sm text-center relative z-10   `}
                                 >
                                   {sponsor.offer}
-                                </h1>
+                                </h3>
                               </div>
                             </div>
                           </div>
@@ -310,7 +309,7 @@ const Main = ({
                                     } min-w-[90px] min-h-[90px] rounded-md mb-2 relative z-10`}
                                   />
 
-                                  <h1
+                                  <h2
                                     className={`${
                                       placeholder && !isOpen
                                         ? "opacity-0"
@@ -318,7 +317,7 @@ const Main = ({
                                     } text-xs xs:text-sm font-semibold whitespace-nowrap`}
                                   >
                                     {truncateString(pod.title, 12)}
-                                  </h1>
+                                  </h2>
                                   <h3
                                     className={`${
                                       placeholder && !isOpen
@@ -373,9 +372,9 @@ const Main = ({
 
       {!rendering && !isBreakPoint && (
         <div className="pt-[150px] px-10">
-          <p className="w-full text-3xl font-extrabold flex justify-center mb-14 relative z-10">
+          <h2 className="w-full text-3xl font-extrabold flex justify-center mb-14 relative z-10">
             {currentCategory}
-          </p>
+          </h2>
           {filteredSponsors.length ? (
             filteredSponsors.map((sponsor: SponsorData, index: number) => (
               <div
@@ -406,7 +405,6 @@ const Main = ({
                             height={225}
                             alt={sponsor.name}
                             priority
-                            loading="eager"
                             className={`group transition-all duration-300 hover:scale-105 h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black relative z-10`}
                           />
                         </Link>
@@ -414,16 +412,16 @@ const Main = ({
                         <div className="flex ml-4 flex-col rounded-sm">
                           <div className="p-6 rounded-md">
                             <div className="flex flex-col gap-2 px-4">
-                              <h1
+                              <h2
                                 className={`text-[#ebebeb] text-5xl font-extrabold relative z-10`}
                               >
                                 {sponsor.name}
-                              </h1>
-                              <h1
+                              </h2>
+                              <h3
                                 className={`text-[#bababa] text-xl relative z-10 `}
                               >
                                 {sponsor.offer}
-                              </h1>
+                              </h3>
                             </div>
                           </div>
                         </div>
@@ -434,11 +432,11 @@ const Main = ({
                       className={`relative pt-8 ml-2 flex w-full justify-between `}
                     >
                       <div className={`flex flex-col gap-1 w-9/12 `}>
-                        <h1
+                        <h2
                           className={`text-2xl font-semibold text-[#ebebeb] `}
                         >
                           About
-                        </h1>
+                        </h2>
                         <p className="font-light py-4">{sponsor.summary}</p>
                       </div>
                       <Link href={`/${convertToSlug(sponsor.name)}`}>
@@ -536,7 +534,7 @@ const Main = ({
                                   } min-w-[110px] min-h-[110px] rounded-md mb-2`}
                                 />
 
-                                <h1
+                                <h2
                                   className={`${
                                     placeholder && !isOpen
                                       ? "opacity-0"
@@ -544,7 +542,7 @@ const Main = ({
                                   } text-sm font-semibold`}
                                 >
                                   {truncateString(pod.title, 13)}
-                                </h1>
+                                </h2>
                                 <h3
                                   className={`${
                                     placeholder && !isOpen

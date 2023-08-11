@@ -33,18 +33,18 @@ const ShopCategories = ({
   );
 
   return (
-    <div className="w-full items-center relative">
+    <section className="w-full items-center relative">
       {/* Sponsor Carousel */}
 
       <div className="mt-16 lg:mt-28">
-        <div className="w-full flex items-center justify-start">
-          <h1
+        <header className="w-full flex items-center justify-start">
+          <h2
             className={`text-base  lg:text-2xl font-bold px-4 mb-12 relative top-9 text-[#cdcdcd]
              z-20"`}
           >
             Shop Categories
-          </h1>
-        </div>
+          </h2>
+        </header>
         <div className="flex flex-col items-center relative bottom-14 py-6 rounded-lg">
           <div
             className={` absolute ${isBreakPoint && "right-10"} ${
@@ -112,7 +112,7 @@ const ShopCategories = ({
       {/* Sponsors A-Z */}
 
      
-    </div>
+    </section>
   );
 };
 

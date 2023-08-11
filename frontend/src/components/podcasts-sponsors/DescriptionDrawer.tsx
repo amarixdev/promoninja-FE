@@ -153,16 +153,15 @@ const DescriptionDrawer = ({
                         height={100}
                         alt={drawer.title}
                         priority
-                        loading={"eager"}
                         className={`min-h-[100px] rounded-lg  min-w-[100px] ${"shadow-2xl shadow-black"} `}
                       />
                     </Link>
                   </div>
 
                   <div className="pr-2">
-                    <h1 className="base:text-base xs:text-lg font-extrabold">
+                    <h2 className="base:text-base xs:text-lg font-extrabold">
                       {drawer.title}
-                    </h1>
+                    </h2>
                     <h3 className="base:text-xs xs:text-sm font-semibold text-[#d5d5d5]">
                       {drawer.subtitle}
                     </h3>
@@ -175,10 +174,13 @@ const DescriptionDrawer = ({
                       target="_blank"
                       className="flex w-full justify-start items-center p-4 relative z-50 max-w-fit"
                     >
-                      <BsPlayCircle color="#1DB954" />
-                      <p className="text-xs font-semibold px-2 hover:cursor-pointer">
+                      <BsPlayCircle
+                        color="#1DB954"
+                        className="fill-[#1DB954]"
+                      />
+                      <h3 className="text-xs  font-semibold px-2 hover:cursor-pointer">
                         Listen on Spotify
-                      </p>
+                      </h3>
                     </Link>
                   )}
                   <div className="px-4 text-white h-[60vh] flex flex-col items-center">
@@ -200,10 +202,10 @@ const DescriptionDrawer = ({
                         <div
                           className={`w-full justify-center items-center bottom-4 relative flex flex-col gap-1`}
                         >
-                          <h1 className="text-lg xs:text-2xl sm:text-3xl md:text-4xl font-extrabold">
+                          <h2 className="text-lg xs:text-2xl sm:text-3xl md:text-4xl font-extrabold">
                             Exclusive Offer:
-                          </h1>
-                          <h1
+                          </h2>
+                          <p
                             className={`text-center relative font-base px-2 text-base xs:text-lg sm:text-xl md:text-3xl ${
                               sponsorOfferDrawer
                                 ? "text-[#aaaaaa]"
@@ -211,16 +213,16 @@ const DescriptionDrawer = ({
                             } overflow-y-auto`}
                           >
                             {drawer.description}
-                          </h1>
+                          </p>
                         </div>
                       </>
                     )}
                     {(podcastOfferDrawer || sponsorOfferDrawer) && (
                       <div className="flex flex-col items-center relative bottom-6">
                         <div className="mt-8 w-full flex flex-col items-center justify-center">
-                          <h1 className="text-lg xs:text-2xl sm:text-3xl md:text-4xl font-extralight">
+                          <h2 className="text-lg xs:text-2xl sm:text-3xl md:text-4xl font-extralight">
                             Visit{" "}
-                          </h1>
+                          </h2>
                           <div className="w-full flex flex-col  mt-2 items-center justify-center">
                             <Link
                               href={convertToFullURL(drawer.url)}
@@ -228,7 +230,7 @@ const DescriptionDrawer = ({
                               className={`text-lg active:scale-95`}
                             >
                               <Button>
-                                <p className=" text-sm xs:text-base sm:text-base md:text-lg">
+                                <p className="text-sm xs:text-base sm:text-base md:text-lg">
                                   {drawer.url}
                                 </p>
                               </Button>
@@ -277,8 +279,8 @@ const DescriptionDrawer = ({
                         onClick={onClose}
                       >
                         {" "}
-                        <div className="flex items-center gap-2 px-6 rounded-lg hover:bg-[#c3c3c358] transition duration-300 ease-in-out">
-                          <p className="font-bold ">Cancel</p>
+                        <div className="flex font-bold items-center gap-2 px-6 rounded-lg hover:bg-[#c3c3c358] transition duration-300 ease-in-out">
+                          Cancel
                         </div>
                       </div>
                     </Tooltip>
@@ -311,21 +313,21 @@ const DescriptionDrawer = ({
                       />
                     </Link>
                     <div className="px-6 flex flex-col">
-                      <h1 className="text-4xl font-extrabold">
+                      <h2 className="text-4xl font-extrabold">
                         {drawer.title}
-                      </h1>
+                      </h2>
                       <h3 className="text-xl font-semibold text-[white]">
                         {drawer.subtitle}
                       </h3>
                       <div className="flex items-center justify-between mt-6">
                         {podcastOfferDrawer && (
                           <div className="flex items-center">
-                            <h1
+                            <h2
                               style={{ color: "white" }}
                               className="text-2xl font-extrabold pr-4"
                             >
                               Visit:{" "}
-                            </h1>
+                            </h2>
                             <Link
                               href={convertToFullURL(drawer.url)}
                               target="_blank"
@@ -373,13 +375,13 @@ const DescriptionDrawer = ({
                       </h2>
                     </div>
                     <div className="w-full justify-end items-center flex pr-10  ">
-                      <p
+                      <h3
                         className="underline cursor-pointer text-xs font-bold active:scale-95"
                         onClick={() => handleBrokenLink(drawer.title)}
                       >
                         {" "}
                         Report Issue
-                      </p>
+                      </h3>
                     </div>
                   </div>
                 )}

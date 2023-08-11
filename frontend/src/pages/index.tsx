@@ -42,8 +42,6 @@ const Home = ({
   const { ninjaMode, setNinjaMode, categoryIndex, setCategoryIndex } =
     NavContext();
 
-  console.log(setNinjaMode);
-
   return (
     <div className="base:mb-[60px] xs:mb-[70px] lg:mb-0">
       <Sidebar />
@@ -62,34 +60,36 @@ const Home = ({
               ></div>
             )}
             <Header page="Home" />
-            <div className="w-full flex flex-col items-start justify-center z-10">
-              <div className="w-full mt-20 mb-6 gap-2 flex flex-col items-center justify-center relative ">
-                <Image
-                  src={LogoText}
-                  alt="logo-text"
-                  width={225}
-                  loading="eager"
-                  className="w-[180px] xs:w-[200px] lg:w-[225px]"
-                  placeholder="empty"
-                />
-                <Image
-                  src={Logo}
-                  width={120}
-                  alt="logo"
-                  loading="eager"
-                  className="mx-2 w-[80px] xs:w-[100px] lg:w-[120px]"
-                />
-              </div>
-              <div className="w-full flex items-center justify-center">
-                <div className="flex w-full sm:w-[60%] md:w-[50%] items-center justify-center px-6 pb-10 lg:pb-14">
-                  <p className="text-center  font-light text-sm xs:text-base sm:text-lg lg:text-xl text-[#909090] tracking-widest italic">
-                    &ldquo;<span className="font-bold">Save money</span> and{" "}
-                    <span className="font-semibold">give back</span> to your
-                    favorite creators when you shop with PromoNinja verified
-                    sponsors&rdquo;
-                  </p>
+            <main className="w-full flex flex-col items-start justify-center z-10">
+              <header>
+                <div className="w-full mt-20 mb-6 gap-2 flex flex-col items-center justify-center relative ">
+                  <Image
+                    src={LogoText}
+                    alt="logo-text"
+                    width={225}
+                    loading="eager"
+                    className="w-[180px] xs:w-[200px] lg:w-[225px]"
+                  />
+                  <Image
+                    src={Logo}
+                    width={120}
+                    alt="logo"
+                    loading="eager"
+                    className="mx-2 w-[80px] xs:w-[100px] lg:w-[120px]"
+                  />
                 </div>
-              </div>
+                <div className="w-full flex items-center justify-center">
+                  <div className="flex w-full sm:w-[60%] md:w-[50%] items-center justify-center px-6 pb-10 lg:pb-14">
+                    <p className="text-center  font-light text-sm xs:text-base sm:text-lg lg:text-xl text-[#909090] tracking-widest italic">
+                      &ldquo;<span className="font-bold">Save money</span> and{" "}
+                      <span className="font-semibold">give back</span> to your
+                      favorite creators when you shop with PromoNinja verified
+                      sponsors&rdquo;
+                    </p>
+                  </div>
+                </div>
+              </header>
+
               <PopularPodcasts
                 ninjaMode={ninjaMode}
                 topPicksData={topPicksData}
@@ -105,8 +105,10 @@ const Home = ({
                 setNinjaMode={setNinjaMode}
               />
               <SponsorsAZ sponsorsData={sponsorsData} />
-            </div>
-            <Footer />
+            </main>
+            <footer>
+              <Footer />
+            </footer>
           </div>
         </div>
       }

@@ -42,7 +42,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <link rel="icon" type="image/x-icon" href={favicon.src} />
-        <meta httpEquiv="Content-Language" content="en" />
         <title>PromoNinja</title>
       </Head>
       <ApolloProvider client={client}>

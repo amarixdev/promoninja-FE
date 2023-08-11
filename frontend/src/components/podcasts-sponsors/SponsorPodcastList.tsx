@@ -110,7 +110,7 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center relative w-full mt-4">
+    <section className="flex flex-col items-center justify-center relative w-full mt-4">
       <DescriptionDrawer
         isOpen={isOpenDrawer}
         onClose={onCloseDrawer}
@@ -137,10 +137,10 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
             className="p-4 relative"
           />
           <div className="w-full flex items-center justify-center relative ">
-            <h1 className="font-light base:text-base sm:text-xl text-center text-[#909090] px-6 italic tracking-wider">
+            <p className="font-light base:text-base sm:text-xl text-center text-[#909090] px-6 italic tracking-wider">
               &ldquo;Empower your favorite podcaster by making your purchases
               through their sponsor link.&rdquo;
-            </h1>
+            </p>
           </div>
         </>
       ) : (
@@ -150,18 +150,18 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
       <div className="flex flex-col justify-evenly w-full text-[#aaaaaa] ">
         <div className="flex justify-between w-full relative pt-14 base:mb-2 lg:mb-0 pl-6 lg:pt-8 lg:pl-8 lg:pb-2">
           <div className="flex relative right-4 lg:right-0">
-            <p className="font-light text-md relative pl-4 lg:px-4 tracking-widest">
+            <h3 className="font-light text-md relative pl-4 lg:px-4 tracking-widest">
               {`#`}
-            </p>
+            </h3>
 
-            <p className="font-light text-sm sm:text-md relative px-4 tracking-widest">
+            <h3 className="font-light text-sm sm:text-md relative px-4 tracking-widest">
               {`Podcast`}
-            </p>
+            </h3>
           </div>
           {isBreakPoint && (
-            <p className="font-light text-sm sm:text-md relative xs:pr-8 base:pr-4 tracking-widest">
+            <h3 className="font-light text-sm sm:text-md relative xs:pr-8 base:pr-4 tracking-widest">
               {`Link`}
-            </p>
+            </h3>
           )}
         </div>
         <div className="w-[95%] border-b-[1px] "></div>
@@ -198,12 +198,12 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
 
                 <div className="w-full justify-between flex items-center">
                   <div className="base: py-4 xs:p-4">
-                    <h1 className="font-medium text-white text-xs xs:text-sm">
+                    <h2 className="font-medium text-white text-xs xs:text-sm">
                       {truncateString(podcast.title, 20)}
-                    </h1>
-                    <p className="text-[#909090] text-xs xs:text-sm">
+                    </h2>
+                    <h3 className="text-[#909090] text-xs xs:text-sm">
                       {truncateString(podcast.publisher, 40)}
-                    </p>
+                    </h3>
                   </div>
                 </div>
                 <div className="xs:p-4 flex ">
@@ -249,13 +249,13 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
                       </Link>
 
                       <div className="p-4 ">
-                        <h1 className={`font-bold text-lg w-fit`}>
+                        <h2 className={`font-bold text-lg w-fit`}>
                           {podcast.title}
-                        </h1>
+                        </h2>
 
-                        <p className="text-[#909090] text-md">
+                        <h3 className="text-[#909090] text-md">
                           {podcast.publisher}
-                        </p>
+                        </h3>
                       </div>
                     </div>
 
@@ -336,13 +336,13 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
                           </div>
 
                           <div className="w-full justify-end items-center flex ">
-                            <p
+                            <h3
                               className="underline cursor-pointer text-xs font-bold active:scale-95"
                               onClick={() => handleBrokenLink(podcast.title)}
                             >
                               {" "}
                               Report Issue
-                            </p>
+                            </h3>
                           </div>
                         </div>
                       </Box>
@@ -358,10 +358,12 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
             message="podcasts typically earn 5% to 20% commission when listeners use affiliate links?"
             page="sponsor"
           />
-          <Footer />
+          <footer>
+            <Footer />
+          </footer>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

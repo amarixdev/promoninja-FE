@@ -73,7 +73,7 @@ const ChatBubble = ({
   const mobileImageSize = page === "sponsor" ? 50 : 70;
 
   return (
-    <>
+    <section>
       <ToggleButton />
       <CommunityModal
         isOpen={isOpenCommunity}
@@ -99,13 +99,13 @@ const ChatBubble = ({
             <div className="flex flex-col gap-4">
               <div className="flex gap-3 justify-center items-center">
                 {page === "sponsor" ? (
-                  <h1 className="font-light text-[#f1f1f1] text-sm xs:text-base sm:text-base text-center">
+                  <p className="font-light text-[#f1f1f1] text-sm xs:text-base sm:text-base text-center">
                     <span className="font-bold">Did you know</span> {message}
-                  </h1>
+                  </p>
                 ) : (
-                  <h1 className="font-semibold text-[#f1f1f1] text-sm xs:text-base sm:text-lg">
+                  <p className="font-semibold text-[#f1f1f1] text-sm xs:text-base sm:text-lg">
                     {message}
-                  </h1>
+                  </p>
                 )}
                 <button
                   className="absolute p-3 right-0 top-0 w-[40%] justify-end flex"
@@ -153,13 +153,13 @@ const ChatBubble = ({
                 </button>
               </Tooltip>
               {page === "sponsor" ? (
-                <h1 className=" font-light text-sm">
+                <p className=" font-light text-sm">
                   {" "}
                   <span className="font-bold">Did you know </span>
                   {message}
-                </h1>
+                </p>
               ) : (
-                <h1 className="font-semibold text-base">{message}</h1>
+                <p className="font-semibold text-base">{message}</p>
               )}
               {page === "sponsor" || (
                 <Button onClick={() => onOpenCommunity()}>Click Here</Button>
@@ -168,7 +168,7 @@ const ChatBubble = ({
           </div>
         </div>
       )}
-    </>
+    </section>
   );
 };
 

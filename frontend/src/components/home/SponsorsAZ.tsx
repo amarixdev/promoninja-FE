@@ -26,11 +26,11 @@ const SponsorsAZ = ({ sponsorsData }: SponsorsAZProps) => {
   });
 
   return (
-    <div className="relative">
+    <section className="relative">
       <div className="w-full flex items-center lg:mt-14 justify-start">
-        <h1 className={`text-base lg:text-2xl font-bold p-4 text-[#cdcdcd]`}>
+        <h2 className={`text-base lg:text-2xl font-bold p-4 text-[#cdcdcd]`}>
           Sponsors A-Z
-        </h1>
+        </h2>
       </div>
       <div className="w-full mb-14 flex flex-col items-center">
         {Object.keys(groupedSponsors).map((letter) => (
@@ -58,9 +58,9 @@ const SponsorsAZ = ({ sponsorsData }: SponsorsAZProps) => {
                         </Link>
 
                         <div className="min-w-[100px] bg-red-500">
-                          <h1 className="w-full text-white font-semibold absolute text-xs lg:text-sm mt-2 text-center max-w-[100px]">
+                          <h3 className="w-full text-white font-semibold absolute text-xs lg:text-sm mt-2 text-center max-w-[100px]">
                             {sponsor.name}
-                          </h1>
+                          </h3>
                         </div>
                       </div>
                     </div>
@@ -70,7 +70,7 @@ const SponsorsAZ = ({ sponsorsData }: SponsorsAZProps) => {
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

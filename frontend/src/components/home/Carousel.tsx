@@ -30,7 +30,7 @@ const Carousel = ({
   ];
 
   return (
-    <div className={style.container}>
+    <nav className={style.container} aria-label="product-category carousel">
       <div
         className={style.carousel}
         style={{
@@ -46,11 +46,11 @@ const Carousel = ({
             key={category.name}
             onClick={() => setCategoryIndex(i)}
           >
-            <h1 className="font-bold relative h-fit">{category.name}</h1>
+            <h2 className="font-bold relative h-fit">{category.name}</h2>
           </Link>
         ))}
       </div>
-    </div>
+    </nav>
   );
 };
 

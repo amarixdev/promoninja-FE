@@ -19,7 +19,7 @@ const PopularPodcasts = ({ topPicksData, ninjaMode }: PopularPodcastsProps) => {
   const isBreakPoint = useMediaQuery(1023);
 
   return (
-    <div className="w-full flex flex-col justify-center items-center">
+    <section className="w-full flex flex-col justify-center items-center">
       <AnimatedLink
         location="/podcasts"
         title="Popular Podcasts"
@@ -32,7 +32,8 @@ const PopularPodcasts = ({ topPicksData, ninjaMode }: PopularPodcastsProps) => {
           scrollDistance={1200}
           podcastPage={false}
         />
-        <div
+        <nav
+          aria-label="popular-podcasts"
           className={`flex overflow-x-scroll scrollbar-hide scroll-smooth relative w-full py-10 lg:px-10`}
           ref={sliderRef}
         >
@@ -76,14 +77,14 @@ const PopularPodcasts = ({ topPicksData, ninjaMode }: PopularPodcastsProps) => {
                   className="rounded-xl mt-4 shadow-lg shadow-black base:w-[130px] xs:w-[150px] sm:w-[170px] "
                 />
                 <div>
-                  <h1
+                  <h2
                     className={`text-xs xs:text-sm sm:text-md lg:font-bold  text-center px-2 pt-6 font-semibold text-[#dadada] group-hover:text-white whitespace-nowrap`}
                   >
                     {!isBreakPoint
                       ? truncateString(podcast.title, 20)
                       : truncateString(podcast.title, 14)}
-                  </h1>
-                  <p
+                  </h2>
+                  <h3
                     className={`text-xs sm:text-sm text-center px-2 font-medium text-[#909090]`}
                   >
                     {!isBreakPoint
@@ -91,7 +92,7 @@ const PopularPodcasts = ({ topPicksData, ninjaMode }: PopularPodcastsProps) => {
                         ? truncateString(podcast.title, 20)
                         : "See Exclusive Deals: "
                       : truncateString(podcast.title, 14)}
-                  </p>
+                  </h3>
                 </div>
                 {
                   <div
@@ -121,9 +122,9 @@ const PopularPodcasts = ({ topPicksData, ninjaMode }: PopularPodcastsProps) => {
               </div>
             </Link>
           ))}
-        </div>
+        </nav>
       </div>
-    </div>
+    </section>
   );
 };
 

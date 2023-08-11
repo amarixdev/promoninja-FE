@@ -148,45 +148,49 @@ const Search = () => {
     <div className="base:mb-[40px] xs:mb-[50px] lg:mb-0">
       <Sidebar />
       <div className="lg:ml-[240px]">
-        <div className="h-screen w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727]">
-          <div className="w-full p-6 flex flex-col justify-center items-center ">
-            <div className="flex items-center justify-center text-[#5b5a5a] w-full">
-              <div className="bg-[#292929] h-10 rounded-l-md flex items-center justify-center p-2">
-                <BiSearch size={20} />
-              </div>
-
-              <input
-                className=" text-white outline-none focus:outline-none rounded-r-md w-10/12 sm:w-8/12 md:w-6/12 lg:w-4/12 p-2 bg-[#202020]"
-                type="text"
-                placeholder="Search"
-                value={searchText}
-                onChange={(e) => handleSearch(e)}
-              />
-            </div>
-            {display.filter && (
-              <div className="flex items-center justify-center ">
-                <div className="w-full p-6 text-xs xs:text-sm  flex gap-4 justify-evenly items-center ">
-                  {searchCategories.map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => handleFilter(category)}
-                      className={`active:scale-95 rounded-full px-8 py-1 items-center flex justify-center ${
-                        podcastFilter &&
-                        category === "Podcasts" &&
-                        "bg-[#3f3f3f] "
-                      } ${
-                        sponsorFilter &&
-                        category === "Sponsors" &&
-                        "bg-[#3f3f3f]"
-                      }`}
-                    >
-                      <p className=" font-medium">{category}</p>
-                    </button>
-                  ))}
+        <main className="h-screen w-full bg-gradient-to-t from-[#151515] via-[#151515] to-[#282727]">
+          <div className="w-full p-6 flex flex-col justify-center items-center">
+            <section className="w-full flex flex-col justify-center items-center">
+              <div className="flex items-center justify-center text-[#5b5a5a] w-full">
+                <div className="bg-[#292929] h-10 rounded-l-md flex items-center justify-center p-2">
+                  <BiSearch size={20} />
                 </div>
+
+                <input
+                  className=" text-white outline-none focus:outline-none rounded-r-md w-10/12 sm:w-8/12 md:w-6/12 lg:w-4/12 p-2 bg-[#202020]"
+                  type="text"
+                  placeholder="Search"
+                  value={searchText}
+                  onChange={(e) => handleSearch(e)}
+                />
               </div>
-            )}
-            <div className="">
+              <div>
+                {display.filter && (
+                  <div className="flex items-center justify-center ">
+                    <div className="w-full p-6 text-xs xs:text-sm  flex gap-4 justify-evenly items-center ">
+                      {searchCategories.map((category) => (
+                        <button
+                          key={category}
+                          onClick={() => handleFilter(category)}
+                          className={`active:scale-95 rounded-full px-8 py-1 items-center flex justify-center ${
+                            podcastFilter &&
+                            category === "Podcasts" &&
+                            "bg-[#3f3f3f] "
+                          } ${
+                            sponsorFilter &&
+                            category === "Sponsors" &&
+                            "bg-[#3f3f3f]"
+                          }`}
+                        >
+                          <h2 className=" font-medium">{category}</h2>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </section>
+            <nav aria-label="search navigation">
               {podcastFilter &&
                 searchText &&
                 podcastSearch.map((podcast) => (
@@ -207,19 +211,18 @@ const Search = () => {
                               src={podcast.imageUrl || fallbackImage}
                               width={100}
                               height={100}
-                              loading="eager"
                               priority
                               alt={podcast.title}
                               className="shadow-black base:max-w-[70px] shadow-2xl xs:min-w-[90px] sm:min-w-[100px] rounded-lg"
                             />
                           </div>
                           <div className="flex flex-col p-4 ">
-                            <h1 className="font-bold text-xs xs:font-extrabold xs:text-sm">
+                            <h2 className="font-bold text-xs xs:font-extrabold xs:text-sm">
                               {truncateString(podcast.title, 30)}
-                            </h1>
-                            <p className="text-[#aaaaaa] text-xs lg:text-sm">
+                            </h2>
+                            <h3 className="text-[#aaaaaa] text-xs lg:text-sm">
                               {truncateString(podcast.publisher, 35)}
-                            </p>
+                            </h3>
                           </div>
                         </div>
                       </Link>
@@ -254,13 +257,13 @@ const Search = () => {
                               />
                             </div>
                             <div className="flex flex-col p-4 ">
-                              <h1 className="font-bold text-xs xs:font-extrabold xs:text-sm">
+                              <h2 className="font-bold text-xs xs:font-extrabold xs:text-sm">
                                 {" "}
                                 {truncateString(sponsor.name, 30)}
-                              </h1>
-                              <p className="text-[#aaaaaa] text-xs xs:text-sm">
+                              </h2>
+                              <h3 className="text-[#aaaaaa] text-xs xs:text-sm">
                                 {truncateString(sponsor.url, 35)}
-                              </p>
+                              </h3>
                             </div>
                           </div>
                         </Link>
@@ -270,9 +273,9 @@ const Search = () => {
                     </div>
                   ))}
               </div>
-            </div>
+            </nav>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

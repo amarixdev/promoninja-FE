@@ -57,7 +57,7 @@ const SponsorList = ({ podcastData, handleDrawer }: SponsorListProps) => {
     }
   };
   return (
-    <div className={`w-full lg:mt-20 text-[#aaaaaa] flex flex-col`}>
+    <main className={`w-full lg:mt-20 text-[#aaaaaa] flex flex-col`}>
       <BrokenLinkModal
         isOpen={isOpenBrokenLink}
         onClose={onCloseBrokenLink}
@@ -66,7 +66,7 @@ const SponsorList = ({ podcastData, handleDrawer }: SponsorListProps) => {
         setPodcastState={setPodcastState}
         notified={notified}
       />
-      <div className="flex flex-col mt-6 justify-evenly bg-gradient-to-b from-black to-[#0e0e0e]">
+      <div className="flex flex-col  justify-evenly bg-gradient-to-b from-black to-[#0e0e0e]">
         <div className="flex relative p-4 lg:pl-8">
           <div className="flex justify-between lg:justify-start items-center w-full">
             <div className="flex items-center">
@@ -122,12 +122,12 @@ const SponsorList = ({ podcastData, handleDrawer }: SponsorListProps) => {
 
                   <div className="w-full justify-between flex items-center">
                     <div className="base: py-4 xs:p-4">
-                      <h1 className="font-medium text-white text-xs xs:text-sm">
+                      <h2 className="font-medium text-white text-xs xs:text-sm">
                         {truncateString(offer.sponsor, 20)}
-                      </h1>
-                      <p className="text-[#909090] text-xs xs:text-sm">
+                      </h2>
+                      <h3 className="text-[#909090] text-xs xs:text-sm">
                         {getSponsor(offer.sponsor).url}
-                      </p>
+                      </h3>
                     </div>
                   </div>
                   <div className=" xs:p-4 flex ">
@@ -179,12 +179,12 @@ const SponsorList = ({ podcastData, handleDrawer }: SponsorListProps) => {
                           </Link>
 
                           <div className="p-4">
-                            <h1 className="text-white font-bold text-lg">
+                            <h2 className="text-white font-bold text-lg">
                               {offer.sponsor}
-                            </h1>
-                            <p className="text-[#909090] text-md">
+                            </h2>
+                            <h3 className="text-[#909090] text-md">
                               {offer.url}
-                            </p>
+                            </h3>
                           </div>
                         </div>
 
@@ -310,10 +310,12 @@ const SponsorList = ({ podcastData, handleDrawer }: SponsorListProps) => {
               currentSponsors={currentSponsors}
             />
           )}
-          <Footer />
+          <footer>
+            <Footer />
+          </footer>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

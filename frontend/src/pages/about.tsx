@@ -21,32 +21,32 @@ const About = (props: Props) => {
     offers: false,
   });
   return (
-    <>
-      <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0 ">
-        <Sidebar />
-        <div className="lg:ml-[240px]">
-          <div
-            className={`w-full flex flex-col py-10 bg-gradient-to-b justify-center items-center ${
-              ninjaMode
-                ? "from-[#131313] via-[#0e0e0e] to-[black]"
-                : "from-[#252525] via-[#1a1a1a] to-[#121212] "
-            } relative overflow-x-hidden z-1`}
-          >
-            <div className="w-full absolute top-0">
-              <BackButton />
-            </div>
+    <div className="flex base:mb-[60px] xs:mb-[70px] lg:mb-0 ">
+      <Sidebar />
+      <div className="lg:ml-[240px]">
+        <div
+          className={`w-full flex flex-col py-10 bg-gradient-to-b justify-center items-center ${
+            ninjaMode
+              ? "from-[#131313] via-[#0e0e0e] to-[black]"
+              : "from-[#252525] via-[#1a1a1a] to-[#121212] "
+          } relative overflow-x-hidden z-1`}
+        >
+          <div className="w-full absolute top-0">
+            <BackButton />
+          </div>
 
-            <div
-              className={` ${
-                ninjaMode
-                  ? "bg-gradient-to-b from-[#212121] to-[#111111]  "
-                  : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
-              } flex flex-col items-center lg:text-left justify-center rounded-lg mt-10 py-8 px-4 max-w-[95%] lg:max-w-[70%] `}
-            >
-              <div className="w-full px-8 text-center lg:text-left">
-                <p className="font-extrabold text-6xl lg:text-7xl ">About</p>
-              </div>
-              <div className="w-full px-8 pt-8 text-center lg:text-left">
+          <div
+            className={` ${
+              ninjaMode
+                ? "bg-gradient-to-b from-[#212121] to-[#111111]  "
+                : "bg-gradient-to-b from-[#2a2a2a] to-[#181818]"
+            } flex flex-col items-center lg:text-left justify-center rounded-lg mt-10 py-8 px-4 max-w-[95%] lg:max-w-[70%] `}
+          >
+            <header className="w-full px-8 text-center lg:text-left">
+              <h1 className="font-extrabold text-6xl lg:text-7xl ">About</h1>
+            </header>
+            <main>
+              <section className="w-full px-8 pt-8 text-center lg:text-left">
                 <h2 className=" text-xl lg:text-2xl font-semibold">
                   Why did I build this?
                 </h2>
@@ -58,9 +58,8 @@ const About = (props: Props) => {
                   listener, I felt happy to repay the podcasting community for
                   the countless hours of entertainment.
                 </p>
-              </div>
-
-              <div className="w-full mt-12 lg:mt-16  px-8 text-center lg:text-left">
+              </section>
+              <section className="w-full mt-12 lg:mt-16  px-8 text-center lg:text-left">
                 <h2 className="font-semibold text-xl lg:text-2xl ">
                   What is PromoNinja?
                 </h2>
@@ -106,36 +105,43 @@ const About = (props: Props) => {
                     </Link>
                   </p>
                 </div>
-                <div className="mt-12">
-                  <h2 className="font-semibold text-xl lg:text-2xl ">
-                    Accessibility
-                  </h2>
-                  <div
-                    className={`${
-                      isBreakpoint ? "flex-col" : "flex-row"
-                    } w-full flex justify-start items-center gap-4`}
-                  >
-                    <p className="pt-2">
-                      To enhance color contrast for improved accessibility,
-                      consider utilizing Ninja Mode{" "}
-                    </p>
-                    <GiNinjaHead
-                      size={25}
-                      onClick={() => setNinjaMode((prev) => !prev)}
-                      className="cursor-pointer animate-pulse hover:animate-none active:scale-95"
-                    />
-                  </div>
+              </section>
+              <section className="w-full mt-12 lg:mt-16  px-8 text-center lg:text-left">
+                <h2 className="font-semibold text-xl lg:text-2xl ">
+                  Accessibility
+                </h2>
+                <div
+                  className={`${
+                    isBreakpoint ? "flex-col" : "flex-row"
+                  } w-full flex justify-start items-center gap-4`}
+                >
+                  <p className="pt-2">
+                    To enhance color contrast for improved accessibility,
+                    consider utilizing Ninja Mode{" "}
+                  </p>
+                  <GiNinjaHead
+                    size={25}
+                    onClick={() => setNinjaMode((prev) => !prev)}
+                    className="cursor-pointer animate-pulse hover:animate-none active:scale-95"
+                  />
                 </div>
-              </div>
-            </div>
-            <div className="pt-10 select-none">
-              <Image src={Logo3} alt="alt-logo" width={300} height={300} />
-            </div>
-            <Footer />
+              </section>
+            </main>
+            <Image
+              placeholder="blur"
+              src={Logo3}
+              alt="alt-logo"
+              width={300}
+              height={300}
+              className="mt-10"
+            />
           </div>
+          <footer>
+            <Footer />
+          </footer>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

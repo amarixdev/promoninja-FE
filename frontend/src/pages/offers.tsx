@@ -11,7 +11,7 @@ import { useMediaQuery, useSetCurrentPage } from "../utils/hooks";
 import { SponsorCategory, SponsorData } from "../utils/types";
 import Slider from "../components/offers-page/Slider";
 import Main from "../components/offers-page/Main";
-import Banner from "../components/offers-page/Banner";
+import Banner from "../components/banners/OffersBanner";
 import LoadMore from "../components/offers-page/LoadMore";
 import Footer from "../components/layout/Footer";
 
@@ -147,25 +147,28 @@ const Offers = ({
             getSponsorsCount={getSponsorsCount}
             setCategoryCount={setCategoryCount}
           />
-          <Main
-            ninjaMode={ninjaMode}
-            bannerBreakpointRef={bannerBreakpointRef}
-            currentCategory={currentCategory}
-            filteredSponsors={filteredSponsors}
-            rendering={rendering}
-          />
-          <LoadMore
-            categoryCount={categoryCount}
-            currentCategory={currentCategory}
-            filteredSponsors={filteredSponsors}
-            getCategorySponsors={getCategorySponsors}
-            setFilteredSponsors={setFilteredSponsors}
-            sponsorsCount={sponsorsCount}
-          />
+          <main>
+            <Main
+              ninjaMode={ninjaMode}
+              bannerBreakpointRef={bannerBreakpointRef}
+              currentCategory={currentCategory}
+              filteredSponsors={filteredSponsors}
+              rendering={rendering}
+            />
+            <LoadMore
+              categoryCount={categoryCount}
+              currentCategory={currentCategory}
+              filteredSponsors={filteredSponsors}
+              getCategorySponsors={getCategorySponsors}
+              setFilteredSponsors={setFilteredSponsors}
+              sponsorsCount={sponsorsCount}
+            />
+          </main>
+
           {!rendering && (
-            <div className={`${isBreakpoint && "pb-28"}`}>
+            <footer className={`${isBreakpoint && "pb-28"}`}>
               <Footer />
-            </div>
+            </footer>
           )}
         </div>
       </div>

@@ -45,18 +45,14 @@ const PodcastHero = ({
       className={`items-center w-full h-full flex justify-center`}
       style={gradientStyle}
     >
-      <div
-        className="flex flex-col justify-center items-center w-full relative top-[60px] lg:mt-12"
-        id="banner"
-      >
+      <div className="flex flex-col justify-center items-center w-full relative pt-[60px] lg:mt-12">
         <Image
           src={imageSrc}
           alt={podcastData.title}
           width={250}
           height={250}
           priority
-          loading="eager"
-          className={`z-10 rounded-lg lg:top-6 mt-8 lg:mb-4 relative base:w-[180px] xs:w-[220px] sm:w-[250px] shadow-2xl shadow-black`}
+          className={`z-10 rounded-lg lg:pt-6 mt-14 lg:mb-4 relative base:w-[180px] xs:w-[220px] sm:w-[250px] shadow-2xl shadow-black`}
         />
         <div className="w-full my-10 bg-gradient-to-b from-[#00000000] via-black to-black">
           <h1
@@ -65,9 +61,9 @@ const PodcastHero = ({
           >
             {podcastData?.title}
           </h1>
-          <h2 className="text-center base:text-sm font-medium xs:text-base mb-4 text-[#aaaaaa] px-4 mt-2">
+          <h3 className="text-center base:text-sm font-medium xs:text-base mb-4 text-[#aaaaaa] px-4 mt-2">
             {podcastData?.publisher}{" "}
-          </h2>
+          </h3>
           {isBreakPoint || (
             <div className="w-full flex items-center justify-between pb-4 bg-black">
               <div className="flex items-center px-6 gap-3 ">
@@ -85,7 +81,7 @@ const PodcastHero = ({
                   className="active:scale-95 transition-all duration-300 ease-in-out"
                 >
                   <BsShareFill size={14} />
-                  <p className="ml-3 text-sm">Share</p>
+                  <h3 className="ml-3 text-sm">Share</h3>
                 </Button>
               </div>
               <Link
@@ -93,10 +89,10 @@ const PodcastHero = ({
                 target="_blank"
                 className="flex w-fit justify-start items-center p-4 mr-14"
               >
-                <BsPlayCircle color={spotifyGreen} />
-                <p className="text-xs text-[#aaaaaa] hover:text-white font-semibold px-2">
+                <BsPlayCircle color={spotifyGreen} className="fill-[#1DB954]" />
+                <h3 className="text-xs text-[#aaaaaa] hover:text-white font-semibold px-2">
                   Listen on Spotify
-                </p>
+                </h3>
               </Link>
             </div>
           )}
@@ -132,7 +128,7 @@ const PodcastHero = ({
             </div>
           )}
           {isBreakPoint || (
-            <div className="w-full h-[80px] overflow-y-auto">
+            <div className="w-full h-[80px] overflow-y-auto relative z-10">
               <p className="py-2 ml-6 text-[#aaaaaa] mb-4 px-4">
                 {truncated
                   ? truncateString(podcastData?.description, 280)

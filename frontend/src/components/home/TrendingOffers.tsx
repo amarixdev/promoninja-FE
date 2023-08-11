@@ -51,7 +51,7 @@ const TrendingOffers = ({
     setTrendingOfferIndex("0");
   }, [trendingOffersData, isBreakPoint]);
   return (
-    <div className="relative w-full mt-14">
+    <section className="relative w-full mt-14">
       <AnimatedLink
         location="/offers"
         title="Trending Offers"
@@ -108,14 +108,14 @@ const TrendingOffers = ({
                             <div className="flex ml-4 flex-col rounded-sm">
                               <div className="p-6 rounded-md">
                                 <div className="flex flex-col gap-2 px-4">
-                                  <h1
+                                  <h2
                                     className={`text-[#ebebeb] text-5xl font-extrabold`}
                                   >
                                     {offer.name}
-                                  </h1>
-                                  <h1 className={`text-[#bababa] text-xl`}>
+                                  </h2>
+                                  <h3 className={`text-[#bababa] text-xl`}>
                                     {offer.offer}
-                                  </h1>
+                                  </h3>
                                 </div>
                               </div>
                             </div>
@@ -126,11 +126,11 @@ const TrendingOffers = ({
                           className={`relative pt-8 ml-2 flex w-full justify-between `}
                         >
                           <div className={`flex flex-col gap-1 w-9/12 `}>
-                            <h1
+                            <h2
                               className={`text-2xl font-semibold text-[#ebebeb] `}
                             >
                               About
-                            </h1>
+                            </h2>
                             <p className="font-light">{offer.summary}</p>
                           </div>
                           <Link
@@ -203,16 +203,16 @@ const TrendingOffers = ({
                           <div className="flex ml-4 flex-col rounded-sm">
                             <div className="p-6">
                               <div className="flex flex-col items-center gap-2">
-                                <h1
+                                <h2
                                   className={`text-[#ebebeb] text-center text-xl xs:text-2xl font-extrabold  `}
                                 >
                                   {offer.name}
-                                </h1>
-                                <h1
+                                </h2>
+                                <h3
                                   className={`text-[#bababa] text-sm xs:text-base text-center `}
                                 >
                                   {offer.offer}
-                                </h1>
+                                </h3>
                               </div>
                             </div>
                           </div>
@@ -257,7 +257,7 @@ const TrendingOffers = ({
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

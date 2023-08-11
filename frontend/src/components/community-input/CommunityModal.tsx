@@ -144,7 +144,7 @@ const CommunityModal = ({
           <ModalBody className="bg-gradient-to-b from-[#222222] to-[#151515] shadow-lg shadow-black">
             <div className=" w-full flex justify-center items-center">
               <div className="gap-2 flex flex-col justify-center items-center py-4">
-                <p className="font-extrabold text-2xl ">Community Input</p>
+                <h2 className="font-extrabold text-2xl ">Community Input</h2>
                 <p className={`font-bold`}>
                   {loading ? (
                     <Spinner />
@@ -182,10 +182,7 @@ const CommunityModal = ({
                   className={` active:scale-95`}
                   onClick={(e) => handleSubmit(e)}
                 >
-                  <p className="transition-all duration-300 ease-in">
-                    {" "}
-                    {"Submit"}
-                  </p>
+                  {"Submit"}
                 </Button>
               </div>
             </form>
