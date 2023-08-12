@@ -241,7 +241,7 @@ export const useBanner = (
           page === "sponsor" && !breakpoint
             ? elementRect.top <= breakpoint
             : elementRect.bottom <= breakpoint;
-
+        // console.log(elementRect.top);
         setBanner(isPastElement);
       }
     };
@@ -283,8 +283,6 @@ export const useReportIssue = (selected: string) => {
 };
 
 export const useCopyToClipboard = (promoCode?: string) => {
-  console.log("test");
-
   const isBreakPoint = useMediaQuery(1023);
   const toastPosition = isBreakPoint ? "top" : "bottom";
   const toast = useToast();

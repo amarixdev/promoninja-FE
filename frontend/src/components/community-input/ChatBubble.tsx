@@ -131,9 +131,9 @@ const ChatBubble = ({
         </div>
       ) : (
         <div
-          className={`${
-            ninjaMode && page !== "podcast" ? style.speechDark : style.speech
-          } ${style.bottom} max-w-[360px] pl-5 pr-10 pt-6 pb-10 ${
+          className={`${style.speech} ${
+            style.bottom
+          } max-w-[360px] pl-5 pr-10 pt-6 pb-10 ${
             inView ? "bottom-0 opacity-100" : "bottom-[-300px] opacity-50"
           } transition-all duration-[500ms] right-10 z-[999]`}
         >

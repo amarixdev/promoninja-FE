@@ -13,6 +13,7 @@ interface SponsorHeroProps {
   setCategoryIndex: Dispatch<SetStateAction<number>>;
   categoryIndex: number;
   bannerBreakpointRef: RefObject<HTMLDivElement>;
+
   ninjaMode: boolean;
 }
 
@@ -30,11 +31,19 @@ const SponsorHero = ({
   };
 
   return (
-    <>
+    <div
+      className={` ${
+        ninjaMode && isBreakPoint
+          ? "bg-gradient-to-b from-[#0c0c0c]  "
+          : isBreakPoint
+          ? "bg-gradient-to-b from-[#525252] "
+          : ""
+      } w-full `}
+    >
       {/* Mobile */}
       {isBreakPoint ? (
         <section>
-          <div className="flex-col w-full items-center justify-center py-2">
+          <div className="flex-col w-full items-center justify-center py-2 ">
             <header>
               <div className="p-10  flex items-center justify-center relative ">
                 <Image
@@ -86,10 +95,10 @@ const SponsorHero = ({
             <div className="w-[100%] pb-4 border-b-[1px] mb-10"></div>
           </div>
           <section
-            className={`w-full bg-gradient-to-b rounded-lg ${
+            className={` shadow-black shadow-lg w-full bg-gradient-to-b rounded-lg ${
               ninjaMode
                 ? "from-[#31313172]  to-[#20202091]"
-                : "from-[#2020201d]  to-[#20202091]"
+                : "from-[#a0a0a01d]  to-[#2e2e2e91] "
             } p-10`}
           >
             <div className="relative">
@@ -106,7 +115,7 @@ const SponsorHero = ({
       ) : (
         /* Desktop */
         <section
-          className="flex-col w-full items-center mt-14 justify-center z-10 relative"
+          className={` flex-col w-full items-center mt-14 justify-center z-10 relative`}
           id={"banner"}
         >
           <header className="p-10 flex items-center w-full">
@@ -149,10 +158,10 @@ const SponsorHero = ({
               </div>
               <div className="flex m-4 mt-8">
                 <div
-                  className={`w-full bg-gradient-to-b rounded-lg ${
+                  className={` h-fit w-full bg-gradient-to-b rounded-lg ${
                     ninjaMode
                       ? "from-[#31313172]  to-[#20202091]"
-                      : "from-[#2020201d]  to-[#20202091]"
+                      : "from-[#b1b1b11d]  to-[#3b3b3b91]"
                   } p-10`}
                   ref={bannerBreakpointRef}
                 >
@@ -200,7 +209,7 @@ const SponsorHero = ({
           </section>
         </section>
       )}
-    </>
+    </div>
   );
 };
 

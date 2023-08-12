@@ -1,30 +1,33 @@
+import { Box, Button, Collapse } from "@chakra-ui/react";
 import Image from "next/image";
+import Link from "next/link";
+import { RefObject, useState } from "react";
+import { FaEllipsisV } from "react-icons/fa";
+import { GiNinjaHeroicStance } from "react-icons/gi";
+import LogoText from "../../public/assets/logo-text.png";
 import {
   convertToFullURL,
   convertToSlug,
-  currentYear,
   truncateString,
 } from "../../utils/functions";
-import { FaEllipsisV } from "react-icons/fa";
-import Link from "next/link";
-import { Box, Button, Collapse } from "@chakra-ui/react";
-import PromoCodeButton from "./PromoCodeButton";
-import { GiNinjaHeroicStance } from "react-icons/gi";
-import ChatBubble from "../community-input/ChatBubble";
 import { useMediaQuery, useReportIssue } from "../../utils/hooks";
 import { OfferData, PodcastData } from "../../utils/types";
-import { useState } from "react";
 import BrokenLinkModal from "../community-input/BrokenLinkModal";
-import LogoText from "../../public/assets/logo-text.png";
-import { BsSpotify } from "react-icons/bs";
+import ChatBubble from "../community-input/ChatBubble";
 import Footer from "../layout/Footer";
+import PromoCodeButton from "./PromoCodeButton";
 
 interface SponsorListProps {
   podcastData: PodcastData;
   handleDrawer: (sponsor: string, isSponsorOfferDrawer: boolean) => void;
+  columnBreakpointRef: RefObject<HTMLDivElement>;
 }
 
-const SponsorList = ({ podcastData, handleDrawer }: SponsorListProps) => {
+const SponsorList = ({
+  podcastData,
+  handleDrawer,
+  columnBreakpointRef,
+}: SponsorListProps) => {
   const isBreakPoint = useMediaQuery(1023);
   const currentSponsors = podcastData?.sponsors.map((sponsor) => sponsor.name);
 
@@ -66,20 +69,23 @@ const SponsorList = ({ podcastData, handleDrawer }: SponsorListProps) => {
         setPodcastState={setPodcastState}
         notified={notified}
       />
-      <div className="flex flex-col  justify-evenly bg-gradient-to-b from-black to-[#0e0e0e]">
-        <div className="flex relative p-4 lg:pl-8">
-          <div className="flex justify-between lg:justify-start items-center w-full">
-            <div className="flex items-center">
-              <p className="font-light text-sm sm:text-md relative right-2 lg:right-0 p-4 top-[70px] tracking-widest">
+      <div className="flex flex-col justify-evenly bg-gradient-to-b from-black to-[#0e0e0e]">
+        <div className="flex relative p-4 lg:pl-8 ">
+          <div
+            ref={columnBreakpointRef}
+            className=" flex justify-between relative top-[70px] lg:justify-start items-center w-full"
+          >
+            <div className="flex items-center relative ">
+              <p className="font-light text-xs xs:text-xs sm:text-sm relative right-2 lg:right-0 p-4  tracking-widest">
                 {`#`}
               </p>
-              <p className="font-light text-sm sm:text-md relative top-[70px] tracking-widest">
+              <p className="font-light text-xs xs:text-xs sm:text-sm relative right-2 lg:right-0  tracking-widest">
                 {`Sponsor`}
               </p>
             </div>
 
             {isBreakPoint && (
-              <p className="font-light text-sm sm:text-md relative pr-2 top-[70px] tracking-widest">
+              <p className="font-light text-xs xs:text-xs sm:text-sm relative pr-2 tracking-widest">
                 {`Offer`}
               </p>
             )}
@@ -87,7 +93,7 @@ const SponsorList = ({ podcastData, handleDrawer }: SponsorListProps) => {
         </div>
         <div className="w-[95%] border-b-[1px] pb-8 pt-2 mt-2 mb-1"></div>
       </div>
-      <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col lg:h-[600px] lg:overflow-y-auto pb-56 lg:pb-40">
+      <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col pb-56 lg:pb-40">
         {!hasNoSponsors ? (
           podcastData.offer.map((offer: OfferData, index) => (
             <div

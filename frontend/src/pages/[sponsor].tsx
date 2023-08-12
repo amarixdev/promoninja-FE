@@ -10,7 +10,11 @@ import { NavContext } from "../context/navContext";
 import client from "../graphql/apollo-client";
 import { Operations } from "../graphql/operations";
 import { convertToSlug } from "../utils/functions";
-import { useScrollRestoration, useSetCurrentPage } from "../utils/hooks";
+import {
+  useMediaQuery,
+  useScrollRestoration,
+  useSetCurrentPage,
+} from "../utils/hooks";
 import { SponsorCategory, SponsorData } from "../utils/types";
 import Footer from "../components/layout/Footer";
 
@@ -25,10 +29,11 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
   useScrollRestoration(router);
   const { ninjaMode, setCategoryIndex } = NavContext();
   const bannerBreakpointRef = useRef<HTMLDivElement>(null);
+  const columnBreakPointRef = useRef<HTMLDivElement>(null);
   const categoryIndex = sponsorCategoryData?.findIndex(
     (sponsor) => sponsor.name === sponsorData?.sponsorCategory[0].name
   );
-
+  const isBreakPoint = useMediaQuery(1023);
   useSetCurrentPage({
     home: false,
     podcasts: false,
@@ -41,8 +46,8 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="lg:ml-[240px] w-full">
-        {ninjaMode ? (
+      <div className="lg:ml-[240px] w-full h-screen ">
+        {/* {ninjaMode ? (
           <div
             className={` from-[#151515] bg-gradient-to-b  absolute w-fit h-[400px] z-0 `}
           ></div>
@@ -50,31 +55,36 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
           <div
             className={` from-[#606060] bg-gradient-to-b  absolute w-fit h-[400px] z-0 `}
           ></div>
-        )}
-        {
-          <div
-            className={`${
-              ninjaMode
-                ? "bg-gradient-to-b from-[#0c0c0c] to-[#000000] "
-                : "bg-gradient-to-b from-[#454545] to-[#101010] "
-            } flex flex-col items-center w-full`}
-          >
-            <section className={`fixed w-full z-50 lg:ml-[240px]`}>
-              <SponsorBanner
-                bannerBreakpointRef={bannerBreakpointRef}
-                sponsorData={sponsorData}
-              />
-            </section>
-            <SponsorHero
+        )} */}
+
+        <div
+          className={` flex flex-col items-center w-full ${
+            ninjaMode && !isBreakPoint
+              ? "bg-gradient-to-b from-[#0c0c0c]  "
+              : !isBreakPoint
+              ? "bg-gradient-to-b from-[#525252] "
+              : ""
+          }`}
+        >
+          <section className={`fixed w-full z-50 lg:ml-[240px] `}>
+            <SponsorBanner
               bannerBreakpointRef={bannerBreakpointRef}
-              categoryIndex={categoryIndex}
-              ninjaMode={ninjaMode}
-              setCategoryIndex={setCategoryIndex}
+              columnBreakpointRef={columnBreakPointRef}
               sponsorData={sponsorData}
             />
-            <PodcastList sponsorData={sponsorData} />
-          </div>
-        }
+          </section>
+          <SponsorHero
+            bannerBreakpointRef={bannerBreakpointRef}
+            categoryIndex={categoryIndex}
+            ninjaMode={ninjaMode}
+            setCategoryIndex={setCategoryIndex}
+            sponsorData={sponsorData}
+          />
+          <PodcastList
+            sponsorData={sponsorData}
+            columnBreakpointRef={columnBreakPointRef}
+          />
+        </div>
       </div>
       <BackButton sponsorPage={true} />
     </div>

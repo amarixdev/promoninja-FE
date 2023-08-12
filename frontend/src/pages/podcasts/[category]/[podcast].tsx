@@ -46,6 +46,8 @@ const Podcast = ({ podcastData, category }: Props) => {
     category: "",
   });
   const bannerBreakpointRef = useRef<HTMLDivElement>(null);
+  const columnBreakpointRef = useRef<HTMLDivElement>(null);
+
   let existingSponsor: boolean = true;
   useSetCurrentPage({
     home: false,
@@ -139,6 +141,7 @@ const Podcast = ({ podcastData, category }: Props) => {
               podcastData={podcastData}
               bannerBreakpointRef={bannerBreakpointRef}
               imageSrc={imageSrc}
+              columnBreakpointRef={columnBreakpointRef}
             />
           </div>
           <PodcastHero
@@ -149,7 +152,11 @@ const Podcast = ({ podcastData, category }: Props) => {
             podcastData={podcastData}
           />
         </header>
-        <SponsorList handleDrawer={handleDrawer} podcastData={podcastData} />
+        <SponsorList
+          handleDrawer={handleDrawer}
+          podcastData={podcastData}
+          columnBreakpointRef={columnBreakpointRef}
+        />
       </div>
     </div>
   );

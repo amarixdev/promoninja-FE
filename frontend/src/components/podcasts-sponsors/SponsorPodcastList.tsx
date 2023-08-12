@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { RefObject, useState } from "react";
 import ChatBubble from "../community-input/ChatBubble";
 import Image from "next/image";
 import {
@@ -22,9 +22,13 @@ import Footer from "../layout/Footer";
 
 interface PodcastListProps {
   sponsorData: SponsorData;
+  columnBreakpointRef: RefObject<HTMLDivElement>;
 }
 
-const PodcastList = ({ sponsorData }: PodcastListProps) => {
+const PodcastList = ({
+  sponsorData,
+  columnBreakpointRef,
+}: PodcastListProps) => {
   const isBreakPoint = useMediaQuery(1023);
   const [preventHover, setPreventHover] = useState(false);
   const [selectedPodcast, setSelectedPodcast] = useState("");
@@ -147,19 +151,22 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
         /* Desktop */
         <></>
       )}
-      <div className="flex flex-col justify-evenly w-full text-[#aaaaaa] ">
-        <div className="flex justify-between w-full relative pt-14 base:mb-2 lg:mb-0 pl-6 lg:pt-8 lg:pl-8 lg:pb-2">
+      <div className="flex flex-col justify-evenly w-full text-[#aaaaaa]">
+        <div
+          ref={columnBreakpointRef}
+          className="flex justify-between w-full relative pt-14 base:mb-2 lg:mb-0 pl-6 lg:pt-8 lg:pl-8 lg:pb-2"
+        >
           <div className="flex relative right-4 lg:right-0">
-            <h3 className="font-light text-md relative pl-4 lg:px-4 tracking-widest">
+            <h3 className="font-light text-xs sm:text-sm relative pl-4 lg:px-4 tracking-widest">
               {`#`}
             </h3>
 
-            <h3 className="font-light text-sm sm:text-md relative px-4 tracking-widest">
+            <h3 className="font-light text-xs sm:text-sm  relative px-4 tracking-widest">
               {`Podcast`}
             </h3>
           </div>
           {isBreakPoint && (
-            <h3 className="font-light text-sm sm:text-md relative xs:pr-8 base:pr-4 tracking-widest">
+            <h3 className="font-light text-xs sm:text-sm  relative xs:pr-8 base:pr-4 tracking-widest">
               {`Link`}
             </h3>
           )}
@@ -167,7 +174,7 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
         <div className="w-[95%] border-b-[1px] "></div>
       </div>
 
-      <div className="w-full flex flex-col lg:h-[500px] pt-1 lg:pt-6 lg:overflow-y-auto pb-52">
+      <div className="w-full flex flex-col lg:h-[500px] pt-1 lg:pt-6  pb-52">
         {sponsorData?.podcast.map((podcast, index) => (
           <div
             key={podcast.title}
@@ -212,7 +219,7 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
               </div>
             ) : (
               /* Desktop */
-              <div className="w-full select-none ">
+              <div className="w-full select-none">
                 <div className=" flex justify-between">
                   <div
                     className={`w-full flex justify-between items-center bg-[#3c3c3c53] py-2 ${
@@ -286,7 +293,7 @@ const PodcastList = ({ sponsorData }: PodcastListProps) => {
                       <div></div>
                     ) : (
                       <Box p="10px" bg="transparent" rounded="md" shadow="md">
-                        <div className="flex flex-col w-full px-10">
+                        <div className="flex flex-col w-full px-10 ">
                           {getPodcast(podcast).url === previousPodcast ? (
                             <div>
                               {" "}
