@@ -45,7 +45,7 @@ const PodcastHero = ({
       className={`items-center w-full h-full flex justify-center`}
       style={gradientStyle}
     >
-      <div className="flex flex-col justify-center items-center w-full relative pt-[60px] lg:mt-12">
+      <div className="flex flex-col justify-center items-center w-full relative pt-[60px] sm:pt-[100px] lg:mt-12">
         <Image
           src={imageSrc}
           alt={podcastData.title}

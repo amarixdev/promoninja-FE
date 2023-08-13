@@ -316,9 +316,8 @@ const SponsorList = ({
               currentSponsors={currentSponsors}
             />
           )}
-          <footer>
-            <Footer />
-          </footer>
+
+          <Footer />
         </div>
       </div>
     </main>

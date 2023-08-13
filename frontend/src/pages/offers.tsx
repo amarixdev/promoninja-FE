@@ -166,9 +166,9 @@ const Offers = ({
           </main>
 
           {!rendering && (
-            <footer className={`${isBreakpoint && "pb-28"}`}>
+            <div className={`${isBreakpoint && "pb-28"}`}>
               <Footer />
-            </footer>
+            </div>
           )}
         </div>
       </div>

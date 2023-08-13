@@ -30,8 +30,8 @@ const Podcasts = ({ categoryPreviews }: Props) => {
       <div
         className={`w-full bg-gradient-to-b lg:ml-[240px] ${
           ninjaMode
-            ? "from-[#0e0e0e] via-[#0e0e0e] to-[black]"
-            : "from-[#1e1e1e] via-[#1a1a1a] to-[#151515]"
+            ? "from-[#101010] via-[#0e0e0e]"
+            : "from-[#1e1e1e] via-[#1a1a1a]"
         }  relative overflow-x-hidden z-1 mt-10`}
       >
         {ninjaMode ? (
@@ -79,9 +79,8 @@ const Podcasts = ({ categoryPreviews }: Props) => {
             ))}
           </main>
         )}
-        <footer>
-          <Footer />
-        </footer>
+
+        <Footer />
       </div>
     </div>
   );

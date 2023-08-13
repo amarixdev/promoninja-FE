@@ -139,9 +139,12 @@ const CommunityModal = ({
         size={modalSize}
       >
         <ModalOverlay color={"black"} />
-        <ModalContent>
+        <ModalContent borderRadius={"2xl"} bgColor={"transparent"}>
           <ModalCloseButton />
-          <ModalBody className="bg-gradient-to-b from-[#222222] to-[#151515] shadow-lg shadow-black">
+          <ModalBody
+            borderRadius={"2xl"}
+            className="bg-[#222] shadow-lg shadow-black"
+          >
             <div className=" w-full flex justify-center items-center">
               <div className="gap-2 flex flex-col justify-center items-center py-4">
                 <h2 className="font-extrabold text-2xl ">Community Input</h2>

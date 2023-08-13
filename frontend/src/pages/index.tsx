@@ -60,7 +60,7 @@ const Home = ({
               ></div>
             )}
             <Header page="Home" />
-            <div className="w-full flex flex-col items-start justify-center z-10">
+            <main className="w-full flex flex-col items-start justify-center z-10">
               <header>
                 <div className="w-full mt-20 mb-6 gap-2 flex flex-col items-center justify-center relative ">
                   <Image
@@ -89,27 +89,25 @@ const Home = ({
                   </div>
                 </div>
               </header>
-              <main>
-                <PopularPodcasts
-                  ninjaMode={ninjaMode}
-                  topPicksData={topPicksData}
-                />
-                <TrendingOffers
-                  ninjaMode={ninjaMode}
-                  trendingOffersData={trendingOffersData}
-                />
-                <ShopCategories
-                  categoryData={categoryData}
-                  categoryIndex={categoryIndex}
-                  setCategoryIndex={setCategoryIndex}
-                  setNinjaMode={setNinjaMode}
-                />
-                <SponsorsAZ sponsorsData={sponsorsData} />
-              </main>
-            </div>
-            <footer>
-              <Footer />
-            </footer>
+
+              <PopularPodcasts
+                ninjaMode={ninjaMode}
+                topPicksData={topPicksData}
+              />
+              <TrendingOffers
+                ninjaMode={ninjaMode}
+                trendingOffersData={trendingOffersData}
+              />
+              <ShopCategories
+                categoryData={categoryData}
+                categoryIndex={categoryIndex}
+                setCategoryIndex={setCategoryIndex}
+                setNinjaMode={setNinjaMode}
+              />
+              <SponsorsAZ sponsorsData={sponsorsData} />
+            </main>
+
+            <Footer />
           </div>
         </div>
       }

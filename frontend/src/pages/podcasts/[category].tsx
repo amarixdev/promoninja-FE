@@ -135,8 +135,8 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                   aria-label={`${categoryName} podcasts `}
                   className={`${
                     ninjaMode
-                      ? "bg-gradient-to-b from-[#0a0a0a] to-[#020202]   "
-                      : "bg-gradient-to-b from-[#1b1b1b] to-[#121212]"
+                      ? "bg-gradient-to-b from-[#0a0a0a] via-[#020202]   "
+                      : "bg-gradient-to-b from-[#1b1b1b] via-[#121212]"
                   }  relative grid-cols-2 ${
                     gridBreakPoint || "grid-cols-3"
                   } sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 3xl:grid-cols-6 4xl:grid-cols-7 grid gap-y-8 gap-x-4 lg:gap-x-8 lg:gap-y-10 p-6 lg:p-10 pb-96 lg:pb-52`}
@@ -228,11 +228,10 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
                     page="category"
                     currentPodcasts={currentPodcasts}
                   />
+
+                  <Footer />
                 </div>
               </main>
-              <footer className={isBreakPoint ? "" : "relative bottom-20"}>
-                <Footer />
-              </footer>
             </div>
           }
         </div>

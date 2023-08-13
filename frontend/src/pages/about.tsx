@@ -136,9 +136,8 @@ const About = (props: Props) => {
               className="mt-10"
             />
           </div>
-          <footer>
-            <Footer />
-          </footer>
+
+          <Footer />
         </div>
       </div>
     </div>

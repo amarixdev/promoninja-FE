@@ -61,11 +61,14 @@ const ChatBubble = ({
           setInView((prev) => !prev);
         }}
       >
-        <div
-          className={` relative active:scale-95 w-[50%] lg:w-[30%] rounded-lg flex justify-center items-center cursor-pointer gap-3 py-2 bg-gradient-to-r from-[#2c2c2c] to-[#202020] lg:hover:bg-gradient-t-b lg:hover:to-[#2f2f2f] lg:hover:from-[#3b3b3b] shadow-lg shadow-black active:shadow-none transition-all duration-150 ease-in-out`}
+        <Button
+          px={20}
+          py={8}
+          borderRadius={"xl"}
+          className="active:scale-95 transition-all duration-300 ease-in-out"
         >
-          <IoChatboxEllipsesOutline size={50} color="#777" />
-        </div>
+          <IoChatboxEllipsesOutline size={40} color="#777" />
+        </Button>
       </div>
     );
   };
@@ -73,7 +76,7 @@ const ChatBubble = ({
   const mobileImageSize = page === "sponsor" ? 50 : 70;
 
   return (
-    <section>
+    <div>
       <ToggleButton />
       <CommunityModal
         isOpen={isOpenCommunity}
@@ -83,9 +86,9 @@ const ChatBubble = ({
       />
       {isBreakPoint ? (
         <div
-          className={`  ${
-            ninjaMode && page !== "podcast" ? style.speechDark : style.speech
-          } ${style.bottom} px-4 pt-2 pb-6 w-[90%] ${
+          className={`  ${style.speech} ${
+            style.bottom
+          } px-4 pt-2 pb-6 w-[90%] ${
             inView ? "bottom-10 opacity-100" : "bottom-[-300px] opacity-50"
           } transition-all duration-[500ms] right-4 z-[100]`}
         >
@@ -168,7 +171,7 @@ const ChatBubble = ({
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 };
 

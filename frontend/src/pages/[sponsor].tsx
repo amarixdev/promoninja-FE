@@ -1,9 +1,9 @@
 import { Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useRef } from "react";
+import SponsorBanner from "../components/banners/SponsorBanner";
 import Sidebar from "../components/layout/Sidebar";
 import BackButton from "../components/misc/BackButton";
-import SponsorBanner from "../components/banners/SponsorBanner";
 import SponsorHero from "../components/podcasts-sponsors/SponsorHero";
 import PodcastList from "../components/podcasts-sponsors/SponsorPodcastList";
 import { NavContext } from "../context/navContext";
@@ -16,7 +16,6 @@ import {
   useSetCurrentPage,
 } from "../utils/hooks";
 import { SponsorCategory, SponsorData } from "../utils/types";
-import Footer from "../components/layout/Footer";
 
 interface Props {
   sponsorData: SponsorData;
@@ -33,6 +32,7 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
   const categoryIndex = sponsorCategoryData?.findIndex(
     (sponsor) => sponsor.name === sponsorData?.sponsorCategory[0].name
   );
+  console.log(columnBreakPointRef);
   const isBreakPoint = useMediaQuery(1023);
   useSetCurrentPage({
     home: false,
@@ -46,45 +46,39 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="lg:ml-[240px] w-full h-screen ">
-        {/* {ninjaMode ? (
+      <div className="lg:ml-[240px] w-full">
+        {
           <div
-            className={` from-[#151515] bg-gradient-to-b  absolute w-fit h-[400px] z-0 `}
-          ></div>
-        ) : (
-          <div
-            className={` from-[#606060] bg-gradient-to-b  absolute w-fit h-[400px] z-0 `}
-          ></div>
-        )} */}
-
-        <div
-          className={` flex flex-col items-center w-full ${
-            ninjaMode && !isBreakPoint
-              ? "bg-gradient-to-b from-[#0c0c0c]  "
-              : !isBreakPoint
-              ? "bg-gradient-to-b from-[#525252] "
-              : ""
-          }`}
-        >
-          <section className={`fixed w-full z-50 lg:ml-[240px] `}>
-            <SponsorBanner
+            className={` flex flex-col items-center w-full ${
+              ninjaMode && !isBreakPoint
+                ? "bg-gradient-to-b from-[#0c0c0c]  "
+                : !isBreakPoint
+                ? "bg-gradient-to-b from-[#525252] "
+                : ""
+            }`}
+          >
+            {
+              <div className={`fixed w-full z-50 lg:ml-[240px]`}>
+                <SponsorBanner
+                  bannerBreakpointRef={bannerBreakpointRef}
+                  sponsorData={sponsorData}
+                  columnBreakpointRef={columnBreakPointRef}
+                />
+              </div>
+            }
+            <SponsorHero
               bannerBreakpointRef={bannerBreakpointRef}
+              categoryIndex={categoryIndex}
+              ninjaMode={ninjaMode}
+              setCategoryIndex={setCategoryIndex}
+              sponsorData={sponsorData}
+            />
+            <PodcastList
               columnBreakpointRef={columnBreakPointRef}
               sponsorData={sponsorData}
             />
-          </section>
-          <SponsorHero
-            bannerBreakpointRef={bannerBreakpointRef}
-            categoryIndex={categoryIndex}
-            ninjaMode={ninjaMode}
-            setCategoryIndex={setCategoryIndex}
-            sponsorData={sponsorData}
-          />
-          <PodcastList
-            sponsorData={sponsorData}
-            columnBreakpointRef={columnBreakPointRef}
-          />
-        </div>
+          </div>
+        }
       </div>
       <BackButton sponsorPage={true} />
     </div>

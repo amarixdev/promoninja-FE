@@ -365,9 +365,7 @@ const PodcastList = ({
             message="podcasts typically earn 5% to 20% commission when listeners use affiliate links?"
             page="sponsor"
           />
-          <footer>
-            <Footer />
-          </footer>
+          <Footer />
         </div>
       </div>
     </section>

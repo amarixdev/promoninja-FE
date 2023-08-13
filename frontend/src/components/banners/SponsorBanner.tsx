@@ -24,6 +24,8 @@ const SponsorBanner = ({
     isBreakPoint ? 113 : 130
   );
 
+  console.log(columnText);
+
   const { ninjaMode } = NavContext();
 
   return (
