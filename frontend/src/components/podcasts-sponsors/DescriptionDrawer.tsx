@@ -19,6 +19,7 @@ import BrokenLinkModal from "../community-input/BrokenLinkModal";
 import PromoCodeButton from "./PromoCodeButton";
 import fallbackImage from "../../public/assets/fallback.png";
 import { GoReport } from "react-icons/go";
+import { useRouter } from "next/router";
 
 interface Props {
   isOpen: boolean;
@@ -68,6 +69,7 @@ const DescriptionDrawer = ({
     backgroundImage: `linear-gradient(to bottom, #11111100, #0000006f, #0000009f)`,
   };
   const isBreakPoint = useMediaQuery(1023);
+  const router = useRouter();
   const {
     handleBrokenLink,
     isOpenBrokenLink,
@@ -224,17 +226,15 @@ const DescriptionDrawer = ({
                             Visit{" "}
                           </h2>
                           <div className="w-full flex flex-col  mt-2 items-center justify-center">
-                            <Link
-                              href={convertToFullURL(drawer.url)}
-                              target="_blank"
-                              className={`text-lg active:scale-95`}
+                            <Button
+                              onClick={() =>
+                                window.open(convertToFullURL(drawer.url))
+                              }
                             >
-                              <Button>
-                                <p className="text-sm xs:text-base sm:text-base md:text-lg">
-                                  {drawer.url}
-                                </p>
-                              </Button>
-                            </Link>
+                              <p className="text-sm xs:text-base sm:text-base md:text-lg">
+                                {drawer.url}
+                              </p>
+                            </Button>
                           </div>
                         </div>
                         {drawer.promoCode &&

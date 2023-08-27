@@ -91,7 +91,7 @@ const SponsorList = ({
             )}
           </div>
         </div>
-        <div className="w-[95%] border-b-[1px] pb-8 pt-2 mt-2 mb-1"></div>
+        <div className="w-full border-b-[1px] pb-8 pt-2 mt-2 mb-1"></div>
       </div>
       <div className="w-full bg-gradient-to-b from-[#0e0e0e] via-[#121212] to-[#161616] flex flex-col pb-56 lg:pb-40">
         {!hasNoSponsors ? (

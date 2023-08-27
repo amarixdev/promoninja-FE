@@ -125,8 +125,9 @@ const ChatBubble = ({
               className="w-full bg-[#222] mt-2 rounded-lg py-2"
               ref={navigateButtonRef}
               onClick={() => onOpenCommunity()}
+              
             >
-              <p className="text-[#f1f1f1] font-semibold active:scale-95 text-sm xs:text-base sm:text-lg">
+              <p className="text-[#f1f1f1] font-semibold text-sm xs:text-base sm:text-lg">
                 Click Here
               </p>
             </Button>

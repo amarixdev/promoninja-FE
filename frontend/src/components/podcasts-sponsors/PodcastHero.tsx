@@ -11,6 +11,7 @@ import {
 } from "../../utils/functions";
 import { FaEllipsisV } from "react-icons/fa";
 import { useCopyToClipboard, useMediaQuery } from "../../utils/hooks";
+import { useRouter } from "next/router";
 
 interface PodcastHeroProps {
   imageSrc: string;
@@ -28,10 +29,14 @@ const PodcastHero = ({
 
   handleDrawer,
 }: PodcastHeroProps) => {
+  const router = useRouter();
   const spotifyGreen = "1DB954";
   const backgroundColor = podcastData?.backgroundColor;
   const [truncated, setTruncated] = useState(true);
   const isBreakPoint = useMediaQuery(1023);
+  const xsBreakPoint = useMediaQuery(390);
+  const buttonFontSize = xsBreakPoint ? "xs" : "sm";
+
   const gradientStyle = {
     backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, #000000)`,
   };
@@ -40,48 +45,54 @@ const PodcastHero = ({
   const copyToClipboard = () => {
     handleCopy(window.location.href);
   };
+
   return (
     <div
-      className={`items-center w-full h-full flex justify-center`}
+      className={`items-center w-full h-full flex justify-center `}
       style={gradientStyle}
     >
       <div className="flex flex-col justify-center items-center w-full relative pt-[60px] sm:pt-[100px] lg:mt-12">
+        <div className="absolute bottom-0 w-full h-10 bg-gradient-to-b from-black to-"></div>
         <Image
           src={imageSrc}
           alt={podcastData.title}
           width={250}
           height={250}
           priority
-          className={`z-10 rounded-lg lg:pt-6 mt-14 lg:mb-4 relative base:w-[180px] xs:w-[220px] sm:w-[250px] shadow-2xl shadow-black`}
+          className={`z-10 rounded-lg lg:mt-[72px] mt-14 lg:mb-4 relative base:w-[180px] xs:w-[220px] sm:w-[250px] shadow-2xl shadow-black`}
         />
-        <div className="w-full my-10 bg-gradient-to-b from-[#00000000] via-black to-black">
+        <div className="relative w-full my-10 bg-gradient-to-b from-[#00000000] via-black to-black">
+          <div className="hidden lg:block absolute w-full h-10 top-10 bg-black"></div>
           <h1
             ref={bannerBreakpointRef}
-            className=" text-center base:text-lg xs:text-xl sm:text-3xl font-bold lg:font-extrabold px-4 "
+            className="text-center base:text-lg xs:text-xl sm:text-3xl font-bold lg:font-extrabold px-4 "
           >
             {podcastData?.title}
           </h1>
-          <h3 className="text-center base:text-sm font-medium xs:text-base mb-4 text-[#aaaaaa] px-4 mt-2">
+          <h3 className="z-10 relative text-center base:text-sm font-medium xs:text-base mb-4 text-[#aaaaaa] px-4 mt-2">
             {podcastData?.publisher}{" "}
           </h3>
           {isBreakPoint || (
             <div className="w-full flex items-center justify-between pb-4 bg-black">
               <div className="flex items-center px-6 gap-3 ">
-                <Link href={`/podcasts/${convertToSlug(category)}`}>
-                  <Button className="active:scale-95 transition-all duration-300 ease-in-out">
-                    <p className="text-sm">
-                      {capitalizeString(
-                        category.split("-").join(" ").toLowerCase()
-                      )}
-                    </p>
-                  </Button>
-                </Link>
+                <Button
+                  onClick={() =>
+                    router.push(`/podcasts/${convertToSlug(category)}`)
+                  }
+                  className="active:scale-95 transition-all duration-300 ease-in-out"
+                  fontSize={"sm"}
+                >
+                  {capitalizeString(
+                    category.split("-").join(" ").toLowerCase()
+                  )}
+                </Button>
                 <Button
                   onClick={() => copyToClipboard()}
-                  className="active:scale-95 transition-all duration-300 ease-in-out"
+                  className="active:scale-95 transition-all duration-300 ease-in-out flex gap-[10px]"
+                  fontSize={"sm"}
                 >
                   <BsShareFill size={14} />
-                  <h3 className="ml-3 text-sm">Share</h3>
+                  Share
                 </Button>
               </div>
               <Link
@@ -99,19 +110,22 @@ const PodcastHero = ({
           {isBreakPoint && (
             <div className="px-6 flex items-center justify-between gap-4 bg-black">
               <div className="flex items-center gap-2">
-                <Link href={`/podcasts/${convertToSlug(category)}`}>
-                  <Button className="active:scale-95 transition-all duration-300 ease-in-out">
-                    <p className="text-xs xs:text-sm">
-                      {capitalizeString(
-                        category.split("-").join(" ").toLowerCase()
-                      )}
-                    </p>
-                  </Button>
-                </Link>
+                <Button
+                  onClick={() =>
+                    router.push(`/podcasts/${convertToSlug(category)}`)
+                  }
+                  className="z-[10] active:scale-95 transition-all duration-300 ease-in-out"
+                  fontSize={buttonFontSize}
+                >
+                  {capitalizeString(
+                    category.split("-").join(" ").toLowerCase()
+                  )}
+                </Button>
+
                 <Button
                   minW={"fit-content"}
                   onClick={() => copyToClipboard()}
-                  className="active:scale-95 transition-all duration-300 ease-in-out"
+                  className="z-[10] active:scale-95 transition-all duration-300 ease-in-out"
                 >
                   <BsShareFill size={15} />
                   <p className="ml-3 text-xs xs:text-sm">Share</p>

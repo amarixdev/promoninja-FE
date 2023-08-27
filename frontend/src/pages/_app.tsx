@@ -43,6 +43,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <link rel="icon" type="image/x-icon" href={favicon.src} />
         <title>PromoNinja</title>
+        <meta property="og:title" content="PromoNinja" />
+        <meta
+          property="og:description"
+          content="Empower Your Savings as You Support Your Favorite Podcasters! Discover Exclusive Discount Codes on Promoninja, Helping Shoppers Save on a Variety of Products"
+        />
+        <meta property="og:image" content="https://imgur.com/a/3DI68Yc" />
+        <meta property="og:url" content="https://promoninja.io" />
       </Head>
       <ApolloProvider client={client}>
         <ChakraProvider theme={theme}>

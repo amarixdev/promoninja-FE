@@ -7,6 +7,7 @@ import { BsShareFill } from "react-icons/bs";
 import { SponsorData } from "../../utils/types";
 import fallbackImage from "../../public/assets/fallback.png";
 import Logo from "../../public/assets/logo.png";
+import { useRouter } from "next/router";
 
 interface SponsorHeroProps {
   sponsorData: SponsorData;
@@ -24,11 +25,15 @@ const SponsorHero = ({
   ninjaMode,
   bannerBreakpointRef,
 }: SponsorHeroProps) => {
+  const router = useRouter();
   const isBreakPoint = useMediaQuery(1023);
+  const xsBreakPoint = useMediaQuery(390);
   const { handleCopy } = useCopyToClipboard();
   const copyToClipboard = () => {
     handleCopy(window.location.href);
   };
+
+  const buttonFontSize = xsBreakPoint ? "xs" : "sm";
 
   return (
     <div
@@ -69,16 +74,17 @@ const SponsorHero = ({
                 {sponsorData?.summary}
               </p>
               <div className="w-full flex items-center justify-start gap-2 px-4">
-                <Link href={"/offers"} className="">
-                  <Button
-                    className="active:scale-95 font-semibold "
-                    onClick={() => setCategoryIndex(categoryIndex)}
-                  >
-                    <p className="text-xs xs:text-sm">
-                      {sponsorData.sponsorCategory[0].name}
-                    </p>
-                  </Button>
-                </Link>
+                <Button
+                  className="active:scale-95 font-semibold"
+                  onClick={() => {
+                    setCategoryIndex(categoryIndex);
+                    router.push("/offers");
+                  }}
+                  fontSize={buttonFontSize}
+                >
+                  {sponsorData.sponsorCategory[0].name}
+                </Button>
+
                 <Button
                   className="active:scale-95 font-semibold "
                   onClick={() => copyToClipboard()}
@@ -140,14 +146,16 @@ const SponsorHero = ({
           <section>
             <div className="px-6 ">
               <div className="px-4 flex items-center gap-4">
-                <Link href={"/offers"}>
-                  <Button
-                    className="active:scale-95"
-                    onClick={() => setCategoryIndex(categoryIndex)}
-                  >
-                    <p>{sponsorData.sponsorCategory[0].name}</p>
-                  </Button>
-                </Link>
+                <Button
+                  className="active:scale-95"
+                  onClick={() => {
+                    setCategoryIndex(categoryIndex);
+                    router.push("/offers");
+                  }}
+                >
+                  {sponsorData.sponsorCategory[0].name}
+                </Button>
+
                 <Button
                   className="active:scale-95"
                   onClick={() => copyToClipboard()}
