@@ -104,7 +104,7 @@ const Sidebar = (props: Props) => {
       className={
         isBreakpoint
           ? "hidden"
-          : "min-w-[240px] fixed bg-black top-0 bottom-0 left-0 z-[999] transition-all duration-500 ease-in-out"
+          : "min-w-[240px] fixed border-2 bg-black top-0 bottom-0 left-0 z-[999] transition-all duration-500 ease-in-out"
       }
     >
       <nav aria-label="sidebar navigation" className="fixed">

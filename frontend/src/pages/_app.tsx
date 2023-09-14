@@ -43,6 +43,17 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <link rel="icon" type="image/x-icon" href={favicon.src} />
         <title>PromoNinja</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="description"
+          content="Empower Your Savings as You Support Your Favorite Podcasters! Discover Exclusive Discount Codes on Promoninja, Helping Shoppers Save on a Variety of Products"
+        />
+        <meta
+          name="keywords"
+          content="PromoNinja, discounts, savings, podcasters"
+        />
+
+        {/* Open Graph Tags */}
         <meta property="og:title" content="PromoNinja" />
         <meta
           property="og:description"
@@ -51,6 +62,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property="og:image" content="https://imgur.com/a/3DI68Yc" />
         <meta property="og:url" content="https://promoninja.io" />
       </Head>
+
       <ApolloProvider client={client}>
         <ChakraProvider theme={theme}>
           <ContextProvider>
