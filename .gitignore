@@ -1,3 +1,4 @@
 .DS_Store
 .env
 environment.ts
+node_modules
