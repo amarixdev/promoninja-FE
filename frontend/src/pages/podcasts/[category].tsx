@@ -28,7 +28,8 @@ import {
   useScrollRestoration,
   useSetCurrentPage,
 } from "../../utils/hooks";
-import { Category, PodcastData } from "../../utils/types";
+import type { Category } from "../../utils/types";
+import { PodcastData } from "../../utils/types";
 import { Spinner } from "@chakra-ui/react";
 import SplashScreen from "../splash";
 import { BsSpotify } from "react-icons/bs";
