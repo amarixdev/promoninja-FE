@@ -43,6 +43,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <link rel="icon" type="image/x-icon" href={favicon.src} />
         <title>PromoNinja</title>
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-3791078786312772"
+        ></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
           name="description"

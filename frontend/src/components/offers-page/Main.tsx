@@ -335,7 +335,7 @@ const Main = ({
                                   fontSize={"x-small"}
                                   className="group-hover:bg-[#555] p-3 group-active:scale-95"
                                 >
-                                  <p className="font-semibold">Support </p>
+                                  <p className="font-semibold">Promo Code </p>
                                 </Button>
                               </div>
                             ))}
@@ -559,7 +559,7 @@ const Main = ({
                                 fontSize={"x-small"}
                                 className="group-active:scale-95 group-hover:bg-[#555]"
                               >
-                                Support
+                                Promo Code
                               </Button>
                             </div>
                           ))}
@@ -575,7 +575,7 @@ const Main = ({
                         <p className=" text-left">
                           Choose a podcast to{" "}
                           <span className="font-bold">support</span>. Click to
-                          reveal their link.
+                          reveal their promo code.
                         </p>
                       </div>
                     </Box>

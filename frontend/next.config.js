@@ -2,12 +2,13 @@
 
 module.exports = {
   images: {
+    unoptimized: false,
     domains: ["i.scdn.co"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "**",
-      },
+      }
     ],
   },
 };
