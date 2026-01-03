@@ -13,7 +13,7 @@ import style from "../../../styles/style.module.css";
 import { capitalizeString } from "../../utils/functions";
 import { useMediaQuery } from "../../utils/hooks";
 import emailjs from "@emailjs/browser";
-import { ENV } from "../../../environment";
+// import { ENV } from "../../../environment";
 
 const CommunityModal = ({
   isOpen,
@@ -108,20 +108,20 @@ const CommunityModal = ({
       setLoading(true);
       setUserInputList((prev) => [...prev, text]);
       try {
-        await emailjs.sendForm(
-          ENV.SERVICE_ID,
-          ENV.TEMPLATE_ID,
-          formRef.current,
-          ENV.PUBLIC_KEY
-        );
-        setSubmitted(true);
-        setLoading(false);
-        setFormHeader(capitalizeString(text));
-        setText("");
-        messageRef.current?.classList.add(`${style.flashText}`);
-        setTimeout(() => {
-          messageRef.current?.classList.remove(`${style.flashText}`);
-        }, 1000);
+        // await emailjs.sendForm(
+        //   ENV.SERVICE_ID,
+        //   ENV.TEMPLATE_ID,
+        //   formRef.current,
+        //   ENV.PUBLIC_KEY
+        // );
+        // setSubmitted(true);
+        // setLoading(false);
+        // setFormHeader(capitalizeString(text));
+        // setText("");
+        // messageRef.current?.classList.add(`${style.flashText}`);
+        // setTimeout(() => {
+        //   messageRef.current?.classList.remove(`${style.flashText}`);
+        // }, 1000);
       } catch (error) {
         setText("");
         setFormHeader("Message Failed To Send: Server Error");

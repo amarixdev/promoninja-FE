@@ -244,42 +244,64 @@ const Category = ({ categoryPodcasts, category: categoryName }: Props) => {
 export default Category;
 
 export const getStaticPaths = async () => {
-  let { data: categoryData } = await client.query({
-    query: Operations.Queries.GetPodcastCategories,
-  });
+  try {
+    let { data: categoryData } = await client.query({
+      query: Operations.Queries.GetPodcastCategories,
+    });
 
-  categoryData = categoryData.getPodcastCategories;
+    categoryData = categoryData.getPodcastCategories;
 
-  const paths = categoryData.map((category: Category) => ({
-    params: { category: convertToSlug(category.name) },
-  }));
+    const paths = categoryData.map((category: Category) => ({
+      params: { category: convertToSlug(category.name) },
+    }));
 
-  return {
-    paths,
-    fallback: true,
-  };
+    return {
+      paths,
+      fallback: true,
+    };
+  } catch (error) {
+    console.error("Error fetching categories in getStaticPaths:", error);
+    return {
+      paths: [],
+      fallback: true,
+    };
+  }
 };
 
 export const getStaticProps = async ({ params }: any) => {
   const { category } = params;
   const slugToCategory = category.split("-").join(" ").toLowerCase();
 
-  const { data } = await client.query({
-    query: Operations.Queries.FetchCategoryPodcasts,
-    variables: {
-      input: {
+  try {
+    const { data } = await client.query({
+      query: Operations.Queries.FetchCategoryPodcasts,
+      variables: {
+        input: {
+          category: slugToCategory,
+        },
+      },
+    });
+
+    const categoryPodcasts = data.fetchCategoryPodcasts;
+
+    if (!categoryPodcasts || categoryPodcasts.length === 0) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const oneWeek = 604800;
+    return {
+      props: {
+        categoryPodcasts,
         category: slugToCategory,
       },
-    },
-  });
-
-  const categoryPodcasts = data.fetchCategoryPodcasts;
-  const oneWeek = 604800;
-  return {
-    props: {
-      categoryPodcasts,
-      category: slugToCategory,
-    },
-    revalidate: 604800,
-  };
+      revalidate: 604800,
+    };
+  } catch (error) {
+    console.error("Error fetching category podcasts in getStaticProps:", error);
+    return {
+      notFound: true,
+    };
+  }
 };

@@ -165,27 +165,43 @@ const Podcast = ({ podcastData, category }: Props) => {
 export default Podcast;
 
 export const getStaticPaths = async () => {
-  let { data: podcastsData } = await client.query({
-    query: Operations.Queries.GetPodcasts,
-    variables: {
-      input: {
-        path: true,
+  try {
+    let { data: podcastsData } = await client.query({
+      query: Operations.Queries.GetPodcasts,
+      variables: {
+        input: {
+          path: true,
+        },
       },
-    },
-  });
+    });
 
-  podcastsData = podcastsData.getPodcasts;
-  const paths = podcastsData.map((podcast: PodcastData) => ({
-    params: {
-      category: convertToSlug(podcast.category[0].name),
-      podcast: convertToSlug(podcast.title),
-    },
-  }));
+    podcastsData = podcastsData?.getPodcasts;
+    
+    if (!podcastsData) {
+      return {
+        paths: [],
+        fallback: true,
+      };
+    }
 
-  return {
-    paths,
-    fallback: true,
-  };
+    const paths = podcastsData.map((podcast: PodcastData) => ({
+      params: {
+        category: convertToSlug(podcast.category[0].name),
+        podcast: convertToSlug(podcast.title),
+      },
+    }));
+
+    return {
+      paths,
+      fallback: true,
+    };
+  } catch (error) {
+    console.error("Error fetching podcasts in getStaticPaths:", error);
+    return {
+      paths: [],
+      fallback: true,
+    };
+  }
 };
 
 export const getStaticProps = async ({ params }: any) => {
@@ -202,6 +218,13 @@ export const getStaticProps = async ({ params }: any) => {
     });
 
     podcastData = podcastData.getPodcast;
+
+    if (!podcastData) {
+      return {
+        notFound: true,
+      };
+    }
+
     const oneWeek = 604800;
     return {
       props: {
@@ -211,6 +234,9 @@ export const getStaticProps = async ({ params }: any) => {
       revalidate: oneWeek,
     };
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching podcast data in getStaticProps:", error);
+    return {
+      notFound: true,
+    };
   }
 };

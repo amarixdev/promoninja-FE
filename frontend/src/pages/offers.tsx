@@ -179,37 +179,53 @@ const Offers = ({
 export default Offers;
 
 export const getStaticProps = async () => {
-  let { data: sponsorsData } = await client.query({
-    query: Operations.Queries.GetSponsors,
-    variables: {
-      input: {
-        offset: 0,
-        pageSize: 15,
-        offerPage: true,
+  try {
+    let { data: sponsorsData } = await client.query({
+      query: Operations.Queries.GetSponsors,
+      variables: {
+        input: {
+          offset: 0,
+          pageSize: 15,
+          offerPage: true,
+        },
       },
-    },
-  });
+    });
 
-  let { data: sponsorCategoryData } = await client.query({
-    query: Operations.Queries.GetSponsorCategories,
-  });
+    let { data: sponsorCategoryData } = await client.query({
+      query: Operations.Queries.GetSponsorCategories,
+    });
 
-  let { data: sponsorsCount } = await client.query({
-    query: Operations.Queries.GetSponsorsCount,
-    variables: {
-      input: {
-        isCategory: false,
+    let { data: sponsorsCount } = await client.query({
+      query: Operations.Queries.GetSponsorsCount,
+      variables: {
+        input: {
+          isCategory: false,
+        },
       },
-    },
-  });
+    });
 
-  sponsorCategoryData = sponsorCategoryData?.getSponsorCategories;
-  sponsorsData = sponsorsData.getSponsors;
-  sponsorsCount = sponsorsCount?.getSponsorsCount;
-  const oneWeek = 604800;
+    sponsorCategoryData = sponsorCategoryData?.getSponsorCategories;
+    sponsorsData = sponsorsData?.getSponsors;
+    sponsorsCount = sponsorsCount?.getSponsorsCount;
+    const oneWeek = 604800;
 
-  return {
-    props: { sponsorsData, sponsorCategoryData, sponsorsCount },
-    revalidate: oneWeek,
-  };
+    return {
+      props: {
+        sponsorsData: sponsorsData || [],
+        sponsorCategoryData: sponsorCategoryData || [],
+        sponsorsCount: sponsorsCount || 0,
+      },
+      revalidate: oneWeek,
+    };
+  } catch (error) {
+    console.error("Error fetching offers page data:", error);
+    return {
+      props: {
+        sponsorsData: [],
+        sponsorCategoryData: [],
+        sponsorsCount: 0,
+      },
+      revalidate: 60,
+    };
+  }
 };

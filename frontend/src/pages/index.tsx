@@ -61,7 +61,7 @@ const Home = ({
             )}
             <Header page="Home" />
             <main className="w-full flex flex-col items-start justify-center z-10">
-              <header>
+              <header className="w-full">
                 <div className="w-full mt-20 mb-6 gap-2 flex flex-col items-center justify-center relative ">
                   <Image
                     src={LogoText}
@@ -118,76 +118,89 @@ const Home = ({
 export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const popularPodcasts = [
-    "Huberman Lab",
-    "Bad Friends",
-    "Almost Adulting with Violet Benson",
-    "Lex Fridman Podcast",
-    "Duncan Trussell Family Hour",
-    "Pardon My Take",
-    "This Past Weekend",
-    "Science Vs",
-    "The Always Sunny Podcast",
-    "Normal Gossip",
-    "KILL TONY",
-    "Murder, Mystery & Makeup",
-    "On Purpose with Jay Shetty",
-    "Last Podcast On The Left",
-    "SmartLess",
-  ];
-  let { data: topPicksData } = await client.query({
-    query: Operations.Queries.GetTopPicks,
-    variables: {
-      input: {
-        podcastTitles: popularPodcasts,
+  try {
+    const popularPodcasts = [
+      "Huberman Lab",
+      "Bad Friends",
+      "Almost Adulting with Violet Benson",
+      "Lex Fridman Podcast",
+      "Duncan Trussell Family Hour",
+      "Pardon My Take",
+      "This Past Weekend",
+      "Science Vs",
+      "The Always Sunny Podcast",
+      "Normal Gossip",
+      "KILL TONY",
+      "Murder, Mystery & Makeup",
+      "On Purpose with Jay Shetty",
+      "Last Podcast On The Left",
+      "SmartLess",
+    ];
+    let { data: topPicksData } = await client.query({
+      query: Operations.Queries.GetTopPicks,
+      variables: {
+        input: {
+          podcastTitles: popularPodcasts,
+        },
       },
-    },
-  });
+    });
 
-  const trendingOffers = [
-    "Athletic Greens",
-    "Tushy",
-    "Helix Mattress",
-    "SquareSpace",
-    "ExpressVPN",
-  ];
+    const trendingOffers = [
+      "Athletic Greens",
+      "Tushy",
+      "Helix Mattress",
+      "SquareSpace",
+      "ExpressVPN",
+    ];
 
-  let { data: trendingOffersData } = await client.query({
-    query: Operations.Queries.GetTrendingOffers,
-    variables: {
-      input: {
-        sponsors: trendingOffers,
+    let { data: trendingOffersData } = await client.query({
+      query: Operations.Queries.GetTrendingOffers,
+      variables: {
+        input: {
+          sponsors: trendingOffers,
+        },
       },
-    },
-  });
+    });
 
-  let { data: sponsorsData } = await client.query({
-    query: Operations.Queries.GetSponsors,
-    variables: {
-      input: {
-        offset: 0,
-        pageSize: 100,
-        offerPage: false,
+    let { data: sponsorsData } = await client.query({
+      query: Operations.Queries.GetSponsors,
+      variables: {
+        input: {
+          offset: 0,
+          pageSize: 100,
+          offerPage: false,
+        },
       },
-    },
-  });
+    });
 
-  let { data: categoryData } = await client.query({
-    query: Operations.Queries.GetSponsorCategories,
-  });
+    let { data: categoryData } = await client.query({
+      query: Operations.Queries.GetSponsorCategories,
+    });
 
-  sponsorsData = sponsorsData?.getSponsors;
-  categoryData = categoryData?.getSponsorCategories;
-  topPicksData = topPicksData?.getTopPicks;
-  trendingOffersData = trendingOffersData?.getTrendingOffers;
-  const oneWeek = 604800;
-  return {
-    props: {
-      sponsorsData,
-      categoryData,
-      topPicksData,
-      trendingOffersData,
-    },
-    revalidate: oneWeek,
-  };
+    sponsorsData = sponsorsData?.getSponsors;
+    categoryData = categoryData?.getSponsorCategories;
+    topPicksData = topPicksData?.getTopPicks;
+    trendingOffersData = trendingOffersData?.getTrendingOffers;
+    const oneWeek = 604800;
+    return {
+      props: {
+        sponsorsData: sponsorsData || [],
+        categoryData: categoryData || [],
+        topPicksData: topPicksData || [],
+        trendingOffersData: trendingOffersData || [],
+      },
+      revalidate: oneWeek,
+    };
+  } catch (error) {
+    console.error("Error fetching home page data:", error);
+    return {
+      props: {
+        sponsorsData: [],
+        categoryData: [],
+        topPicksData: [],
+        trendingOffersData: [],
+      },
+      revalidate: 60,
+    };
+  }
 };

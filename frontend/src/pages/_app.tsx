@@ -13,19 +13,19 @@ import favicon from "../public/favicon.ico";
 import SplashScreen from "./splash";
 import FooterBar from "../components/layout/FooterBar";
 import TagManager, { TagManagerArgs } from "react-gtm-module";
-import { GTM_ID } from "../../environment";
+// import { GTM_ID } from "../../environment";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const gtmId = GTM_ID;
-  const tagManagerArgs: TagManagerArgs = useMemo(
-    () => ({
-      gtmId,
-    }),
-    [gtmId]
-  );
-  useEffect(() => {
-    TagManager.initialize(tagManagerArgs);
-  }, [tagManagerArgs]);
+  // const gtmId = GTM_ID;
+  // const tagManagerArgs: TagManagerArgs = useMemo(
+  //   () => ({
+  //     gtmId,
+  //   }),
+  //   [gtmId]
+  // );
+  // useEffect(() => {
+  //   TagManager.initialize(tagManagerArgs);
+  // }, [tagManagerArgs]);
 
   const isLoading = useLoadingScreen();
   const [splashScreen, setSplashScreen] = useState(true);

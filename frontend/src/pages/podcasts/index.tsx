@@ -87,39 +87,58 @@ const Podcasts = ({ categoryPreviews }: Props) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { data: podcastCategories } = await client.query({
-    query: Operations.Queries.GetPodcastCategories,
-  });
-
-  const categoryTitles = podcastCategories?.getPodcastCategories.map(
-    (category: any) => category.name
-  );
-  const categoryPromises = categoryTitles.map(async (category: string) => {
-    const { data } = await client.query({
-      query: Operations.Queries.FetchCategoryPodcasts,
-      variables: {
-        input: {
-          category,
-        },
-      },
+  try {
+    const { data: podcastCategories } = await client.query({
+      query: Operations.Queries.GetPodcastCategories,
     });
-    return { [category]: data };
-  });
 
-  const categoriesData = await Promise.all(categoryPromises);
+    const categories = podcastCategories?.getPodcastCategories;
+    
+    if (!categories || categories.length === 0) {
+      return {
+        props: {
+          categoryPreviews: [],
+        },
+        revalidate: 60,
+      };
+    }
 
-  const categoryPreviews = categoriesData.map((category) => {
-    const key = Object.keys(category)[0];
-    const value = category[key].fetchCategoryPodcasts;
-    return { [key]: value };
-  });
-  const oneWeek = 604800;
-  return {
-    props: {
-      categoryPreviews,
-    },
-    revalidate: oneWeek,
-  };
+    const categoryTitles = categories.map((category: any) => category.name);
+    const categoryPromises = categoryTitles.map(async (category: string) => {
+      const { data } = await client.query({
+        query: Operations.Queries.FetchCategoryPodcasts,
+        variables: {
+          input: {
+            category,
+          },
+        },
+      });
+      return { [category]: data };
+    });
+
+    const categoriesData = await Promise.all(categoryPromises);
+
+    const categoryPreviews = categoriesData.map((category) => {
+      const key = Object.keys(category)[0];
+      const value = category[key].fetchCategoryPodcasts;
+      return { [key]: value };
+    });
+    const oneWeek = 604800;
+    return {
+      props: {
+        categoryPreviews,
+      },
+      revalidate: oneWeek,
+    };
+  } catch (error) {
+    console.error("Error fetching podcasts page data:", error);
+    return {
+      props: {
+        categoryPreviews: [],
+      },
+      revalidate: 60,
+    };
+  }
 };
 
 export default Podcasts;

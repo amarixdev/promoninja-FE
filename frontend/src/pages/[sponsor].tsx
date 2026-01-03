@@ -88,23 +88,31 @@ const SponsorPage = ({ sponsorData, sponsorCategoryData }: Props) => {
 export default SponsorPage;
 
 export const getStaticPaths = async () => {
-  let { data: sponsorsData } = await client.query({
-    query: Operations.Queries.GetSponsors,
-    variables: {
-      input: {
-        offerPage: false,
-        path: true,
+  try {
+    let { data: sponsorsData } = await client.query({
+      query: Operations.Queries.GetSponsors,
+      variables: {
+        input: {
+          offerPage: false,
+          path: true,
+        },
       },
-    },
-  });
-  sponsorsData = sponsorsData.getSponsors;
-  const paths = sponsorsData.map((sponsor: SponsorData) => ({
-    params: { sponsor: convertToSlug(sponsor.name) },
-  }));
-  return {
-    paths,
-    fallback: true,
-  };
+    });
+    sponsorsData = sponsorsData.getSponsors;
+    const paths = sponsorsData.map((sponsor: SponsorData) => ({
+      params: { sponsor: convertToSlug(sponsor.name) },
+    }));
+    return {
+      paths,
+      fallback: true,
+    };
+  } catch (error) {
+    console.error("Error fetching sponsors in getStaticPaths:", error);
+    return {
+      paths: [],
+      fallback: true,
+    };
+  }
 };
 
 export const getStaticProps = async ({ params }: any) => {
@@ -112,28 +120,42 @@ export const getStaticProps = async ({ params }: any) => {
   console.log(sponsor);
   const slugToSponsor = sponsor.split("-").join(" ").toLowerCase();
 
-  let { data: sponsorData } = await client.query({
-    query: Operations.Queries.GetSponsor,
-    variables: {
-      input: {
-        name: slugToSponsor,
+  try {
+    let { data: sponsorData } = await client.query({
+      query: Operations.Queries.GetSponsor,
+      variables: {
+        input: {
+          name: slugToSponsor,
+        },
       },
-    },
-  });
+    });
 
-  let { data: sponsorCategoryData } = await client.query({
-    query: Operations.Queries.GetSponsorCategories,
-  });
+    let { data: sponsorCategoryData } = await client.query({
+      query: Operations.Queries.GetSponsorCategories,
+    });
 
-  sponsorData = sponsorData?.getSponsor;
-  sponsorCategoryData = sponsorCategoryData?.getSponsorCategories;
-  const oneWeek = 604800;
+    sponsorData = sponsorData?.getSponsor;
+    sponsorCategoryData = sponsorCategoryData?.getSponsorCategories;
 
-  return {
-    props: {
-      sponsorData,
-      sponsorCategoryData,
-      revalidate: oneWeek,
-    },
-  };
+    if (!sponsorData) {
+      return {
+        notFound: true,
+      };
+    }
+
+    const oneWeek = 604800;
+
+    return {
+      props: {
+        sponsorData,
+        sponsorCategoryData,
+        revalidate: oneWeek,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching sponsor data in getStaticProps:", error);
+    return {
+      notFound: true,
+    };
+  }
 };
