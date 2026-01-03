@@ -82,8 +82,7 @@ const Home = ({
                   <div className="flex w-full sm:w-[60%] md:w-[50%] items-center justify-center px-6 pb-10 lg:pb-14">
                     <p className="text-center  font-light text-sm xs:text-base sm:text-lg lg:text-xl text-[#909090] tracking-widest italic">
                       &ldquo;<span className="font-bold">Save money</span> and{" "}
-                      <span className="font-semibold">give back</span> to your
-                      favorite creators when you shop with PromoNinja verified
+                      <span className="font-semibold">support</span> your favorite creators when you shop with PromoNinja verified
                       sponsors&rdquo;
                     </p>
                   </div>

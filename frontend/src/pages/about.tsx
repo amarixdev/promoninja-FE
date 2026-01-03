@@ -46,7 +46,7 @@ const About = (props: Props) => {
               <h1 className="font-extrabold text-6xl lg:text-7xl ">About</h1>
             </header>
             <main>
-              <section className="w-full px-8 pt-8 text-center lg:text-left">
+              {/* <section className="w-full px-8 pt-8 text-center lg:text-left">
                 <h2 className=" text-xl lg:text-2xl font-semibold">
                   Why did I build this?
                 </h2>
@@ -58,7 +58,7 @@ const About = (props: Props) => {
                   listener, I felt happy to repay the podcasting community for
                   the countless hours of entertainment.
                 </p>
-              </section>
+              </section> */}
               <section className="w-full mt-12 lg:mt-16  px-8 text-center lg:text-left">
                 <h2 className="font-semibold text-xl lg:text-2xl ">
                   What is PromoNinja?
