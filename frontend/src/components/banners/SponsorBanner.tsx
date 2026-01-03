@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { RefObject } from "react";
+import React, { RefObject, useState } from "react";
 import { scrollToTop, truncateString } from "../../utils/functions";
 import { SponsorData } from "../../utils/types";
 import { useBanner, useMediaQuery } from "../../utils/hooks";
@@ -23,11 +23,23 @@ const SponsorBanner = ({
     columnBreakpointRef,
     isBreakPoint ? 113 : 130
   );
+  const [imageFailed, setImageFailed] = useState(false);
 
   console.log(columnText);
 
   const { ninjaMode } = NavContext();
 
+  const getImageSrc = () => {
+    if (!sponsorData?.imageUrl || imageFailed) {
+      return fallbackImage;
+    }
+    return sponsorData.imageUrl;
+  };
+
+
+
+
+  
   return (
     <div
       onClick={() => scrollToTop()}
@@ -43,12 +55,13 @@ const SponsorBanner = ({
     >
       <div className="flex items-center p-3">
         <Image
-          src={sponsorData.imageUrl || fallbackImage}
+          src={getImageSrc()}
           alt={sponsorData.name}
           width={70}
           height={70}
           priority
           className={`min-w-[70px] min-h-[70px]  rounded-md p-2 relative`}
+          onError={() => setImageFailed(true)}
         />
         <div className="flex flex-col justify-center px-2">
           <h1

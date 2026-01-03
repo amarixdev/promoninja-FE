@@ -1,4 +1,4 @@
-import React, { Dispatch, RefObject, SetStateAction } from "react";
+import React, { Dispatch, RefObject, SetStateAction, useState } from "react";
 import { useCopyToClipboard, useMediaQuery } from "../../utils/hooks";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,12 +28,20 @@ const SponsorHero = ({
   const router = useRouter();
   const isBreakPoint = useMediaQuery(1023);
   const xsBreakPoint = useMediaQuery(390);
+  const [imageFailed, setImageFailed] = useState(false);
   const { handleCopy } = useCopyToClipboard();
   const copyToClipboard = () => {
     handleCopy(window.location.href);
   };
 
   const buttonFontSize = xsBreakPoint ? "xs" : "sm";
+
+  const getImageSrc = () => {
+    if (!sponsorData?.imageUrl || imageFailed) {
+      return fallbackImage;
+    }
+    return sponsorData.imageUrl;
+  };
 
   return (
     <div
@@ -52,12 +60,13 @@ const SponsorHero = ({
             <header>
               <div className="p-10  flex items-center justify-center relative ">
                 <Image
-                  src={sponsorData?.imageUrl || fallbackImage}
+                  src={getImageSrc()}
                   width={150}
                   height={150}
                   priority
                   alt={sponsorData?.name}
                   className="shadow-xl rounded-lg shadow-black z-10 relative base:w-[150px] xs:w-[180px] sm:w-[220px] base:h-[150px] xs:h-[180px] sm:h-[220px]"
+                  onError={() => setImageFailed(true)}
                 />
               </div>
               <div className="flex w-full items-center justify-center flex-col">
@@ -126,12 +135,13 @@ const SponsorHero = ({
         >
           <header className="p-10 flex items-center w-full">
             <Image
-              src={sponsorData?.imageUrl || fallbackImage}
+              src={getImageSrc()}
               width={230}
               height={230}
               priority
               alt={sponsorData?.name}
               className="shadow-xl shadow-black relative rounded-md w-[230px] h-[230px]"
+              onError={() => setImageFailed(true)}
             />
             <div className="flex flex-col items-start mx-4 p-6 ">
               <h2 className="font-bold text-sm relative top-4">Sponsor</h2>

@@ -15,6 +15,7 @@ import { OfferData, PodcastData } from "../../utils/types";
 import BrokenLinkModal from "../community-input/BrokenLinkModal";
 import ChatBubble from "../community-input/ChatBubble";
 import Footer from "../layout/Footer";
+import fallbackImage from "../../public/assets/fallback.png";
 import PromoCodeButton from "./PromoCodeButton";
 
 interface SponsorListProps {
@@ -34,6 +35,7 @@ const SponsorList = ({
   const [isOpen, setIsOpen] = useState(false);
   const [preventHover, setPreventHover] = useState(false);
   const [selectedSponsor, setSelectedSponsor] = useState("");
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const hasNoSponsors = podcastData?.sponsors.length === 0;
   const {
     handleBrokenLink,
@@ -43,6 +45,17 @@ const SponsorList = ({
     podcastState,
     setPodcastState,
   } = useReportIssue(selectedSponsor);
+
+  const handleImageError = (sponsorName: string) => {
+    setFailedImages((prev) => new Set(prev).add(sponsorName));
+  };
+
+  const getImageSrc = (imageUrl: string, sponsorName: string) => {
+    if (!imageUrl || failedImages.has(sponsorName)) {
+      return fallbackImage;
+    }
+    return imageUrl;
+  };
 
   const getSponsor = (offerSponsor: string) => {
     return podcastData?.sponsors.filter(
@@ -114,16 +127,18 @@ const SponsorList = ({
                     {index + 1}
                   </p>
                   <Image
-                    src={
+                    src={getImageSrc(
                       podcastData?.sponsors.filter(
                         (sponsor) => sponsor.name === offer?.sponsor
-                      )[0].imageUrl
-                    }
+                      )[0].imageUrl,
+                      offer.sponsor
+                    )}
                     width={40}
                     height={40}
                     priority
                     alt={offer.sponsor}
                     className="base:min-w-[40px] xs:min-w-[50px] base:min-h-[40px] xs:min-h-[50px] xs:p-0 shadow-md shadow-black rounded-md"
+                    onError={() => handleImageError(offer.sponsor)}
                   />
 
                   <div className="w-full justify-between flex items-center">
@@ -174,13 +189,17 @@ const SponsorList = ({
                             }}
                           >
                             <Image
-                              src={getSponsor(offer.sponsor).imageUrl}
+                              src={getImageSrc(
+                                getSponsor(offer.sponsor).imageUrl,
+                                offer.sponsor
+                              )}
                               width={80}
                               height={80}
                               priority
                               loading="eager"
                               alt={offer.sponsor}
                               className="rounded-md w-[80px] h-[80px] shadow-md shadow-black hover:scale-105 transition-all duration-300"
+                              onError={() => handleImageError(offer.sponsor)}
                             />
                           </Link>
 

@@ -76,6 +76,25 @@ const Main = ({
   });
 
   const [hoveredOffer, setHoveredOffer] = useState("");
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
+
+  const handleImageError = (identifier: string) => {
+    setFailedImages((prev) => new Set(prev).add(identifier));
+  };
+
+  const getSponsorImageSrc = (sponsor: SponsorData) => {
+    if (!sponsor.imageUrl || failedImages.has(sponsor.name)) {
+      return fallbackImage;
+    }
+    return sponsor.imageUrl;
+  };
+
+  const getPodcastImageSrc = (podcast: PodcastData) => {
+    if (!podcast.imageUrl || failedImages.has(podcast.title)) {
+      return fallbackImage;
+    }
+    return podcast.imageUrl;
+  };
   const handleHover = (offerName: string, mouseEnter: boolean) => {
     setHoveredOffer(offerName);
     setImageHover(mouseEnter);
@@ -188,12 +207,13 @@ const Main = ({
                       <div className="flex-col flex w-full ">
                         <div className="flex flex-col items-center">
                           <Image
-                            src={sponsor.imageUrl || fallbackImage}
+                            src={getSponsorImageSrc(sponsor)}
                             width={150}
                             height={150}
                             alt={sponsor.name}
                             priority
                             className={` h-[150px] max-w-[150px] relative rounded-lg shadow-xl shadow-black`}
+                            onError={() => handleImageError(sponsor.name)}
                           />
 
                           <div className="flex ml-4 flex-col rounded-sm">
@@ -297,7 +317,7 @@ const Main = ({
                               >
                                 <div>
                                   <Image
-                                    src={pod?.imageUrl || fallbackImage}
+                                    src={getPodcastImageSrc(pod)}
                                     width={90}
                                     height={90}
                                     alt={pod.title}
@@ -307,6 +327,7 @@ const Main = ({
                                         ? "opacity-0"
                                         : "opacity-100"
                                     } min-w-[90px] min-h-[90px] rounded-md mb-2 relative z-10`}
+                                    onError={() => handleImageError(pod.title)}
                                   />
 
                                   <h2
@@ -400,12 +421,13 @@ const Main = ({
                           }}
                         >
                           <Image
-                            src={sponsor.imageUrl || fallbackImage}
+                            src={getSponsorImageSrc(sponsor)}
                             width={225}
                             height={225}
                             alt={sponsor.name}
                             priority
                             className={`group transition-all duration-300 hover:scale-105 h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black relative z-10`}
+                            onError={() => handleImageError(sponsor.name)}
                           />
                         </Link>
 
@@ -522,7 +544,7 @@ const Main = ({
                             >
                               <div>
                                 <Image
-                                  src={pod?.imageUrl || fallbackImage}
+                                  src={getPodcastImageSrc(pod)}
                                   width={110}
                                   height={110}
                                   alt={pod.title}
@@ -532,6 +554,7 @@ const Main = ({
                                       ? "opacity-0"
                                       : "opacity-100"
                                   } min-w-[110px] min-h-[110px] rounded-md mb-2`}
+                                  onError={() => handleImageError(pod.title)}
                                 />
 
                                 <h2

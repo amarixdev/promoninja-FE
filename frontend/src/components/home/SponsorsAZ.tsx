@@ -4,7 +4,7 @@ import { convertToSlug } from "../../utils/functions";
 import { SponsorData } from "../../utils/types";
 import { useMediaQuery } from "../../utils/hooks";
 import fallbackImage from "../../public/assets/fallback.png";
-import { useEffect } from "react";
+import { useState } from "react";
 
 interface SponsorsAZProps {
   sponsorsData: SponsorData[];
@@ -12,18 +12,30 @@ interface SponsorsAZProps {
 
 const SponsorsAZ = ({ sponsorsData }: SponsorsAZProps) => {
   const isBreakPoint = useMediaQuery(1023);
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
+  
   type GroupedSponsors = { [key: string]: string[] };
   const sortedSponsors = sponsorsData?.map((sponsor) => sponsor.name).sort();
   const groupedSponsors: GroupedSponsors = {};
 
-  sortedSponsors.forEach((str) => {
+  sortedSponsors?.forEach((str) => {
     const firstLetter = str.charAt(0).toUpperCase();
     if (!groupedSponsors[firstLetter]) {
       groupedSponsors[firstLetter] = [];
-    } else {
     }
     groupedSponsors[firstLetter].push(str);
   });
+
+  const handleImageError = (sponsorName: string) => {
+    setFailedImages((prev) => new Set(prev).add(sponsorName));
+  };
+
+  const getImageSrc = (sponsor: SponsorData) => {
+    if (!sponsor.imageUrl || failedImages.has(sponsor.name)) {
+      return fallbackImage;
+    }
+    return sponsor.imageUrl;
+  };
 
   return (
     <section className="relative">
@@ -37,27 +49,28 @@ const SponsorsAZ = ({ sponsorsData }: SponsorsAZProps) => {
           <div className="w-full p-4 my-4" key={letter}>
             <p className="text-[#909090] text-3xl font-bold">{letter}</p>
             <div className="w-full flex flex-wrap p-1 gap-y-16 gap-x-2 items-center base:justify-center lg:justify-start">
-              {groupedSponsors[letter].map((sponsor) =>
+              {groupedSponsors[letter].map((sponsorName) =>
                 sponsorsData
-                  .filter((data) => data.name === sponsor)
+                  .filter((data) => data.name === sponsorName)
                   .map((sponsor) => (
                     <div key={sponsor.name} className="flex flex-col">
-                      <div className="flex flex-col w-[100px] mx-5 active:scale-95 transition-all duration-300 ease-in-out ">
+                      <div className="flex flex-col w-[100px] mx-5 active:scale-95 transition-all duration-300 ease-in-out">
                         <Link href={`/${convertToSlug(sponsor.name)}`}>
                           {isBreakPoint || (
                             <div className="hover:bg-[#ffffff0e] h-[100px] w-[100px] rounded-lg absolute transition ease-in-out duration-300"></div>
                           )}
                           <Image
-                            src={sponsor.imageUrl || fallbackImage}
+                            src={getImageSrc(sponsor)}
                             alt={sponsor.name}
                             width={100}
                             height={100}
                             className="rounded-lg min-w-[100px] min-h-[100px]"
                             loading="eager"
+                            onError={() => handleImageError(sponsor.name)}
                           />
                         </Link>
 
-                        <div className="min-w-[100px] bg-red-500">
+                        <div className="min-w-[100px]">
                           <h3 className="w-full text-white font-semibold absolute text-xs lg:text-sm mt-2 text-center max-w-[100px]">
                             {sponsor.name}
                           </h3>

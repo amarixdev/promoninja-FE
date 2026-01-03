@@ -23,7 +23,19 @@ const TrendingOffers = ({
   const trendingOffersSliderRef = useRef<HTMLDivElement>(null);
   const [trendingOfferIndex, setTrendingOfferIndex] = useState("0");
   const [ninjaRunningIndex, setNinjaRunningIndex] = useState(0);
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const isBreakPoint = useMediaQuery(1023);
+
+  const handleImageError = (sponsorName: string) => {
+    setFailedImages((prev) => new Set(prev).add(sponsorName));
+  };
+
+  const getImageSrc = (offer: SponsorData) => {
+    if (!offer.imageUrl || failedImages.has(offer.name)) {
+      return fallbackImage;
+    }
+    return offer.imageUrl;
+  };
 
   const NinjaRunning = Array(5).fill(
     <GiRunningNinja size={isBreakPoint ? 40 : 55} />
@@ -96,12 +108,13 @@ const TrendingOffers = ({
                           <div className="flex justify-start ">
                             <Link href={`/${convertToSlug(offer.name)}`}>
                               <Image
-                                src={offer.imageUrl || fallbackImage}
+                                src={getImageSrc(offer)}
                                 width={225}
                                 height={225}
                                 alt={offer.name}
                                 priority
                                 className={`hover:scale-105 transition-all duration-500 max-h-[120px] max-w-[120px] rounded-lg shadow-xl shadow-black`}
+                                onError={() => handleImageError(offer.name)}
                               />
                             </Link>
 
@@ -191,12 +204,13 @@ const TrendingOffers = ({
                         <div className="flex flex-col items-center">
                           <Link href={`/${convertToSlug(offer.name)}`}>
                             <Image
-                              src={offer.imageUrl || fallbackImage}
+                              src={getImageSrc(offer)}
                               width={120}
                               height={120}
                               alt={offer.name}
                               priority
                               className={`max-h-[150px] max-w-[150px] rounded-lg shadow-xl shadow-black`}
+                              onError={() => handleImageError(offer.name)}
                             />
                           </Link>
 

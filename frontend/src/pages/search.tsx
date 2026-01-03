@@ -45,6 +45,7 @@ const Search = () => {
   const [sponsorFilter, setSponsorFilter] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [display, setDisplay] = useState({ filter: false });
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const [podcastSearch, setPodcastSearch] = useState<PodcastSearchResults[]>([
     { imageUrl: "", title: "", publisher: "", category: [{ name: "" }] },
   ]);
@@ -52,6 +53,24 @@ const Search = () => {
   const [sponsorSearch, setSponsorSearch] = useState<SponsorSearchResults[]>([
     { imageUrl: "", name: "", url: "" },
   ]);
+
+  const handleImageError = (identifier: string) => {
+    setFailedImages((prev) => new Set(prev).add(identifier));
+  };
+
+  const getPodcastImageSrc = (podcast: PodcastSearchResults) => {
+    if (!podcast.imageUrl || failedImages.has(podcast.title)) {
+      return fallbackImage;
+    }
+    return podcast.imageUrl;
+  };
+
+  const getSponsorImageSrc = (sponsor: SponsorSearchResults) => {
+    if (!sponsor.imageUrl || failedImages.has(sponsor.name)) {
+      return fallbackImage;
+    }
+    return sponsor.imageUrl;
+  };
 
   const [getPodcasts] = useLazyQuery(Operations.Queries.GetPodcasts);
   const [getSponsors] = useLazyQuery(Operations.Queries.GetSponsors);
@@ -208,12 +227,13 @@ const Search = () => {
                         <div className="flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f] lg:min-w-[550px] min-w-[200px] xs:min-w-[300px] sm:min-w-[350px] md:min-w-[420px]">
                           <div className="p-4">
                             <Image
-                              src={podcast.imageUrl || fallbackImage}
+                              src={getPodcastImageSrc(podcast)}
                               width={100}
                               height={100}
                               priority
                               alt={podcast.title}
                               className="shadow-black base:max-w-[70px] shadow-2xl xs:min-w-[90px] sm:min-w-[100px] rounded-lg"
+                              onError={() => handleImageError(podcast.title)}
                             />
                           </div>
                           <div className="flex flex-col p-4 ">
@@ -247,13 +267,14 @@ const Search = () => {
                           <div className="flex items-center bg-[#222222] rounded-lg shadow-black hover:cursor-pointer hover:bg-[#3f3f3f] lg:min-w-[550px] min-w-[200px] xs:min-w-[300px] sm:min-w-[350px] md:min-w-[420px]">
                             <div className="p-4">
                               <Image
-                                src={sponsor.imageUrl || fallbackImage}
+                                src={getSponsorImageSrc(sponsor)}
                                 width={100}
                                 height={100}
                                 loading="eager"
                                 priority
                                 alt={sponsor.name}
                                 className=" shadow-2xl shadow-black base:max-w-[70px] xs:min-w-[90px] sm:min-w-[100px] base:max-h-[70px] xs:min-h-[90px] sm:min-h-[100px] rounded-lg"
+                                onError={() => handleImageError(sponsor.name)}
                               />
                             </div>
                             <div className="flex flex-col p-4 ">

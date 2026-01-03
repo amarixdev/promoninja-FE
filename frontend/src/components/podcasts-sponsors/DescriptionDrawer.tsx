@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { BsPlayCircle } from "react-icons/bs";
 import { convertToFullURL, convertToSlug } from "../../utils/functions";
 import {
@@ -70,6 +71,7 @@ const DescriptionDrawer = ({
   };
   const isBreakPoint = useMediaQuery(1023);
   const router = useRouter();
+  const [imageFailed, setImageFailed] = useState(false);
   const {
     handleBrokenLink,
     isOpenBrokenLink,
@@ -78,6 +80,13 @@ const DescriptionDrawer = ({
     podcastState,
     setPodcastState,
   } = useReportIssue(drawer.title);
+
+  const getImageSrc = () => {
+    if (!drawer.image || imageFailed) {
+      return fallbackImage;
+    }
+    return drawer.image;
+  };
 
   return (
     <>
@@ -150,12 +159,13 @@ const DescriptionDrawer = ({
                       }`}
                     >
                       <Image
-                        src={drawer.image || fallbackImage}
+                        src={getImageSrc()}
                         width={100}
                         height={100}
                         alt={drawer.title}
                         priority
                         className={`min-h-[100px] rounded-lg  min-w-[100px] ${"shadow-2xl shadow-black"} `}
+                        onError={() => setImageFailed(true)}
                       />
                     </Link>
                   </div>
@@ -301,7 +311,7 @@ const DescriptionDrawer = ({
                       }`}
                     >
                       <Image
-                        src={drawer.image || fallbackImage}
+                        src={getImageSrc()}
                         width={200}
                         height={200}
                         alt={drawer.title}
@@ -310,6 +320,7 @@ const DescriptionDrawer = ({
                         className={` min-w-[200px] relative bottom-0 hover:bottom-3 transition-all duration-500 ease-in-out ${
                           podcastOfferDrawer && "shadow-2xl shadow-black"
                         } `}
+                        onError={() => setImageFailed(true)}
                       />
                     </Link>
                     <div className="px-6 flex flex-col">
