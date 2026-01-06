@@ -92,17 +92,8 @@ const About = (props: Props) => {
 
                   <p>
                     PromoNinja is not affiliated with any of the podcasts on
-                    this site. If you have any feedback or questions, or would
-                    like to have your podcast featured on the site please reach
-                    out on Twitter{" "}
-                    <Link
-                      href={"https://www.twitter.com/promoninjaapp"}
-                      target="_blank"
-                    >
-                      <span className="text-[#e09249] underline underline-offset-2">
-                        @PromoNinjaApp
-                      </span>
-                    </Link>
+                    this site. All trademarks and logos belong to their respective
+                    owners.
                   </p>
                 </div>
               </section>
